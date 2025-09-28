@@ -17,29 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMigration", "DBMigration\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareService", "ShareService\ShareService.csproj", "{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eduflex-Angular", "eduflex-Angular", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "eduflex-Angular", "..\eduflex-Angular\", "{C803EF86-A142-7A59-1918-306C716B6BC2}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_54518"
-		Debug.AspNetCompiler.PhysicalPath = "..\eduflex-Angular\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54518\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_54518"
-		Release.AspNetCompiler.PhysicalPath = "..\eduflex-Angular\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54518\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "54518"
-		SlnRelativePath = "..\eduflex-Angular\"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,16 +35,9 @@ Global
 		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C803EF86-A142-7A59-1918-306C716B6BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C803EF86-A142-7A59-1918-306C716B6BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C803EF86-A142-7A59-1918-306C716B6BC2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{C803EF86-A142-7A59-1918-306C716B6BC2}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{C803EF86-A142-7A59-1918-306C716B6BC2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA066A13-C766-4424-B7B7-E666EDDB700A}

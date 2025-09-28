@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36511.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eduflex", "Eduflex\Eduflex.csproj", "{AF7EFEC9-84D6-41B6-8563-93D0FFB3CA77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		..\eduflex-Angular\.gitignore = ..\eduflex-Angular\.gitignore
+		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
+		init-mongo.js = init-mongo.js
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMigration", "DBMigration\DBMigration.csproj", "{BF049640-651C-4B19-A654-21FA177A9156}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareService", "ShareService\ShareService.csproj", "{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eduflex-Angular", "eduflex-Angular", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "eduflex-Angular", "..\eduflex-Angular\", "{C803EF86-A142-7A59-1918-306C716B6BC2}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54518"
+		Debug.AspNetCompiler.PhysicalPath = "..\eduflex-Angular\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54518\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54518"
+		Release.AspNetCompiler.PhysicalPath = "..\eduflex-Angular\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54518\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "54518"
+		SlnRelativePath = "..\eduflex-Angular\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF7EFEC9-84D6-41B6-8563-93D0FFB3CA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7EFEC9-84D6-41B6-8563-93D0FFB3CA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7EFEC9-84D6-41B6-8563-93D0FFB3CA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7EFEC9-84D6-41B6-8563-93D0FFB3CA77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF049640-651C-4B19-A654-21FA177A9156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF049640-651C-4B19-A654-21FA177A9156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF049640-651C-4B19-A654-21FA177A9156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF049640-651C-4B19-A654-21FA177A9156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4B98C3-3370-4A62-8BE1-B1F6225EC1A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C803EF86-A142-7A59-1918-306C716B6BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C803EF86-A142-7A59-1918-306C716B6BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C803EF86-A142-7A59-1918-306C716B6BC2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C803EF86-A142-7A59-1918-306C716B6BC2}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C803EF86-A142-7A59-1918-306C716B6BC2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA066A13-C766-4424-B7B7-E666EDDB700A}
+	EndGlobalSection
+EndGlobal

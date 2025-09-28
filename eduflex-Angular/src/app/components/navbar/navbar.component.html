@@ -1,0 +1,57 @@
+<nav class="navbar">
+  <!-- Brand Logo -->
+  <div class="nav-brand">
+    <div class="logo">EF</div>
+    <h3>Eduflex</h3>
+  </div>
+
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-button" (click)="toggleMobileMenu()">
+    ☰
+  </button>
+
+  <!-- Navigation Links -->
+  <div class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+    <!-- Navigation Links -->
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="active">About Us</a>
+    <a routerLink="/services" routerLinkActive="active">Services</a>
+    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+
+    <!-- Auth Section -->
+    @if (authService.isLoggedIn) {
+      <div class="auth-section">
+        <span class="welcome-text">
+          Welcome, {{ getUserName() }}
+        </span>
+        
+        <div class="user-menu">
+          <div class="user-avatar" (click)="toggleUserDropdown()">
+            {{ getInitials() }}
+          </div>
+          
+          @if (isUserDropdownOpen) {
+            <div class="user-dropdown">
+              @if (currentUser) {
+                <div class="user-info">
+                  <div class="user-name">{{ currentUser.firstName || 'User' }} {{ currentUser.lastName || '' }}</div>
+                  <div class="user-email">{{ currentUser.email }}</div>
+                </div>
+              }
+              
+              <div class="dropdown-links">
+                <a routerLink="/dashboard">📊 Dashboard</a>
+                <a routerLink="/profile">👤 My Profile</a>
+                <a routerLink="/applications">📝 My Applications</a>
+              </div>
+              
+              <button class="logout-button" (click)="logout()">🚪 Logout</button>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <a routerLink="/login" class="login-button">Login</a>
+    }
+  </div>
+</nav>

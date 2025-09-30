@@ -7,7 +7,12 @@
     <UserSecretsId>cdc7f369-8001-48c4-9d25-6a69c9e01a5b</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<Company>Quyen The Do</Company>
+		<Authors>Quyen The Do</Authors>
+		<Copyright>Copyright © 2025 Quyen The Do. All rights reserved.</Copyright>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	</PropertyGroup>
   <ItemGroup>
     <Compile Remove="Test\**" />
     <Content Remove="Test\**" />

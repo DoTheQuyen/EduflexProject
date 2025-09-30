@@ -10,10 +10,18 @@
     <button type="button" class="btn-close" (click)="message = ''"></button>
   </div>
 
-  <div class="profile-card">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading profile...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="profile-card">
     <div class="card-header">
       <h5>Personal Information</h5>
-      <button *ngIf="!isEditing" class="btn btn-outline-primary btn-sm" (click)="toggleEdit()">
+      <button *ngIf="!isEditing && !showChangePassword" class="btn btn-outline-primary btn-sm" (click)="toggleEdit()">
         <i class="fas fa-edit"></i> Edit Profile
       </button>
       <div *ngIf="isEditing" class="edit-actions">
@@ -89,31 +97,59 @@
 
         <div class="info-group">
           <label>Account Created</label>
-          <p class="info-value">
-            {{ userInfo?.createdAt ? (userInfo.createdAt | date:'medium') : 'Not available' }}
-          </p>
+          <p class="info-value">{{ getCreatedAt() }}</p>
         </div>
 
         <div class="info-group">
           <label>Last Login</label>
-          <p class="info-value">
-            {{ userInfo?.lastLogin ? (userInfo.lastLogin | date:'medium') : 'Never' }}
-          </p>
+          <p class="info-value">{{ getLastLogin() }}</p>
         </div>
       </ng-template>
     </div>
   </div>
 
-  <div class="profile-card mt-4">
+  <!-- Change Password Section -->
+  <div *ngIf="!isLoading" class="profile-card mt-4">
     <div class="card-header">
       <h5>Security</h5>
-    </div>
-    <div class="card-body">
-      <div class="security-actions">
-        <button class="btn btn-outline-warning" (click)="changePassword()">
-          <i class="fas fa-key"></i> Change Password
+      <button *ngIf="!showChangePassword && !isEditing" class="btn btn-outline-warning btn-sm" (click)="toggleChangePassword()">
+        <i class="fas fa-key"></i> Change Password
+      </button>
+      <div *ngIf="showChangePassword" class="edit-actions">
+        <button class="btn btn-outline-secondary btn-sm" (click)="toggleChangePassword()">
+          Cancel
         </button>
       </div>
     </div>
+    
+    <div class="card-body" *ngIf="showChangePassword">
+      <form>
+        <div class="mb-3">
+          <label for="currentPassword" class="form-label">Current Password</label>
+          <input type="password" class="form-control" id="currentPassword" 
+                 [(ngModel)]="passwordData.currentPassword" name="currentPassword" required>
+        </div>
+        
+        <div class="mb-3">
+          <label for="newPassword" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newPassword" 
+                 [(ngModel)]="passwordData.newPassword" name="newPassword" required>
+          <div class="form-text">Password must be at least 6 characters long.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirm New Password</label>
+          <input type="password" class="form-control" id="confirmPassword" 
+                 [(ngModel)]="passwordData.confirmPassword" name="confirmPassword" required>
+        </div>
+        
+        <button type="button" class="btn btn-warning" (click)="changePassword()" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{isLoading ? 'Changing Password...' : 'Change Password'}}
+        </button>
+      </form>
+    </div>
+    
+   
   </div>
 </div>

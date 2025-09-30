@@ -1,4 +1,6 @@
-﻿namespace Eduflex.API.DTOs
+﻿using System;
+
+namespace Eduflex.API.DTOs
 {
     public class ApplicationDetailDto
     {

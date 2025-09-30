@@ -1,4 +1,4 @@
-﻿using DBMigration.Models;
+﻿using ShareService.Models;
 using DBMigration.Services.Interface;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
@@ -53,9 +53,9 @@ namespace DBMigration.Services.Services
         {
             var collections = new Dictionary<string, Action<IMongoDatabase>>
             {
-                ["Applications"] = db => db.GetCollection<Application>("Applications"),
-                ["Students"] = db => db.GetCollection<Student>("Students"),
-                ["Users"] = db => db.GetCollection<User>("Users")
+                ["Applications"] = db => db.GetCollection<ApplicationModel>("Applications"),
+                ["Students"] = db => db.GetCollection<StudentModel>("Students"),
+                ["Users"] = db => db.GetCollection<UserModel>("Users")
             };
 
             foreach (var (collectionName, createAction) in collections)
@@ -91,26 +91,26 @@ namespace DBMigration.Services.Services
             switch (collectionName)
             {
                 case "Applications":
-                    var applications = _database.GetCollection<Application>(collectionName);
+                    var applications = _database.GetCollection<ApplicationModel>(collectionName);
                     await applications.Indexes.CreateManyAsync(new[]
                     {
-                    new CreateIndexModel<Application>(Builders<Application>.IndexKeys.Ascending(a => a.StudentId)),
-                    new CreateIndexModel<Application>(Builders<Application>.IndexKeys.Ascending(a => a.Status)),
-                    new CreateIndexModel<Application>(Builders<Application>.IndexKeys.Descending(a => a.DateApplied))
+                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Ascending(a => a.StudentId)),
+                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Ascending(a => a.Status)),
+                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Descending(a => a.DateApplied))
                 });
                     break;
 
                 case "Students":
-                    var students = _database.GetCollection<Student>(collectionName);
+                    var students = _database.GetCollection<StudentModel>(collectionName);
                     await students.Indexes.CreateOneAsync(
-                        new CreateIndexModel<Student>(Builders<Student>.IndexKeys.Ascending(s => s.Email),
+                        new CreateIndexModel<StudentModel>(Builders<StudentModel>.IndexKeys.Ascending(s => s.Email),
                         new CreateIndexOptions { Unique = true }));
                     break;
 
                 case "Users":
-                    var users = _database.GetCollection<User>(collectionName);
+                    var users = _database.GetCollection<UserModel>(collectionName);
                     await users.Indexes.CreateOneAsync(
-                        new CreateIndexModel<User>(Builders<User>.IndexKeys.Ascending(u => u.Email),
+                        new CreateIndexModel<UserModel>(Builders<UserModel>.IndexKeys.Ascending(u => u.Email),
                         new CreateIndexOptions { Unique = true }));
                     break;
             }
@@ -158,7 +158,7 @@ namespace DBMigration.Services.Services
             _logger.LogInformation("📊 Inserting test data...");
 
             // Insert Students
-            var studentsCollection = _database.GetCollection<Student>("Students");
+            var studentsCollection = _database.GetCollection<StudentModel>("Students");
             var students = GetSampleStudents();
             if (await studentsCollection.CountDocumentsAsync(_ => true) == 0)
             {
@@ -167,7 +167,7 @@ namespace DBMigration.Services.Services
             }
 
             // Insert Users
-            var usersCollection = _database.GetCollection<User>("Users");
+            var usersCollection = _database.GetCollection<UserModel>("Users");
             var users = GetSampleUsers(students);
             if (await usersCollection.CountDocumentsAsync(_ => true) == 0)
             {
@@ -176,7 +176,7 @@ namespace DBMigration.Services.Services
             }
 
             // Insert Applications
-            var applicationsCollection = _database.GetCollection<Application>("Applications");
+            var applicationsCollection = _database.GetCollection<ApplicationModel>("Applications");
             var applications = GetSampleApplications(students);
             if (await applicationsCollection.CountDocumentsAsync(_ => true) == 0)
             {
@@ -204,11 +204,11 @@ namespace DBMigration.Services.Services
             }
         }
 
-        private List<Student> GetSampleStudents()
+        private List<StudentModel> GetSampleStudents()
         {
-            return new List<Student>
+            return new List<StudentModel>
         {
-            new Student
+            new StudentModel
             {
                 Email = "john.doe@student.edu",
                 FirstName = "John",
@@ -218,7 +218,7 @@ namespace DBMigration.Services.Services
                 PhoneNumber = "+1234567890",
                 CreatedAt = DateTime.UtcNow
             },
-            new Student
+            new StudentModel
             {
                 Email = "jane.smith@student.edu",
                 FirstName = "Jane",
@@ -228,7 +228,7 @@ namespace DBMigration.Services.Services
                 PhoneNumber = "+1987654321",
                 CreatedAt = DateTime.UtcNow
             },
-            new Student
+            new StudentModel
             {
                 Email = "mike.wilson@student.edu",
                 FirstName = "Mike",
@@ -241,12 +241,12 @@ namespace DBMigration.Services.Services
         };
         }
 
-        private List<User> GetSampleUsers(List<Student> students)
+        private List<UserModel> GetSampleUsers(List<StudentModel> students)
         {
             // Simple password hash (in real app, use proper hashing)
             var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password123!");
 
-            return students.Select(s => new User
+            return students.Select(s => new UserModel
             {
                 Email = s.Email,
                 PasswordHash = passwordHash,
@@ -257,9 +257,9 @@ namespace DBMigration.Services.Services
             }).ToList();
         }
 
-        private List<Application> GetSampleApplications(List<Student> students)
+        private List<ApplicationModel> GetSampleApplications(List<StudentModel> students)
         {
-            var applications = new List<Application>();
+            var applications = new List<ApplicationModel>();
             var now = DateTime.UtcNow;
             var random = new Random();
 
@@ -273,7 +273,7 @@ namespace DBMigration.Services.Services
                     var appType = applicationTypes[random.Next(applicationTypes.Length)];
                     var status = statuses[random.Next(statuses.Length)];
 
-                    applications.Add(new Application
+                    applications.Add(new ApplicationModel
                     {
                         StudentId = student.Email,
                         StudentName = $"{student.FirstName} {student.LastName}",

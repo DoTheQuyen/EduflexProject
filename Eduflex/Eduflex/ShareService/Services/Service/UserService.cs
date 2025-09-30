@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eduflex.API.DTOs;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ShareService.DataAccess.Interface;
@@ -12,15 +13,15 @@ namespace ShareService.Services
     public class UserService : IUserService
     {
         private readonly IUserDB _userDB;
-        private readonly IValidator<UpdateUserProfileDto> _profileValidator;
-        private readonly IValidator<ChangePasswordDto> _passwordValidator;
+        private readonly IValidator<UpdateUserProfileModel> _profileValidator;
+        private readonly IValidator<ChangePasswordModel> _passwordValidator;
         private readonly ILogger<UserService> _logger;
         private readonly IConfiguration _configuration;
 
         public UserService(
             IUserDB userDB,
-            IValidator<UpdateUserProfileDto> profileValidator,
-            IValidator<ChangePasswordDto> passwordValidator,
+            IValidator<UpdateUserProfileModel> profileValidator,
+            IValidator<ChangePasswordModel> passwordValidator,
             ILogger<UserService> logger,
             IConfiguration configuration)
         {
@@ -44,12 +45,12 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileDto updateDto)
+        public async Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileModel updateModel)
         {
             try
             {
                 // Validate input
-                var validationResult = await _profileValidator.ValidateAsync(updateDto);
+                var validationResult = await _profileValidator.ValidateAsync(updateModel);
                 if (!validationResult.IsValid)
                 {
                     var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
@@ -57,13 +58,13 @@ namespace ShareService.Services
                 }
 
                 // Check if email is already taken by another user
-                var existingUser = await _userDB.GetUserByEmailAsync(updateDto.Email);
+                var existingUser = await _userDB.GetUserByEmailAsync(updateModel.Email);
                 if (existingUser != null && existingUser.Id != userId)
                 {
                     throw new ArgumentException("Email is already taken by another user");
                 }
 
-                return await _userDB.UpdateUserProfileAsync(userId, updateDto);
+                return await _userDB.UpdateUserProfileAsync(userId, updateModel);
             }
             catch (Exception ex)
             {
@@ -72,12 +73,12 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto)
+        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordModel changePasswordModel)
         {
             try
             {
                 // Validate input
-                var validationResult = await _passwordValidator.ValidateAsync(changePasswordDto);
+                var validationResult = await _passwordValidator.ValidateAsync(changePasswordModel);
                 if (!validationResult.IsValid)
                 {
                     var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
@@ -89,12 +90,12 @@ namespace ShareService.Services
                 if (user == null)
                     throw new ArgumentException("User not found");
 
-                var currentPasswordHash = HashPassword(changePasswordDto.CurrentPassword);
+                var currentPasswordHash = HashPassword(changePasswordModel.CurrentPassword);
                 if (user.PasswordHash != currentPasswordHash)
                     return false;
 
                 // Update password
-                var newPasswordHash = HashPassword(changePasswordDto.NewPassword);
+                var newPasswordHash = HashPassword(changePasswordModel.NewPassword);
                 return await _userDB.UpdatePasswordAsync(userId, newPasswordHash);
             }
             catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Eduflex.API.DTOs;
+using Eduflex.API.Mapping;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Models;
 using ShareService.Services.Interface;
@@ -7,7 +9,7 @@ using System.Security.Claims;
 namespace Eduflex.API.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(GroupName = "user")]
+    [ApiExplorerSettings(GroupName = "app")]
     [Route("api/[controller]")]
     [Authorize]
     public class UserController : ControllerBase
@@ -22,7 +24,7 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet("profile")]
-        public async Task<ActionResult<UserProfileDto>> GetUserProfile()
+        public async Task<ActionResult<UserDto>> GetUserProfile()
         {
             try
             {
@@ -34,17 +36,7 @@ namespace Eduflex.API.Controllers
                 if (user == null)
                     return NotFound("User not found");
 
-                return Ok(new UserProfileDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Role = user.Role,
-                    CreatedAt = user.CreatedAt,
-                    LastLogin = user.LastLogin,
-                    IsActive = user.IsActive
-                });
+                return Ok(user.ToDto());
             }
             catch (Exception ex)
             {
@@ -54,7 +46,7 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPut("profile")]
-        public async Task<ActionResult<UserProfileDto>> UpdateUserProfile(UpdateUserProfileDto updateDto)
+        public async Task<ActionResult<UserDto>> UpdateUserProfile(UpdateUserProfileDto updateDto)
         {
             try
             {
@@ -62,11 +54,11 @@ namespace Eduflex.API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized("User not authenticated");
 
-                var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto);
+                var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto.ToModel());
                 if (updatedUser == null)
                     return NotFound("User not found");
 
-                return Ok(new UserProfileDto
+                return Ok(new UserDto
                 {
                     Id = updatedUser.Id,
                     Email = updatedUser.Email,
@@ -94,7 +86,7 @@ namespace Eduflex.API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized("User not authenticated");
 
-                var result = await _userService.ChangePasswordAsync(userId, changePasswordDto);
+                var result = await _userService.ChangePasswordAsync(userId, changePasswordDto.ToModel());
                 if (!result)
                     return BadRequest("Current password is incorrect");
 
@@ -108,29 +100,5 @@ namespace Eduflex.API.Controllers
         }
     }
 
-    public class UserProfileDto
-    {
-        public string Id { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-        public DateTime? LastLogin { get; set; }
-        public bool IsActive { get; set; }
-    }
-
-    //public class UpdateUserProfileDto
-    //{
-    //    public string FirstName { get; set; } = string.Empty;
-    //    public string LastName { get; set; } = string.Empty;
-    //    public string Email { get; set; } = string.Empty;
-    //}
-
-    //public class ChangePasswordDto
-    //{
-    //    public string CurrentPassword { get; set; } = string.Empty;
-    //    public string NewPassword { get; set; } = string.Empty;
-    //    public string ConfirmPassword { get; set; } = string.Empty;
-    //}
+   
 }

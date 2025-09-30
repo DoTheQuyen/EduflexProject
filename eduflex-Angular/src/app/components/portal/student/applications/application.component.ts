@@ -1,4 +1,4 @@
-import { Client, ApplicationDetailModel } from './../../../../services/api.services';
+import { Client, ApplicationDetailDto } from './../../../../services/api.services';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
@@ -20,8 +20,8 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   studentName: string = 'Student';
   isLoading = true;
-  applications: ApplicationDetailModel[] = [];
-  filteredApplications: ApplicationDetailModel[] = [];
+  applications: ApplicationDetailDto[] = [];
+  filteredApplications: ApplicationDetailDto[] = [];
 
   searchTerm: string = '';
   statusFilter: string = 'all';

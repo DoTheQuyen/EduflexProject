@@ -4,6 +4,8 @@ using ShareService.Models;
 using System.Security.Claims;
 using ShareService.Services;
 using ShareService.Services.Interface;
+using Eduflex.API.DTOs;
+using Eduflex.API.Mapping;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -21,7 +23,7 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ApplicationModel>>> GetApplications()
+    public async Task<ActionResult<List<ApplicationDto>>> GetApplications()
     {
         try
         {
@@ -42,7 +44,7 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApplicationDetailModel>> GetApplication(string id)
+    public async Task<ActionResult<ApplicationDetailDto>> GetApplication(string id)
     {
         try
         {
@@ -72,7 +74,7 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApplicationModel>> CreateApplication(CreateApplicationModel createDto)
+    public async Task<ActionResult<ApplicationModel>> CreateApplication(CreateApplicationDto createDto)
     {
         try
         {
@@ -85,7 +87,7 @@ public class ApplicationsController : ControllerBase
             // Set userId from token, not from request body
             createDto.UserId = userId;
 
-            var application = await _applicationService.CreateApplication(createDto);
+            var application = await _applicationService.CreateApplication(createDto.ToModel());
             return CreatedAtAction(nameof(GetApplication), new { id = application.Id }, application);
         }
         catch (ArgumentException ex)

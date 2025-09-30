@@ -1,4 +1,5 @@
 ﻿using Eduflex.API.DTOs;
+using Eduflex.API.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,16 +18,13 @@ namespace Eduflex.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        //private readonly MongoDBService _mongoDBService;
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
 
         public AuthController(
-            //MongoDBService mongoDBService, 
             IConfiguration configuration, 
             IAuthService authService)
         {
-            //_mongoDBService = mongoDBService;
             _configuration = configuration;
             _authService = authService;
         }
@@ -84,7 +82,7 @@ namespace Eduflex.API.Controllers
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
         {
           
-            var user = await _authService.ValidateUserAsync(loginDto.Email, loginDto.Password, VerifyPassword);
+            var user = await _authService.ValidateUserAsync(loginDto.ToModel(), VerifyPassword);
 
             if (user == null)
                 return Unauthorized("Invalid credentials");

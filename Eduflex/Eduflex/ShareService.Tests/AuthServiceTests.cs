@@ -36,7 +36,13 @@ namespace ShareService.Tests
             var user = new UserModel { Email = "test@example.com", PasswordHash = "HASH" };
             _authMock.Setup(a => a.FindByEmailAsync("test@example.com")).ReturnsAsync(user);
 
-            var result = await _service.ValidateUserAsync("test@example.com", "password", (pwd, hash) => true);
+            var result = await _service.ValidateUserAsync(
+                new LoginModel() 
+                { 
+                    Email = "test@example.com", 
+                    Password = "password" 
+                }, 
+                (pwd, hash) => true);
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Email, Is.EqualTo("test@example.com"));

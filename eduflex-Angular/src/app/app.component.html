@@ -1,4 +1,4 @@
 
-<app-navbar></app-navbar>
+<app-navbar  *ngIf="!isPortalRoute()"></app-navbar>
 <router-outlet></router-outlet> 
 <app-footer></app-footer>

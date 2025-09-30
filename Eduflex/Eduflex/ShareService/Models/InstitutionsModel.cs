@@ -1,9 +1,9 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Eduflex.Shared.Models;
+namespace ShareService.Models;
 
-public class Institutions
+public class InstitutionsModel
 {
     [BsonElement("_t")]
     public int T { get; set; }

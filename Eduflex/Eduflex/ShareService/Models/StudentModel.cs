@@ -10,8 +10,16 @@ namespace ShareService.Models
         public string Id { get; set; }
 
         [BsonElement("userId")]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
+
+        [BsonElement("email")]
+        public string Email { get; set; }
+
+        [BsonElement("firstName")]
+        public string FirstName { get; set; }
+
+        [BsonElement("lastName")]
+        public string LastName { get; set; }
 
         [BsonElement("nationality")]
         public string Nationality { get; set; }

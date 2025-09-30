@@ -1,0 +1,23 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <h5 *ngIf="!isCollapsed" class="sidebar-title">
+      {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
+    </h5>
+    <div *ngIf="isCollapsed" class="sidebar-icon">
+      <i class="fas fa-graduation-cap"></i>
+    </div>
+  </div>
+
+  <ul class="sidebar-menu">
+    <li *ngFor="let item of menuItems" class="menu-item">
+      <a 
+        [routerLink]="item.route" 
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="menu-link">
+        <i class="fas fa-{{item.icon}} menu-icon"></i>
+        <span *ngIf="!isCollapsed" class="menu-text">{{item.title}}</span>
+      </a>
+    </li>
+  </ul>
+</nav>

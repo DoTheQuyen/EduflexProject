@@ -5,20 +5,10 @@
     "version": "v1"
   },
   "paths": {
-    "/api/Applications/student/{studentId}": {
+    "/api/Applications": {
       "get": {
         "tags": [
           "Applications"
-        ],
-        "parameters": [
-          {
-            "name": "studentId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -28,7 +18,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationDto"
+                    "$ref": "#/components/schemas/ApplicationModel"
                   }
                 }
               },
@@ -36,7 +26,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationDto"
+                    "$ref": "#/components/schemas/ApplicationModel"
                   }
                 }
               },
@@ -44,8 +34,54 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ApplicationDto"
+                    "$ref": "#/components/schemas/ApplicationModel"
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
                 }
               }
             }
@@ -74,65 +110,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetailDto"
+                  "$ref": "#/components/schemas/ApplicationDetailModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetailDto"
+                  "$ref": "#/components/schemas/ApplicationDetailModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationDetailDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Applications": {
-      "post": {
-        "tags": [
-          "Applications"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationDto"
+                  "$ref": "#/components/schemas/ApplicationDetailModel"
                 }
               }
             }
@@ -141,7 +129,7 @@
       }
     },
     "/api/Applications/{id}/status": {
-      "patch": {
+      "put": {
         "tags": [
           "Applications"
         ],
@@ -159,17 +147,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStatusDto"
+                "type": "string"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStatusDto"
+                "type": "string"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStatusDto"
+                "type": "string"
               }
             }
           }
@@ -184,7 +172,7 @@
   },
   "components": {
     "schemas": {
-      "ApplicationDetailDto": {
+      "ApplicationDetailModel": {
         "type": "object",
         "properties": {
           "id": {
@@ -222,7 +210,7 @@
         },
         "additionalProperties": false
       },
-      "ApplicationDto": {
+      "ApplicationModel": {
         "type": "object",
         "properties": {
           "id": {
@@ -237,7 +225,19 @@
             "type": "string",
             "nullable": true
           },
+          "studentEmail": {
+            "type": "string",
+            "nullable": true
+          },
           "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "applicationType": {
             "type": "string",
             "nullable": true
           },
@@ -249,21 +249,25 @@
             "type": "string",
             "nullable": true
           },
-          "details": {
+          "createdAt": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
           },
-          "applicationType": {
+          "updatedAt": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "CreateApplicationDto": {
+      "CreateApplicationModel": {
         "type": "object",
         "properties": {
           "studentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
             "type": "string",
             "nullable": true
           },
@@ -280,16 +284,6 @@
             "nullable": true
           },
           "applicationType": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateStatusDto": {
-        "type": "object",
-        "properties": {
-          "status": {
             "type": "string",
             "nullable": true
           }

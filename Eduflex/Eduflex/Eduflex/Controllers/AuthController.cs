@@ -1,9 +1,10 @@
 ﻿using Eduflex.API.DTOs;
-using Eduflex.API.Models;
-using Eduflex.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using ShareService.Models;
+using ShareService.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -16,87 +17,91 @@ namespace Eduflex.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly MongoDBService _mongoDBService;
+        //private readonly MongoDBService _mongoDBService;
         private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
 
-        public AuthController(MongoDBService mongoDBService, IConfiguration configuration)
+        public AuthController(
+            //MongoDBService mongoDBService, 
+            IConfiguration configuration, 
+            IAuthService authService)
         {
-            _mongoDBService = mongoDBService;
+            //_mongoDBService = mongoDBService;
             _configuration = configuration;
+            _authService = authService;
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
-        {
-            // Check if user already exists
-            var existingUser = await _mongoDBService.Users
-                .Find(u => u.Email == registerDto.Email)
-                .FirstOrDefaultAsync();
+        //[HttpPost("register")]
+        //public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
+        //{
+        //    // Check if user already exists
+        //    var existingUser = await _mongoDBService.Users
+        //        .Find(u => u.Email == registerDto.Email)
+        //        .FirstOrDefaultAsync();
 
-            if (existingUser != null)
-                return BadRequest("User already exists");
+        //    if (existingUser != null)
+        //        return BadRequest("User already exists");
 
-            // Create new user
-            var user = new User
-            {
-                Email = registerDto.Email,
-                PasswordHash = HashPassword(registerDto.Password),
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                CreatedAt = DateTime.UtcNow,
-                Role = "Student"
-            };
+        //    // Create new user
+        //    var user = new User
+        //    {
+        //        Email = registerDto.Email,
+        //        PasswordHash = HashPassword(registerDto.Password),
+        //        FirstName = registerDto.FirstName,
+        //        LastName = registerDto.LastName,
+        //        CreatedAt = DateTime.UtcNow,
+        //        Role = "Student"
+        //    };
 
-            await _mongoDBService.Users.InsertOneAsync(user);
+        //    await _mongoDBService.Users.InsertOneAsync(user);
 
-            // Create student profile
-            var student = new Student
-            {
-                UserId = user.Id,
-                Nationality = registerDto.Nationality,
-                //DateOfBirth = registerDto.DateOfBirth,
-                PhoneNumber = registerDto.PhoneNumber,
-                CreatedAt = DateTime.UtcNow
-            };
+        //    // Create student profile
+        //    var student = new Student
+        //    {
+        //        UserId = user.Id,
+        //        Nationality = registerDto.Nationality,
+        //        //DateOfBirth = registerDto.DateOfBirth,
+        //        PhoneNumber = registerDto.PhoneNumber,
+        //        CreatedAt = DateTime.UtcNow
+        //    };
 
-            await _mongoDBService.Students.InsertOneAsync(student);
+        //    await _mongoDBService.Students.InsertOneAsync(student);
 
-            var token = GenerateJwtToken(user);
+        //    //var token = GenerateJwtToken(user);
 
-            return new AuthResponseDto
-            {
-                Token = token,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                //Role = user.Role
-            };
-        }
-
+        //    return new AuthResponseDto
+        //    {
+        //        //Token = token,
+        //        Email = user.Email,
+        //        FirstName = user.FirstName,
+        //        LastName = user.LastName,
+        //        //Role = user.Role
+        //    };
+        //}
+                
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
         {
-            var user = await _mongoDBService.Users
-                .Find(u => u.Email == loginDto.Email)
-                .FirstOrDefaultAsync();
+          
+            var user = await _authService.ValidateUserAsync(loginDto.Email, loginDto.Password, VerifyPassword);
 
-            if (user == null || !VerifyPassword(loginDto.Password, user.PasswordHash))
+            if (user == null)
                 return Unauthorized("Invalid credentials");
 
-            // Update last login
-            var update = Builders<User>.Update.Set(u => u.LastLogin, DateTime.UtcNow);
-            await _mongoDBService.Users.UpdateOneAsync(u => u.Id == user.Id, update);
+            await _authService.UpdateLastLoginAsync(user.Id);
 
             var token = GenerateJwtToken(user);
 
-            return new AuthResponseDto
+            return Ok(new AuthResponseDto
             {
                 Token = token,
+                UserId = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Role = user.Role
-            };
+            });
         }
 
         [HttpPost("logout")]
@@ -120,7 +125,8 @@ namespace Eduflex.API.Controllers
             return hash == storedHash;
         }
 
-        private string GenerateJwtToken(User user)
+        //private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(UserModel user)
         {
             // Implement JWT token generation
             // This is a simplified version - use proper JWT library in production

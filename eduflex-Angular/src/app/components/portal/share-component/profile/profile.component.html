@@ -1,0 +1,119 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>User Profile</h2>
+    <p>Manage your account information and preferences</p>
+  </div>
+
+  <!-- Message Alert -->
+  <div *ngIf="message" class="alert alert-{{messageType}} alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="btn-close" (click)="message = ''"></button>
+  </div>
+
+  <div class="profile-card">
+    <div class="card-header">
+      <h5>Personal Information</h5>
+      <button *ngIf="!isEditing" class="btn btn-outline-primary btn-sm" (click)="toggleEdit()">
+        <i class="fas fa-edit"></i> Edit Profile
+      </button>
+      <div *ngIf="isEditing" class="edit-actions">
+        <button class="btn btn-primary btn-sm" (click)="updateProfile()" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{isLoading ? 'Saving...' : 'Save Changes'}}
+        </button>
+        <button class="btn btn-outline-secondary btn-sm ms-2" (click)="toggleEdit()" [disabled]="isLoading">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form *ngIf="isEditing; else viewMode">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName" 
+                     [(ngModel)]="profileData.firstName" name="firstName" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName" 
+                     [(ngModel)]="profileData.lastName" name="lastName" required>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" 
+                 [(ngModel)]="profileData.email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          <input type="text" class="form-control" [value]="profileData.role" disabled>
+          <div class="form-text">Role cannot be changed</div>
+        </div>
+      </form>
+
+      <ng-template #viewMode>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-group">
+              <label>First Name</label>
+              <p class="info-value">{{profileData.firstName || 'Not set'}}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="info-group">
+              <label>Last Name</label>
+              <p class="info-value">{{profileData.lastName || 'Not set'}}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-group">
+          <label>Email Address</label>
+          <p class="info-value">{{profileData.email}}</p>
+        </div>
+
+        <div class="info-group">
+          <label>Role</label>
+          <p class="info-value">
+            <span class="badge bg-primary">{{profileData.role}}</span>
+          </p>
+        </div>
+
+        <div class="info-group">
+          <label>Account Created</label>
+          <p class="info-value">
+            {{ userInfo?.createdAt ? (userInfo.createdAt | date:'medium') : 'Not available' }}
+          </p>
+        </div>
+
+        <div class="info-group">
+          <label>Last Login</label>
+          <p class="info-value">
+            {{ userInfo?.lastLogin ? (userInfo.lastLogin | date:'medium') : 'Never' }}
+          </p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="profile-card mt-4">
+    <div class="card-header">
+      <h5>Security</h5>
+    </div>
+    <div class="card-body">
+      <div class="security-actions">
+        <button class="btn btn-outline-warning" (click)="changePassword()">
+          <i class="fas fa-key"></i> Change Password
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

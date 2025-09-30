@@ -1,4 +1,5 @@
-﻿using DBMigration.Models;
+﻿using DBMigration.Migrations;
+using DBMigration.Models;
 using DBMigration.Services.Interface;
 using DBMigration.Services.Services;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,16 @@ builder.Services.AddScoped<IMongoDatabase>(serviceProvider =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
+// Register migration services
+builder.Services.AddScoped<IMigrationService, MigrationService>();
+
+// Register all migrations
+builder.Services.AddTransient<_001_AddApplications_290925>();
+builder.Services.AddTransient<_002_AddUserLastLoginField_290925>();
+builder.Services.AddTransient<_004_AddUserForeignKeyToStudents_290925>();
+builder.Services.AddTransient<_005_AddStudentForeignKeyToApplications_290925>();
+builder.Services.AddTransient<_006_ConvertStudentIdToString_290925>();
+
 // Register your services
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 
@@ -83,7 +94,9 @@ async Task RunConsoleApp(IServiceProvider services)
                     "4. View Current Collections",
                     "5. Clear Test Data",
                     "6. Drop All Collections",
-                    "7. Exit"
+                    "7. Run Database Migrations", 
+                    "8. View Migration History", 
+                    "9. Exit"
                 }));
 
         try
@@ -125,6 +138,49 @@ async Task RunConsoleApp(IServiceProvider services)
                     break;
 
                 case "7":
+                    var migrationService = services.GetRequiredService<IMigrationService>();
+                    if (await migrationService.RunMigrationsAsync())
+                    {
+                        AnsiConsole.MarkupLine("[green]✅ Migrations completed successfully[/]");
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine("[red]❌ Migrations failed[/]");
+                    }
+                    break;
+
+                case "8":
+                    var migrationHistoryService = services.GetRequiredService<IMigrationService>();
+                    var history = await migrationHistoryService.GetMigrationHistoryAsync();
+
+                    if (!history.Any())
+                    {
+                        AnsiConsole.MarkupLine("[yellow]No migrations have been applied yet.[/]");
+                        break;
+                    }
+
+                    var historyTable = new Table();
+                    historyTable.AddColumn("Migration ID");
+                    historyTable.AddColumn("Name");
+                    historyTable.AddColumn("Applied At");
+                    historyTable.AddColumn("Status");
+                    historyTable.AddColumn("Execution Time");
+
+                    foreach (var record in history)
+                    {
+                        historyTable.AddRow(
+                            record.MigrationId,
+                            record.Name,
+                            record.AppliedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                            record.Success ? "✅ Success" : "❌ Failed",
+                            $"{record.ExecutionTimeMs}ms"
+                        );
+                    }
+
+                    AnsiConsole.Write(historyTable);
+                    break;
+
+                case "9":
                     AnsiConsole.MarkupLine("[green]Goodbye! 👋[/]");
                     return;
             }

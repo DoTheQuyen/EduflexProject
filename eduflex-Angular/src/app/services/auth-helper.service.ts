@@ -4,16 +4,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthHelperService {
-  
-  constructor() { }
-
-  getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('authToken');
+    // Add token validation if needed (check expiration)
+    return !!token && this.isTokenValid();
   }
 
-  isLoggedIn(): boolean {
-    const token = this.getAuthToken();
-    return !!token; // Simple check - you can add token expiration validation
+  private isTokenValid(): boolean {
+    // Add your token validation logic here
+    // For now, just return true if token exists
+    return true;
   }
 
   getCurrentUser(): any {
@@ -21,35 +21,28 @@ export class AuthHelperService {
       const userData = localStorage.getItem('userData');
       return userData ? JSON.parse(userData) : null;
     } catch (e) {
-      console.error('Error parsing user data:', e);
       return null;
     }
   }
 
-  getUserRole(): string {
-    const user = this.getCurrentUser();
-    return user?.role?.toLowerCase() || 'student';
+  getUserInfo(): any {
+    return this.getCurrentUser();
   }
 
-  storeAuthData(token: string, userData: any): void {
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('userData', JSON.stringify(userData));
-  }
-
-  clearAuthData(): void {
+  logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
     localStorage.removeItem('rememberMe');
     localStorage.removeItem('userEmail');
+    // Don't use window.location.href to avoid full page reloads
   }
 
-  hasRole(requiredRole: string | string[]): boolean {
-    const userRole = this.getUserRole();
-    
-    if (Array.isArray(requiredRole)) {
-      return requiredRole.includes(userRole);
-    }
-    
-    return userRole === requiredRole;
+  getAuthToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
+  getUserRole(): string {
+    const userInfo = this.getCurrentUser();
+    return userInfo?.role || 'student';
   }
 }

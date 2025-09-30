@@ -6,6 +6,8 @@ namespace ShareService.Models
     {
         [BsonElement("studentId")]
         public string StudentId { get; set; } = string.Empty;
+        [BsonElement("userId")]
+        public string UserId { get; set; } = string.Empty;
 
         [BsonElement("StudentName")]
         public string StudentName { get; set; } = string.Empty;

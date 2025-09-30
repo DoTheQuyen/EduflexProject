@@ -1,0 +1,1009 @@
+2025-09-30 03:07:08.418 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 03:07:08.672 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 03:07:08.672 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 03:07:08.704 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 03:07:08.704 +07:00 [INF] Hosting environment: Development
+2025-09-30 03:07:08.704 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 03:07:09.434 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 03:07:09.434 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 03:07:09.465 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 35.0703ms
+2025-09-30 03:07:09.500 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 71.7737ms
+2025-09-30 03:07:09.533 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 03:07:09.566 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 33.9902ms
+2025-09-30 03:07:23.178 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2025-09-30 03:07:23.200 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:07:23.207 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 29.1913ms
+2025-09-30 03:07:23.209 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 49
+2025-09-30 03:07:23.211 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:07:26.322 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 03:07:26.345 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.API.DTOs.AuthResponseDto]] Login(Eduflex.API.DTOs.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2025-09-30 03:07:28.506 +07:00 [INF] Executed MQL query
+EduflexDB.Users.aggregate([?])
+2025-09-30 03:07:28.552 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2025-09-30 03:07:28.560 +07:00 [INF] Executed MQL query
+EduflexDB.Users.aggregate([?])
+2025-09-30 03:07:28.597 +07:00 [INF] Executing Bulk Write (0.1144 ms) Collection='EduflexDB.Users', Insertions=0, Deletions=0, Modifications=1
+2025-09-30 03:07:28.640 +07:00 [INF] Executed Bulk Write (46.2143 ms) Collection='EduflexDB.Users', Inserted=0, Deleted=0, Modified=1
+2025-09-30 03:07:28.642 +07:00 [INF] Last login updated for user: 68d7a157a219be53eb1599dd
+2025-09-30 03:07:28.780 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.API.DTOs.AuthResponseDto'.
+2025-09-30 03:07:28.787 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 2439.1046ms
+2025-09-30 03:07:28.787 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 03:07:28.790 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 5580.6386ms
+2025-09-30 03:07:29.613 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications/student-application/68d7a157a219be53eb1599dd - null null
+2025-09-30 03:07:29.614 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:07:29.614 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications/student-application/68d7a157a219be53eb1599dd - 204 null null 1.027ms
+2025-09-30 03:07:29.620 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications/student-application/68d7a157a219be53eb1599dd - null null
+2025-09-30 03:07:29.621 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:07:29.660 +07:00 [INF] Executing endpoint 'ApplicationsController.GetStudentApplications (Eduflex)'
+2025-09-30 03:07:29.666 +07:00 [INF] Route matched with {action = "GetStudentApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.API.DTOs.ApplicationDto]]] GetStudentApplications(System.String) on controller ApplicationsController (Eduflex).
+2025-09-30 03:07:32.776 +07:00 [INF] Executed action ApplicationsController.GetStudentApplications (Eduflex) in 3109.7729ms
+2025-09-30 03:07:32.777 +07:00 [INF] Executed endpoint 'ApplicationsController.GetStudentApplications (Eduflex)'
+2025-09-30 03:07:32.779 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No service for type 'MongoDB.Driver.IMongoClient' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Program.<>c.<<Main>$>b__0_5(IServiceProvider sp) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex\Program.cs:line 97
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at lambda_method119(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-09-30 03:07:32.822 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications/student-application/68d7a157a219be53eb1599dd - 500 null text/plain; charset=utf-8 3201.6486ms
+2025-09-30 03:36:23.075 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 03:36:23.318 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 03:36:23.319 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 03:36:23.354 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 03:36:23.354 +07:00 [INF] Hosting environment: Development
+2025-09-30 03:36:23.354 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 03:36:23.734 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 03:36:23.734 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 03:36:23.760 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 33.6035ms
+2025-09-30 03:36:23.789 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 63.3036ms
+2025-09-30 03:36:23.835 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 03:36:23.864 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 29.111ms
+2025-09-30 03:39:07.810 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 03:39:07.819 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:39:07.822 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 18.3414ms
+2025-09-30 03:39:07.831 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 03:39:07.834 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:39:10.991 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 03:39:11.022 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 03:39:15.078 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 4049.498ms
+2025-09-30 03:39:15.081 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 03:39:15.085 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No service for type 'MongoDB.Driver.IMongoClient' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Program.<>c.<<Main>$>b__0_5(IServiceProvider sp) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex\Program.cs:line 97
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at lambda_method10(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-09-30 03:39:15.182 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 500 null text/plain; charset=utf-8 7351.4373ms
+2025-09-30 03:40:59.369 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 03:40:59.557 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 03:40:59.557 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 03:40:59.586 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 03:40:59.586 +07:00 [INF] Hosting environment: Development
+2025-09-30 03:40:59.586 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 03:41:01.039 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 03:41:01.039 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 03:41:01.099 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 64.8596ms
+2025-09-30 03:41:01.133 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 99.6582ms
+2025-09-30 03:41:01.173 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 03:41:01.202 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 28.7737ms
+2025-09-30 03:41:05.836 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 03:41:05.843 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:41:05.846 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 10.0468ms
+2025-09-30 03:41:05.857 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 03:41:05.859 +07:00 [INF] CORS policy execution successful.
+2025-09-30 03:41:05.981 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 03:41:05.994 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:05:55.417 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:05:55.706 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:05:55.706 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:05:55.739 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:05:55.739 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:05:55.739 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:05:56.237 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:05:56.237 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:05:56.265 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 33.1453ms
+2025-09-30 04:05:56.294 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 62.498ms
+2025-09-30 04:05:56.329 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:05:56.381 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 52.9166ms
+2025-09-30 04:06:05.687 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2025-09-30 04:06:05.692 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:06:05.694 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 7.6806ms
+2025-09-30 04:06:05.698 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 49
+2025-09-30 04:06:05.699 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:06:08.388 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 04:06:08.403 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.API.DTOs.AuthResponseDto]] Login(Eduflex.API.DTOs.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2025-09-30 04:07:57.320 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:07:57.506 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:07:57.506 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:07:57.547 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:07:57.547 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:07:57.547 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:07:57.914 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:07:57.914 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:07:57.966 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 56.2153ms
+2025-09-30 04:07:58.032 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 123.2803ms
+2025-09-30 04:07:58.058 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:07:58.088 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 30.6937ms
+2025-09-30 04:08:02.957 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2025-09-30 04:08:02.963 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:08:02.965 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 8.5546ms
+2025-09-30 04:08:02.968 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 49
+2025-09-30 04:08:02.969 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:08:03.031 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 04:08:03.043 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.API.DTOs.AuthResponseDto]] Login(Eduflex.API.DTOs.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2025-09-30 04:08:03.302 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2025-09-30 04:08:03.345 +07:00 [INF] Last login updated for user: 68d7a157a219be53eb1599dd
+2025-09-30 04:08:03.410 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.API.DTOs.AuthResponseDto'.
+2025-09-30 04:08:03.415 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 369.9593ms
+2025-09-30 04:08:03.415 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 04:08:03.416 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 447.8713ms
+2025-09-30 04:08:04.242 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:08:04.243 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:08:04.244 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 1.7834ms
+2025-09-30 04:08:04.249 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:08:04.250 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:08:04.311 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:08:04.314 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:09:36.436 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:09:36.707 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:09:36.707 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:09:36.738 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:09:36.738 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:09:36.738 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:09:37.340 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:09:37.340 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:09:37.361 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 25.4416ms
+2025-09-30 04:09:37.393 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 58.5883ms
+2025-09-30 04:09:37.422 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:09:37.455 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 33.2603ms
+2025-09-30 04:09:40.526 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:09:40.530 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:09:40.532 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 5.9411ms
+2025-09-30 04:09:40.535 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:09:40.537 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:09:40.678 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:09:40.696 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:09:49.780 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:09:55.524 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:09:55.535 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 14836.4977ms
+2025-09-30 04:09:55.536 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:09:55.536 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 15001.0664ms
+2025-09-30 04:10:10.494 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:10:10.495 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:10:10.495 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 1.482ms
+2025-09-30 04:10:10.497 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:10:10.497 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:10:10.499 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:10:10.500 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:13:00.642 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:13:00.681 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:13:00.682 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 170181.7147ms
+2025-09-30 04:13:00.682 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:13:00.682 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 170184.9374ms
+2025-09-30 04:13:04.210 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:13:04.210 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:13:04.210 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.6181ms
+2025-09-30 04:13:04.212 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:13:04.212 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:13:04.216 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:13:04.216 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:13:51.884 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:13:51.893 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:13:51.893 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 47676.5202ms
+2025-09-30 04:13:51.894 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:13:51.926 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 47714.4286ms
+2025-09-30 04:13:55.692 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:13:55.692 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:13:55.692 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.613ms
+2025-09-30 04:13:55.694 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:13:55.694 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:13:55.695 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:13:55.695 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:16:10.748 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:16:10.749 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:16:10.749 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 135053.8562ms
+2025-09-30 04:16:10.749 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:16:10.749 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 135055.0383ms
+2025-09-30 04:16:14.844 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:16:14.844 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:16:14.845 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.5837ms
+2025-09-30 04:16:14.846 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:16:14.846 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:16:14.847 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:16:14.847 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:17:00.353 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:17:00.354 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:17:00.388 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 45540.7344ms
+2025-09-30 04:17:00.388 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:17:00.388 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 45541.9632ms
+2025-09-30 04:17:07.990 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:17:08.205 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:17:08.206 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:17:08.234 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:17:08.234 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:17:08.234 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:17:09.738 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:17:09.738 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:17:09.763 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 29.5556ms
+2025-09-30 04:17:09.788 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 55.0666ms
+2025-09-30 04:17:09.815 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:17:09.842 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 27.1346ms
+2025-09-30 04:17:14.471 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:17:14.476 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:17:14.478 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 7.4322ms
+2025-09-30 04:17:14.480 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:17:14.482 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:17:14.607 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:17:14.618 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:34:30.752 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:34:30.985 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:34:30.985 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:34:31.019 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:34:31.019 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:34:31.019 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:34:31.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:34:31.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:34:31.994 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 34.6207ms
+2025-09-30 04:34:32.067 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 109.0005ms
+2025-09-30 04:34:32.095 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:34:32.123 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 28.3832ms
+2025-09-30 04:34:32.949 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:34:32.958 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:34:32.960 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 11.7204ms
+2025-09-30 04:34:32.963 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:34:32.964 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:34:33.133 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:34:33.153 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:34:36.311 +07:00 [ERR] Error in GetApplicationsByUserId for user 68d7a157a219be53eb1599dd
+System.FormatException: Element 'email' does not match any field or property of class ShareService.Models.StudentModel.
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.CursorBatchDeserializationHelper.DeserializeBatch[TDocument](RawBsonArray batch, IBsonSerializer`1 documentSerializer, MessageEncoderSettings messageEncoderSettings)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateFirstCursorBatch(BsonDocument cursorDocument)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateCursor(IChannelSourceHandle channelSource, IChannelHandle channel, BsonDocument commandResult)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.FindAsync[TProjection](FilterDefinition`1 filter, FindOptions`2 options, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.FirstOrDefaultAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at ShareService.DataAccess.Application.GetStudentByUserIdAsync(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\DataAccess\Service\Application.cs:line 22
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 81
+2025-09-30 04:34:36.412 +07:00 [ERR] Error in GetApplications endpoint
+System.Exception: Error retrieving applications
+ ---> System.FormatException: Element 'email' does not match any field or property of class ShareService.Models.StudentModel.
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.CursorBatchDeserializationHelper.DeserializeBatch[TDocument](RawBsonArray batch, IBsonSerializer`1 documentSerializer, MessageEncoderSettings messageEncoderSettings)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateFirstCursorBatch(BsonDocument cursorDocument)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateCursor(IChannelSourceHandle channelSource, IChannelHandle channel, BsonDocument commandResult)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.FindAsync[TProjection](FilterDefinition`1 filter, FindOptions`2 options, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.FirstOrDefaultAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at ShareService.DataAccess.Application.GetStudentByUserIdAsync(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\DataAccess\Service\Application.cs:line 22
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 81
+   --- End of inner exception stack trace ---
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 109
+   at ApplicationsController.GetApplications() in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex\Controllers\ApplicationsController.cs:line 34
+2025-09-30 04:34:36.427 +07:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-09-30 04:34:36.430 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3275.3353ms
+2025-09-30 04:34:36.430 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:34:36.431 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 500 null text/plain; charset=utf-8 3468.478ms
+2025-09-30 04:37:10.878 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:37:11.074 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:37:11.074 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:37:11.104 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:37:11.104 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:37:11.104 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:37:12.181 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:37:12.181 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:37:12.205 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 27.6747ms
+2025-09-30 04:37:12.236 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 60.1092ms
+2025-09-30 04:37:12.263 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:37:12.295 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 32.4394ms
+2025-09-30 04:37:14.224 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:37:14.231 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:37:14.233 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 9.1593ms
+2025-09-30 04:37:14.235 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:37:14.237 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:37:14.378 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:37:14.392 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:37:52.177 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:37:52.377 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:37:52.378 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:37:52.408 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:37:52.408 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:37:52.408 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:37:53.333 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:37:53.333 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:37:53.383 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 54.3952ms
+2025-09-30 04:37:53.412 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 84.0062ms
+2025-09-30 04:37:53.439 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:37:53.469 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 30.6372ms
+2025-09-30 04:37:55.995 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:37:56.001 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:37:56.003 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 8.3506ms
+2025-09-30 04:37:56.006 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:37:56.007 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:37:56.139 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:37:56.151 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:39:18.645 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:39:18.890 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:39:18.891 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:39:18.923 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:39:18.923 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:39:18.923 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:39:19.668 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:39:19.667 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:39:19.728 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 65.2563ms
+2025-09-30 04:39:19.754 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 93.4271ms
+2025-09-30 04:39:19.795 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:39:19.829 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 33.686ms
+2025-09-30 04:39:21.260 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:39:21.267 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:39:21.269 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 9.2717ms
+2025-09-30 04:39:21.271 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:39:21.272 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:39:21.415 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:39:21.429 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:40:34.178 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:40:34.413 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:40:34.413 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:40:34.444 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:40:34.444 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:40:34.444 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:40:35.608 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:40:35.608 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:40:35.634 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 31.5852ms
+2025-09-30 04:40:35.663 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 61.7113ms
+2025-09-30 04:40:35.694 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:40:35.729 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 35.085ms
+2025-09-30 04:40:36.557 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:40:36.562 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:40:36.565 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 7.7104ms
+2025-09-30 04:40:36.589 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:40:36.591 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:40:36.732 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:40:36.743 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:40:56.656 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 04:40:56.706 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 04:40:56.716 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 19970.7226ms
+2025-09-30 04:40:56.716 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:40:56.717 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 20128.3007ms
+2025-09-30 04:40:59.045 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:40:59.045 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:40:59.046 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 1.1749ms
+2025-09-30 04:40:59.052 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:40:59.053 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:40:59.055 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:40:59.056 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:43:35.949 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 04:43:36.220 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 04:43:36.220 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 04:43:36.253 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 04:43:36.253 +07:00 [INF] Hosting environment: Development
+2025-09-30 04:43:36.253 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 04:43:37.178 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 04:43:37.178 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 04:43:37.207 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 32.0984ms
+2025-09-30 04:43:37.236 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 63.0373ms
+2025-09-30 04:43:37.287 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 04:43:37.318 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 31.7718ms
+2025-09-30 04:43:38.127 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:43:38.137 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:43:38.140 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 12.8772ms
+2025-09-30 04:43:38.154 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:43:38.156 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:43:38.283 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:43:38.297 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 04:44:32.530 +07:00 [ERR] Error in GetApplicationsByUserId for user 68d7a157a219be53eb1599dd
+System.FormatException: Element 'createdAt' does not match any field or property of class ShareService.Models.ApplicationModel.
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.CursorBatchDeserializationHelper.DeserializeBatch[TDocument](RawBsonArray batch, IBsonSerializer`1 documentSerializer, MessageEncoderSettings messageEncoderSettings)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateFirstCursorBatch(BsonDocument cursorDocument)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateCursor(IChannelSourceHandle channelSource, IChannelHandle channel, BsonDocument commandResult)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.FindAsync[TProjection](FilterDefinition`1 filter, FindOptions`2 options, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at ShareService.DataAccess.Application.GetApplicationsByStudentIdAsync(String studentId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\DataAccess\Service\Application.cs:line 90
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 89
+2025-09-30 04:44:32.620 +07:00 [ERR] Error in GetApplications endpoint
+System.Exception: Error retrieving applications
+ ---> System.FormatException: Element 'createdAt' does not match any field or property of class ShareService.Models.ApplicationModel.
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.DeserializeClass(BsonDeserializationContext context)
+   at MongoDB.Bson.Serialization.BsonClassMapSerializer`1.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+   at MongoDB.Bson.Serialization.IBsonSerializerExtensions.Deserialize[TValue](IBsonSerializer`1 serializer, BsonDeserializationContext context)
+   at MongoDB.Driver.Core.Operations.CursorBatchDeserializationHelper.DeserializeBatch[TDocument](RawBsonArray batch, IBsonSerializer`1 documentSerializer, MessageEncoderSettings messageEncoderSettings)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateFirstCursorBatch(BsonDocument cursorDocument)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.CreateCursor(IChannelSourceHandle channelSource, IChannelHandle channel, BsonDocument commandResult)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, RetryableReadContext context)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(OperationContext operationContext, IReadBinding binding)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](OperationContext operationContext, IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, Boolean allowChannelPinning)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference explicitReadPreference, Nullable`1 timeout, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.FindAsync[TProjection](FilterDefinition`1 filter, FindOptions`2 options, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at ShareService.DataAccess.Application.GetApplicationsByStudentIdAsync(String studentId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\DataAccess\Service\Application.cs:line 90
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 89
+   --- End of inner exception stack trace ---
+   at ShareService.Services.ApplicationService.GetApplicationsByUserId(String userId) in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\ShareService\Services\Service\ApplicationService.cs:line 109
+   at ApplicationsController.GetApplications() in D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex\Controllers\ApplicationsController.cs:line 34
+2025-09-30 04:44:32.634 +07:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-09-30 04:44:32.637 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 54338.0094ms
+2025-09-30 04:44:32.638 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:44:32.638 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 500 null text/plain; charset=utf-8 54484.3107ms
+2025-09-30 04:44:38.842 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 04:44:38.842 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:44:38.843 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 1.3358ms
+2025-09-30 04:44:38.852 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 04:44:38.853 +07:00 [INF] CORS policy execution successful.
+2025-09-30 04:44:38.854 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 04:44:38.854 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:42:57.125 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:42:57.870 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:42:57.870 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:42:57.901 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:42:57.901 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:42:57.901 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:42:58.721 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:42:58.721 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:42:58.745 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 27.7167ms
+2025-09-30 05:42:58.793 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 77.2223ms
+2025-09-30 05:42:58.818 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:42:58.849 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 31.5325ms
+2025-09-30 05:43:01.839 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:43:01.845 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:43:01.847 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 7.6702ms
+2025-09-30 05:43:01.850 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:43:01.851 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:43:02.008 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:43:02.018 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:44:47.989 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:44:48.211 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:44:48.212 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:44:48.245 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:44:48.245 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:44:48.245 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:44:49.294 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:44:49.294 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:44:49.320 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 30.6324ms
+2025-09-30 05:44:49.346 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 58.2574ms
+2025-09-30 05:44:49.374 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:44:49.408 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 34.4607ms
+2025-09-30 05:44:51.387 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:44:51.394 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:44:51.396 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 9.2577ms
+2025-09-30 05:44:51.430 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:44:51.432 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:44:51.573 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:44:51.590 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:46:00.821 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:46:01.045 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:46:01.046 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:46:01.078 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:46:01.078 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:46:01.078 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:46:01.765 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:46:01.766 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:46:01.814 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 54.9461ms
+2025-09-30 05:46:01.843 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 84.4757ms
+2025-09-30 05:46:01.871 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:46:01.901 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 30.7464ms
+2025-09-30 05:46:02.628 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:46:02.638 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:46:02.639 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 11.3529ms
+2025-09-30 05:46:02.655 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:46:02.657 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:46:02.831 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:46:02.848 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:46:46.332 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:46:46.518 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:46:46.518 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:46:46.546 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:46:46.546 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:46:46.546 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:46:46.988 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:46:46.988 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:46:47.032 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 47.6163ms
+2025-09-30 05:46:47.073 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 90.3695ms
+2025-09-30 05:46:47.101 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:46:47.132 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 31.4955ms
+2025-09-30 05:46:49.539 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:46:49.543 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:46:49.544 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 5.0393ms
+2025-09-30 05:46:49.547 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:46:49.549 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:46:49.686 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:46:49.697 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:47:04.419 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:47:04.619 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:47:04.619 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:47:04.648 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:47:04.648 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:47:04.648 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:47:05.778 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:47:05.778 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:47:05.802 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 27.6089ms
+2025-09-30 05:47:05.829 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 55.2108ms
+2025-09-30 05:47:05.869 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:47:05.902 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 32.7563ms
+2025-09-30 05:47:06.720 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:47:06.725 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:47:06.727 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 7.2393ms
+2025-09-30 05:47:06.750 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:47:06.752 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:47:06.893 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:47:06.907 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:47:50.610 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:47:50.826 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:47:50.827 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:47:50.855 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:47:50.856 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:47:50.856 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:47:51.832 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:47:51.832 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:47:51.855 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 27.4057ms
+2025-09-30 05:47:51.884 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 56.5462ms
+2025-09-30 05:47:51.910 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:47:51.940 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 30.6041ms
+2025-09-30 05:47:54.195 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:47:54.200 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:47:54.204 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 8.3943ms
+2025-09-30 05:47:54.223 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:47:54.225 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:47:54.394 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:47:54.411 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:51:26.752 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:51:26.982 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:51:26.983 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:51:27.013 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:51:27.013 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:51:27.013 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:51:27.925 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:51:27.925 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:51:27.957 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 35.6568ms
+2025-09-30 05:51:27.987 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 67.2696ms
+2025-09-30 05:51:28.025 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:51:28.084 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 59.3663ms
+2025-09-30 05:51:28.220 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:51:28.229 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:51:28.231 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 10.9397ms
+2025-09-30 05:51:28.233 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:51:28.235 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:51:28.380 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:51:28.405 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:51:48.460 +07:00 [WRN] Student not found for user ID: 68d7a157a219be53eb1599dd
+2025-09-30 05:51:48.470 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 05:51:48.488 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 20077.3101ms
+2025-09-30 05:51:48.488 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:51:48.491 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 20258.3281ms
+2025-09-30 05:52:44.547 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:52:44.799 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:52:44.799 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:52:44.828 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:52:44.828 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:52:44.828 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:52:45.577 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:52:45.577 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:52:45.627 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 54.0243ms
+2025-09-30 05:52:45.659 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 87.2969ms
+2025-09-30 05:52:45.689 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:52:45.723 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 35.3157ms
+2025-09-30 05:52:48.072 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:52:48.077 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:52:48.079 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 7.0322ms
+2025-09-30 05:52:48.081 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:52:48.082 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:52:48.238 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:52:48.253 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:55:18.299 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 05:55:18.516 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 05:55:18.517 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 05:55:18.550 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 05:55:18.550 +07:00 [INF] Hosting environment: Development
+2025-09-30 05:55:18.550 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 05:55:19.195 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 05:55:19.195 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 05:55:19.229 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 37.7799ms
+2025-09-30 05:55:19.263 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 72.7461ms
+2025-09-30 05:55:19.322 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 05:55:19.377 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 55.1373ms
+2025-09-30 05:55:20.355 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 05:55:20.360 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:55:20.363 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 8.0939ms
+2025-09-30 05:55:20.366 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 05:55:20.367 +07:00 [INF] CORS policy execution successful.
+2025-09-30 05:55:21.021 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:55:21.031 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 05:55:30.803 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 05:55:30.812 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 05:55:30.826 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 9792.7257ms
+2025-09-30 05:55:30.826 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 05:55:30.828 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 10462.1258ms
+2025-09-30 06:10:03.353 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 06:10:03.554 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 06:10:03.554 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 06:10:03.593 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 06:10:03.593 +07:00 [INF] Hosting environment: Development
+2025-09-30 06:10:03.593 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 06:10:04.738 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 06:10:04.738 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 06:10:04.804 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 69.9395ms
+2025-09-30 06:10:04.830 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 98.2042ms
+2025-09-30 06:10:04.874 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 06:10:04.903 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 29.4007ms
+2025-09-30 06:10:09.137 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:10:09.141 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:10:09.142 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 5.7462ms
+2025-09-30 06:10:09.161 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:10:09.162 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:10:12.191 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:10:12.200 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:10:13.477 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:10:13.481 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:10:13.491 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 1288.1062ms
+2025-09-30 06:10:13.491 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:10:13.492 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 4331.3832ms
+2025-09-30 06:49:35.774 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-30 06:49:36.000 +07:00 [INF] Now listening on: https://localhost:5083
+2025-09-30 06:49:36.000 +07:00 [INF] Now listening on: http://localhost:5084
+2025-09-30 06:49:36.031 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-30 06:49:36.031 +07:00 [INF] Hosting environment: Development
+2025-09-30 06:49:36.031 +07:00 [INF] Content root path: D:\EduflexProject\EduflexProject\Eduflex\Eduflex\Eduflex
+2025-09-30 06:49:36.596 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2025-09-30 06:49:36.596 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-30 06:49:36.623 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 31.3666ms
+2025-09-30 06:49:36.661 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 70.5108ms
+2025-09-30 06:49:36.690 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2025-09-30 06:49:36.735 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 45.3351ms
+2025-09-30 06:49:43.997 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:49:44.001 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:49:44.003 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 6.1406ms
+2025-09-30 06:49:44.006 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:49:44.008 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:49:46.838 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:46.849 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:49:48.529 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:49:48.535 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:49:48.548 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 1696.746ms
+2025-09-30 06:49:48.549 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:48.550 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 4544.6951ms
+2025-09-30 06:49:50.696 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:49:50.698 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:49:50.698 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 2.5426ms
+2025-09-30 06:49:50.700 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:49:50.701 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:49:50.702 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:50.702 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:49:50.711 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:49:50.712 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:49:50.712 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 9.7346ms
+2025-09-30 06:49:50.712 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:50.712 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 12.1254ms
+2025-09-30 06:49:53.354 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:49:53.354 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:49:53.364 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:53.364 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:49:53.375 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:49:53.375 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:49:53.376 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 11.9654ms
+2025-09-30 06:49:53.376 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:49:53.376 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 22.6553ms
+2025-09-30 06:50:05.967 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:50:05.967 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:50:05.967 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.4838ms
+2025-09-30 06:50:05.968 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:50:05.969 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:50:05.969 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:05.969 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:50:05.975 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:50:05.975 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:50:05.976 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 6.3535ms
+2025-09-30 06:50:05.976 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:05.976 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 7.5154ms
+2025-09-30 06:50:07.118 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:50:07.118 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:50:07.119 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:07.119 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:50:07.125 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:50:07.126 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:50:07.126 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 6.6649ms
+2025-09-30 06:50:07.126 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:07.127 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 8.4073ms
+2025-09-30 06:50:08.189 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:50:08.190 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:50:08.190 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:08.190 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:50:08.195 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:50:08.196 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:50:08.196 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.5574ms
+2025-09-30 06:50:08.196 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:50:08.196 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 7.0608ms
+2025-09-30 06:52:51.003 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:52:51.003 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:52:51.007 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.6796ms
+2025-09-30 06:52:51.021 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:52:51.021 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:52:51.021 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:52:51.022 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:52:51.026 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:52:51.027 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:52:51.027 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.4221ms
+2025-09-30 06:52:51.027 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:52:51.027 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.7718ms
+2025-09-30 06:52:57.369 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:52:57.369 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:52:57.369 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.4173ms
+2025-09-30 06:52:57.371 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:52:57.371 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:52:57.372 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:52:57.372 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:52:57.376 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:52:57.377 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:52:57.377 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.1686ms
+2025-09-30 06:52:57.377 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:52:57.377 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.1816ms
+2025-09-30 06:53:22.691 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:22.691 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:22.741 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 49.3286ms
+2025-09-30 06:53:22.775 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:22.775 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:22.775 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:22.776 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:53:22.779 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:53:22.779 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:53:22.780 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.9225ms
+2025-09-30 06:53:22.780 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:22.780 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 5.0397ms
+2025-09-30 06:53:27.859 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:27.859 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:27.860 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 1.1463ms
+2025-09-30 06:53:27.861 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:27.862 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:27.863 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:27.863 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:53:27.871 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:53:27.871 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:53:27.871 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 8.0288ms
+2025-09-30 06:53:27.871 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:27.871 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 9.9466ms
+2025-09-30 06:53:33.973 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2025-09-30 06:53:33.973 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:33.974 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 0.8798ms
+2025-09-30 06:53:33.977 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 49
+2025-09-30 06:53:33.977 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:33.978 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 06:53:34.014 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.API.DTOs.AuthResponseDto]] Login(Eduflex.API.DTOs.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2025-09-30 06:53:34.137 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2025-09-30 06:53:34.316 +07:00 [INF] Last login updated for user: 68d7a157a219be53eb1599dd
+2025-09-30 06:53:34.338 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.API.DTOs.AuthResponseDto'.
+2025-09-30 06:53:34.342 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 327.9655ms
+2025-09-30 06:53:34.342 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 06:53:34.342 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 365.4267ms
+2025-09-30 06:53:35.169 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:35.169 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:35.169 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.7385ms
+2025-09-30 06:53:35.174 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:53:35.174 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:53:35.175 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:35.176 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:53:35.184 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:53:35.184 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:53:35.184 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 7.9621ms
+2025-09-30 06:53:35.184 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:53:35.184 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 10.6324ms
+2025-09-30 06:54:09.588 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:54:09.588 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:54:09.588 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.5034ms
+2025-09-30 06:54:09.590 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:54:09.590 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:54:09.591 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:09.591 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:54:09.594 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:54:09.595 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:54:09.595 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.6573ms
+2025-09-30 06:54:09.595 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:09.595 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 5.0897ms
+2025-09-30 06:54:10.263 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:54:10.263 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:54:10.264 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:10.264 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:54:10.267 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:54:10.267 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:54:10.267 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.3389ms
+2025-09-30 06:54:10.267 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:10.267 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 4.3266ms
+2025-09-30 06:54:10.752 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:54:10.752 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:54:10.752 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:10.753 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:54:10.759 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:54:10.759 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:54:10.759 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 6.6828ms
+2025-09-30 06:54:10.760 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:10.760 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 8.3946ms
+2025-09-30 06:54:11.424 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:54:11.424 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:54:11.425 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:11.425 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:54:11.429 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:54:11.429 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:54:11.430 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 4.4671ms
+2025-09-30 06:54:11.430 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:54:11.430 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 5.7462ms
+2025-09-30 06:55:50.217 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:55:50.217 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:55:50.217 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.7077ms
+2025-09-30 06:55:50.226 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:55:50.227 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:55:50.228 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:55:50.228 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:55:50.233 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:55:50.233 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:55:50.233 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.4866ms
+2025-09-30 06:55:50.233 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:55:50.233 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.9556ms
+2025-09-30 06:56:51.321 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:56:51.321 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:56:51.322 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.5665ms
+2025-09-30 06:56:51.363 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:56:51.364 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:56:51.364 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:56:51.364 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:56:51.368 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:56:51.368 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:56:51.368 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 4.2707ms
+2025-09-30 06:56:51.368 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:56:51.369 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 5.5082ms
+2025-09-30 06:56:52.515 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:56:52.515 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:56:52.516 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:56:52.516 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:56:52.520 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:56:52.521 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:56:52.521 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 4.8757ms
+2025-09-30 06:56:52.521 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:56:52.522 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.8879ms
+2025-09-30 06:59:10.184 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:59:10.185 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:59:10.185 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.4803ms
+2025-09-30 06:59:10.223 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:59:10.223 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:59:10.224 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:59:10.224 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:59:10.227 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:59:10.227 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:59:10.228 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.6352ms
+2025-09-30 06:59:10.228 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:59:10.228 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 4.7097ms
+2025-09-30 06:59:40.659 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 06:59:40.660 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:59:40.660 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.5878ms
+2025-09-30 06:59:40.666 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 06:59:40.666 +07:00 [INF] CORS policy execution successful.
+2025-09-30 06:59:40.667 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:59:40.667 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 06:59:40.670 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 06:59:40.671 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 06:59:40.671 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.519ms
+2025-09-30 06:59:40.671 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 06:59:40.671 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 5.1878ms
+2025-09-30 07:00:16.578 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 07:00:16.578 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:00:16.578 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.5812ms
+2025-09-30 07:00:16.610 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 07:00:16.610 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:00:16.611 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:00:16.611 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 07:00:16.614 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 07:00:16.614 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 07:00:16.614 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 3.341ms
+2025-09-30 07:00:16.614 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:00:16.614 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 4.3958ms
+2025-09-30 07:00:17.790 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 07:00:17.791 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:00:17.791 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:00:17.792 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 07:00:17.801 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 07:00:17.802 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 07:00:17.802 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 10.7912ms
+2025-09-30 07:00:17.802 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:00:17.805 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 14.6429ms
+2025-09-30 07:01:07.795 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 07:01:07.795 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:07.795 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.298ms
+2025-09-30 07:01:07.797 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 07:01:07.798 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:07.799 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:01:07.799 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 07:01:07.804 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 07:01:07.804 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 07:01:07.804 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.2354ms
+2025-09-30 07:01:07.804 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:01:07.804 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.944ms
+2025-09-30 07:01:25.260 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2025-09-30 07:01:25.261 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:25.261 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 1.0799ms
+2025-09-30 07:01:25.262 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 49
+2025-09-30 07:01:25.262 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:25.262 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 07:01:25.263 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.API.DTOs.AuthResponseDto]] Login(Eduflex.API.DTOs.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2025-09-30 07:01:25.266 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2025-09-30 07:01:25.270 +07:00 [INF] Last login updated for user: 68d7a157a219be53eb1599dd
+2025-09-30 07:01:25.270 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.API.DTOs.AuthResponseDto'.
+2025-09-30 07:01:25.270 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 7.8057ms
+2025-09-30 07:01:25.270 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2025-09-30 07:01:25.271 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 8.3637ms
+2025-09-30 07:01:26.087 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Applications - null null
+2025-09-30 07:01:26.087 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:26.087 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Applications - 204 null null 0.2456ms
+2025-09-30 07:01:26.092 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Applications - null null
+2025-09-30 07:01:26.092 +07:00 [INF] CORS policy execution successful.
+2025-09-30 07:01:26.093 +07:00 [INF] Executing endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:01:26.093 +07:00 [INF] Route matched with {action = "GetApplications", controller = "Applications"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[ShareService.Models.ApplicationModel]]] GetApplications() on controller ApplicationsController (Eduflex).
+2025-09-30 07:01:26.098 +07:00 [INF] Returned 3 applications for user 68d7a157a219be53eb1599dd (student: 68d7a156a219be53eb1599da)
+2025-09-30 07:01:26.098 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ShareService.Models.ApplicationModel, ShareService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-30 07:01:26.099 +07:00 [INF] Executed action ApplicationsController.GetApplications (Eduflex) in 5.0269ms
+2025-09-30 07:01:26.099 +07:00 [INF] Executed endpoint 'ApplicationsController.GetApplications (Eduflex)'
+2025-09-30 07:01:26.099 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Applications - 200 null application/json; charset=utf-8 6.6055ms

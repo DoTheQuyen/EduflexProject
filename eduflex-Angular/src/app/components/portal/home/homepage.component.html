@@ -1,0 +1,34 @@
+<div class="portal-container">
+  <!-- Sidebar -->
+  <app-sidebar 
+    [userInfo]="userInfo" 
+    [isCollapsed]="isSidebarCollapsed">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <!-- Header -->
+    <header class="portal-header">
+      <div class="header-left">
+        <button class="btn btn-outline-secondary" (click)="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h4 class="portal-title">
+          {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
+        </h4>
+      </div>
+      
+      <div class="header-right">
+        <span class="welcome-text">Welcome, {{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
+        <button class="btn btn-outline-danger btn-sm" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Dynamic Content Area -->
+    <main class="content-area">
+      <router-outlet></router-outlet> <!-- This will render the child components -->
+    </main>
+  </div>
+</div>

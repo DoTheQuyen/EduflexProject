@@ -61,6 +61,7 @@ export class AuthService {
     }
   }
 
+  
   // optional method version if you need to call it from TS
   public isLoggedInNow(): boolean { return this.isLoggedIn; }
 

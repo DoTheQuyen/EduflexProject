@@ -52,7 +52,7 @@
       "convertConstructorInterfaceData": false,
       "importRequiredTypes": true,
       "useGetBaseUrlMethod": false,
-      "baseUrlTokenName": "API_BASE_URL",
+      "baseUrlTokenName": "AUTH_API_BASE_URL",
       "queryNullValue": "",
       "useAbortSignal": false,
       "inlineNamedDictionaries": false,
@@ -61,7 +61,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../../eduflex-Angular/src/app/services/auth.services.ts",
+      "output": "../../../eduflex-Angular/src/app/services/public.services.ts",
       "newLineBehavior": "Auto"
     }
   }

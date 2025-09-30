@@ -7,7 +7,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authToken = authHelper.getAuthToken();
   
   // Skip adding auth token for login/register requests
-  if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+  if (req.url.includes('/api/Auth/login') || req.url.includes('/api/Auth/register')) {
     return next(req);
   }
   

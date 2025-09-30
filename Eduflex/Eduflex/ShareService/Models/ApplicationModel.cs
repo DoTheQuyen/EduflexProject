@@ -3,32 +3,40 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShareService.Models
 {
-
     public class ApplicationModel
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; }
 
         [BsonElement("studentId")]
-        public string StudentId { get; set; } = string.Empty;
+        public string StudentId { get; set; }
 
         [BsonElement("studentName")]
-        public string StudentName { get; set; } = string.Empty;
+        public string StudentName { get; set; }
+
+        [BsonElement("studentEmail")]
+        public string StudentEmail { get; set; }
 
         [BsonElement("description")]
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; }
+
+        [BsonElement("details")]
+        public string Details { get; set; }
+
+        [BsonElement("applicationType")]
+        public string ApplicationType { get; set; }
 
         [BsonElement("dateApplied")]
         public DateTime DateApplied { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected
+        public string Status { get; set; } = "Pending";
 
-        [BsonElement("details")]
-        public string Details { get; set; } = string.Empty;
+        [BsonElement("createdAt")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [BsonElement("applicationType")]
-        public string ApplicationType { get; set; } = string.Empty;
+        [BsonElement("updatedAt")]
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

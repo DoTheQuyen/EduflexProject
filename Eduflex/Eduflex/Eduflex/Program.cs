@@ -1,38 +1,54 @@
-using Microsoft.EntityFrameworkCore;
-using Eduflex.API.Data;
-using Eduflex.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
+using ShareService.Inject;
+using System.Text;
+using Serilog;
+using ShareService.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Month)
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("auth", new OpenApiInfo { Title = "Eduflex Auth API", Version = "v1" });
     c.SwaggerDoc("app", new OpenApiInfo { Title = "Eduflex App API", Version = "v1" });
-    // include only actions that match the doc group
     c.DocInclusionPredicate((docName, apiDesc) =>
         string.Equals(apiDesc.GroupName, docName, StringComparison.OrdinalIgnoreCase));
 });
 
-// Configure MongoDB
+// Configure MongoDB Settings
 builder.Services.Configure<MongoDBSettings>(
     builder.Configuration.GetSection("MongoDBSettings"));
 
-builder.Services.AddSingleton<MongoDBService>();
+// Register MongoDB Client (Singleton - recommended by MongoDB)
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("MongoDBConnection");
+    return new MongoClient(connectionString);
+});
 
-// Add Entity Framework with MongoDB
-builder.Services.AddDbContext<MongoDbContext>(options =>
-    options.UseMongoDB(builder.Configuration.GetConnectionString("MongoDBConnection"), "EduflexDB"));
+// Register MongoDB Database (Scoped)
+builder.Services.AddScoped<IMongoDatabase>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<MongoDBSettings>>().Value;
+    var client = sp.GetRequiredService<IMongoClient>();
+    return client.GetDatabase(settings.DatabaseName);
+});
 
 // Add JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -53,21 +69,20 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:9000")
+        policy.WithOrigins("http://localhost:4200", "http://localhost:9000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
 
-// Generate NSwag API documentation
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Register all shared services (DataAccess, Services, Validators)
+builder.Services.AddSharedServices();
 
 var app = builder.Build();
 
 // NSwag middleware
-app.UseOpenApi();          // /swagger/v1/swagger.json
+app.UseOpenApi();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/auth/swagger.json", "Auth API v1");

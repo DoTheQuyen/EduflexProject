@@ -13,7 +13,7 @@ import { Observable, throwError as _observableThrow, of as _observableOf } from 
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
-export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
+export const APPLICATION_API_BASE_URL = new InjectionToken<string>('APPLICATION_API_BASE_URL');
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +23,7 @@ export class Client {
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(APPLICATION_API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ?? "";
     }
@@ -31,11 +31,8 @@ export class Client {
     /**
      * @return OK
      */
-    student(studentId: string): Observable<ApplicationDto[]> {
-        let url_ = this.baseUrl + "/api/Applications/student/{studentId}";
-        if (studentId === undefined || studentId === null)
-            throw new Error("The parameter 'studentId' must be defined.");
-        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
+    applicationsAll(): Observable<ApplicationModel[]> {
+        let url_ = this.baseUrl + "/api/Applications";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -47,20 +44,20 @@ export class Client {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processStudent(response_);
+            return this.processApplicationsAll(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processStudent(response_ as any);
+                    return this.processApplicationsAll(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ApplicationDto[]>;
+                    return _observableThrow(e) as any as Observable<ApplicationModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ApplicationDto[]>;
+                return _observableThrow(response_) as any as Observable<ApplicationModel[]>;
         }));
     }
 
-    protected processStudent(response: HttpResponseBase): Observable<ApplicationDto[]> {
+    protected processApplicationsAll(response: HttpResponseBase): Observable<ApplicationModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -74,7 +71,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ApplicationDto.fromJS(item));
+                    result200!.push(ApplicationModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -90,64 +87,10 @@ export class Client {
     }
 
     /**
-     * @return OK
-     */
-    applicationsGET(id: string): Observable<ApplicationDetailDto> {
-        let url_ = this.baseUrl + "/api/Applications/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processApplicationsGET(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processApplicationsGET(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<ApplicationDetailDto>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<ApplicationDetailDto>;
-        }));
-    }
-
-    protected processApplicationsGET(response: HttpResponseBase): Observable<ApplicationDetailDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApplicationDetailDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
      * @param body (optional) 
      * @return OK
      */
-    applicationsPOST(body: CreateApplicationDto | undefined): Observable<ApplicationDto> {
+    applicationsPOST(body: CreateApplicationModel | undefined): Observable<ApplicationModel> {
         let url_ = this.baseUrl + "/api/Applications";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -170,14 +113,14 @@ export class Client {
                 try {
                     return this.processApplicationsPOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ApplicationDto>;
+                    return _observableThrow(e) as any as Observable<ApplicationModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ApplicationDto>;
+                return _observableThrow(response_) as any as Observable<ApplicationModel>;
         }));
     }
 
-    protected processApplicationsPOST(response: HttpResponseBase): Observable<ApplicationDto> {
+    protected processApplicationsPOST(response: HttpResponseBase): Observable<ApplicationModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -188,7 +131,61 @@ export class Client {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApplicationDto.fromJS(resultData200);
+            result200 = ApplicationModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    applicationsGET(id: string): Observable<ApplicationDetailModel> {
+        let url_ = this.baseUrl + "/api/Applications/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApplicationsGET(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApplicationsGET(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationDetailModel>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationDetailModel>;
+        }));
+    }
+
+    protected processApplicationsGET(response: HttpResponseBase): Observable<ApplicationDetailModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApplicationDetailModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -203,7 +200,7 @@ export class Client {
      * @param body (optional) 
      * @return OK
      */
-    status(id: string, body: UpdateStatusDto | undefined): Observable<void> {
+    status(id: string, body: string | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Applications/{id}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -221,7 +218,7 @@ export class Client {
             })
         };
 
-        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processStatus(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -255,7 +252,7 @@ export class Client {
     }
 }
 
-export class ApplicationDetailDto implements IApplicationDetailDto {
+export class ApplicationDetailModel implements IApplicationDetailModel {
     id?: string | undefined;
     studentId?: string | undefined;
     studentName?: string | undefined;
@@ -265,7 +262,7 @@ export class ApplicationDetailDto implements IApplicationDetailDto {
     details?: string | undefined;
     applicationType?: string | undefined;
 
-    constructor(data?: IApplicationDetailDto) {
+    constructor(data?: IApplicationDetailModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -287,9 +284,9 @@ export class ApplicationDetailDto implements IApplicationDetailDto {
         }
     }
 
-    static fromJS(data: any): ApplicationDetailDto {
+    static fromJS(data: any): ApplicationDetailModel {
         data = typeof data === 'object' ? data : {};
-        let result = new ApplicationDetailDto();
+        let result = new ApplicationDetailModel();
         result.init(data);
         return result;
     }
@@ -308,7 +305,7 @@ export class ApplicationDetailDto implements IApplicationDetailDto {
     }
 }
 
-export interface IApplicationDetailDto {
+export interface IApplicationDetailModel {
     id?: string | undefined;
     studentId?: string | undefined;
     studentName?: string | undefined;
@@ -319,17 +316,20 @@ export interface IApplicationDetailDto {
     applicationType?: string | undefined;
 }
 
-export class ApplicationDto implements IApplicationDto {
+export class ApplicationModel implements IApplicationModel {
     id?: string | undefined;
     studentId?: string | undefined;
     studentName?: string | undefined;
+    studentEmail?: string | undefined;
     description?: string | undefined;
-    dateApplied?: Date;
-    status?: string | undefined;
     details?: string | undefined;
     applicationType?: string | undefined;
+    dateApplied?: Date;
+    status?: string | undefined;
+    createdAt?: Date;
+    updatedAt?: Date;
 
-    constructor(data?: IApplicationDto) {
+    constructor(data?: IApplicationModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -343,17 +343,20 @@ export class ApplicationDto implements IApplicationDto {
             this.id = _data["id"];
             this.studentId = _data["studentId"];
             this.studentName = _data["studentName"];
+            this.studentEmail = _data["studentEmail"];
             this.description = _data["description"];
-            this.dateApplied = _data["dateApplied"] ? new Date(_data["dateApplied"].toString()) : <any>undefined;
-            this.status = _data["status"];
             this.details = _data["details"];
             this.applicationType = _data["applicationType"];
+            this.dateApplied = _data["dateApplied"] ? new Date(_data["dateApplied"].toString()) : <any>undefined;
+            this.status = _data["status"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): ApplicationDto {
+    static fromJS(data: any): ApplicationModel {
         data = typeof data === 'object' ? data : {};
-        let result = new ApplicationDto();
+        let result = new ApplicationModel();
         result.init(data);
         return result;
     }
@@ -363,34 +366,41 @@ export class ApplicationDto implements IApplicationDto {
         data["id"] = this.id;
         data["studentId"] = this.studentId;
         data["studentName"] = this.studentName;
+        data["studentEmail"] = this.studentEmail;
         data["description"] = this.description;
-        data["dateApplied"] = this.dateApplied ? this.dateApplied.toISOString() : <any>undefined;
-        data["status"] = this.status;
         data["details"] = this.details;
         data["applicationType"] = this.applicationType;
+        data["dateApplied"] = this.dateApplied ? this.dateApplied.toISOString() : <any>undefined;
+        data["status"] = this.status;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         return data;
     }
 }
 
-export interface IApplicationDto {
+export interface IApplicationModel {
     id?: string | undefined;
     studentId?: string | undefined;
     studentName?: string | undefined;
+    studentEmail?: string | undefined;
     description?: string | undefined;
-    dateApplied?: Date;
-    status?: string | undefined;
     details?: string | undefined;
     applicationType?: string | undefined;
+    dateApplied?: Date;
+    status?: string | undefined;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
-export class CreateApplicationDto implements ICreateApplicationDto {
+export class CreateApplicationModel implements ICreateApplicationModel {
     studentId?: string | undefined;
+    userId?: string | undefined;
     studentName?: string | undefined;
     description?: string | undefined;
     details?: string | undefined;
     applicationType?: string | undefined;
 
-    constructor(data?: ICreateApplicationDto) {
+    constructor(data?: ICreateApplicationModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -402,6 +412,7 @@ export class CreateApplicationDto implements ICreateApplicationDto {
     init(_data?: any) {
         if (_data) {
             this.studentId = _data["studentId"];
+            this.userId = _data["userId"];
             this.studentName = _data["studentName"];
             this.description = _data["description"];
             this.details = _data["details"];
@@ -409,9 +420,9 @@ export class CreateApplicationDto implements ICreateApplicationDto {
         }
     }
 
-    static fromJS(data: any): CreateApplicationDto {
+    static fromJS(data: any): CreateApplicationModel {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateApplicationDto();
+        let result = new CreateApplicationModel();
         result.init(data);
         return result;
     }
@@ -419,6 +430,7 @@ export class CreateApplicationDto implements ICreateApplicationDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["studentId"] = this.studentId;
+        data["userId"] = this.userId;
         data["studentName"] = this.studentName;
         data["description"] = this.description;
         data["details"] = this.details;
@@ -427,48 +439,13 @@ export class CreateApplicationDto implements ICreateApplicationDto {
     }
 }
 
-export interface ICreateApplicationDto {
+export interface ICreateApplicationModel {
     studentId?: string | undefined;
+    userId?: string | undefined;
     studentName?: string | undefined;
     description?: string | undefined;
     details?: string | undefined;
     applicationType?: string | undefined;
-}
-
-export class UpdateStatusDto implements IUpdateStatusDto {
-    status?: string | undefined;
-
-    constructor(data?: IUpdateStatusDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.status = _data["status"];
-        }
-    }
-
-    static fromJS(data: any): UpdateStatusDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateStatusDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["status"] = this.status;
-        return data;
-    }
-}
-
-export interface IUpdateStatusDto {
-    status?: string | undefined;
 }
 
 export class ApiException extends Error {

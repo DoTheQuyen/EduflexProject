@@ -11,7 +11,7 @@ namespace DBMigration.Models
 
         [BsonElement("userId")]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string UserId { get; set; }
+        public string UserId { get; set; } // Foreign key to Users collection
 
         [BsonElement("email")]
         public string Email { get; set; } = string.Empty;

@@ -1,34 +1,61 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { AboutComponent } from './components/about/about.component';
+import { Routes } from '@angular/router';
+import { HomeComponent } from './components/public/home/home.component';
+import { AboutComponent } from './components/public/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HomepageComponent } from './components/activities/home/homepage.component';
+import { HomepageComponent } from './components/portal/home/homepage.component';
+import { ApplicationComponent } from './components/portal/student/applications/application.component';
+import { ProfileComponent } from './components/portal/share-component/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register',  loadComponent: () =>
-      import('./components/register/register.component').then(m => m.RegisterComponent) },
+  { path: '', component: HomeComponent }, // Public home page
+  { path: 'about', component: AboutComponent }, // Public about page
+  { path: 'login', component: LoginComponent }, // Public login page
+  { 
+    path: 'register',  
+    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent) 
+  },
+
+  // Student portal (parent)
   {
-    path: '',
+    path: 'student-portal',
     component: HomepageComponent,
     canActivate: [AuthGuard],
     children: [
-      // { path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) },
-      // { path: 'courses', loadChildren: () => import('./modules/courses/courses.module').then(m => m.CoursesModule) },
-      // { path: 'students', loadChildren: () => import('./modules/students/students.module').then(m => m.StudentsModule) },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      {
+        path: 'application',
+        component: ApplicationComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        canActivate: [AuthGuard]
+      },
+      { path: '', redirectTo: 'application', pathMatch: 'full' } // default child
     ]
   },
-  { path: '**', redirectTo: '' }
-];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
+  // Staff portal
+  {
+    path: 'staff-portal', 
+    component: HomepageComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'applications',
+        component: ApplicationComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        canActivate: [AuthGuard]
+      },
+      { path: '', redirectTo: 'applications', pathMatch: 'full' }
+    ]
+  },
+
+  { path: '**', redirectTo: '' } // Fallback to public home
+];

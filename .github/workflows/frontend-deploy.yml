@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: eduflex-Angular
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build for production
         working-directory: eduflex-Angular

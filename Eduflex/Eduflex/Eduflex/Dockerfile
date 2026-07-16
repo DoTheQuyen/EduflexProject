@@ -13,7 +13,7 @@ ENV BuildingInsideDocker=true
 
 # Publish the API project
 WORKDIR /src/Eduflex/Eduflex/Eduflex
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish -p:BuildingInsideDocker=true
 
 # Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime

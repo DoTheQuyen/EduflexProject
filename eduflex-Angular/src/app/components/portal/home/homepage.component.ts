@@ -9,7 +9,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, SidebarComponent], // Remove ApplicationComponent from imports
   templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.css']
+  // styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
   userInfo: any;

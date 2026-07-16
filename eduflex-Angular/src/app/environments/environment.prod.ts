@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.yourdomain.com'
+  apiClientUrl: 'https://eduflex-api.proudground-29bd75df.australiaeast.azurecontainerapps.io',
+  publicApiUrl: 'https://eduflex-api.proudground-29bd75df.australiaeast.azurecontainerapps.io'
 };

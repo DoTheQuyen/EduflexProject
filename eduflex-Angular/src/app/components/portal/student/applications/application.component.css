@@ -1,6 +1,6 @@
 .student-portal {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: white;
   padding-bottom: 2rem;
 }
 
@@ -145,4 +145,6 @@
   .pagination .page-item {
     margin-bottom: 0.5rem;
   }
+
+ 
 }

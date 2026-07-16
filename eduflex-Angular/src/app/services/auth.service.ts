@@ -1,82 +1,62 @@
-// // src/app/services/auth.service.ts
-// import { Injectable } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { jwtDecode } from 'jwt-decode';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AuthService {
-//   constructor(private router: Router) {}
-
-//   isLoggedIn(): boolean {
-//     const token = localStorage.getItem('access_token');
-//     if (!token) return false;
-
-//     try {
-//       const decoded: any = jwtDecode(token);
-//       const currentTime = Date.now() / 1000;
-//       return decoded.exp > currentTime;
-//     } catch (error) {
-//       return false;
-//     }
-//   }
-
-//   logout(): void {
-//     localStorage.removeItem('access_token');
-//     localStorage.removeItem('user_info');
-//     this.router.navigate(['/login']);
-//   }
-
-//   getUserInfo(): any {
-//     const userInfo = localStorage.getItem('user_info');
-//     return userInfo ? JSON.parse(userInfo) : null;
-//   }
-// }
-
-// src/app/services/auth.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { User } from '../models/user'; // adjust path if your models folder differs
+import { User } from '../models/user';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // current user stream the navbar can subscribe to
-  private currentUserSubject = new BehaviorSubject<User | null>(this.readUserFromStorage());
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public readonly currentUser: Observable<User | null> = this.currentUserSubject.asObservable();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    // initialize only if in browser
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUserSubject.next(this.readUserFromStorage());
+    }
+  }
 
-  // allow template usage: *ngIf="authService.isLoggedIn"
+  // ✅ safe getter for templates
   get isLoggedIn(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     const token = localStorage.getItem('access_token');
     if (!token) return false;
+
     try {
       const decoded: any = jwtDecode(token);
-      return (decoded?.exp ?? 0) > (Date.now() / 1000);
+      return (decoded?.exp ?? 0) > Date.now() / 1000;
     } catch {
       return false;
     }
   }
 
-  
-  // optional method version if you need to call it from TS
-  public isLoggedInNow(): boolean { return this.isLoggedIn; }
+  // ✅ explicit method version
+  public isLoggedInNow(): boolean {
+    return this.isLoggedIn;
+  }
 
-  public getUserInfo(): User | null { return this.readUserFromStorage(); }
+  public getUserInfo(): User | null {
+    return isPlatformBrowser(this.platformId) ? this.readUserFromStorage() : null;
+  }
 
-  // call this after a successful login/refresh to persist and broadcast the user
+  // ✅ set session only in browser
   public setSession(token: string, user: User): void {
-    localStorage.setItem('access_token', token);
-    localStorage.setItem('user_info', JSON.stringify(user));
-    this.currentUserSubject.next(user);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('access_token', token);
+      localStorage.setItem('user_info', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+    }
   }
 
   public clearSession(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_info');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_info');
+    }
     this.currentUserSubject.next(null);
   }
 
@@ -86,7 +66,12 @@ export class AuthService {
   }
 
   private readUserFromStorage(): User | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
     const raw = localStorage.getItem('user_info');
-    try { return raw ? (JSON.parse(raw) as User) : null; } catch { return null; }
+    try {
+      return raw ? (JSON.parse(raw) as User) : null;
+    } catch {
+      return null;
+    }
   }
 }

@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthHelperService {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   isLoggedIn(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     const token = localStorage.getItem('authToken');
-    // Add token validation if needed (check expiration)
     return !!token && this.isTokenValid();
   }
 
@@ -17,10 +20,11 @@ export class AuthHelperService {
   }
 
   getCurrentUser(): any {
+    if (!isPlatformBrowser(this.platformId)) return null;
     try {
       const userData = localStorage.getItem('userData');
       return userData ? JSON.parse(userData) : null;
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -30,14 +34,17 @@ export class AuthHelperService {
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
-    localStorage.removeItem('rememberMe');
-    localStorage.removeItem('userEmail');
-    // Don't use window.location.href to avoid full page reloads
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('rememberMe');
+      localStorage.removeItem('userEmail');
+    }
+    // Optionally navigate using Router here instead of full reload
   }
 
   getAuthToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
     return localStorage.getItem('authToken');
   }
 

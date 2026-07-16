@@ -1,20 +1,24 @@
-import { Client, ApplicationDetailDto } from './../../../../services/api.services';
+import { Client, ApplicationDetailDto } from '@services/api.services';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { DataTablesModule } from 'angular-datatables';
-import { HttpClientModule } from '@angular/common/http';
+import { AuthHelperService } from '@services/auth-helper.service';
+import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { DataTableColumn, DataTableAction  } from '@generic/data-table/data-table.models';
+import { formatDateTime } from '../../../../shared/utils/date-time.util';
 
 @Component({
   selector: 'app-student-portal',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, DataTablesModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, FormsModule, DataTablesModule, DataTableComponent],
   templateUrl: './application.component.html',
-  styleUrls: ['./application.component.css']
+  // styleUrls: ['./application.component.css']
 })
 export class ApplicationComponent implements OnInit, OnDestroy {
+  userInfo: any;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -26,15 +30,26 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
   statusFilter: string = 'all';
 
+  columns: DataTableColumn<ApplicationDetailDto>[] = [
+  { field: 'description', title: 'Description' },
+  { field: 'applicationType', title: 'Type' },
+  { field: 'dateApplied', title: 'Date Applied', className: 'text-center',
+    formatter: (value) => formatDateTime(value, 'dd/MM/yyyy HH:mm') },
+  { field: 'status', title: 'Status', className: 'text-center' },
+  { field: 'actions', title: 'Actions', className: 'text-center' }
+];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private appService: Client
+    private appService: Client,
+    private authHelper: AuthHelperService
   ) {}
 
   ngOnInit(): void {
     this.initializeDataTable();
     this.loadStudentApplications();
+    this.userInfo = this.authHelper.getCurrentUser();
   }
 
   ngOnDestroy(): void {
@@ -83,11 +98,11 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
     if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase();
-      // filtered = filtered.filter(app =>
-      //   app.description.toLowerCase().includes(searchLower) ||
-      //   app.status.toLowerCase().includes(searchLower) ||
-      //   app.applicationType.toLowerCase().includes(searchLower)
-      // );
+      filtered = filtered.filter(app =>
+        app.description?.toLowerCase().includes(searchLower) ||
+        app.status?.toLowerCase().includes(searchLower) ||
+        app.applicationType?.toLowerCase().includes(searchLower)
+      );
     }
 
     if (this.statusFilter !== 'all') {
@@ -108,17 +123,13 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     this.filterApplications();
   }
 
- getStatusBadgeClass(status: string | undefined): string {
-  if (!status) return 'badge bg-secondary'; 
-  switch (status.toLowerCase()) {
-    case 'approved': return 'badge bg-success';
-    case 'under review': return 'badge bg-warning text-dark';
-    case 'rejected': return 'badge bg-danger';
-    case 'documents required': return 'badge bg-info';
-    default: return 'badge bg-secondary';
+onTableAction(event: DataTableAction<any>) {
+    console.log('Table action clicked:', event);
+    if (event.action === 'view') {
+      // do something with event.row
+      alert(`Viewing application with ID: ${event.row.id}`);
+    }
   }
-}
-
   onNewApplication(): void {
     this.router.navigate(['/student-portal/new-application']);
   }

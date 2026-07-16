@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { Client, LoginDto, AuthResponseDto } from '../../services/public.services';
-import { AuthHelperService } from '../../services/auth-helper.service';
+import { Client, LoginDto, AuthResponseDto } from '@services/public.services';
+import { AuthHelperService } from '@services/auth-helper.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private apiClient: Client,
     private router: Router,
-    private authHelper: AuthHelperService
+    private authHelper: AuthHelperService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -105,17 +106,21 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private storeAuthData(authResponse: AuthResponseDto): void {
-    localStorage.setItem('authToken', authResponse.token || '');
-    localStorage.setItem('userData', JSON.stringify({
-      id: authResponse.userId,
-      email: authResponse.email,
-      firstName: authResponse.firstName,
-      lastName: authResponse.lastName,
-      role: authResponse.role
-    }));
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('authToken', authResponse.token || '');
+      localStorage.setItem('userData', JSON.stringify({
+        id: authResponse.userId,
+        email: authResponse.email,
+        firstName: authResponse.firstName,
+        lastName: authResponse.lastName,
+        role: authResponse.role
+      }));
+    }
   }
 
   private handleRememberMe(email: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.loginForm.get('rememberMe')?.value) {
       localStorage.setItem('rememberMe', 'true');
       localStorage.setItem('userEmail', email);
@@ -126,6 +131,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private loadRememberedEmail(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const remember = localStorage.getItem('rememberMe');
     if (remember === 'true') {
       const savedEmail = localStorage.getItem('userEmail');
@@ -143,7 +150,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     return err.message || 'Unexpected error. Try again.';
   }
 
-isFieldInvalid(fieldName: string): boolean {
+  isFieldInvalid(fieldName: string): boolean {
     const control = this.loginForm.get(fieldName);
     return control ? control.invalid && control.touched : false;
   }
@@ -161,7 +168,7 @@ isFieldInvalid(fieldName: string): boolean {
     return 'Invalid field';
   }
 
-    onForgotPassword(event: Event): void {
+  onForgotPassword(event: Event): void {
     event.preventDefault();
     this.errorMessage = 'Password reset functionality coming soon! Please contact support.';
   }

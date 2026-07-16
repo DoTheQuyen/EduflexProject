@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthHelperService } from '../../../../services/auth-helper.service';
-import { Client, UserDto, UpdateUserProfileDto, ChangePasswordDto } from '../../../../services/api.services';
+import { AuthHelperService } from '@services/auth-helper.service';
+import { Client, UserDto, UpdateUserProfileDto, ChangePasswordDto } from '@services/api.services';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  // styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
   userInfo: any;

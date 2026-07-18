@@ -1,0 +1,50 @@
+<section class="promotion-section" *ngIf="coursePromotions.length > 0">
+  <div class="container">
+    <div class="promotion-heading">
+      <h2>Course offers this semester</h2>
+      <p>Scholarships and study pathways from our partner universities</p>
+    </div>
+
+    <div class="promotion-carousel">
+      <button type="button" class="promotion-arrow promotion-arrow-prev" (click)="prevPromotionSlide(); restartPromotionAutoplay()" aria-label="Previous offer">&#8249;</button>
+
+      <article class="promotion-card">
+        <div class="promotion-banner">
+          <div class="promotion-top-row">
+            <span class="promotion-crest">{{ coursePromotions[currentPromotionIndex].universityName.charAt(0) }}</span>
+            <span class="promotion-semester">{{ coursePromotions[currentPromotionIndex].semester }}</span>
+          </div>
+          <span class="promotion-scholarship">{{ coursePromotions[currentPromotionIndex].scholarshipLabel }}</span>
+          <h3>{{ coursePromotions[currentPromotionIndex].courseName }}</h3>
+          <p class="promotion-uni-name">{{ coursePromotions[currentPromotionIndex].universityName }}</p>
+        </div>
+        <div class="promotion-info">
+          <div class="promotion-stats-grid">
+            <div class="promotion-stat-row"><span class="label">Location</span><span class="value">{{ coursePromotions[currentPromotionIndex].location }}</span></div>
+            <div class="promotion-stat-row"><span class="label">Tuition</span><span class="value">{{ coursePromotions[currentPromotionIndex].tuition }}</span></div>
+            <div class="promotion-stat-row"><span class="label">Opportunities</span><span class="value">{{ coursePromotions[currentPromotionIndex].opportunities }}</span></div>
+            <div class="promotion-stat-row promotion-expiry"><span class="label">Offer ends</span><span class="value">{{ coursePromotions[currentPromotionIndex].expiryDate | date:'mediumDate' }}</span></div>
+          </div>
+          <p class="promotion-note" *ngIf="coursePromotions[currentPromotionIndex].note">{{ coursePromotions[currentPromotionIndex].note }}</p>
+          <div class="promotion-cta-row">
+            <a class="promotion-btn-visit" [href]="coursePromotions[currentPromotionIndex].websiteUrl" target="_blank" rel="noopener">Visit university website</a>
+            <button type="button" class="promotion-btn-enquire" (click)="onEnquireClick()">Enquire about this course</button>
+          </div>
+        </div>
+      </article>
+
+      <button type="button" class="promotion-arrow promotion-arrow-next" (click)="nextPromotionSlide(); restartPromotionAutoplay()" aria-label="Next offer">&#8250;</button>
+    </div>
+
+    <div class="promotion-dots">
+      <button
+        type="button"
+        *ngFor="let p of coursePromotions; let i = index"
+        class="promotion-dot"
+        [class.active]="i === currentPromotionIndex"
+        (click)="goToPromotionSlide(i)"
+        [attr.aria-label]="'Go to offer ' + (i + 1)">
+      </button>
+    </div>
+  </div>
+</section>

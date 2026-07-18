@@ -5,6 +5,7 @@ using ShareService.DataAccess.Interface;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using ShareService.Models.Auth;
 
 namespace ShareService.Tests
 {

@@ -1,21 +1,28 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AuthHelperService } from '../../../services/auth-helper.service';
+import { EnquiryModalComponent } from '../enquiry-modal/enquiry-modal.component';
+import { FeedbackCarouselComponent } from '../feedback-carousel/feedback-carousel.component';
+import { CoursePromotionCarouselComponent } from '../course-promotion-carousel/course-promotion-carousel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, EnquiryModalComponent, FeedbackCarouselComponent, CoursePromotionCarouselComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   activeTab: string = 'schools';
   isMobileMenuOpen: boolean = false;
   isHeaderSticky: boolean = false;
   showUserDropdown: boolean = false;
+  isEnquiryModalOpen: boolean = false;
+  showEnquirySuccess: boolean = false;
   userInfo: any;
+
+  private enquirySuccessTimeout: any;
 
   constructor(
     private authHelper: AuthHelperService,
@@ -33,9 +40,42 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.enquirySuccessTimeout) {
+      clearTimeout(this.enquirySuccessTimeout);
+    }
+  }
+
   // Check if user is logged in
   get isLoggedIn(): boolean {
     return this.authHelper.isLoggedIn();
+  }
+
+  openEnquiryModal(): void {
+    this.isEnquiryModalOpen = true;
+  }
+
+  closeEnquiryModal(): void {
+    this.isEnquiryModalOpen = false;
+  }
+
+  onCourseEnquire(): void {
+    this.openEnquiryModal();
+  }
+
+  onEnquirySubmitted(): void {
+    this.isEnquiryModalOpen = false;
+    this.showEnquirySuccess = true;
+    this.enquirySuccessTimeout = setTimeout(() => {
+      this.showEnquirySuccess = false;
+    }, 550000);
+  }
+
+  dismissEnquirySuccess(): void {
+    this.showEnquirySuccess = false;
+    if (this.enquirySuccessTimeout) {
+      clearTimeout(this.enquirySuccessTimeout);
+    }
   }
 
   // Navigation methods

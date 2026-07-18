@@ -1,5 +1,4 @@
-﻿using Eduflex.API.DTOs;
-using ShareService.Models;
+﻿using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 
 namespace ShareService.DataAccess.Interface

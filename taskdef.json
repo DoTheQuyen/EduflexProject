@@ -1,0 +1,29 @@
+{
+  "family": "EduflexTask",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [ "FARGATE" ],
+  "cpu": "256",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::544111998951:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "eduflex-api",
+      "image": "544111998951.dkr.ecr.ap-southeast-2.amazonaws.com/eduflex-api:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/EduflexTask",
+          "awslogs-region": "ap-southeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Auth;
 
 namespace ShareService.DataAccess
 {

@@ -1,0 +1,132 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #2c3e50;
+}
+
+.modal-panel h2 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+}
+
+.modal-subtitle {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-navy-700);
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid {
+  border-color: var(--color-error);
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.recaptcha-wrap {
+  margin: 1rem 0;
+}
+
+.form-error {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  border: none;
+  color: white;
+  padding: 0.9rem 2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+}
+
+.btn-primary:disabled {
+  background: #D8C39E;
+  cursor: not-allowed;
+}
+
+.success-panel {
+  text-align: center;
+  padding: 2rem 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}

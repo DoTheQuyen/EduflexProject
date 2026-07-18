@@ -27,7 +27,7 @@
 .footer-brand .logo {
   width: 35px;
   height: 35px;
-  background: linear-gradient(45deg, #e74c3c, #3498db);
+  background: linear-gradient(45deg, var(--color-accent), var(--color-navy-900));
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
 }
 
 .footer-nav a:hover {
-  color: #e74c3c;
+  color: var(--color-accent);
 }
 
 /* Info */

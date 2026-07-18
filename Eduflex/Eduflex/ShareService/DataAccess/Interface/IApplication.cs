@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
-using ShareService.Models;
+using ShareService.Models.Application;
+using ShareService.Models.Student;
 
 namespace ShareService.DataAccess.Interface
 {

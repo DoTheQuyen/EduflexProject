@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using ShareService.Models;
+using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

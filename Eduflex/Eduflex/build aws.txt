@@ -1,0 +1,51 @@
+﻿aws configure
+
+cd D:\EduflexProject\EduflexProject
+
+docker build -t eduflex -f Eduflex/Eduflex/Eduflex/Dockerfile .
+docker run -p 5000:5000 eduflex
+
+- Build Angular app:
+cd eduflex-Angular
+ng build --configuration production
+
+
+- Create S3 bucket (must be globally unique):
+aws s3 mb s3://eduflex-frontend
+
+- Upload files:
+aws s3 sync dist/eduflex-angular/browser/ s3://eduflex-frontend --delete
+
+
+- In AWS Console → ECR → Create repository → Name: eduflex-api.
+Or via CLI:
+
+aws ecr create-repository --repository-name eduflex-api
+
+
+- Authenticate Docker to ECR:
+ aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin <userId>.dkr.ecr.ap-southeast-2.amazonaws.com
+
+ - Tag Docker image:
+ docker tag eduflex:latest 544111998951.dkr.ecr.ap-southeast-2.amazonaws.com/eduflex-api:latest
+ docker push 544111998951.dkr.ecr.ap-southeast-2.amazonaws.com/eduflex-api:latest
+
+
+
+
+ Perfect 👍 your new ALB Security Group is ready:
+
+GroupId: sg-038aedce9e1303a60
+
+Save the returned LoadBalancerArn and DNSName (the DNS is what you’ll use to test).
+"LoadBalancers": [ { "LoadBalancerArn": "arn:aws:elasticloadbalancing:ap-southeast-2:544111998951:loadbalancer/app/eduflex-api-alb/44a8a76da1953568", 
+"DNSName": "eduflex-api-alb-259778746.ap-southeast-2.elb.amazonaws.com", "CanonicalHostedZoneId": "Z1GM3OXH4ZPM65", "CreatedTime": "2025-09-30T08:31:38.853Z", "LoadBalancerName": "eduflex-api-alb",
+
+Save the TargetGroupArn from the output.
+ "TargetGroupArn": "arn:aws:elasticloadbalancing:ap-southeast-2:544111998951:targetgroup/eduflex-api-tg/6b2846eefac45323",
+            "TargetGroupName": "eduflex-api-tg",
+            "Protocol": "HTTP",
+            "Port": 80,
+
+
+

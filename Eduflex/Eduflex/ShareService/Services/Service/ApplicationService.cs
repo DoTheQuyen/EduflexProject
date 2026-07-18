@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Application;
 using ShareService.Services.Interface;
-using ShareService.Validators;
 
 namespace ShareService.Services
 {

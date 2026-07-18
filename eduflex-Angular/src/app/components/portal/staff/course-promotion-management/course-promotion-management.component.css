@@ -1,0 +1,98 @@
+.promotion-portal {
+  min-height: 100vh;
+  background-color: white;
+  padding-bottom: 2rem;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.table th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #495057;
+  background-color: #f8f9fa;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.promo-course-name {
+  font-weight: 600;
+}
+
+.promo-uni-name {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  border: none;
+  font-weight: 500;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.modal-panel-custom {
+  background: white;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-body {
+  padding: 1.25rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #eee;
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.25rem;
+}

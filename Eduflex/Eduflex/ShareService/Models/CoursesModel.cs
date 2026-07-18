@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ShareService.Models;
+namespace Eduflex.Shared.Models;
 
 public class CoursesModel
 {

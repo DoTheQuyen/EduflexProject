@@ -252,6 +252,575 @@ export class Client {
     }
 
     /**
+     * @param count (optional) 
+     * @return OK
+     */
+    latest(count: number | undefined): Observable<CoursePromotionDto[]> {
+        let url_ = this.baseUrl + "/api/CoursePromotions/latest?";
+        if (count === null)
+            throw new Error("The parameter 'count' cannot be null.");
+        else if (count !== undefined)
+            url_ += "count=" + encodeURIComponent("" + count) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLatest(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLatest(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CoursePromotionDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CoursePromotionDto[]>;
+        }));
+    }
+
+    protected processLatest(response: HttpResponseBase): Observable<CoursePromotionDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CoursePromotionDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    coursePromotionsAll(): Observable<CoursePromotionDto[]> {
+        let url_ = this.baseUrl + "/api/CoursePromotions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCoursePromotionsAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCoursePromotionsAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CoursePromotionDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CoursePromotionDto[]>;
+        }));
+    }
+
+    protected processCoursePromotionsAll(response: HttpResponseBase): Observable<CoursePromotionDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CoursePromotionDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    coursePromotionsPOST(body: CreateCoursePromotionDto | undefined): Observable<CoursePromotionDto> {
+        let url_ = this.baseUrl + "/api/CoursePromotions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCoursePromotionsPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCoursePromotionsPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CoursePromotionDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CoursePromotionDto>;
+        }));
+    }
+
+    protected processCoursePromotionsPOST(response: HttpResponseBase): Observable<CoursePromotionDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CoursePromotionDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    coursePromotionsPUT(id: string, body: CreateCoursePromotionDto | undefined): Observable<CoursePromotionDto> {
+        let url_ = this.baseUrl + "/api/CoursePromotions/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCoursePromotionsPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCoursePromotionsPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CoursePromotionDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CoursePromotionDto>;
+        }));
+    }
+
+    protected processCoursePromotionsPUT(response: HttpResponseBase): Observable<CoursePromotionDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CoursePromotionDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    coursePromotionsDELETE(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/CoursePromotions/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCoursePromotionsDELETE(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCoursePromotionsDELETE(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processCoursePromotionsDELETE(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    enquiries(body: CreateEnquiryDto | undefined): Observable<EnquiryDto> {
+        let url_ = this.baseUrl + "/api/Enquiries";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEnquiries(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEnquiries(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EnquiryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EnquiryDto>;
+        }));
+    }
+
+    protected processEnquiries(response: HttpResponseBase): Observable<EnquiryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = EnquiryDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param count (optional) 
+     * @return OK
+     */
+    latest2(count: number | undefined): Observable<FeedbackDto[]> {
+        let url_ = this.baseUrl + "/api/Feedbacks/latest?";
+        if (count === null)
+            throw new Error("The parameter 'count' cannot be null.");
+        else if (count !== undefined)
+            url_ += "count=" + encodeURIComponent("" + count) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLatest2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLatest2(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FeedbackDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FeedbackDto[]>;
+        }));
+    }
+
+    protected processLatest2(response: HttpResponseBase): Observable<FeedbackDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(FeedbackDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    feedbacksPOST(body: CreateFeedbackDto | undefined): Observable<FeedbackDto> {
+        let url_ = this.baseUrl + "/api/Feedbacks";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFeedbacksPOST(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFeedbacksPOST(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FeedbackDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FeedbackDto>;
+        }));
+    }
+
+    protected processFeedbacksPOST(response: HttpResponseBase): Observable<FeedbackDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FeedbackDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    feedbacksAll(): Observable<FeedbackDto[]> {
+        let url_ = this.baseUrl + "/api/Feedbacks";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFeedbacksAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFeedbacksAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FeedbackDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FeedbackDto[]>;
+        }));
+    }
+
+    protected processFeedbacksAll(response: HttpResponseBase): Observable<FeedbackDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(FeedbackDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    feedbacksDELETE(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/Feedbacks/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFeedbacksDELETE(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFeedbacksDELETE(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processFeedbacksDELETE(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return OK
      */
     profileGET(): Observable<UserDto> {
@@ -671,6 +1240,94 @@ export interface IChangePasswordDto {
     confirmPassword?: string | undefined;
 }
 
+export class CoursePromotionDto implements ICoursePromotionDto {
+    id?: string | undefined;
+    courseName?: string | undefined;
+    universityName?: string | undefined;
+    semester?: string | undefined;
+    scholarshipLabel?: string | undefined;
+    location?: string | undefined;
+    tuition?: string | undefined;
+    opportunities?: string | undefined;
+    expiryDate?: Date;
+    note?: string | undefined;
+    websiteUrl?: string | undefined;
+    isFeatured?: boolean;
+    displayOrder?: number;
+    createdAt?: Date;
+
+    constructor(data?: ICoursePromotionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.courseName = _data["courseName"];
+            this.universityName = _data["universityName"];
+            this.semester = _data["semester"];
+            this.scholarshipLabel = _data["scholarshipLabel"];
+            this.location = _data["location"];
+            this.tuition = _data["tuition"];
+            this.opportunities = _data["opportunities"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : <any>undefined;
+            this.note = _data["note"];
+            this.websiteUrl = _data["websiteUrl"];
+            this.isFeatured = _data["isFeatured"];
+            this.displayOrder = _data["displayOrder"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CoursePromotionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CoursePromotionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["courseName"] = this.courseName;
+        data["universityName"] = this.universityName;
+        data["semester"] = this.semester;
+        data["scholarshipLabel"] = this.scholarshipLabel;
+        data["location"] = this.location;
+        data["tuition"] = this.tuition;
+        data["opportunities"] = this.opportunities;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : <any>undefined;
+        data["note"] = this.note;
+        data["websiteUrl"] = this.websiteUrl;
+        data["isFeatured"] = this.isFeatured;
+        data["displayOrder"] = this.displayOrder;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICoursePromotionDto {
+    id?: string | undefined;
+    courseName?: string | undefined;
+    universityName?: string | undefined;
+    semester?: string | undefined;
+    scholarshipLabel?: string | undefined;
+    location?: string | undefined;
+    tuition?: string | undefined;
+    opportunities?: string | undefined;
+    expiryDate?: Date;
+    note?: string | undefined;
+    websiteUrl?: string | undefined;
+    isFeatured?: boolean;
+    displayOrder?: number;
+    createdAt?: Date;
+}
+
 export class CreateApplicationDto implements ICreateApplicationDto {
     studentId?: string | undefined;
     userId?: string | undefined;
@@ -725,6 +1382,322 @@ export interface ICreateApplicationDto {
     description?: string | undefined;
     details?: string | undefined;
     applicationType?: string | undefined;
+}
+
+export class CreateCoursePromotionDto implements ICreateCoursePromotionDto {
+    courseName?: string | undefined;
+    universityName?: string | undefined;
+    semester?: string | undefined;
+    scholarshipLabel?: string | undefined;
+    location?: string | undefined;
+    tuition?: string | undefined;
+    opportunities?: string | undefined;
+    expiryDate?: Date;
+    note?: string | undefined;
+    websiteUrl?: string | undefined;
+    isFeatured?: boolean;
+    displayOrder?: number;
+
+    constructor(data?: ICreateCoursePromotionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseName = _data["courseName"];
+            this.universityName = _data["universityName"];
+            this.semester = _data["semester"];
+            this.scholarshipLabel = _data["scholarshipLabel"];
+            this.location = _data["location"];
+            this.tuition = _data["tuition"];
+            this.opportunities = _data["opportunities"];
+            this.expiryDate = _data["expiryDate"] ? new Date(_data["expiryDate"].toString()) : <any>undefined;
+            this.note = _data["note"];
+            this.websiteUrl = _data["websiteUrl"];
+            this.isFeatured = _data["isFeatured"];
+            this.displayOrder = _data["displayOrder"];
+        }
+    }
+
+    static fromJS(data: any): CreateCoursePromotionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateCoursePromotionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseName"] = this.courseName;
+        data["universityName"] = this.universityName;
+        data["semester"] = this.semester;
+        data["scholarshipLabel"] = this.scholarshipLabel;
+        data["location"] = this.location;
+        data["tuition"] = this.tuition;
+        data["opportunities"] = this.opportunities;
+        data["expiryDate"] = this.expiryDate ? this.expiryDate.toISOString() : <any>undefined;
+        data["note"] = this.note;
+        data["websiteUrl"] = this.websiteUrl;
+        data["isFeatured"] = this.isFeatured;
+        data["displayOrder"] = this.displayOrder;
+        return data;
+    }
+}
+
+export interface ICreateCoursePromotionDto {
+    courseName?: string | undefined;
+    universityName?: string | undefined;
+    semester?: string | undefined;
+    scholarshipLabel?: string | undefined;
+    location?: string | undefined;
+    tuition?: string | undefined;
+    opportunities?: string | undefined;
+    expiryDate?: Date;
+    note?: string | undefined;
+    websiteUrl?: string | undefined;
+    isFeatured?: boolean;
+    displayOrder?: number;
+}
+
+export class CreateEnquiryDto implements ICreateEnquiryDto {
+    firstName?: string | undefined;
+    middleName?: string | undefined;
+    lastName?: string | undefined;
+    email?: string | undefined;
+    mobile?: string | undefined;
+    enquiry?: string | undefined;
+    recaptchaToken?: string | undefined;
+
+    constructor(data?: ICreateEnquiryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.mobile = _data["mobile"];
+            this.enquiry = _data["enquiry"];
+            this.recaptchaToken = _data["recaptchaToken"];
+        }
+    }
+
+    static fromJS(data: any): CreateEnquiryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateEnquiryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["mobile"] = this.mobile;
+        data["enquiry"] = this.enquiry;
+        data["recaptchaToken"] = this.recaptchaToken;
+        return data;
+    }
+}
+
+export interface ICreateEnquiryDto {
+    firstName?: string | undefined;
+    middleName?: string | undefined;
+    lastName?: string | undefined;
+    email?: string | undefined;
+    mobile?: string | undefined;
+    enquiry?: string | undefined;
+    recaptchaToken?: string | undefined;
+}
+
+export class CreateFeedbackDto implements ICreateFeedbackDto {
+    name?: string | undefined;
+    photoData?: string | undefined;
+    photoContentType?: string | undefined;
+    courseName?: string | undefined;
+    comment?: string | undefined;
+
+    constructor(data?: ICreateFeedbackDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.photoData = _data["photoData"];
+            this.photoContentType = _data["photoContentType"];
+            this.courseName = _data["courseName"];
+            this.comment = _data["comment"];
+        }
+    }
+
+    static fromJS(data: any): CreateFeedbackDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateFeedbackDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["photoData"] = this.photoData;
+        data["photoContentType"] = this.photoContentType;
+        data["courseName"] = this.courseName;
+        data["comment"] = this.comment;
+        return data;
+    }
+}
+
+export interface ICreateFeedbackDto {
+    name?: string | undefined;
+    photoData?: string | undefined;
+    photoContentType?: string | undefined;
+    courseName?: string | undefined;
+    comment?: string | undefined;
+}
+
+export class EnquiryDto implements IEnquiryDto {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    middleName?: string | undefined;
+    lastName?: string | undefined;
+    email?: string | undefined;
+    mobile?: string | undefined;
+    enquiry?: string | undefined;
+    status?: string | undefined;
+    createdAt?: Date;
+
+    constructor(data?: IEnquiryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.mobile = _data["mobile"];
+            this.enquiry = _data["enquiry"];
+            this.status = _data["status"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): EnquiryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnquiryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["mobile"] = this.mobile;
+        data["enquiry"] = this.enquiry;
+        data["status"] = this.status;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IEnquiryDto {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    middleName?: string | undefined;
+    lastName?: string | undefined;
+    email?: string | undefined;
+    mobile?: string | undefined;
+    enquiry?: string | undefined;
+    status?: string | undefined;
+    createdAt?: Date;
+}
+
+export class FeedbackDto implements IFeedbackDto {
+    id?: string | undefined;
+    name?: string | undefined;
+    photoUrl?: string | undefined;
+    courseName?: string | undefined;
+    comment?: string | undefined;
+    createdAt?: Date;
+
+    constructor(data?: IFeedbackDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.photoUrl = _data["photoUrl"];
+            this.courseName = _data["courseName"];
+            this.comment = _data["comment"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): FeedbackDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeedbackDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["photoUrl"] = this.photoUrl;
+        data["courseName"] = this.courseName;
+        data["comment"] = this.comment;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IFeedbackDto {
+    id?: string | undefined;
+    name?: string | undefined;
+    photoUrl?: string | undefined;
+    courseName?: string | undefined;
+    comment?: string | undefined;
+    createdAt?: Date;
 }
 
 export class UpdateUserProfileDto implements IUpdateUserProfileDto {

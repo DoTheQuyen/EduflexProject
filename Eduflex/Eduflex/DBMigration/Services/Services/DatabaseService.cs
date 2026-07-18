@@ -1,8 +1,11 @@
-﻿using ShareService.Models;
-using DBMigration.Services.Interface;
+﻿using DBMigration.Services.Interface;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ShareService.Models.Setting;
+using ShareService.Models.Application;
+using ShareService.Models.Auth;
+using ShareService.Models.Student;
 
 namespace DBMigration.Services.Services
 {

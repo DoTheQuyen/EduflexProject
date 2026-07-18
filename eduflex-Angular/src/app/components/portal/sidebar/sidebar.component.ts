@@ -50,6 +50,8 @@ export class SidebarComponent implements OnChanges {
         { title: 'Courses', icon: 'school', route: '/staff-portal/courses' },
         { title: 'Students', icon: 'people', route: '/staff-portal/students' },
         { title: 'Applications', icon: 'assignment', route: '/staff-portal/applications' },
+        { title: 'Feedback', icon: 'comment', route: '/staff-portal/feedback' },
+        { title: 'Course Promotions', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
         { title: 'Profile', icon: 'person', route: '/staff-portal/profile' }
       ];
     } else {

@@ -1,30 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MongoDB.EntityFrameworkCore.Extensions;
-using ShareService.DataAccess.Interface;
-using ShareService.Models;
+﻿//using Microsoft.EntityFrameworkCore;
+//using MongoDB.EntityFrameworkCore.Extensions;
+//using ShareService.DataAccess.Interface;
+//using ShareService.Models;
 
-namespace ShareService.DataAccess.Service
-{
-    public class MongoDbContext : DbContext, IMongoDbContext
-    {
-        public MongoDbContext(DbContextOptions<MongoDbContext> options) : base(options) { }
+//namespace ShareService.DataAccess.Service
+//{
+//    public class MongoDbContext : DbContext, IMongoDbContext
+//    {
+//        public MongoDbContext(DbContextOptions<MongoDbContext> options) : base(options) { }
 
-        public DbSet<UserModel> Users { get; set; }
-        public DbSet<StudentModel> Students { get; set; }
-        public DbSet<ApplicationModel> Applications { get; set; }
+//        public DbSet<UserModel> Users { get; set; }
+//        public DbSet<StudentModel> Students { get; set; }
+//        public DbSet<ApplicationModel> Applications { get; set; }
 
-        //public DbSet<CoursesModel> Courses { get; set; }
-        //public DbSet<InstitutionsModel> Institutions { get; set; }
+//        //public DbSet<CoursesModel> Courses { get; set; }
+//        //public DbSet<InstitutionsModel> Institutions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+//        protected override void OnModelCreating(ModelBuilder modelBuilder)
+//        {
+//            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserModel>().ToCollection("Users");
-            modelBuilder.Entity<StudentModel>().ToCollection("Students");
-            modelBuilder.Entity<ApplicationModel>().ToCollection("Applications");
-            //modelBuilder.Entity<Course>().ToCollection("courses");
-            //modelBuilder.Entity<Institution>().ToCollection("institutions");
-        }
-    }
-}
+//            modelBuilder.Entity<UserModel>().ToCollection("Users");
+//            modelBuilder.Entity<StudentModel>().ToCollection("Students");
+//            modelBuilder.Entity<ApplicationModel>().ToCollection("Applications");
+//            //modelBuilder.Entity<Course>().ToCollection("courses");
+//            //modelBuilder.Entity<Institution>().ToCollection("institutions");
+//        }
+//    }
+//}
+
+//Temporary disable MongoDbContext and use IMongoDatabase directly for now
+//Keep this for future practice

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ShareService.Models;
 using System.Security.Claims;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using Eduflex.API.DTOs;
 using Eduflex.API.Mapping;
+using ShareService.Models.Application;
 
 [ApiController]
 [Route("api/[controller]")]

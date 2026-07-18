@@ -3,13 +3,13 @@ using NUnit.Framework;
 using ShareService.Models;
 using ShareService.Services;
 using ShareService.DataAccess.Interface;
-using Eduflex.API.DTOs;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using FluentValidation.Results;
+using ShareService.Models.Auth;
 
 namespace ShareService.Tests
 {

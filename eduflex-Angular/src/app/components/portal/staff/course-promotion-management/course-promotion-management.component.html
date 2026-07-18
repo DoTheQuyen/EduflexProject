@@ -1,0 +1,180 @@
+<div class="promotion-portal">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="mb-2">Manage Course Promotions</h2>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <button class="btn btn-primary btn-lg" (click)="openAddModal()">
+          <i class="fas fa-plus me-2"></i>Add Course Promotion
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading course promotions...</p>
+        </div>
+
+        <div *ngIf="!isLoading" class="card border shadow-sm">
+          <div class="card-header bg-white py-3">
+            <h5 class="card-title mb-0">All Course Promotions ({{ promotions.length }})</h5>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Course / University</th>
+                    <th>Semester</th>
+                    <th>Scholarship</th>
+                    <th>Location</th>
+                    <th>Tuition</th>
+                    <th class="text-center">Offer ends</th>
+                    <th class="text-center">Featured</th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of promotions">
+                    <td>
+                      <div class="promo-course-name">{{ p.courseName }}</div>
+                      <div class="promo-uni-name">{{ p.universityName }}</div>
+                    </td>
+                    <td>{{ p.semester }}</td>
+                    <td><span class="badge bg-warning text-dark">{{ p.scholarshipLabel }}</span></td>
+                    <td>{{ p.location }}</td>
+                    <td>{{ p.tuition }}</td>
+                    <td class="text-center">{{ p.expiryDate | date:'mediumDate' }}</td>
+                    <td class="text-center">
+                      <span class="badge" [class.bg-success]="p.isFeatured" [class.bg-secondary]="!p.isFeatured">
+                        {{ p.isFeatured ? 'Yes' : 'No' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <div class="row-actions">
+                        <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(p)">
+                          <i class="fas fa-edit me-1"></i>Edit
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="onDelete(p)">
+                          <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="promotions.length === 0">
+                    <td colspan="8" class="text-center text-muted py-4">No course promotions yet. Click "Add Course Promotion" to create one.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Course Promotion Modal -->
+<div class="modal-backdrop-custom" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-panel-custom" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5 class="mb-0">{{ editingId ? 'Edit Course Promotion' : 'Add Course Promotion' }}</h5>
+      <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+    </div>
+
+    <form [formGroup]="promotionForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="courseName" class="form-label">Course name *</label>
+            <input id="courseName" type="text" class="form-control" formControlName="courseName">
+            <span class="field-error" *ngIf="isFieldInvalid('courseName')">Course name is required</span>
+          </div>
+
+          <div class="col-md-6">
+            <label for="universityName" class="form-label">University name *</label>
+            <input id="universityName" type="text" class="form-control" formControlName="universityName">
+            <span class="field-error" *ngIf="isFieldInvalid('universityName')">University name is required</span>
+          </div>
+
+          <div class="col-md-4">
+            <label for="semester" class="form-label">Semester *</label>
+            <input id="semester" type="text" class="form-control" placeholder="Semester 2, 2026" formControlName="semester">
+            <span class="field-error" *ngIf="isFieldInvalid('semester')">Semester is required</span>
+          </div>
+
+          <div class="col-md-4">
+            <label for="scholarshipLabel" class="form-label">Scholarship *</label>
+            <input id="scholarshipLabel" type="text" class="form-control" placeholder="20% scholarship" formControlName="scholarshipLabel">
+            <span class="field-error" *ngIf="isFieldInvalid('scholarshipLabel')">Scholarship label is required</span>
+          </div>
+
+          <div class="col-md-4">
+            <label for="expiryDate" class="form-label">Offer ends *</label>
+            <input id="expiryDate" type="date" class="form-control" formControlName="expiryDate">
+            <span class="field-error" *ngIf="isFieldInvalid('expiryDate')">Offer end date is required</span>
+          </div>
+
+          <div class="col-md-6">
+            <label for="location" class="form-label">Location *</label>
+            <input id="location" type="text" class="form-control" placeholder="Melbourne, VIC" formControlName="location">
+            <span class="field-error" *ngIf="isFieldInvalid('location')">Location is required</span>
+          </div>
+
+          <div class="col-md-6">
+            <label for="tuition" class="form-label">Tuition *</label>
+            <input id="tuition" type="text" class="form-control" placeholder="AUD 45,000/yr" formControlName="tuition">
+            <span class="field-error" *ngIf="isFieldInvalid('tuition')">Tuition is required</span>
+          </div>
+
+          <div class="col-md-12">
+            <label for="opportunities" class="form-label">Opportunities *</label>
+            <input id="opportunities" type="text" class="form-control" placeholder="Jul & Feb intake" formControlName="opportunities">
+            <span class="field-error" *ngIf="isFieldInvalid('opportunities')">Opportunities is required</span>
+          </div>
+
+          <div class="col-md-12">
+            <label for="note" class="form-label">Marketing note</label>
+            <textarea id="note" rows="3" class="form-control" formControlName="note"></textarea>
+            <span class="field-error" *ngIf="isFieldInvalid('note')">Note must not exceed 600 characters</span>
+          </div>
+
+          <div class="col-md-8">
+            <label for="websiteUrl" class="form-label">University website URL *</label>
+            <input id="websiteUrl" type="url" class="form-control" placeholder="https://www.unimelb.edu.au" formControlName="websiteUrl">
+            <span class="field-error" *ngIf="isFieldInvalid('websiteUrl')">A valid website URL is required</span>
+          </div>
+
+          <div class="col-md-4">
+            <label for="displayOrder" class="form-label">Display order</label>
+            <input id="displayOrder" type="number" min="0" class="form-control" formControlName="displayOrder">
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-check-label d-flex align-items-center gap-2">
+              <input type="checkbox" class="form-check-input mt-0" formControlName="isFeatured">
+              Featured on public site
+            </label>
+          </div>
+        </div>
+
+        <p class="text-danger mt-3" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Saving...' : 'Save Course Promotion' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

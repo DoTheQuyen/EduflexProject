@@ -3,7 +3,6 @@
   <div class="container hero-content">
     <h1>Your Gateway to Studying & Migrating in Australia</h1>
     <p>Personalised guidance from course selection to visa outcomes — we walk you through each step.</p>
-    <button routerLink="/contact" class="btn-primary">Free Consultation</button>
   </div>
 </section>
 
@@ -80,6 +79,11 @@
   </div>
 </section>
 
+<!-- Course Promotions -->
+<app-course-promotion-carousel (enquire)="onCourseEnquire()"></app-course-promotion-carousel>
+
+<!-- Student Feedback / Testimonials -->
+<app-feedback-carousel></app-feedback-carousel>
 
 <!-- Services / What We Offer -->
 <section class="services-offered">
@@ -114,6 +118,18 @@
   <div class="container">
     <h2>Ready to Start?</h2>
     <p>Book a free consultation with Eduflex today and let us help you design your future in Australia.</p>
-    <button routerLink="/contact" class="btn-primary">Book Now</button>
+    <button (click)="openEnquiryModal()" class="btn-primary">Book a free consultation now</button>
   </div>
 </section>
+
+<app-enquiry-modal
+  *ngIf="isEnquiryModalOpen"
+  (closed)="closeEnquiryModal()"
+  (submitted)="onEnquirySubmitted()">
+</app-enquiry-modal>
+
+<div class="enquiry-toast" *ngIf="showEnquirySuccess">
+  <span class="enquiry-toast-icon">✓</span>
+  <span class="enquiry-toast-text">Your enquiry has been submitted. Our staff will contact you shortly.</span>
+  <button type="button" class="enquiry-toast-close" (click)="dismissEnquirySuccess()" aria-label="Dismiss">&times;</button>
+</div>

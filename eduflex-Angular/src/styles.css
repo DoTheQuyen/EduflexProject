@@ -1,5 +1,24 @@
 
 /* You can add global styles to this file, and also import other style files */
+
+/* Brand tokens — single source of truth for the navy/brass palette used
+   across home, navbar, and footer. Component-scoped stylesheets read these
+   via var(--color-...) instead of re-typing hex values. */
+:root {
+  --color-navy-900: #16233A;
+  --color-navy-700: #2E4258;
+  --color-accent: #B8862F;
+  --color-accent-dark: #8F6A24;
+  --color-success: #1F7A5C;
+  --color-success-dark: #14523F;
+  --color-error: #B3413A;
+  --color-error-dark: #8F332D;
+  --color-ink: #1B2430;
+  --color-muted: #5C6B7A;
+  --color-surface: #F5F6F7;
+  --color-border: #DCE0E4;
+}
+
 * {
   margin: 0;
   padding: 0;

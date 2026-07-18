@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Eduflex.API.DTOs;
-using ShareService.Models;
+using ShareService.Models.Student;
 
 namespace Eduflex.API.Mapping
 {

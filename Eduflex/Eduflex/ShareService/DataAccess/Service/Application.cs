@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Application;
+using ShareService.Models.Student;
 
 namespace ShareService.DataAccess
 {
@@ -23,62 +24,6 @@ namespace ShareService.DataAccess
             return await _studentsCollection
              .Find(s => s.UserId == userId)
              .FirstOrDefaultAsync();
-        }
-
-        public async Task DebugDatabaseContent(string userId)
-        {
-            try
-            {
-                Console.WriteLine("=== DEBUGGING DATABASE CONTENT ===");
-                Console.WriteLine($"Searching for userId: {userId}");
-
-                // Get the raw BSON documents
-                var database = _studentsCollection.Database;
-                var studentsCollection = database.GetCollection<BsonDocument>("Students");
-
-                var allStudents = await studentsCollection.Find(new BsonDocument()).ToListAsync();
-
-                Console.WriteLine($"Total students in database: {allStudents.Count}");
-
-                foreach (var studentDoc in allStudents)
-                {
-                    Console.WriteLine("--- RAW STUDENT DOCUMENT ---");
-                    Console.WriteLine(studentDoc.ToJson());
-
-                    // Check if userId field exists and what type it is
-                    if (studentDoc.Contains("userId"))
-                    {
-                        var userIdValue = studentDoc["userId"];
-                        Console.WriteLine($"userId field - BsonType: {userIdValue.BsonType}, Value: {userIdValue}");
-
-                        // Try to match with our search userId
-                        if (userIdValue.BsonType == BsonType.ObjectId)
-                        {
-                            var objectId = userIdValue.AsObjectId;
-                            Console.WriteLine($"ObjectId: {objectId}, AsString: {objectId.ToString()}");
-
-                            if (ObjectId.TryParse(userId, out var searchObjectId))
-                            {
-                                Console.WriteLine($"Match: {objectId == searchObjectId}");
-                            }
-                        }
-                        else if (userIdValue.BsonType == BsonType.String)
-                        {
-                            var stringValue = userIdValue.AsString;
-                            Console.WriteLine($"String value: '{stringValue}'");
-                            Console.WriteLine($"Match: {stringValue == userId}");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("NO userId FIELD FOUND IN THIS DOCUMENT!");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Debug error: {ex.Message}");
-            }
         }
 
         public async Task<List<ApplicationModel>> GetApplicationsByStudentIdAsync(string studentId)

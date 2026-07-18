@@ -1,0 +1,81 @@
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CoursePromotionService } from '../../../services/course-promotion.service';
+import { CoursePromotion } from '../../../models/course-promotion';
+
+@Component({
+  selector: 'app-course-promotion-carousel',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './course-promotion-carousel.component.html',
+  styleUrls: ['./course-promotion-carousel.component.css']
+})
+export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
+  @Output() enquire = new EventEmitter<void>();
+
+  coursePromotions: CoursePromotion[] = [];
+  currentPromotionIndex: number = 0;
+  private promotionAutoplayTimer: any;
+
+  constructor(
+    private coursePromotionService: CoursePromotionService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadCoursePromotions();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopPromotionAutoplay();
+  }
+
+  loadCoursePromotions(): void {
+    this.coursePromotionService.getLatest(10).subscribe({
+      next: (promotions) => {
+        this.coursePromotions = promotions;
+        this.restartPromotionAutoplay();
+      },
+      error: (err) => {
+        console.error('Failed to load course promotions', err);
+      }
+    });
+  }
+
+  goToPromotionSlide(index: number): void {
+    this.currentPromotionIndex = index;
+  }
+
+  nextPromotionSlide(): void {
+    if (this.coursePromotions.length === 0) { return; }
+    this.currentPromotionIndex = (this.currentPromotionIndex + 1) % this.coursePromotions.length;
+  }
+
+  prevPromotionSlide(): void {
+    if (this.coursePromotions.length === 0) { return; }
+    this.currentPromotionIndex = (this.currentPromotionIndex - 1 + this.coursePromotions.length) % this.coursePromotions.length;
+  }
+
+  startPromotionAutoplay(): void {
+    this.stopPromotionAutoplay();
+    this.promotionAutoplayTimer = setInterval(() => this.nextPromotionSlide(), 5000);
+  }
+
+  stopPromotionAutoplay(): void {
+    if (this.promotionAutoplayTimer) {
+      clearInterval(this.promotionAutoplayTimer);
+    }
+  }
+
+  restartPromotionAutoplay(): void {
+    if (this.coursePromotions.length > 1) {
+      this.startPromotionAutoplay();
+    }
+  }
+
+  onEnquireClick(): void {
+    this.enquire.emit();
+  }
+}

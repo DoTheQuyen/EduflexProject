@@ -1,4 +1,4 @@
-﻿using ShareService.Models;
+﻿using ShareService.Models.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;

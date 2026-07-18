@@ -1,7 +1,6 @@
-﻿using Eduflex.API.DTOs;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 
 namespace ShareService.DataAccess

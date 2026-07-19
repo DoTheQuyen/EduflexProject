@@ -1,9 +1,8 @@
-﻿using Eduflex.API.DTOs;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 using System.Security.Cryptography;
 using System.Text;

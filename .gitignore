@@ -1,0 +1,9 @@
+# Local database dumps (may contain real data / password hashes)
+mongodump/
+
+# Editor/IDE
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

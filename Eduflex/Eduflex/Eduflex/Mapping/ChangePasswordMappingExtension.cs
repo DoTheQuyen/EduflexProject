@@ -1,5 +1,5 @@
 ﻿using Eduflex.API.DTOs;
-using ShareService.Models;
+using ShareService.Models.Auth;
 
 namespace Eduflex.API.Mapping
 {

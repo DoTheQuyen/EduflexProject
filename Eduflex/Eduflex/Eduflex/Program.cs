@@ -1,18 +1,21 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
-using ShareService.Inject;
-using System.Text;
 using Serilog;
-using ShareService.Models;
+using ShareService.Inject;
+using ShareService.Models.Setting;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// ✅ Register health checks
+builder.Services.AddHealthChecks();
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()
@@ -34,6 +37,18 @@ builder.Services.AddSwaggerGen(c =>
 // Configure MongoDB Settings
 builder.Services.Configure<MongoDBSettings>(
     builder.Configuration.GetSection("MongoDBSettings"));
+
+// Configure reCAPTCHA Settings (used by EnquiriesController to verify "I'm not a robot")
+builder.Services.Configure<RecaptchaSettings>(
+    builder.Configuration.GetSection("Recaptcha"));
+
+//Configure Feedback Settings (used by FeedbacksController)
+builder.Services.Configure<FeedbackSettings>(
+    builder.Configuration.GetSection("FeedbackSettings"));
+
+//Configure Course Promotion Settings (used by CoursePromotionsController)
+builder.Services.Configure<CoursePromotionSettings>(
+    builder.Configuration.GetSection("CoursePromotionSettings"));
 
 // Register MongoDB Client (Singleton - recommended by MongoDB)
 builder.Services.AddSingleton<IMongoClient>(sp =>
@@ -86,7 +101,8 @@ builder.Services.AddSharedServices();
 var app = builder.Build();
 
 // NSwag middleware
-app.UseOpenApi();
+//app.UseOpenApi();
+app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/auth/swagger.json", "Auth API v1");
@@ -105,5 +121,8 @@ app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapGet("/", () => "Eduflex API is running 🚀");
+app.MapHealthChecks("/health");
 
 app.Run();

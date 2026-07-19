@@ -1,0 +1,248 @@
+section {
+  padding: 5rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.promotion-section {
+  background: white;
+}
+
+.promotion-heading {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.promotion-heading h2 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.promotion-heading p {
+  color: #666;
+  font-size: 1.05rem;
+}
+
+.promotion-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.promotion-card {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 12% -10%, rgba(255, 255, 255, 0.85), transparent 55%),
+    linear-gradient(180deg, #bfe0f7 0%, #eaf4fc 42%, #ffffff 78%);
+  box-shadow: 0 8px 30px rgba(22, 35, 58, 0.12);
+}
+
+.promotion-banner {
+  padding: 1.5rem 1.75rem 0.5rem;
+}
+
+.promotion-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.promotion-crest {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid rgba(22, 35, 58, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-navy-700);
+}
+
+.promotion-semester {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-navy-700);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+}
+
+.promotion-scholarship {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(184, 134, 47, 0.15);
+  color: var(--color-accent-dark);
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+}
+
+.promotion-banner h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-navy-700);
+  margin: 0 0 0.25rem;
+}
+
+.promotion-uni-name {
+  font-size: 0.85rem;
+  color: var(--color-navy-700);
+  opacity: 0.75;
+  margin: 0;
+}
+
+.promotion-info {
+  padding: 0.75rem 1.75rem 1.5rem;
+}
+
+.promotion-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.75rem;
+}
+
+.promotion-stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(22, 35, 58, 0.08);
+  font-size: 0.85rem;
+}
+
+.promotion-stat-row .label {
+  color: #666;
+}
+
+.promotion-stat-row .value {
+  text-align: right;
+  font-weight: 600;
+}
+
+.promotion-stat-row.promotion-expiry .value {
+  color: var(--color-accent-dark);
+}
+
+.promotion-note {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.85rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(22, 35, 58, 0.08);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.promotion-cta-row {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.promotion-btn-visit,
+.promotion-btn-enquire {
+  flex: 1;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius, 6px);
+  padding: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.promotion-btn-visit {
+  background: var(--color-navy-700);
+  color: white;
+  border: 1px solid var(--color-navy-700);
+}
+
+.promotion-btn-visit:hover {
+  background: var(--color-navy-900);
+  border-color: var(--color-navy-900);
+}
+
+.promotion-btn-enquire {
+  background: transparent;
+  color: var(--color-navy-700);
+  border: 1px solid #ddd;
+}
+
+.promotion-btn-enquire:hover {
+  border-color: var(--color-navy-700);
+}
+
+.promotion-arrow {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promotion-arrow:hover {
+  background: var(--color-navy-900);
+  color: white;
+}
+
+.promotion-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.promotion-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  border: none;
+  background: #d8dbe0;
+  cursor: pointer;
+  padding: 0;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.promotion-dot.active {
+  width: 22px;
+  background: var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .promotion-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .promotion-arrow {
+    display: none;
+  }
+}

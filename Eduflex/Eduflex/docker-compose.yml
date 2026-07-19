@@ -1,35 +1,41 @@
-version: '3.8'
+version: "3.9"
+
 services:
-  mongodb:
-    image: mongo:7.0
-    container_name: eduflex-mongodb
+  eduflex-api:
+    build:
+      context: .
+      dockerfile: Eduflex/Eduflex/Eduflex/Dockerfile
+    container_name: eduflex-api
+    ports:
+      - "5000:5000"   # Host:Container
     environment:
-      MONGO_INITDB_ROOT_USERNAME: 
-      MONGO_INITDB_ROOT_PASSWORD: 
-      MONGO_INITDB_DATABASE: EduflexDB
+      - ASPNETCORE_URLS=http://+:5000
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_HOST_PATH=/usr/share/dotnet/dotnet
+      # Mongo connection string points to "mongo" service
+      - ConnectionStrings__MongoDb=mongodb://mongo:27017/EduflexDB
+    depends_on:
+      - mongo
+
+  eduflex-angular:
+    build:
+      context: ./eduflex-Angular
+      dockerfile: Dockerfile
+    container_name: eduflex-angular
+    ports:
+      - "4200:4200"
+    depends_on:
+      - eduflex-api
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    restart: always
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-    networks:
-      - eduflex-network
-
-  api:
-    build: .
-    container_name: eduflex-api
-    environment:
-      - MONGODB_CONNECTION=mongodb://admin:password123@mongodb:27017/EduflexDB
-    ports:
-      - "7007:80"
-    depends_on:
-      - mongodb
-    networks:
-      - eduflex-network
+      - mongo_data:/data/db
 
 volumes:
-  mongodb_data:
-
-networks:
-  eduflex-network:
-    driver: bridge
+  mongo_data:

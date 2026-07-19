@@ -11,7 +11,7 @@ section {
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
   color: white;
   text-align: center;
   padding: 6rem 2rem;
@@ -29,7 +29,7 @@ section {
 }
 
 .btn-primary {
-  background: #e74c3c;
+  background: var(--color-accent);
   border: none;
   color: white;
   padding: 0.9rem 2rem;
@@ -39,7 +39,7 @@ section {
 }
 
 .btn-primary:hover {
-  background: #c0392b;
+  background: var(--color-accent-dark);
 }
 
 .btn-secondary {
@@ -142,7 +142,7 @@ section {
 
 /* Stats */
 .stats {
-  background: #2a5298;
+  background: var(--color-navy-700);
   color: white;
 }
 
@@ -161,7 +161,7 @@ section {
   display: block;
   font-size: 2.2rem;
   font-weight: 700;
-  color: #e74c3c;
+  color: var(--color-accent);
 }
 
 .stat-item .label {
@@ -214,7 +214,7 @@ section {
 }
 
 .team-member .title {
-  color: #e74c3c;
+  color: var(--color-accent);
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -264,7 +264,7 @@ section {
 
 /* CTA Section */
 .cta-apply {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
   color: white;
   text-align: center;
   padding: 5rem 2rem;
@@ -298,5 +298,75 @@ section {
   .stats-grid {
     flex-direction: column;
     align-items: center;
+  }
+}
+
+/* Enquiry submitted toast */
+.enquiry-toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  background: var(--color-success);
+  color: white;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 580px;
+  z-index: 1100;
+  animation: enquiry-toast-in 0.3s ease;
+}
+
+@keyframes enquiry-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enquiry-toast-icon {
+  background: var(--color-success-dark);
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.enquiry-toast-text {
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.enquiry-toast-close {
+  background: none;
+  border: none;
+  color: #cccccc;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.enquiry-toast-close:hover {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .enquiry-toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
   }
 }

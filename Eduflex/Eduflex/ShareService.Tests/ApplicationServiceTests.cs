@@ -1,7 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
 using ShareService.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
@@ -9,6 +8,7 @@ using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 using FluentValidation.Results;
+using ShareService.Models.Application;
 
 namespace ShareService.Tests
 {

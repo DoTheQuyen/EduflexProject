@@ -1,5 +1,4 @@
 ﻿using DBMigration.Migrations;
-using ShareService.Models;
 using DBMigration.Services.Interface;
 using DBMigration.Services.Services;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +10,7 @@ using MongoDB.Driver;
 using Spectre.Console;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using ShareService.Models.Setting;
 
 // Create the host builder
 var builder = Host.CreateApplicationBuilder(args);
@@ -54,6 +54,9 @@ builder.Services.AddTransient<_002_AddUserLastLoginField_290925>();
 builder.Services.AddTransient<_004_AddUserForeignKeyToStudents_290925>();
 builder.Services.AddTransient<_005_AddStudentForeignKeyToApplications_290925>();
 builder.Services.AddTransient<_006_ConvertStudentIdToString_290925>();
+builder.Services.AddTransient<_007_AddEnquiriesCollection_170726>();
+builder.Services.AddTransient<_008_AddFeedbacksCollection_170726>();
+builder.Services.AddTransient<_009_AddCoursePromotionsCollection_180726>();
 
 // Register your services
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using ShareService.DataAccess.Interface;
-using ShareService.Models;
+using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 
 public class AuthService : IAuthService

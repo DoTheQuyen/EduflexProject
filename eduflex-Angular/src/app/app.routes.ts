@@ -7,6 +7,8 @@ import { HomepageComponent } from './components/portal/home/homepage.component';
 import { ApplicationComponent } from './components/portal/student/applications/application.component';
 import { ProfileComponent } from './components/portal/share-component/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
+import { FeedbackManagementComponent } from './components/portal/staff/feedback-management/feedback-management.component';
+import { CoursePromotionManagementComponent } from './components/portal/staff/course-promotion-management/course-promotion-management.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Public home page
@@ -37,22 +39,16 @@ export const routes: Routes = [
     ]
   },
 
-  // Staff portal
+    // Staff portal
   {
     path: 'staff-portal', 
     component: HomepageComponent,
     canActivate: [AuthGuard],
     children: [
-      {
-        path: 'applications',
-        component: ApplicationComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'profile',
-        component: ProfileComponent,
-        canActivate: [AuthGuard]
-      },
+      { path: 'applications', component: ApplicationComponent, canActivate: [AuthGuard] },
+      { path: 'feedback', component: FeedbackManagementComponent, canActivate: [AuthGuard] },
+      { path: 'course-promotions', component: CoursePromotionManagementComponent, canActivate: [AuthGuard] },
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'applications', pathMatch: 'full' }
     ]
   },

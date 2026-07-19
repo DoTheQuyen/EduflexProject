@@ -1,14 +1,20 @@
-﻿using Eduflex.API.DTOs;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using ShareService.DataAccess;
 using ShareService.DataAccess.Interface;
-using ShareService.DataAccess.Service;
-using ShareService.Models;
+using ShareService.Models.Application;
+using ShareService.Models.Auth;
+using ShareService.Models.CoursePromotion;
+using ShareService.Models.Enquiry;
+using ShareService.Models.Feedback;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using ShareService.Services.Service;
-using ShareService.Validators;
+using ShareService.Validations.Application;
+using ShareService.Validations.Auth;
+using ShareService.Validations.CoursePromotion;
+using ShareService.Validations.Enquiry;
+using ShareService.Validations.Feedback;
 
 namespace ShareService.Inject
 {
@@ -22,6 +28,9 @@ namespace ShareService.Inject
             services.AddScoped<IAuthentication, Authentication>();
             services.AddScoped<IApplication, Application>();
             services.AddScoped<IUserDB, UserDB>();
+            services.AddScoped<IEnquiry, Enquiry>();
+            services.AddScoped<IFeedback, Feedback>();
+            services.AddScoped<ICoursePromotion, CoursePromotion>();
 
             #endregion
 
@@ -32,6 +41,10 @@ namespace ShareService.Inject
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEnquiryService, EnquiryService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<ICoursePromotionService, CoursePromotionService>();
+            services.AddHttpClient<IRecaptchaService, RecaptchaService>();
 
 
             #endregion
@@ -43,6 +56,9 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<CreateApplicationModel>, CreateApplicationModelValidator>();
             services.AddScoped<IValidator<UpdateUserProfileModel>, UpdateUserProfileValidator>();
             services.AddScoped<IValidator<ChangePasswordModel>, ChangePasswordValidator>();
+            services.AddScoped<IValidator<CreateEnquiryModel>, CreateEnquiryModelValidator>();
+            services.AddScoped<IValidator<CreateFeedbackModel>, CreateFeedbackModelValidator>();
+            services.AddScoped<IValidator<CreateCoursePromotionModel>, CreateCoursePromotionModelValidator>();
 
             #endregion
 

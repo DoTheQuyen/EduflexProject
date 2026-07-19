@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using ShareService.Models;
+using ShareService.Models.Auth;
+using ShareService.Models.Student;
 
 namespace ShareService.Services.Service
 {

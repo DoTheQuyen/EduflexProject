@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Eduflex.API.DTOs;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using ShareService.DataAccess;
 using ShareService.DataAccess.Interface;
@@ -40,8 +41,8 @@ namespace ShareService.Inject
             #region Validators
             services.AddScoped<IValidator<LoginModel>, LoginModelValidator>();
             services.AddScoped<IValidator<CreateApplicationModel>, CreateApplicationModelValidator>();
-            services.AddScoped<IValidator<UpdateUserProfileDto>, UpdateUserProfileValidator>();
-            services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
+            services.AddScoped<IValidator<UpdateUserProfileModel>, UpdateUserProfileValidator>();
+            services.AddScoped<IValidator<ChangePasswordModel>, ChangePasswordValidator>();
 
             #endregion
 

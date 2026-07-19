@@ -28,3 +28,7 @@ yarn-error.log
 
 # Others
 *.vsidx
+
+# Angular
+.angular/cache/
+

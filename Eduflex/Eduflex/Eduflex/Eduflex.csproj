@@ -7,7 +7,12 @@
     <UserSecretsId>cdc7f369-8001-48c4-9d25-6a69c9e01a5b</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<Company>Quyen The Do</Company>
+		<Authors>Quyen The Do</Authors>
+		<Copyright>Copyright © 2025 Quyen The Do. All rights reserved.</Copyright>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	</PropertyGroup>
   <ItemGroup>
     <Compile Remove="Test\**" />
     <Content Remove="Test\**" />
@@ -53,16 +58,16 @@
     <ProjectReference Include="..\ShareService\ShareService.csproj" />
   </ItemGroup>
 
-	<Target Name="ExportSwagger" AfterTargets="Build">
-		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-auth.json&quot; &quot;$(TargetPath)&quot; auth" />
-		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-app.json&quot;  &quot;$(TargetPath)&quot; app" />
+	<Target Name="ExportSwagger" AfterTargets="Build"  Condition="'$(BuildingInsideDocker)' != 'true'">
+		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-auth.json&quot; &quot;$(TargetPath)&quot; auth" ContinueOnError="WarnAndContinue" />
+		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-app.json&quot;  &quot;$(TargetPath)&quot; app" ContinueOnError="WarnAndContinue" />
 	</Target>
 
-	<Target Name="NSwagAuth" AfterTargets="ExportSwagger">
+	<Target Name="NSwagAuth" AfterTargets="ExportSwagger"  Condition="'$(BuildingInsideDocker)' != 'true'">
 		<Exec Condition="Exists('$(ProjectDir)swagger-auth.json') AND Exists('$(ProjectDir)nswag.auth.json')" Command="nswag run &quot;$(ProjectDir)nswag.auth.json&quot;" />
 	</Target>
 
-	<Target Name="NSwagApp" AfterTargets="ExportSwagger">
+	<Target Name="NSwagApp" AfterTargets="ExportSwagger"  Condition="'$(BuildingInsideDocker)' != 'true'">
 		<Exec Condition="Exists('$(ProjectDir)swagger-app.json') AND Exists('$(ProjectDir)nswag.app.json')" Command="nswag run &quot;$(ProjectDir)nswag.app.json&quot;" />
 	</Target>
 

@@ -1,9 +1,10 @@
-﻿using FluentValidation;
+﻿using Eduflex.API.DTOs;
+using FluentValidation;
 using ShareService.Services.Interface;
 
 namespace ShareService.Validators
 {
-    public class UpdateUserProfileValidator : AbstractValidator<UpdateUserProfileDto>
+    public class UpdateUserProfileValidator : AbstractValidator<UpdateUserProfileModel>
     {
         public UpdateUserProfileValidator()
         {

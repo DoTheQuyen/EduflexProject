@@ -1,5 +1,5 @@
 ﻿using DBMigration.Migrations;
-using DBMigration.Models;
+using ShareService.Models;
 using DBMigration.Services.Interface;
 using DBMigration.Services.Services;
 using Microsoft.Extensions.Configuration;

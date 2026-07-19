@@ -28,6 +28,10 @@ export class SidebarComponent implements OnChanges {
     }
   }
 
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
+  }
+  
   private setMenuItems(): void {
     if (!this.userInfo) {
       this.menuItems = [];

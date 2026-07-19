@@ -17,12 +17,12 @@ public class AuthService : IAuthService
         _logger = logger;
     }
 
-    public async Task<UserModel?> ValidateUserAsync(string email, string password, Func<string, string, bool> verifyPassword)
+    public async Task<UserModel?> ValidateUserAsync(LoginModel loginModel, Func<string, string, bool> verifyPassword)
     {
         try
         {
             // Create login model for validation
-            var loginModel = new LoginModel { Email = email, Password = password };
+            //var loginModel = new LoginModel { Email = email, Password = password };
 
             // Use FluentValidation to validate rules of input object before process
             var validate = await _validator.ValidateAsync(loginModel);
@@ -36,21 +36,21 @@ public class AuthService : IAuthService
             // Authorization here
 
             // Process business rule here
-            var user = await _authentication.FindByEmailAsync(email);
+            var user = await _authentication.FindByEmailAsync(loginModel.Email);
             if (user == null)
             {
-                _logger.LogInformation("User not found for email: {email}", email);
+                _logger.LogInformation("User not found for email: {email}", loginModel.Email);
                 return null;
             }
 
-            var isValid = verifyPassword(password, user.PasswordHash);
-            _logger.LogInformation("User validation result for {email}: {result}", email, isValid ? "Success" : "Failed");
+            var isValid = verifyPassword(loginModel.Password, user.PasswordHash);
+            _logger.LogInformation("User validation result for {email}: {result}", loginModel.Email, isValid ? "Success" : "Failed");
 
             return isValid ? user : null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in ValidateUserAsync for email: {email}", email);
+            _logger.LogError(ex, "Error in ValidateUserAsync for email: {email}", loginModel.Email);
             throw new Exception("Error in ValidateUserAsync", ex);
         }
     }

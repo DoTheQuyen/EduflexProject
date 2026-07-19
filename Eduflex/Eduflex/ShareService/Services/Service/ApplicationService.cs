@@ -14,15 +14,18 @@ namespace ShareService.Services
         private readonly IApplication _applicationDataAccess;
         private readonly IValidator<CreateApplicationModel> _createApplicationValidator;
         private readonly ILogger<ApplicationService> _logger;
+        private readonly IMongoClient _client;
 
         public ApplicationService(
             IApplication applicationDataAccess,
             IValidator<CreateApplicationModel> createApplicationValidator,
-            ILogger<ApplicationService> logger)
+            ILogger<ApplicationService> logger,
+            IMongoClient client)
         {
             _applicationDataAccess = applicationDataAccess;
             _createApplicationValidator = createApplicationValidator;
             _logger = logger;
+            _client = client;
         }
 
         /// <summary>
@@ -186,21 +189,26 @@ namespace ShareService.Services
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
         public async Task<ApplicationModel> CreateApplication(CreateApplicationModel createDto)
-        {
-            try
+        {            
+            // Use FluentValidation to validate input
+            var validate = await _createApplicationValidator.ValidateAsync(createDto);
+            if (!validate.IsValid)
             {
-                // Use FluentValidation to validate input
-                var validate = await _createApplicationValidator.ValidateAsync(createDto);
-                if (!validate.IsValid)
-                {
-                    var errors = string.Join("; ", validate.Errors.Select(e => e.ErrorMessage));
-                    _logger.LogInformation("Validation failed for application creation: {errors}", errors);
-                    throw new ArgumentException($"Validation failed: {errors}");
-                }
+                var errors = string.Join("; ", validate.Errors.Select(e => e.ErrorMessage));
+                _logger.LogInformation("Validation failed for application creation: {errors}", errors);
+                throw new ArgumentException($"Validation failed: {errors}");
+            }
+
+            //practice transaction session
+            using var session = await _client.StartSessionAsync();
+            session.StartTransaction();
+            try
+            {               
 
                 // Authorization here (future implementation)
 
-                // Process business rule here
+                // Process business rule here   
+
                 var application = new ApplicationModel
                 {
                     StudentId = createDto.StudentId,
@@ -212,7 +220,7 @@ namespace ShareService.Services
                     Status = "Pending" // Default status
                 };
 
-                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application);
+                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application,session);
 
                 // Business logic: Return limited information
                 var result = new ApplicationModel
@@ -223,7 +231,7 @@ namespace ShareService.Services
                     Status = createdApplication.Status,
                     ApplicationType = createdApplication.ApplicationType
                 };
-
+                await session.CommitTransactionAsync();
                 _logger.LogInformation("Created new application with ID: {ApplicationId} for student {StudentId}",
                     result.Id, createDto.StudentId);
 
@@ -231,6 +239,7 @@ namespace ShareService.Services
             }
             catch (Exception ex)
             {
+                await session.AbortTransactionAsync();
                 _logger.LogError(ex, "Error in CreateApplication for student {StudentId}", createDto.StudentId);
                 throw new Exception("Error creating application", ex);
             }
@@ -246,6 +255,9 @@ namespace ShareService.Services
         /// <exception cref="Exception"></exception>
         public async Task<bool> UpdateApplicationStatus(string id, string status)
         {
+            //practice transaction session
+            using var session = await _client.StartSessionAsync();
+            session.StartTransaction();
             try
             {
                 // Authorization here (future implementation)
@@ -259,6 +271,7 @@ namespace ShareService.Services
 
                 var result = await _applicationDataAccess.UpdateApplicationStatusAsync(id, status);
 
+                await session.CommitTransactionAsync();
                 _logger.LogInformation("Status update for application {ApplicationId}: {Status} - Success: {Success}",
                     id, status, result);
 
@@ -266,6 +279,7 @@ namespace ShareService.Services
             }
             catch (Exception ex)
             {
+                await session.AbortTransactionAsync();
                 _logger.LogError(ex, "Error in UpdateApplicationStatus for application {ApplicationId}", id);
                 throw new Exception("Error updating application status", ex);
             }

@@ -1,4 +1,5 @@
-﻿using DBMigration.Models;
+﻿using ShareService.Models;
+using DBMigration.Models;
 using DBMigration.Services.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

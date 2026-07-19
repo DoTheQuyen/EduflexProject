@@ -9,7 +9,7 @@ namespace ShareService.Services.Interface
 {
     public interface IAuthService
     {
-        Task<UserModel?> ValidateUserAsync(string email, string password, Func<string, string, bool> verifyPassword);
+        Task<UserModel?> ValidateUserAsync(LoginModel loginModel, Func<string, string, bool> verifyPassword);
         Task UpdateLastLoginAsync(string userId);
     }
 }

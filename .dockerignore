@@ -1,0 +1,12 @@
+**/.git
+**/.github
+**/.vs
+**/.angular
+**/node_modules
+**/dist
+**/bin
+**/obj
+**/logs
+copilot.exe
+taskdef.json
+*.md

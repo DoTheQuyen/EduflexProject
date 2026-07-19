@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Eduflex.API.DTOs;
+using MongoDB.Driver;
 using ShareService.DataAccess.Interface;
 using ShareService.Models;
 using ShareService.Services.Interface;
@@ -28,7 +29,7 @@ namespace ShareService.DataAccess
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileDto updateDto)
+        public async Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileModel updateDto)
         {
             var update = Builders<UserModel>.Update
                 .Set(u => u.FirstName, updateDto.FirstName)

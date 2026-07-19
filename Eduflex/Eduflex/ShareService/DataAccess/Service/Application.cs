@@ -96,19 +96,30 @@ namespace ShareService.DataAccess
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ApplicationModel> CreateApplicationAsync(ApplicationModel application)
+
+        /// <summary>
+        /// practice apply transaction session
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public async Task<ApplicationModel> CreateApplicationAsync(ApplicationModel application, IClientSessionHandle? session = null)
         {
-            await _applicationsCollection.InsertOneAsync(application);
+            if (session == null)
+                await _applicationsCollection.InsertOneAsync(application);
+            else
+                await _applicationsCollection.InsertOneAsync(session, application);
             return application;
         }
 
-        public async Task<bool> UpdateApplicationStatusAsync(string id, string status)
+        public async Task<bool> UpdateApplicationStatusAsync(string id, string status, IClientSessionHandle? session = null)
         {
             var update = Builders<ApplicationModel>.Update
                 .Set(a => a.Status, status);
 
-            var result = await _applicationsCollection
-                .UpdateOneAsync(a => a.Id == id, update);
+            var result = session == null
+                ? await _applicationsCollection.UpdateOneAsync(a => a.Id == id, update)
+                : await _applicationsCollection.UpdateOneAsync(session, a => a.Id == id, update);
 
             return result.ModifiedCount > 0;
         }

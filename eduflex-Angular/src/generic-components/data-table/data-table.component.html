@@ -1,0 +1,39 @@
+<div class="table-responsive">
+  <table datatable [dtOptions]="compatOptions" [dtTrigger]="compatTrigger" [class]="tableClass">
+    <thead class="table-light">
+      <tr>
+        <th *ngFor="let col of columns" [ngClass]="col.className">
+          {{ col.title }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of data">
+        <td *ngFor="let col of columns" [ngClass]="col.className">
+
+          <!-- Status column -->
+          <ng-container *ngIf="col.field === 'status'; else notStatus">
+            <span class="badge" [ngClass]="getStatusBadgeClass(getCellData(row, col.field, col.formatter))">
+              {{ getCellData(row, col.field, col.formatter) }}
+            </span>
+          </ng-container>
+
+          <!-- Actions column -->
+          <ng-template #notStatus>
+            <ng-container *ngIf="col.field === 'actions'; else defaultCell">
+              <button class="btn btn-sm btn-outline-primary" (click)="actionClick.emit({ action: 'view', row })">
+                <i class="fas fa-eye me-1"></i> View
+              </button>
+            </ng-container>
+          </ng-template>
+
+          <!-- Default cell -->
+          <ng-template #defaultCell>
+            {{ getCellData(row, col.field, col.formatter) }}
+          </ng-template>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using ShareService.Services.Interface;
+using ShareService.Models;
 
 namespace ShareService.Validators
 {
-    public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
+    public class ChangePasswordValidator : AbstractValidator<ChangePasswordModel>
     {
         public ChangePasswordValidator()
         {

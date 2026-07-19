@@ -23,44 +23,19 @@
         </div>
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
-          <div class="card-header bg-white py-3">
-            <h5 class="card-title mb-0">All Feedback ({{ feedbacks.length }})</h5>
-          </div>
-
+         
           <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Photo</th>
-                    <th>Name</th>
-                    <th>Course</th>
-                    <th>Comment</th>
-                    <th class="text-center">Date</th>
-                    <th class="text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let f of feedbacks">
-                    <td>
-                      <img [src]="f.photoUrl" alt="{{ f.name }}" class="feedback-thumb">
-                    </td>
-                    <td>{{ f.name }}</td>
-                    <td><span class="badge bg-primary">{{ f.courseName }}</span></td>
-                    <td class="feedback-comment-cell">{{ f.comment }}</td>
-                    <td class="text-center">{{ f.createdAt | date:'mediumDate' }}</td>
-                    <td class="text-center">
-                      <button class="btn btn-sm btn-outline-danger" (click)="onDelete(f)">
-                        <i class="fas fa-trash me-1"></i>Delete
-                      </button>
-                    </td>
-                  </tr>
-                  <tr *ngIf="feedbacks.length === 0">
-                    <td colspan="6" class="text-center text-muted py-4">No feedback yet. Click "Add Feedback" to create one.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <app-data-table
+              [columns]="columns"
+              [data]="feedbacks"
+              [rowActions]="rowActions"
+              [settings]="{ pageLength: 10, responsive: true }"
+              (actionClick)="onTableAction($event)"
+              tableClass="table table-bordered table-hover mb-0">
+            </app-data-table>
+            <p *ngIf="!isLoading && feedbacks.length === 0" class="text-center text-muted py-4 mb-0">
+              No feedback yet. Click "Add Feedback" to create one.
+            </p>
           </div>
         </div>
       </div>

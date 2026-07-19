@@ -55,6 +55,7 @@
     "@angular/build": "^20.3.3",
     "@angular/cli": "^20.3.3",
     "@angular/compiler-cli": "^20.3.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/datatables.net": "^1.10.28",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",

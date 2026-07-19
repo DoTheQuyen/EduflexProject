@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DataTablesModule } from 'angular-datatables';
 import { CoursePromotion } from '../../../../models/course-promotion';
 import { CoursePromotionService } from '../../../../services/course-promotion.service';
+import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { formatDateTime } from '../../../../shared/utils/date-time.util';
 
 @Component({
   selector: 'app-course-promotion-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent],
   templateUrl: './course-promotion-management.component.html',
   styleUrls: ['./course-promotion-management.component.css']
 })
@@ -20,6 +24,31 @@ export class CoursePromotionManagementComponent implements OnInit {
   editingId: string | null = null;
 
   promotionForm: FormGroup;
+
+  columns: DataTableColumn<CoursePromotion>[] = [
+    { field: 'courseName', title: 'Course / University',
+      render: (value, row) => `
+        <div class="promo-course-name">${value}</div>
+        <div class="promo-uni-name">${row.universityName}</div>
+      ` },
+    { field: 'semester', title: 'Semester' },
+    { field: 'scholarshipLabel', title: 'Scholarship',
+      render: (value) => `<span class="badge bg-warning text-dark">${value}</span>` },
+    { field: 'location', title: 'Location' },
+    { field: 'tuition', title: 'Tuition' },
+    { field: 'expiryDate', title: 'Offer ends', className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate') },
+    { field: 'isFeatured', title: 'Featured', className: 'text-center',
+      render: (value) => value === 'Yes'
+        ? `<span class="badge bg-success">Yes</span>`
+        : `<span class="badge bg-secondary">No</span>` },
+    { field: 'actions', title: 'Actions', className: 'text-center' }
+  ];
+
+  rowActions: DataTableRowAction<CoursePromotion>[] = [
+    { action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' },
+    { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
+  ];
 
   constructor(private fb: FormBuilder, private coursePromotionService: CoursePromotionService) {
     this.promotionForm = this.fb.group({
@@ -135,5 +164,13 @@ export class CoursePromotionManagementComponent implements OnInit {
         window.alert('Could not delete this course promotion. Please try again.');
       }
     });
+  }
+
+  onTableAction(event: DataTableAction<CoursePromotion>): void {
+    if (event.action === 'edit') {
+      this.openEditModal(event.row);
+    } else if (event.action === 'delete') {
+      this.onDelete(event.row);
+    }
   }
 }

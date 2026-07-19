@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DataTablesModule } from 'angular-datatables';
 import { Feedback } from '../../../../models/feedback';
 import { FeedbackService } from '../../../../services/feedback.service';
+import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { formatDateTime } from '../../../../shared/utils/date-time.util';
 
 @Component({
   selector: 'app-feedback-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent],
   templateUrl: './feedback-management.component.html',
   styleUrls: ['./feedback-management.component.css']
 })
@@ -20,6 +24,21 @@ export class FeedbackManagementComponent implements OnInit {
   photoPreview: string = '';
 
   feedbackForm: FormGroup;
+
+  columns: DataTableColumn<Feedback>[] = [
+    { field: 'photoUrl', title: 'Photo', className: 'text-center',
+      render: (value) => `<img src="${value}" alt="" class="feedback-thumb">` },
+    { field: 'name', title: 'Name' },
+    { field: 'courseName', title: 'Course', className: 'text-center' },
+    { field: 'comment', title: 'Comment', className: 'feedback-comment-cell' },
+    { field: 'createdAt', title: 'Date', className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate') },
+    { field: 'actions', title: 'Actions', className: 'text-center' }
+  ];
+
+  rowActions: DataTableRowAction<Feedback>[] = [
+    { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
+  ];
 
   constructor(private fb: FormBuilder, private feedbackService: FeedbackService) {
     this.feedbackForm = this.fb.group({
@@ -47,8 +66,6 @@ export class FeedbackManagementComponent implements OnInit {
       }
     });
   }
-
-
 
   isFieldInvalid(fieldName: string): boolean {
     const control = this.feedbackForm.get(fieldName);
@@ -100,6 +117,12 @@ export class FeedbackManagementComponent implements OnInit {
         window.alert('Could not delete this feedback. Please try again.');
       }
     });
+  }
+
+  onTableAction(event: DataTableAction<Feedback>): void {
+    if (event.action === 'delete') {
+      this.onDelete(event.row);
+    }
   }
 
   onPhotoSelected(event: Event): void {

@@ -23,13 +23,17 @@ h1, h2, h3 {
 
 /* Hero */
 .hero {
-  background: var(--color-navy-900);
+  background-color: var(--color-navy-900);
   color: white;
   padding: 4.5rem 2rem 3.5rem;
   background-image:
     linear-gradient(rgba(184, 134, 47, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(184, 134, 47, 0.18) 1px, transparent 1px);
-  background-size: 42px 42px;
+    linear-gradient(90deg, rgba(184, 134, 47, 0.18) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(22, 35, 58, 0.86) 0%, rgba(22, 35, 58, 0.93) 100%),
+    url('assets/hero/sydney-opera-house-sunset-hero.jpg');
+  background-size: 42px 42px, 42px 42px, cover, cover;
+  background-position: 0 0, 0 0, center, center;
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
 }
 
 .hero-grid {
@@ -204,6 +208,24 @@ h1, h2, h3 {
 }
 
 /* Why Eduflex */
+.why-band {
+  position: relative;
+  background-color: white;
+  background-image:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.78) 78%, rgba(255, 255, 255, 1) 100%),
+    url('assets/hero/students-studying-park.jpg');
+  background-size: cover, cover;
+  background-position: center, center 68%;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.why-band .band-head {
+  display: inline-block;
+  
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+}
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));

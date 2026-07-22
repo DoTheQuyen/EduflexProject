@@ -12,11 +12,13 @@ import { FeedbackManagementComponent } from './components/portal/staff/feedback-
 import { CoursePromotionManagementComponent } from './components/portal/staff/course-promotion-management/course-promotion-management.component';
 import { RoleManagementComponent } from './components/portal/staff/role-management/role-management.component';
 import { UserManagementComponent } from './components/portal/staff/user-management/user-management.component';
+import { StudentHandbookComponent } from './components/public/student-handbook/student-handbook.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Public home page
   { path: 'about', component: AboutComponent }, // Public about page
   { path: 'login', component: LoginComponent }, // Public login page
+  { path: 'student-handbook', component: StudentHandbookComponent }, // Public student handbook page
   { 
     path: 'register',  
     loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent) 

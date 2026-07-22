@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Reflection;
 
 namespace DBMigration.Services.Services
 {
@@ -14,12 +13,18 @@ namespace DBMigration.Services.Services
         private readonly IMongoDatabase _database;
         private readonly ILogger<MigrationService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IMigrationRegistrationService _migrationRegistrationService;
 
-        public MigrationService(IMongoDatabase database, ILogger<MigrationService> logger, IServiceProvider serviceProvider)
+        public MigrationService(
+            IMongoDatabase database,
+            ILogger<MigrationService> logger,
+            IServiceProvider serviceProvider,
+            IMigrationRegistrationService migrationRegistrationService)
         {
             _database = database;
             _logger = logger;
             _serviceProvider = serviceProvider;
+            _migrationRegistrationService = migrationRegistrationService;
         }
 
         public async Task<bool> RunMigrationsAsync()
@@ -127,10 +132,7 @@ namespace DBMigration.Services.Services
         private List<IMigration> DiscoverMigrations()
         {
             var migrations = new List<IMigration>();
-            var migrationTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => typeof(IMigration).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                .OrderBy(t => t.Name);
+            var migrationTypes = _migrationRegistrationService.GetMigrationTypes();
 
             foreach (var type in migrationTypes)
             {

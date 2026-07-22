@@ -1,0 +1,75 @@
+<div class="feedback-portal">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="mb-2">Manage Roles</h2>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <button class="btn btn-primary btn-lg" (click)="openModal()">
+          <i class="fas fa-plus me-2"></i>Add Role
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading roles...</p>
+        </div>
+
+        <div *ngIf="!isLoading" class="card border shadow-sm">
+          <div class="card-body p-0">
+            <app-data-table
+              [columns]="columns"
+              [data]="roles"
+              [settings]="{ pageLength: 10, responsive: true }"
+              tableClass="table table-bordered table-hover mb-0">
+            </app-data-table>
+            <p *ngIf="!isLoading && roles.length === 0" class="text-center text-muted py-4 mb-0">
+              No roles yet. Click "Add Role" to create one.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Role Modal -->
+<app-modal *ngIf="isModalOpen" title="Add Role" [isSaving]="isSubmitting"
+  saveLabel="Save Role"
+  (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
+  <form [formGroup]="roleForm">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name *</label>
+      <input id="name" type="text" class="form-control" formControlName="name">
+      <span class="field-error" *ngIf="isFieldInvalid('name')">Role name is required</span>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" rows="2" class="form-control" formControlName="description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Permissions</label>
+      <div *ngFor="let group of groupedPermissions" class="mb-2">
+        <div class="fw-bold">{{ group.moduleName }}</div>
+        <div class="form-check" *ngFor="let permission of group.permissions">
+          <input class="form-check-input" type="checkbox" [id]="permission.id"
+            [checked]="isPermissionSelected(permission.id)"
+            (change)="togglePermission(permission.id, $any($event.target).checked)">
+          <label class="form-check-label" [for]="permission.id">{{ permission.action }} ({{ permission.key }})</label>
+        </div>
+      </div>
+      <p *ngIf="groupedPermissions.length === 0" class="text-muted small">No permissions available yet.</p>
+    </div>
+
+    <app-notification type="error" [message]="errorMessage"></app-notification>
+  </form>
+</app-modal>

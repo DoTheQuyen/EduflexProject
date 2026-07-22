@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using ShareService.DataAccess.Interface;
 using ShareService.Services;
+using ShareService.Services.Interface;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -20,6 +21,7 @@ namespace ShareService.Tests
         private Mock<ILogger<ApplicationService>> _loggerMock;
         private Mock<IMongoClient> _clientMock;
         private Mock<IClientSessionHandle> _sessionMock;
+        private Mock<IPermissionService> _permissionServiceMock;
         private ApplicationService _service;
 
         [SetUp]
@@ -30,6 +32,7 @@ namespace ShareService.Tests
             _loggerMock = new Mock<ILogger<ApplicationService>>();
             _clientMock = new Mock<IMongoClient>();
             _sessionMock = new Mock<IClientSessionHandle>();
+            _permissionServiceMock = new Mock<IPermissionService>();
 
             // Validator always passes
             _validatorMock
@@ -58,7 +61,8 @@ namespace ShareService.Tests
                 _appRepoMock.Object,
                 _validatorMock.Object,
                 _loggerMock.Object,
-                _clientMock.Object
+                _clientMock.Object,
+                _permissionServiceMock.Object
             );
         }
 

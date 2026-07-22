@@ -1,5 +1,6 @@
-﻿using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
+﻿using Eduflex.Authorization;
+using Eduflex.DTOs.Auth;
+using Eduflex.Mapping.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Models;
@@ -64,7 +65,7 @@ namespace Eduflex.API.Controllers
                     Email = updatedUser.Email,
                     FirstName = updatedUser.FirstName,
                     LastName = updatedUser.LastName,
-                    Role = updatedUser.Role,
+                    RoleId = updatedUser.RoleId,
                     CreatedAt = updatedUser.CreatedAt,
                     LastLogin = updatedUser.LastLogin,
                     IsActive = updatedUser.IsActive
@@ -78,6 +79,7 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost("change-password")]
+        [SkipMustChangePasswordCheck]
         public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             try

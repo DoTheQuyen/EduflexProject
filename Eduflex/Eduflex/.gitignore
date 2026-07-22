@@ -20,6 +20,9 @@ out/
 *.snupkg
 packages/
 
+# Local per-developer MongoDB connection strings (never commit — see DBMigration/appsettings.json)
+appsettings.local.json
+
 # Angular/Node
 node_modules/
 dist/

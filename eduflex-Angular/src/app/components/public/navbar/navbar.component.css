@@ -3,9 +3,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700)); /* Match home hero gradient */
+   background:
+    radial-gradient(120% 90% at 12% -10%, var(--color-navy-700), transparent 85%),
+    linear-gradient(90deg, var(--color-navy-700) 0%, #0c4e83 55%, var(--color-navy-900) 100%);
   color: #fff;
-  padding: 0.8rem 2rem; /* Increased padding to match home container */
+  padding: 0rem 2rem; /* Increased padding to match home container */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -20,13 +22,15 @@
 }
 
 .nav-brand .logo {
-  background: #fff;
-  color: var(--color-navy-900); /* Updated to match gradient */
-  font-weight: bold;
-  border-radius: 50%;
-  padding: 0.5rem 0.7rem;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+.nav-brand .logo:hover {
+  transform: scale(1.06);
 }
 
 .nav-brand h3 {
@@ -74,6 +78,10 @@
   width: 100%;
   height: 2px;
   background: var(--color-accent);
+}
+
+.navbar.navbar-hidden {
+  transform: translateY(-100%);
 }
 
 /* Auth Section - Moved to right */

@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShareService.Models.Auth
 {
+    [BsonIgnoreExtraElements]
     public class UserModel
     {
         [BsonId]
@@ -26,11 +27,14 @@ namespace ShareService.Models.Auth
         [BsonElement("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [BsonElement("role")]
-        public string Role { get; set; } = "Student";
+        [BsonElement("roleId")]
+        public string RoleId { get; set; }
 
         [BsonElement("isActive")]
         public bool IsActive { get; set; } = true;
+
+        [BsonElement("mustChangePassword")]
+        public bool MustChangePassword { get; set; } = false;
 
         [BsonElement("lastLogin")]
         public DateTime? LastLogin { get; set; }

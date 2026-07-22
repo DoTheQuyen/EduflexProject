@@ -1,4 +1,5 @@
 ﻿using DBMigration.Services.Interface;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -6,23 +7,40 @@ using ShareService.Models.Setting;
 using ShareService.Models.Application;
 using ShareService.Models.Auth;
 using ShareService.Models.Student;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DBMigration.Services.Services
 {
-   
+
 
     public class DatabaseService : IDatabaseService
     {
         private readonly IMongoDatabase _database;
         private readonly ILogger<DatabaseService> _logger;
         private readonly MongoDBSettings _settings;
+        private readonly IConfiguration _configuration;
 
         // Updated constructor
-        public DatabaseService(IMongoClient mongoClient, MongoDBSettings settings, ILogger<DatabaseService> logger)
+        public DatabaseService(IMongoClient mongoClient, MongoDBSettings settings, ILogger<DatabaseService> logger, IConfiguration configuration)
         {
             _settings = settings;
             _database = mongoClient.GetDatabase(settings.DatabaseName);
             _logger = logger;
+            _configuration = configuration;
+        }
+
+        // Mirrors Eduflex.Controllers.AuthController.HashPassword exactly — that's the only
+        // hashing scheme the login endpoint actually verifies against (SHA-256, not BCrypt).
+        private string HashPassword(string password)
+        {
+            var salt = _configuration["JWT:Salt"]
+                ?? throw new InvalidOperationException("JWT:Salt is not configured. Add it to DBMigration/appsettings.json.");
+
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password + salt);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
         }
 
         public async Task<bool> TestConnectionAsync()
@@ -93,15 +111,9 @@ namespace DBMigration.Services.Services
         {
             switch (collectionName)
             {
-                case "Applications":
-                    var applications = _database.GetCollection<ApplicationModel>(collectionName);
-                    await applications.Indexes.CreateManyAsync(new[]
-                    {
-                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Ascending(a => a.StudentId)),
-                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Ascending(a => a.Status)),
-                    new CreateIndexModel<ApplicationModel>(Builders<ApplicationModel>.IndexKeys.Descending(a => a.DateApplied))
-                });
-                    break;
+                // Applications indexes are owned by migration _001_AddApplications_290925
+                // (idx_student_date, idx_status, idx_status_date) — creating unnamed indexes
+                // here on the same key patterns collides with those named ones.
 
                 case "Students":
                     var students = _database.GetCollection<StudentModel>(collectionName);
@@ -122,7 +134,10 @@ namespace DBMigration.Services.Services
 
         public async Task DropCollectionsAsync()
         {
-            var collections = new[] { "Applications", "Students", "Users" };
+            // Drops whatever actually exists (including _migrations and anything added by
+            // migrations, e.g. Enquiries/Feedbacks/CoursePromotions) instead of a fixed list —
+            // a hardcoded subset silently goes stale every time a new collection is introduced.
+            var collections = await _database.ListCollectionNames().ToListAsync();
 
             foreach (var collectionName in collections)
             {
@@ -171,11 +186,14 @@ namespace DBMigration.Services.Services
 
             // Insert Users
             var usersCollection = _database.GetCollection<UserModel>("Users");
-            var users = GetSampleUsers(students);
             if (await usersCollection.CountDocumentsAsync(_ => true) == 0)
             {
+                var studentRoleId = await GetOrCreateRoleIdAsync("Student", "Standard authenticated user", Array.Empty<string>());
+                var adminRoleId = await GetOrCreateRoleIdAsync("Admin", "Full administrative access", new[] { "applications.manage" });
+
+                var users = GetSampleUsers(students, studentRoleId, adminRoleId);
                 await usersCollection.InsertManyAsync(users);
-                _logger.LogInformation($"✅ Inserted {users.Count} users");
+                _logger.LogInformation($"✅ Inserted {users.Count} users (admin@eduflex.com / admin123, students / test123)");
             }
 
             // Insert Applications
@@ -244,20 +262,53 @@ namespace DBMigration.Services.Services
         };
         }
 
-        private List<UserModel> GetSampleUsers(List<StudentModel> students)
+        // Mirrors the Admin/Student roles that migration _010_AddRolesAndUserRoleId_200726 seeds,
+        // so seed users get a valid roleId whether or not migrations have already run.
+        private async Task<string> GetOrCreateRoleIdAsync(string name, string description, string[] permissions)
         {
-            // Simple password hash (in real app, use proper hashing)
-            var passwordHash = BCrypt.Net.BCrypt.HashPassword("Password123!");
+            var rolesCollection = _database.GetCollection<BsonDocument>("Roles");
+            var role = await rolesCollection.Find(Builders<BsonDocument>.Filter.Eq("name", name)).FirstOrDefaultAsync();
 
-            return students.Select(s => new UserModel
+            if (role == null)
+            {
+                role = new BsonDocument
+                {
+                    { "name", name },
+                    { "description", description },
+                    { "permissions", new BsonArray(permissions) }
+                };
+                await rolesCollection.InsertOneAsync(role);
+                _logger.LogInformation($"✅ Seeded {name} role (Roles collection was empty)");
+            }
+
+            return role["_id"].AsObjectId.ToString();
+        }
+
+        private List<UserModel> GetSampleUsers(List<StudentModel> students, string studentRoleId, string adminRoleId)
+        {
+            var studentPasswordHash = HashPassword("test123");
+
+            var users = students.Select(s => new UserModel
             {
                 Email = s.Email,
-                PasswordHash = passwordHash,
+                PasswordHash = studentPasswordHash,
                 FirstName = s.FirstName,
                 LastName = s.LastName,
-                Role = "Student",
+                RoleId = studentRoleId,
                 CreatedAt = DateTime.UtcNow
             }).ToList();
+
+            users.Add(new UserModel
+            {
+                Email = "admin@eduflex.com",
+                PasswordHash = HashPassword("admin123"),
+                FirstName = "Admin",
+                LastName = "User",
+                RoleId = adminRoleId,
+                CreatedAt = DateTime.UtcNow
+            });
+
+            return users;
         }
 
         private List<ApplicationModel> GetSampleApplications(List<StudentModel> students)

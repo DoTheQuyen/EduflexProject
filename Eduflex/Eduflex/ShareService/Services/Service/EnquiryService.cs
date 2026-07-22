@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Enquiry;
 using ShareService.Services.Interface;
+using ShareService.Services.Interface.Integration;
 
 namespace ShareService.Services
 {

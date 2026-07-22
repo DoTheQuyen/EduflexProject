@@ -92,7 +92,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.successMessage = 'Login successful! Redirecting...';
 
         setTimeout(() => {
-          this.forcePortalRedirect();
+          if (response.mustChangePassword) {
+            this.router.navigateByUrl(this.profilePathForCurrentRole(), { replaceUrl: true });
+          } else {
+            this.forcePortalRedirect();
+          }
         }, 800);
 
         this.isLoading = false;
@@ -113,9 +117,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         email: authResponse.email,
         firstName: authResponse.firstName,
         lastName: authResponse.lastName,
-        role: authResponse.role
+        role: authResponse.roleName,
+        roleId: authResponse.roleId,
+        mustChangePassword: authResponse.mustChangePassword,
+        permissions: authResponse.permissions || []
       }));
     }
+  }
+
+  private profilePathForCurrentRole(): string {
+    const currentUser = this.authHelper.getCurrentUser();
+    const userRole = currentUser?.role?.toLowerCase() || 'student';
+    return userRole === 'student' ? '/student-portal/profile' : '/staff-portal/profile';
   }
 
   private handleRememberMe(email: string): void {

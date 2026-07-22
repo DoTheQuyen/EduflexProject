@@ -1,5 +1,5 @@
-using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
+using Eduflex.DTOs.Feedback;
+using Eduflex.Mapping.Feedback;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,7 +10,6 @@ namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "app")]
     public class FeedbacksController : ControllerBase
     {
         private readonly IFeedbackService _feedbackService;
@@ -24,9 +23,10 @@ namespace Eduflex.API.Controllers
             _feedbackSettings = feedbackSettings.Value;
         }
 
-        [HttpGet("latest")]
+        [HttpGet("feedback-latest")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<FeedbackDto>>> GetLatest([FromQuery] int? count = null)
+        [ApiExplorerSettings(GroupName = "public")]
+        public async Task<ActionResult<List<FeedbackDto>>> GetLatestFeedback([FromQuery] int? count = null)
         {
             var effectiveCount = count ?? _feedbackSettings.DefaultLatestCount;
             var feedbacks = await _feedbackService.GetLatestFeedback(effectiveCount);
@@ -35,6 +35,7 @@ namespace Eduflex.API.Controllers
 
         [HttpPost]
         [Authorize]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<ActionResult<FeedbackDto>> CreateFeedback(CreateFeedbackDto createDto)
         {
             try
@@ -55,6 +56,7 @@ namespace Eduflex.API.Controllers
 
         [HttpGet]
         [Authorize]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<ActionResult<List<FeedbackDto>>> GetAll()
         {
             var feedbacks = await _feedbackService.GetAllFeedback();
@@ -63,6 +65,7 @@ namespace Eduflex.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<IActionResult> DeleteFeedback(string id)
         {
             var deleted = await _feedbackService.DeleteFeedback(id);

@@ -7,8 +7,11 @@ import { HomepageComponent } from './components/portal/home/homepage.component';
 import { ApplicationComponent } from './components/portal/student/applications/application.component';
 import { ProfileComponent } from './components/portal/share-component/profile/profile.component';
 import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 import { FeedbackManagementComponent } from './components/portal/staff/feedback-management/feedback-management.component';
 import { CoursePromotionManagementComponent } from './components/portal/staff/course-promotion-management/course-promotion-management.component';
+import { RoleManagementComponent } from './components/portal/staff/role-management/role-management.component';
+import { UserManagementComponent } from './components/portal/staff/user-management/user-management.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Public home page
@@ -48,6 +51,8 @@ export const routes: Routes = [
       { path: 'applications', component: ApplicationComponent, canActivate: [AuthGuard] },
       { path: 'feedback', component: FeedbackManagementComponent, canActivate: [AuthGuard] },
       { path: 'course-promotions', component: CoursePromotionManagementComponent, canActivate: [AuthGuard] },
+      { path: 'roles', component: RoleManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'] } },
+      { path: 'users', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'] } },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'applications', pathMatch: 'full' }
     ]

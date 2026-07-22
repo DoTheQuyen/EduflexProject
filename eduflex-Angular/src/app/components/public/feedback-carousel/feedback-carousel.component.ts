@@ -1,7 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { FeedbackService } from '../../../services/feedback.service';
-import { Feedback } from '../../../models/feedback';
+import { Client, FeedbackDto } from '@services/content.services';
 
 @Component({
   selector: 'app-feedback-carousel',
@@ -11,12 +10,12 @@ import { Feedback } from '../../../models/feedback';
   styleUrls: ['./feedback-carousel.component.css']
 })
 export class FeedbackCarouselComponent implements OnInit, OnDestroy {
-  feedbacks: Feedback[] = [];
+  feedbacks: FeedbackDto[] = [];
   currentFeedbackIndex: number = 0;
   private feedbackAutoplayTimer: any;
 
   constructor(
-    private feedbackService: FeedbackService,
+    private apiClient: Client,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -31,15 +30,17 @@ export class FeedbackCarouselComponent implements OnInit, OnDestroy {
   }
 
   loadFeedbacks(): void {
-    this.feedbackService.getLatest(10).subscribe({
+
+     this.apiClient.feedbackLatest(10).subscribe({
       next: (feedbacks) => {
         this.feedbacks = feedbacks;
         this.restartFeedbackAutoplay();
       },
       error: (err) => {
-        console.error('Failed to load feedback', err);
+        console.error('Failed to load course promotions', err);
       }
     });
+
   }
 
   goToFeedbackSlide(index: number): void {

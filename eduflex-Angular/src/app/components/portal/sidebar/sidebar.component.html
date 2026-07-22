@@ -1,11 +1,11 @@
 <nav class="sidebar" [class.collapsed]="isCollapsed">
   <div class="sidebar-header">
+    <button class="sidebar-toggle-btn" (click)="onToggleClick()" aria-label="Toggle sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
     <h5 *ngIf="!isCollapsed" class="sidebar-title">
       {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
     </h5>
-    <div *ngIf="isCollapsed" class="sidebar-icon">
-      <i class="fas fa-graduation-cap"></i>
-    </div>
   </div>
 
   <ul class="sidebar-menu">

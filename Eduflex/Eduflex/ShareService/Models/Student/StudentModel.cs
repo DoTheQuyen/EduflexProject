@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using ShareService.Models.Address;
 using ShareService.Models.Application;
+using ShareService.Models.Education;
 
 namespace ShareService.Models.Student
 {

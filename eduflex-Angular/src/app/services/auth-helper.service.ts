@@ -52,4 +52,9 @@ export class AuthHelperService {
     const userInfo = this.getCurrentUser();
     return userInfo?.role || 'student';
   }
+
+  hasPermission(permissionKey: string): boolean {
+    const userInfo = this.getCurrentUser();
+    return !!userInfo?.permissions?.includes(permissionKey);
+  }
 }

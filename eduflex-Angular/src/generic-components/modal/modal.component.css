@@ -1,0 +1,65 @@
+.modal-backdrop-generic {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.modal-panel-generic {
+  background: white;
+  border-radius: var(--radius, 10px);
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.modal-panel-generic.modal-sm { max-width: 400px; }
+.modal-panel-generic.modal-md { max-width: 560px; }
+.modal-panel-generic.modal-lg { max-width: 800px; }
+
+.modal-header-generic {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border, #eee);
+}
+.modal-title-generic {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-ink, #1B2430);
+}
+.modal-close-generic {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-muted, #5C6B7A);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+.modal-close-generic:hover {
+  color: var(--color-ink, #1B2430);
+}
+
+.modal-body-generic {
+  border: none;
+  margin: 0;
+  padding: 1.25rem;
+  min-inline-size: 0; /* fieldset defaults to min-content width, which breaks shrinking in flex/grid parents */
+}
+.modal-body-generic:disabled {
+  opacity: 0.6;
+}
+
+.modal-footer-generic {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--color-border, #eee);
+}

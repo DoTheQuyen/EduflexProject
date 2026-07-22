@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Communication.Email" Version="1.1.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
@@ -51,6 +52,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.2.3" />
     <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>
 
@@ -58,16 +60,21 @@
     <ProjectReference Include="..\ShareService\ShareService.csproj" />
   </ItemGroup>
 
-	<Target Name="ExportSwagger" AfterTargets="Build"  Condition="'$(BuildingInsideDocker)' != 'true'">
+	<Target Name="ExportSwagger" AfterTargets="Build" Condition="'$(BuildingInsideDocker)' != 'true'">
 		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-auth.json&quot; &quot;$(TargetPath)&quot; auth" ContinueOnError="WarnAndContinue" />
+		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-public.json&quot; &quot;$(TargetPath)&quot; public" ContinueOnError="WarnAndContinue" />
 		<Exec Command="dotnet swagger tofile --output &quot;$(ProjectDir)swagger-app.json&quot;  &quot;$(TargetPath)&quot; app" ContinueOnError="WarnAndContinue" />
 	</Target>
 
-	<Target Name="NSwagAuth" AfterTargets="ExportSwagger"  Condition="'$(BuildingInsideDocker)' != 'true'">
+	<Target Name="NSwagAuth" AfterTargets="ExportSwagger" Condition="'$(BuildingInsideDocker)' != 'true'">
 		<Exec Condition="Exists('$(ProjectDir)swagger-auth.json') AND Exists('$(ProjectDir)nswag.auth.json')" Command="nswag run &quot;$(ProjectDir)nswag.auth.json&quot;" />
 	</Target>
 
-	<Target Name="NSwagApp" AfterTargets="ExportSwagger"  Condition="'$(BuildingInsideDocker)' != 'true'">
+	<Target Name="NSwagPublic" AfterTargets="ExportSwagger" Condition="'$(BuildingInsideDocker)' != 'true'">
+		<Exec Condition="Exists('$(ProjectDir)swagger-public.json') AND Exists('$(ProjectDir)nswag.public.json')" Command="nswag run &quot;$(ProjectDir)nswag.public.json&quot;" />
+	</Target>
+
+	<Target Name="NSwagApp" AfterTargets="ExportSwagger" Condition="'$(BuildingInsideDocker)' != 'true'">
 		<Exec Condition="Exists('$(ProjectDir)swagger-app.json') AND Exists('$(ProjectDir)nswag.app.json')" Command="nswag run &quot;$(ProjectDir)nswag.app.json&quot;" />
 	</Target>
 

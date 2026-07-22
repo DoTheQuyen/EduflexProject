@@ -1,6 +1,5 @@
-/* General Section Styling */
 section {
-  padding: 4rem 0;
+  padding: 3rem 0;
 }
 
 .container {
@@ -9,123 +8,301 @@ section {
   padding: 0 2rem;
 }
 
-/* About Header */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+}
+
+/* Header */
 .about-header {
   text-align: center;
-  padding: 4rem 0 2rem;
-  background: white;
+  padding: 4rem 2rem 3rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.about-header h2 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 1rem;
+.about-header h1 {
+  font-size: 2.4rem;
+  color: var(--color-navy-900);
+  margin: 0.6rem 0 1rem;
 }
 
-.about-header .tagline {
-  font-size: 1.2rem;
-  color: #e74c3c;
-  font-weight: 600;
+.header-sub {
+  max-width: 56ch;
+  margin: 0 auto;
+  color: var(--color-muted);
+  font-size: 1.05rem;
 }
 
-/* Mission & Vision */
-.mission-vision {
-  background: white;
+/* Section heading block */
+.band-head {
+  max-width: 60ch;
+  margin-bottom: 2.5rem;
 }
 
+.band-head h2 {
+  font-size: 1.9rem;
+  color: var(--color-navy-900);
+  margin-top: 0.4rem;
+}
+
+/* Mission / Vision / Values */
 .mission-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
 }
 
 .mission-card {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  background: white;
 }
 
-.mission-card:hover {
-  transform: translateY(-5px);
-}
-
-.mission-card .icon {
-  font-size: 2.5rem;
+.mission-icon {
+  width: 32px;
+  height: 32px;
   margin-bottom: 1rem;
+  color: var(--color-accent);
 }
 
 .mission-card h3 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  color: var(--color-ink);
+  margin-bottom: 0.75rem;
 }
 
-.mission-card p,
-.mission-card li {
-  color: #666;
+.mission-card p {
+  color: var(--color-muted);
   line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.values-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.values-list li {
+  color: var(--color-muted);
+  line-height: 1.5;
+  font-size: 0.9rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.75rem;
+}
+
+.values-list li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.values-list strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* How we work */
+.approach-band {
+  background: var(--color-surface);
+}
+
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+}
+
+.step-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  background: white;
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent-dark);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.step-card h3 {
   font-size: 1rem;
+  color: var(--color-ink);
+  margin-bottom: 0.4rem;
 }
 
- .team-grid {
-    grid-template-columns: 1fr;
-  }
-
-  
-/* Team */
-.team {
-     background: white;
+.step-card p {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin: 0;
 }
 
-.team h2 {
+/* Story */
+.story-text {
+  max-width: 72ch;
+}
+
+.story-text h2 {
+  font-size: 1.9rem;
+  color: var(--color-navy-900);
+  margin-top: 0.4rem;
+}
+
+.story-text p {
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-top: 1rem;
+}
+
+.pull-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--color-navy-900);
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.1rem;
+  margin: 1.5rem 0;
+  line-height: 1.5;
+}
+
+/* Stats */
+.stats {
+  background: var(--color-navy-900);
+  padding: 2.1rem 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.2rem;
-  color: #2c3e50;
 }
 
+.stats-grid > div + div {
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: white;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #C7CEDA;
+  margin-top: 0.2rem;
+}
+
+/* Team */
 .team-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
 }
 
 .team-member {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
   background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease;
+  overflow: hidden;
 }
-
-.team-member:hover {
-  transform: translateY(-8px);
-}
-
 .team-member img {
-  width: 180px;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  width: 50%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  margin: 0 auto;
 }
 
-.team-member h3 {
-  font-size: 1.4rem;
-  color: #2c3e50;
-  margin-bottom: 0.25rem;
+.team-body {
+  padding: 1.5rem;
+  text-align: center;
 }
 
-.team-member .title {
-  color: #e74c3c;
-  font-weight: bold;
-  margin-bottom: 1rem;
+.team-body h3 {
+  font-size: 1.2rem;
+  color: var(--color-ink);
+  margin-bottom: 0.2rem;
 }
 
-.team-member .bio {
-  color: #555;
-  font-size: 0.95rem;
+.team-body .title {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  margin-bottom: 0.9rem;
+}
+
+.pill-gold {
+  background: rgba(184, 134, 47, 0.14);
+  color: var(--color-accent-dark);
+}
+
+.team-body .bio {
+  color: var(--color-muted);
+  font-size: 0.9rem;
   line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .step-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-header h1 {
+    font-size: 1.9rem;
+  }
+  .step-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid > div + div {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-grid {
+    grid-template-columns: 1fr;
+  }
 }

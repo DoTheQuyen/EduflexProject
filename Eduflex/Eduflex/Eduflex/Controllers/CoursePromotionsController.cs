@@ -1,16 +1,17 @@
-using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
+using Eduflex.DTOs.Course;
+using Eduflex.Mapping.Course;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using ShareService.Common;
 using ShareService.Models.Setting;
 using ShareService.Services.Interface;
+using Eduflex.Authorization;
 
 namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "app")]
     public class CoursePromotionsController : ControllerBase
     {
         private readonly ICoursePromotionService _coursePromotionService;
@@ -27,9 +28,10 @@ namespace Eduflex.API.Controllers
             _coursePromotionSettings = coursePromotionSettings.Value;
         }
 
-        [HttpGet("latest")]
+        [HttpGet("course-latest")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<CoursePromotionDto>>> GetLatest([FromQuery] int? count = null)
+        [ApiExplorerSettings(GroupName = "public")]
+        public async Task<ActionResult<List<CoursePromotionDto>>> GetFeaturedActiveCoursePromotions([FromQuery] int? count = null)
         {
             var effectiveCount = count ?? _coursePromotionSettings.DefaultLatestCount;
             var promotions = await _coursePromotionService.GetFeaturedActiveCoursePromotions(effectiveCount);
@@ -37,7 +39,8 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [RequirePermission(PermissionKeys.CoursePromotionsView)]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<ActionResult<List<CoursePromotionDto>>> GetAll()
         {
             var promotions = await _coursePromotionService.GetAllCoursePromotions();
@@ -45,7 +48,8 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [RequirePermission(PermissionKeys.CoursePromotionsAdd)]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<ActionResult<CoursePromotionDto>> CreateCoursePromotion(CreateCoursePromotionDto createDto)
         {
             try
@@ -65,7 +69,8 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [RequirePermission(PermissionKeys.CoursePromotionsEdit)]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<ActionResult<CoursePromotionDto>> UpdateCoursePromotion(string id, CreateCoursePromotionDto updateDto)
         {
             try
@@ -89,7 +94,8 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [RequirePermission(PermissionKeys.CoursePromotionsDelete)]
+        [ApiExplorerSettings(GroupName = "app")]
         public async Task<IActionResult> DeleteCoursePromotion(string id)
         {
             var deleted = await _coursePromotionService.DeleteCoursePromotion(id);

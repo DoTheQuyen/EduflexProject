@@ -1,0 +1,42 @@
+.app-notification {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius, 8px);
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  position: relative;
+}
+.app-notification-success {
+  background-color: #EAF6F1;
+  border: 1px solid var(--color-success);
+  color: var(--color-success-dark);
+}
+.app-notification-error {
+  background-color: #FBEEED;
+  border: 1px solid var(--color-error);
+  color: var(--color-error-dark);
+}
+.app-notification-warning {
+  background-color: #FDF3E2;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent-dark);
+}
+.app-notification-info {
+  background-color: #EAF0F5;
+  border: 1px solid var(--color-navy-700);
+  color: var(--color-navy-900);
+}
+.app-notification-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+}
+.app-notification-close:hover {
+  opacity: 1;
+}

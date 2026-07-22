@@ -143,7 +143,10 @@ export class AuthResponseDto implements IAuthResponseDto {
     email?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
-    role?: string | undefined;
+    roleId?: string | undefined;
+    roleName?: string | undefined;
+    mustChangePassword?: boolean;
+    permissions?: string[] | undefined;
 
     constructor(data?: IAuthResponseDto) {
         if (data) {
@@ -161,7 +164,14 @@ export class AuthResponseDto implements IAuthResponseDto {
             this.email = _data["email"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
-            this.role = _data["role"];
+            this.roleId = _data["roleId"];
+            this.roleName = _data["roleName"];
+            this.mustChangePassword = _data["mustChangePassword"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions!.push(item);
+            }
         }
     }
 
@@ -179,7 +189,14 @@ export class AuthResponseDto implements IAuthResponseDto {
         data["email"] = this.email;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
-        data["role"] = this.role;
+        data["roleId"] = this.roleId;
+        data["roleName"] = this.roleName;
+        data["mustChangePassword"] = this.mustChangePassword;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item);
+        }
         return data;
     }
 }
@@ -190,7 +207,10 @@ export interface IAuthResponseDto {
     email?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
-    role?: string | undefined;
+    roleId?: string | undefined;
+    roleName?: string | undefined;
+    mustChangePassword?: boolean;
+    permissions?: string[] | undefined;
 }
 
 export class LoginDto implements ILoginDto {

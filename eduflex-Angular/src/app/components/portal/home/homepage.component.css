@@ -19,27 +19,17 @@
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #dee2e6;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.portal-title {
-  margin: 0;
-  color: #333;
-  font-weight: 600;
 }
 
 .header-right {
   display: flex;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .welcome-text {

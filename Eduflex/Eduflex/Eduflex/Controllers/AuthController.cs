@@ -1,10 +1,11 @@
-﻿using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
+﻿using Eduflex.DTOs.Auth;
+using Eduflex.Mapping.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using ShareService.Models.Auth;
+using ShareService.Services;
 using ShareService.Services.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,68 +21,25 @@ namespace Eduflex.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
+        private readonly IRoleService _roleService;
+        private readonly IPermissionService _permissionService;
 
         public AuthController(
-            IConfiguration configuration, 
-            IAuthService authService)
+            IConfiguration configuration,
+            IAuthService authService,
+            IRoleService roleService,
+            IPermissionService permissionService)
         {
             _configuration = configuration;
             _authService = authService;
+            _roleService = roleService;
+            _permissionService = permissionService;
         }
 
-        //[HttpPost("register")]
-        //public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
-        //{
-        //    // Check if user already exists
-        //    var existingUser = await _mongoDBService.Users
-        //        .Find(u => u.Email == registerDto.Email)
-        //        .FirstOrDefaultAsync();
-
-        //    if (existingUser != null)
-        //        return BadRequest("User already exists");
-
-        //    // Create new user
-        //    var user = new User
-        //    {
-        //        Email = registerDto.Email,
-        //        PasswordHash = HashPassword(registerDto.Password),
-        //        FirstName = registerDto.FirstName,
-        //        LastName = registerDto.LastName,
-        //        CreatedAt = DateTime.UtcNow,
-        //        Role = "Student"
-        //    };
-
-        //    await _mongoDBService.Users.InsertOneAsync(user);
-
-        //    // Create student profile
-        //    var student = new Student
-        //    {
-        //        UserId = user.Id,
-        //        Nationality = registerDto.Nationality,
-        //        //DateOfBirth = registerDto.DateOfBirth,
-        //        PhoneNumber = registerDto.PhoneNumber,
-        //        CreatedAt = DateTime.UtcNow
-        //    };
-
-        //    await _mongoDBService.Students.InsertOneAsync(student);
-
-        //    //var token = GenerateJwtToken(user);
-
-        //    return new AuthResponseDto
-        //    {
-        //        //Token = token,
-        //        Email = user.Email,
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        //Role = user.Role
-        //    };
-        //}
-                
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
         {
-          
             var user = await _authService.ValidateUserAsync(loginDto.ToModel(), VerifyPassword);
 
             if (user == null)
@@ -89,7 +47,9 @@ namespace Eduflex.API.Controllers
 
             await _authService.UpdateLastLoginAsync(user.Id);
 
-            var token = GenerateJwtToken(user);
+            var role = await _roleService.GetByIdAsync(user.RoleId);
+            var token = GenerateJwtToken(user, role?.Name ?? "Student");
+            var permissions = await _permissionService.GetPermissionsForUserAsync(user.Id);
 
             return Ok(new AuthResponseDto
             {
@@ -98,7 +58,10 @@ namespace Eduflex.API.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Role = user.Role
+                RoleId = user.RoleId,
+                RoleName = role?.Name ?? "Student",
+                MustChangePassword = user.MustChangePassword,
+                Permissions = permissions
             });
         }
 
@@ -106,7 +69,7 @@ namespace Eduflex.API.Controllers
         public async Task<ActionResult<string>> Logout()
         {
             // Your logout logic here
-            return Ok( "Logged out successfully" );
+            return Ok("Logged out successfully");
         }
 
         private string HashPassword(string password)
@@ -123,11 +86,8 @@ namespace Eduflex.API.Controllers
             return hash == storedHash;
         }
 
-        //private string GenerateJwtToken(User user)
-        private string GenerateJwtToken(UserModel user)
+        private string GenerateJwtToken(UserModel user, string roleName)
         {
-            // Implement JWT token generation
-            // This is a simplified version - use proper JWT library in production
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
 
@@ -137,9 +97,9 @@ namespace Eduflex.API.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.Role, roleName)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

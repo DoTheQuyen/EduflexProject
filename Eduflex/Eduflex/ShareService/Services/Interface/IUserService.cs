@@ -7,6 +7,8 @@ namespace ShareService.Services.Interface
         Task<UserModel?> GetUserByIdAsync(string userId);
         Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileModel updateDto);
         Task<bool> ChangePasswordAsync(string userId, ChangePasswordModel changePasswordDto);
+        Task<UserModel> CreateUserAsync(CreateUserModel createUserModel);
+        Task<List<UserModel>> GetAllUsersAsync();
     }
 
     

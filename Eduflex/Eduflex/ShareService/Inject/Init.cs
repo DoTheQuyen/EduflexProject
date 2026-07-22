@@ -7,14 +7,18 @@ using ShareService.Models.Auth;
 using ShareService.Models.CoursePromotion;
 using ShareService.Models.Enquiry;
 using ShareService.Models.Feedback;
+using ShareService.Models.Role;
 using ShareService.Services;
 using ShareService.Services.Interface;
+using ShareService.Services.Interface.Integration;
 using ShareService.Services.Service;
+using ShareService.Services.Service.Integration;
 using ShareService.Validations.Application;
 using ShareService.Validations.Auth;
 using ShareService.Validations.CoursePromotion;
 using ShareService.Validations.Enquiry;
 using ShareService.Validations.Feedback;
+using ShareService.Validations.Role;
 
 namespace ShareService.Inject
 {
@@ -26,6 +30,9 @@ namespace ShareService.Inject
             #region DataAccess
             //services.AddScoped<IMongoDbContext, MongoDbContext>();
             services.AddScoped<IAuthentication, Authentication>();
+            services.AddScoped<IRole, Role>();
+            services.AddScoped<IPermissionCatalog, PermissionCatalog>();
+            services.AddScoped<IModuleCatalog, ModuleCatalog>();
             services.AddScoped<IApplication, Application>();
             services.AddScoped<IUserDB, UserDB>();
             services.AddScoped<IEnquiry, Enquiry>();
@@ -40,13 +47,14 @@ namespace ShareService.Inject
             services.AddScoped<MongoDBService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEnquiryService, EnquiryService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<ICoursePromotionService, CoursePromotionService>();
-            services.AddHttpClient<IRecaptchaService, RecaptchaService>();
-
-
+                      
+            
             #endregion
 
 
@@ -59,10 +67,18 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<CreateEnquiryModel>, CreateEnquiryModelValidator>();
             services.AddScoped<IValidator<CreateFeedbackModel>, CreateFeedbackModelValidator>();
             services.AddScoped<IValidator<CreateCoursePromotionModel>, CreateCoursePromotionModelValidator>();
+            services.AddScoped<IValidator<CreateRoleModel>, CreateRoleModelValidator>();
+            services.AddScoped<IValidator<CreateUserModel>, CreateUserModelValidator>();
 
             #endregion
 
+            // Register all your integration services here
+            #region Integration Services
+            services.AddScoped<IAzureBlobDocStorageService, AzureBlobDocStorageService>();
+            services.AddHttpClient<IRecaptchaService, RecaptchaService>();
+            services.AddScoped<IAzureEmailService, AzureEmailService>();
 
+            #endregion
 
             return services;
         }

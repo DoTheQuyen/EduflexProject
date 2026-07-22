@@ -1,5 +1,5 @@
 section {
-  padding: 5rem 0;
+  padding: 3rem 0;
 }
 
 .container {
@@ -8,44 +8,91 @@ section {
   padding: 0 2rem;
 }
 
-/* .feedback-section {
-  background: #f8f9fa;
-} */
+.feedback-section {
+  background: var(--color-surface);
+}
 
-.feedback-heading {
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+}
+
+.center-head {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
+  max-width: 50ch;
 }
 
-.feedback-heading h2 {
-  font-size: 2.2rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+.center-head h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.9rem;
+  color: var(--color-navy-900);
+  margin-top: 0.4rem;
 }
 
-.feedback-heading p {
-  color: #666;
-  font-size: 1.05rem;
-}
-
-.feedback-carousel {
+.carousel {
   position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
+.carousel-arrow {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: white;
+  color: var(--color-navy-900);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--color-navy-900);
+  color: white;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
+  border: none;
+  background: var(--color-border);
+  cursor: pointer;
+  padding: 0;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.dot.is-active {
+  width: 20px;
+  background: var(--color-accent);
+}
+
 .feedback-card {
   flex: 1;
   display: flex;
-  min-height: 300px;
-  min-width: 70%;
-  border-radius: 10px;
+  min-height: 280px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: white;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 12% -10%, rgba(255, 255, 255, 0.85), transparent 55%),
-    linear-gradient(180deg, #bfe0f7 0%, #eaf4fc 42%, #ffffff 78%);
-  box-shadow: 0 8px 30px rgba(22, 35, 58, 0.12);
 }
 
 .feedback-photo {
@@ -61,88 +108,45 @@ section {
 .feedback-photo-overlay {
   width: 100%;
   padding: 1.5rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
 }
 
 .feedback-name {
   color: white;
-  font-weight: 700;
-  font-size: 1.3rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
   margin: 0 0 0.25rem;
 }
 
 .feedback-course {
-  color: rgb(115, 205, 233);
+  color: #D9B876;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.85rem;
   margin: 0;
 }
 
-.feedback-comment {
+.feedback-quote-wrap {
   width: 65%;
-  padding: 1rem 1rem;
+  padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
-.feedback-quote {
+.quote-mark {
+  font-family: var(--font-display);
   font-size: 2.5rem;
   color: var(--color-accent);
   line-height: 1;
-  font-family: Georgia, serif;
 }
 
-.feedback-comment p {
-  font-size: 1.05rem;
+.feedback-quote-wrap p {
+  font-size: 1.02rem;
   line-height: 1.7;
-  color: #333;
+  color: var(--color-ink);
   margin: 0;
-}
-
-.feedback-arrow {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: #2c3e50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.feedback-arrow:hover {
-  background: var(--color-navy-900);
-  color: white;
-}
-
-.feedback-dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-.feedback-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  border: none;
-  background: #d8dbe0;
-  cursor: pointer;
-  padding: 0;
-  transition: width 0.2s ease, background 0.2s ease;
-}
-
-.feedback-dot.active {
-  width: 22px;
-  background: var(--color-accent);
 }
 
 @media (max-width: 768px) {
@@ -152,7 +156,7 @@ section {
   }
 
   .feedback-photo,
-  .feedback-comment {
+  .feedback-quote-wrap {
     width: 100%;
   }
 
@@ -160,11 +164,11 @@ section {
     height: 220px;
   }
 
-  .feedback-comment {
+  .feedback-quote-wrap {
     padding: 2rem;
   }
 
-  .feedback-arrow {
+  .carousel-arrow {
     display: none;
   }
 }

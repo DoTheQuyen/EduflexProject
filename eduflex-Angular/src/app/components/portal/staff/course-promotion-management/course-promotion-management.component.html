@@ -5,7 +5,7 @@
         <h2 class="mb-2">Manage Course Promotions</h2>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-lg" (click)="openAddModal()">
+        <button class="btn btn-primary btn-lg" *ngIf="canAdd" (click)="openAddModal()">
           <i class="fas fa-plus me-2"></i>Add Course Promotion
         </button>
       </div>

@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ShareService.Services;
 using ShareService.Services.Interface;
-using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
 using ShareService.Models.Application;
+using ShareService.Common;
+using Eduflex.DTOs.Application;
+using Eduflex.Mapping.Application;
+using Eduflex.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -102,18 +104,28 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPut("{id}/status")]
-    [Authorize(Roles = "Admin")] // Only admin can update status
+    [RequirePermission(PermissionKeys.ApplicationsEdit)]
     public async Task<ActionResult> UpdateApplicationStatus(string id, [FromBody] string status)
     {
         try
         {
-            var result = await _applicationService.UpdateApplicationStatus(id, status);
+            var userId = GetUserIdFromToken();
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID not found in token");
+            }
+
+            var result = await _applicationService.UpdateApplicationStatus(id, status, userId);
             if (!result)
             {
                 return NotFound("Application not found");
             }
 
             return Ok("Application status updated successfully");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid("You do not have permission to update application status");
         }
         catch (ArgumentException ex)
         {

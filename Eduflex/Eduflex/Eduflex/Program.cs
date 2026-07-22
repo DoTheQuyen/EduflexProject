@@ -28,6 +28,7 @@ builder.Services.AddHealthChecks();
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Month)
+    .WriteTo.Console()
     .MinimumLevel.Information()
     .CreateLogger();
 

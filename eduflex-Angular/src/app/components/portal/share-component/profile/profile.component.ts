@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
           firstName: userProfile.firstName || '',
           lastName: userProfile.lastName || '',
           email: userProfile.email || '',
-          role: userProfile.role || 'Student'
+          role: this.authHelper.getCurrentUser()?.role || 'Student'
         };
         this.isLoading = false;
       },

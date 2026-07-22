@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Application;
 using ShareService.Services.Interface;
@@ -14,17 +15,20 @@ namespace ShareService.Services
         private readonly IValidator<CreateApplicationModel> _createApplicationValidator;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IMongoClient _client;
+        private readonly IPermissionService _permissionService;
 
         public ApplicationService(
             IApplication applicationDataAccess,
             IValidator<CreateApplicationModel> createApplicationValidator,
             ILogger<ApplicationService> logger,
-            IMongoClient client)
+            IMongoClient client,
+            IPermissionService permissionService)
         {
             _applicationDataAccess = applicationDataAccess;
             _createApplicationValidator = createApplicationValidator;
             _logger = logger;
             _client = client;
+            _permissionService = permissionService;
         }
 
         /// <summary>
@@ -252,14 +256,19 @@ namespace ShareService.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> UpdateApplicationStatus(string id, string status)
+        public async Task<bool> UpdateApplicationStatus(string id, string status, string userId)
         {
             //practice transaction session
             using var session = await _client.StartSessionAsync();
             session.StartTransaction();
             try
             {
-                // Authorization here (future implementation)
+                // Authorization: defense-in-depth safety net behind [RequirePermission] at the controller
+                var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+                if (!permissions.Contains(PermissionKeys.ApplicationsEdit))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to update application status");
+                }
 
                 // Process business rule here
 
@@ -275,6 +284,16 @@ namespace ShareService.Services
                     id, status, result);
 
                 return result;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                await session.AbortTransactionAsync();
+                throw;
+            }
+            catch (ArgumentException)
+            {
+                await session.AbortTransactionAsync();
+                throw;
             }
             catch (Exception ex)
             {

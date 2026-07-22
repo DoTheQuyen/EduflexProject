@@ -1,34 +1,36 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
-import { CoursePromotion, CreateCoursePromotion } from '../models/course-promotion';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class CoursePromotionService {
-  private readonly baseUrl = `${environment.apiClientUrl}/api/CoursePromotions`;
+// keep this for study
+// import { Injectable } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
+// import { Observable } from 'rxjs';
+// import { environment } from '../environments/environment';
+// import { CoursePromotion, CreateCoursePromotion } from '../models/course-promotion';
 
-  constructor(private http: HttpClient) {}
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class CoursePromotionService {
+//   private readonly baseUrl = `${environment.apiClientUrl}/api/CoursePromotions`;
 
-  getLatest(count: number = 10): Observable<CoursePromotion[]> {
-    return this.http.get<CoursePromotion[]>(`${this.baseUrl}/latest?count=${count}`);
-  }
+//   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<CoursePromotion[]> {
-    return this.http.get<CoursePromotion[]>(this.baseUrl);
-  }
+//   getLatest(count: number = 10): Observable<CoursePromotion[]> {
+//     return this.http.get<CoursePromotion[]>(`${this.baseUrl}/latest?count=${count}`);
+//   }
 
-  create(promotion: CreateCoursePromotion): Observable<CoursePromotion> {
-    return this.http.post<CoursePromotion>(this.baseUrl, promotion);
-  }
+//   getAll(): Observable<CoursePromotion[]> {
+//     return this.http.get<CoursePromotion[]>(this.baseUrl);
+//   }
 
-  update(id: string, promotion: CreateCoursePromotion): Observable<CoursePromotion> {
-    return this.http.put<CoursePromotion>(`${this.baseUrl}/${id}`, promotion);
-  }
+//   create(promotion: CreateCoursePromotion): Observable<CoursePromotion> {
+//     return this.http.post<CoursePromotion>(this.baseUrl, promotion);
+//   }
 
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
-}
+//   update(id: string, promotion: CreateCoursePromotion): Observable<CoursePromotion> {
+//     return this.http.put<CoursePromotion>(`${this.baseUrl}/${id}`, promotion);
+//   }
+
+//   delete(id: string): Observable<void> {
+//     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+//   }
+// }

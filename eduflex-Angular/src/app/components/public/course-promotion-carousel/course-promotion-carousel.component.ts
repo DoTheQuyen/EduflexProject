@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { CoursePromotionService } from '../../../services/course-promotion.service';
-import { CoursePromotion } from '../../../models/course-promotion';
+import { Client, CoursePromotionDto } from '@services/content.services';
 
 @Component({
   selector: 'app-course-promotion-carousel',
@@ -13,12 +12,12 @@ import { CoursePromotion } from '../../../models/course-promotion';
 export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
   @Output() enquire = new EventEmitter<void>();
 
-  coursePromotions: CoursePromotion[] = [];
+  coursePromotions: CoursePromotionDto[] = [];
   currentPromotionIndex: number = 0;
   private promotionAutoplayTimer: any;
 
   constructor(
-    private coursePromotionService: CoursePromotionService,
+    private apiClient: Client,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -33,7 +32,7 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
   }
 
   loadCoursePromotions(): void {
-    this.coursePromotionService.getLatest(10).subscribe({
+    this.apiClient.courseLatest(10).subscribe({
       next: (promotions) => {
         this.coursePromotions = promotions;
         this.restartPromotionAutoplay();

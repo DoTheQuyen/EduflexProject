@@ -1,27 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CoursePromotion } from '../../../../models/course-promotion';
-import { CoursePromotionService } from '../../../../services/course-promotion.service';
+import { DataTablesModule } from 'angular-datatables';
+import { Client, CoursePromotionDto, CreateCoursePromotionDto } from '@services/api.services';
+import { AuthHelperService } from '@services/auth-helper.service';
+import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { formatDateTime } from '../../../../shared/utils/date-time.util';
 
 @Component({
   selector: 'app-course-promotion-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent],
   templateUrl: './course-promotion-management.component.html',
   styleUrls: ['./course-promotion-management.component.css']
 })
 export class CoursePromotionManagementComponent implements OnInit {
-  promotions: CoursePromotion[] = [];
+  promotions: CoursePromotionDto[] = [];
   isLoading = false;
   isModalOpen = false;
   isSubmitting = false;
   errorMessage = '';
   editingId: string | null = null;
 
+  canAdd = false;
+  canEdit = false;
+  canDelete = false;
+
   promotionForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private coursePromotionService: CoursePromotionService) {
+  columns: DataTableColumn<CoursePromotionDto>[] = [
+    { field: 'courseName', title: 'Course / University',
+      render: (value, row) => `
+        <div class="promo-course-name">${value}</div>
+        <div class="promo-uni-name">${row.universityName}</div>
+      ` },
+    { field: 'semester', title: 'Semester' },
+    { field: 'scholarshipLabel', title: 'Scholarship',
+      render: (value) => `<span class="badge bg-warning text-dark">${value}</span>` },
+    { field: 'location', title: 'Location' },
+    { field: 'tuition', title: 'Tuition' },
+    { field: 'expiryDate', title: 'Offer ends', className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate') },
+    { field: 'isFeatured', title: 'Featured', className: 'text-center',
+      render: (value) => value === 'Yes'
+        ? `<span class="badge bg-success">Yes</span>`
+        : `<span class="badge bg-secondary">No</span>` },
+    { field: 'actions', title: 'Actions', className: 'text-center' }
+  ];
+
+  rowActions: DataTableRowAction<CoursePromotionDto>[] = [];
+
+  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService) {
     this.promotionForm = this.fb.group({
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
       universityName: ['', [Validators.required, Validators.maxLength(150)]],
@@ -36,6 +66,15 @@ export class CoursePromotionManagementComponent implements OnInit {
       isFeatured: [true],
       displayOrder: [0, [Validators.required, Validators.min(0)]]
     });
+
+    this.canAdd = this.authHelper.hasPermission('coursepromotions.add');
+    this.canEdit = this.authHelper.hasPermission('coursepromotions.edit');
+    this.canDelete = this.authHelper.hasPermission('coursepromotions.delete');
+
+    this.rowActions = [
+      ...(this.canEdit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
+      ...(this.canDelete ? [{ action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }] : [])
+    ];
   }
 
   ngOnInit(): void {
@@ -44,7 +83,7 @@ export class CoursePromotionManagementComponent implements OnInit {
 
   loadPromotions(): void {
     this.isLoading = true;
-    this.coursePromotionService.getAll().subscribe({
+    this.apiClient.coursePromotionsAll().subscribe({
       next: (promotions) => {
         this.promotions = promotions;
         this.isLoading = false;
@@ -67,8 +106,8 @@ export class CoursePromotionManagementComponent implements OnInit {
     this.isModalOpen = true;
   }
 
-  openEditModal(promotion: CoursePromotion): void {
-    this.editingId = promotion.id;
+  openEditModal(promotion: CoursePromotionDto): void {
+    this.editingId = promotion.id ?? null;
     this.promotionForm.reset({
       courseName: promotion.courseName,
       universityName: promotion.universityName,
@@ -77,7 +116,7 @@ export class CoursePromotionManagementComponent implements OnInit {
       location: promotion.location,
       tuition: promotion.tuition,
       opportunities: promotion.opportunities,
-      expiryDate: promotion.expiryDate ? promotion.expiryDate.substring(0, 10) : '',
+      expiryDate: promotion.expiryDate ? promotion.expiryDate.toISOString().substring(0, 10) : '',
       note: promotion.note,
       websiteUrl: promotion.websiteUrl,
       isFeatured: promotion.isFeatured,
@@ -101,14 +140,14 @@ export class CoursePromotionManagementComponent implements OnInit {
 
     this.isSubmitting = true;
     const value = this.promotionForm.value;
-    const payload = {
+    const payload = new CreateCoursePromotionDto({
       ...value,
-      expiryDate: new Date(value.expiryDate).toISOString()
-    };
+      expiryDate: new Date(value.expiryDate)
+    });
 
     const request$ = this.editingId
-      ? this.coursePromotionService.update(this.editingId, payload)
-      : this.coursePromotionService.create(payload);
+      ? this.apiClient.coursePromotionsPUT(this.editingId, payload)
+      : this.apiClient.coursePromotionsPOST(payload);
 
     request$.subscribe({
       next: () => {
@@ -123,17 +162,25 @@ export class CoursePromotionManagementComponent implements OnInit {
     });
   }
 
-  onDelete(promotion: CoursePromotion): void {
+  onDelete(promotion: CoursePromotionDto): void {
     const confirmed = window.confirm(`Delete the promotion for ${promotion.courseName} (${promotion.universityName})?`);
-    if (!confirmed) {
+    if (!confirmed || !promotion.id) {
       return;
     }
 
-    this.coursePromotionService.delete(promotion.id).subscribe({
+    this.apiClient.coursePromotionsDELETE(promotion.id).subscribe({
       next: () => this.loadPromotions(),
       error: () => {
         window.alert('Could not delete this course promotion. Please try again.');
       }
     });
+  }
+
+  onTableAction(event: DataTableAction<CoursePromotionDto>): void {
+    if (event.action === 'edit') {
+      this.openEditModal(event.row);
+    } else if (event.action === 'delete') {
+      this.onDelete(event.row);
+    }
   }
 }

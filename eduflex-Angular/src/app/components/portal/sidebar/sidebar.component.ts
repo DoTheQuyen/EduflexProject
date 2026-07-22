@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -19,6 +19,7 @@ interface MenuItem {
 export class SidebarComponent implements OnChanges {
   @Input() userInfo: any;
   @Input() isCollapsed = false;
+  @Output() toggle = new EventEmitter<void>();
 
   menuItems: MenuItem[] = [];
 
@@ -28,10 +29,10 @@ export class SidebarComponent implements OnChanges {
     }
   }
 
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
+  onToggleClick(): void {
+    this.toggle.emit();
   }
-  
+
   private setMenuItems(): void {
     if (!this.userInfo) {
       this.menuItems = [];
@@ -44,7 +45,7 @@ export class SidebarComponent implements OnChanges {
         { title: 'My Courses', icon: 'book', route: '/my-courses' },
         { title: 'Profile', icon: 'person', route: '/student-portal/profile' }
       ];
-    } else if (this.userInfo.role === 'Staff') {
+    } else if (this.userInfo.role === 'Staff' || this.userInfo.role === 'Manager') {
       this.menuItems = [
         { title: 'Dashboard', icon: 'dashboard', route: '/staff-portal/dashboard' },
         { title: 'Courses', icon: 'school', route: '/staff-portal/courses' },
@@ -52,6 +53,15 @@ export class SidebarComponent implements OnChanges {
         { title: 'Applications', icon: 'assignment', route: '/staff-portal/applications' },
         { title: 'Feedback', icon: 'comment', route: '/staff-portal/feedback' },
         { title: 'Course Promotions', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
+        { title: 'Profile', icon: 'person', route: '/staff-portal/profile' }
+      ];
+    } else if (this.userInfo.role === 'Admin') {
+      this.menuItems = [
+        { title: 'Applications', icon: 'assignment', route: '/staff-portal/applications' },
+        { title: 'Feedback', icon: 'comment', route: '/staff-portal/feedback' },
+        { title: 'Course Promotions', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
+        { title: 'Roles', icon: 'lock', route: '/staff-portal/roles' },
+        { title: 'Users', icon: 'people', route: '/staff-portal/users' },
         { title: 'Profile', icon: 'person', route: '/staff-portal/profile' }
       ];
     } else {

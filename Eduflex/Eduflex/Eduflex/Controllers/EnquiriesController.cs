@@ -1,5 +1,5 @@
-using Eduflex.API.DTOs;
-using Eduflex.API.Mapping;
+using Eduflex.DTOs.Enquiry;
+using Eduflex.Mapping.Enquiry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Services.Interface;
@@ -9,7 +9,7 @@ namespace Eduflex.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [AllowAnonymous]
-    [ApiExplorerSettings(GroupName = "app")]
+    [ApiExplorerSettings(GroupName = "public")]
     public class EnquiriesController : ControllerBase
     {
         private readonly IEnquiryService _enquiryService;

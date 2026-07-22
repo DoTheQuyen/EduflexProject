@@ -48,13 +48,26 @@ namespace ShareService.DataAccess
         public async Task<bool> UpdatePasswordAsync(string userId, string newPasswordHash)
         {
             var update = Builders<UserModel>.Update
-                .Set(u => u.PasswordHash, newPasswordHash);
-                //.Set(u => u.UpdatedAt, DateTime.UtcNow);
+                .Set(u => u.PasswordHash, newPasswordHash)
+                .Set(u => u.MustChangePassword, false);
 
             var result = await _usersCollection
                 .UpdateOneAsync(u => u.Id == userId, update);
 
             return result.ModifiedCount > 0;
+        }
+
+        public async Task<UserModel> CreateUserAsync(UserModel user)
+        {
+            await _usersCollection.InsertOneAsync(user);
+            return user;
+        }
+
+        public async Task<List<UserModel>> GetAllUsersAsync()
+        {
+            return await _usersCollection
+                .Find(FilterDefinition<UserModel>.Empty)
+                .ToListAsync();
         }
     }
 }

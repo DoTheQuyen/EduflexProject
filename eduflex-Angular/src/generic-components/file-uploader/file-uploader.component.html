@@ -1,0 +1,23 @@
+<div class="uploader" [ngClass]="'uploader-' + variant" [class.dragging]="isDragging"
+     (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+     (click)="fileInput.click()">
+
+  <ng-container *ngIf="variant === 'avatar'">
+    <div class="uploader-avatar-preview">
+      <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview">
+      <i *ngIf="!previewUrl" class="fas fa-image text-muted"></i>
+    </div>
+    <span class="uploader-avatar-label">{{ label }}</span>
+  </ng-container>
+
+  <ng-container *ngIf="variant === 'dropzone'">
+    <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="uploader-dropzone-preview">
+    <ng-container *ngIf="!previewUrl">
+      <i class="fas fa-cloud-upload-alt uploader-dropzone-icon"></i>
+      <p class="uploader-dropzone-label">{{ label }}</p>
+      <p class="uploader-dropzone-hint">Drag & drop, or click to browse</p>
+    </ng-container>
+  </ng-container>
+
+  <input #fileInput type="file" [accept]="accept" hidden (change)="onFileInputChange($event)">
+</div>

@@ -21,15 +21,19 @@
           <!-- Actions column -->
           <ng-template #notStatus>
             <ng-container *ngIf="col.field === 'actions'; else defaultCell">
-              <button class="btn btn-sm btn-outline-primary" (click)="actionClick.emit({ action: 'view', row })">
-                <i class="fas fa-eye me-1"></i> View
-              </button>
+              <div class="row-actions">
+                <button *ngFor="let ra of rowActions" [ngClass]="ra.cssClass || 'btn btn-sm btn-outline-primary'"
+                  (click)="actionClick.emit({ action: ra.action, row })">
+                  <i *ngIf="ra.icon" class="fas {{ ra.icon }} me-1"></i>{{ ra.label }}
+                </button>
+              </div>
             </ng-container>
           </ng-template>
 
           <!-- Default cell -->
           <ng-template #defaultCell>
-            {{ getCellData(row, col.field, col.formatter) }}
+            <span *ngIf="col.render; else plainText" [innerHTML]="col.render(getCellData(row, col.field), row)"></span>
+            <ng-template #plainText>{{ getCellData(row, col.field, col.formatter) }}</ng-template>
           </ng-template>
 
         </td>

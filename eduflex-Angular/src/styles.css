@@ -1,10 +1,57 @@
+/* Tailwind v4 — theme + utilities only. Preflight (Tailwind's reset) is
+   intentionally skipped so it doesn't fight Bootstrap's own reset, since
+   this app loads both (see angular.json "styles"). */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
-/* You can add global styles to this file, and also import other style files */
+/* DaisyUI — prefixed so its classes (d-btn, d-card, ...) never collide with
+   Bootstrap's identically-named classes (.btn, .card, ...), which this app
+   also loads globally (see angular.json "styles"). Only our own custom
+   theme is enabled — DaisyUI's stock themes are turned off so components
+   never render in DaisyUI's default palette. */
+@plugin "daisyui" {
+  prefix: "d-";
+  themes: false;
+}
 
-/* Brand tokens — single source of truth for the navy/brass palette used
-   across home, navbar, and footer. Component-scoped stylesheets read these
-   via var(--color-...) instead of re-typing hex values. */
-:root {
+@plugin "daisyui/theme" {
+  name: "eduflex";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #FFFFFF;
+  --color-base-200: #F5F6F7;
+  --color-base-300: #DCE0E4;
+  --color-base-content: #1B2430;
+
+  --color-primary: #16233A;
+  --color-primary-content: #FFFFFF;
+  --color-secondary: #2E4258;
+  --color-secondary-content: #FFFFFF;
+  --color-accent: #B8862F;
+  --color-accent-content: #FFFFFF;
+  --color-neutral: #5C6B7A;
+  --color-neutral-content: #FFFFFF;
+
+  --color-info: #2E4258;
+  --color-info-content: #FFFFFF;
+  --color-success: #1F7A5C;
+  --color-success-content: #FFFFFF;
+  --color-warning: #B8862F;
+  --color-warning-content: #1B2430;
+  --color-error: #B3413A;
+  --color-error-content: #FFFFFF;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+}
+
+/* ===== Brand tokens — single source of truth for color, shared by the
+   public site (ext) and the portal (int). Also usable directly as Tailwind
+   utilities, e.g. bg-navy-900, text-accent, border-error. ===== */
+@theme {
   --color-navy-900: #16233A;
   --color-navy-700: #2E4258;
   --color-accent: #B8862F;
@@ -19,6 +66,15 @@
   --color-border: #DCE0E4;
 }
 
+/* Non-color shared tokens — plain custom properties, not part of Tailwind's
+   theme namespace, just consumed via var() in theme.css and component CSS. */
+:root {
+  --radius: 0.5rem;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 4px 12px rgba(22, 35, 58, 0.3);
+  --font-display: Cambria, Georgia, "Times New Roman", serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -28,53 +84,4 @@
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: #2c3e50;
-  color: white;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  margin-left: 1rem;
-}
-
-.login-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border: 1px solid #ddd;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-}
-
-button {
-  background-color: #3498db;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-}
-
-.error-message {
-  color: red;
-  margin-top: 1rem;
 }

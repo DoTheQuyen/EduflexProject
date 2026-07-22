@@ -6,6 +6,10 @@ using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 using System.Security.Cryptography;
 using System.Text;
+using ShareService.Services.Interface.Integration;
+using ShareService.Services.Service.Integration;
+using Microsoft.Extensions.Options;
+using ShareService.Models.Setting;
 
 namespace ShareService.Services
 {
@@ -14,21 +18,30 @@ namespace ShareService.Services
         private readonly IUserDB _userDB;
         private readonly IValidator<UpdateUserProfileModel> _profileValidator;
         private readonly IValidator<ChangePasswordModel> _passwordValidator;
+        private readonly IValidator<CreateUserModel> _createUserValidator;
         private readonly ILogger<UserService> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IAzureEmailService _emailService;
+        private readonly WebURLSettings _appSettings;
 
         public UserService(
-            IUserDB userDB,
-            IValidator<UpdateUserProfileModel> profileValidator,
-            IValidator<ChangePasswordModel> passwordValidator,
-            ILogger<UserService> logger,
-            IConfiguration configuration)
+             IUserDB userDB,
+             IValidator<UpdateUserProfileModel> profileValidator,
+             IValidator<ChangePasswordModel> passwordValidator,
+             IValidator<CreateUserModel> createUserValidator,
+             ILogger<UserService> logger,
+             IConfiguration configuration,
+             IAzureEmailService emailService,
+             IOptions<WebURLSettings> appSettings)
         {
             _userDB = userDB;
             _profileValidator = profileValidator;
             _passwordValidator = passwordValidator;
+            _createUserValidator = createUserValidator;
             _logger = logger;
             _configuration = configuration;
+            _emailService = emailService;
+            _appSettings = appSettings.Value;
         }
 
         public async Task<UserModel?> GetUserByIdAsync(string userId)
@@ -110,6 +123,77 @@ namespace ShareService.Services
             var bytes = Encoding.UTF8.GetBytes(password + _configuration["JWT:Salt"]);
             var hash = sha256.ComputeHash(bytes);
             return Convert.ToBase64String(hash);
+        }
+
+        public async Task<UserModel> CreateUserAsync(CreateUserModel createUserModel)
+        {
+            try
+            {
+                var validationResult = await _createUserValidator.ValidateAsync(createUserModel);
+                if (!validationResult.IsValid)
+                {
+                    var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ArgumentException($"Validation failed: {errors}");
+                }
+
+                var existingUser = await _userDB.GetUserByEmailAsync(createUserModel.Email);
+                if (existingUser != null)
+                {
+                    throw new ArgumentException("A user with this email already exists");
+                }
+
+                var user = new UserModel
+                {
+                    Email = createUserModel.Email,
+                    PasswordHash = HashPassword(createUserModel.Password),
+                    FirstName = createUserModel.FirstName,
+                    LastName = createUserModel.LastName,
+                    RoleId = createUserModel.RoleId,
+                    IsActive = true,
+                    MustChangePassword = true
+                };
+
+                var createdUser = await _userDB.CreateUserAsync(user);
+
+                try
+                {
+                    var (subject, html, plainText) = EmailTemplates.NewUserWelcome(
+                        createdUser.FirstName,
+                        createdUser.Email,
+                        createUserModel.Password,
+                        $"{_appSettings.FrontendBaseUrl}/login");
+
+                    await _emailService.SendEmailAsync(createdUser.Email, subject, html, plainText);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "User {UserId} was created but welcome email failed to send", createdUser.Id);
+                }
+
+                return createdUser;
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating user: {Email}", createUserModel.Email);
+                throw;
+            }
+        }
+
+        public async Task<List<UserModel>> GetAllUsersAsync()
+        {
+            try
+            {
+                return await _userDB.GetAllUsersAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all users");
+                throw;
+            }
         }
     }
 }

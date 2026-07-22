@@ -1,15 +1,18 @@
-﻿using Moq;
-using NUnit.Framework;
-using ShareService.Models;
-using ShareService.Services;
-using ShareService.DataAccess.Interface;
-using FluentValidation;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using NUnit.Framework;
+using ShareService.DataAccess.Interface;
+using ShareService.Models;
 using ShareService.Models.Auth;
+using ShareService.Models.Setting;
+using ShareService.Services;
+using ShareService.Services.Interface.Integration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShareService.Tests
 {
@@ -19,9 +22,12 @@ namespace ShareService.Tests
         private Mock<IUserDB> _userDbMock;
         private Mock<IValidator<UpdateUserProfileModel>> _profileValidatorMock;
         private Mock<IValidator<ChangePasswordModel>> _passwordValidatorMock;
+        private Mock<IValidator<CreateUserModel>> _createUserValidatorMock;
         private Mock<ILogger<UserService>> _loggerMock;
         private Mock<IConfiguration> _configMock;
         private UserService _service;
+        private Mock<IAzureEmailService> _emailService;
+        private Mock<IOptions<WebURLSettings>> _appSettings;
 
         [SetUp]
         public void Setup()
@@ -29,8 +35,11 @@ namespace ShareService.Tests
             _userDbMock = new Mock<IUserDB>();
             _profileValidatorMock = new Mock<IValidator<UpdateUserProfileModel>>();
             _passwordValidatorMock = new Mock<IValidator<ChangePasswordModel>>();
+            _createUserValidatorMock = new Mock<IValidator<CreateUserModel>>();
             _loggerMock = new Mock<ILogger<UserService>>();
             _configMock = new Mock<IConfiguration>();
+            _emailService = new Mock<IAzureEmailService>();
+            _appSettings = new Mock<IOptions<WebURLSettings>>();
 
             // Default validators: valid
             _profileValidatorMock
@@ -44,12 +53,23 @@ namespace ShareService.Tests
             // Salt for password hashing
             _configMock.Setup(c => c["JWT:Salt"]).Returns("SALT");
 
+            // AppSettings.Value must be explicitly configured — Mock<IOptions<T>> won't
+            // synthesize a T for a property getter the way it does for interface methods.
+            // Without this, UserService's constructor line "_appSettings = appSettings.Value"
+            // would store null, and CreateUserAsync would NullReferenceException on FrontendBaseUrl.
+            _appSettings
+                .Setup(a => a.Value)
+                .Returns(new WebURLSettings { FrontendBaseUrl = "http://localhost:4200" });
+
             _service = new UserService(
                 _userDbMock.Object,
                 _profileValidatorMock.Object,
                 _passwordValidatorMock.Object,
+                _createUserValidatorMock.Object,
                 _loggerMock.Object,
-                _configMock.Object
+                _configMock.Object,
+                _emailService.Object,
+                _appSettings.Object
             );
         }
 

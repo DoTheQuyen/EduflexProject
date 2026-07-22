@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EnquiryService } from '../../../services/enquiry.service';
+import { Client, CreateEnquiryDto } from '@services/content.services';
 import { environment } from '../../../environments/environment';
 
 declare const grecaptcha: any;
@@ -26,7 +26,7 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
   private recaptchaWidgetId: number | null = null;
   private recaptchaPollHandle: any;
 
-  constructor(private fb: FormBuilder, private enquiryService: EnquiryService) {
+  constructor(private fb: FormBuilder, private apiClient: Client) {
     this.enquiryForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       middleName: ['', [Validators.maxLength(100)]],
@@ -106,11 +106,12 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
     this.isSubmitting = true;
 
     const { firstName, middleName, lastName, email, mobile, enquiry } = this.enquiryForm.value;
-
-    this.enquiryService.create({
+    const payload = new CreateEnquiryDto({
       firstName, middleName, lastName, email, mobile, enquiry,
       recaptchaToken: this.recaptchaToken
-    }).subscribe({
+    });
+
+    this.apiClient.enquiries(payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.submitted.emit();

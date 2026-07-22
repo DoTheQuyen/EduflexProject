@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Feedback } from '../../../../models/feedback';
-import { FeedbackService } from '../../../../services/feedback.service';
+import { DataTablesModule } from 'angular-datatables';
+import { Client, FeedbackDto, CreateFeedbackDto } from '@services/api.services';
+import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { ModalComponent } from '@generic/modal/modal.component';
+import { NotificationComponent } from '@generic/notification/notification.component';
+import { formatDateTime } from '../../../../shared/utils/date-time.util';
 
 @Component({
   selector: 'app-feedback-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent, ModalComponent, NotificationComponent],
   templateUrl: './feedback-management.component.html',
   styleUrls: ['./feedback-management.component.css']
 })
 export class FeedbackManagementComponent implements OnInit {
-  feedbacks: Feedback[] = [];
+  feedbacks: FeedbackDto[] = [];
   isLoading = false;
   isModalOpen = false;
   isSubmitting = false;
@@ -21,7 +26,22 @@ export class FeedbackManagementComponent implements OnInit {
 
   feedbackForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private feedbackService: FeedbackService) {
+  columns: DataTableColumn<FeedbackDto>[] = [
+    { field: 'photoUrl', title: 'Photo', className: 'text-center',
+      render: (value) => `<img src="${value}" alt="" class="feedback-thumb">` },
+    { field: 'name', title: 'Name' },
+    { field: 'courseName', title: 'Course', className: 'text-center' },
+    { field: 'comment', title: 'Comment', className: 'feedback-comment-cell' },
+    { field: 'createdAt', title: 'Date', className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate') },
+    { field: 'actions', title: 'Actions', className: 'text-center' }
+  ];
+
+  rowActions: DataTableRowAction<FeedbackDto>[] = [
+    { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
+  ];
+
+  constructor(private fb: FormBuilder, private apiClient: Client) {
     this.feedbackForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(150)]],
       photoData: ['', [Validators.required]],
@@ -37,7 +57,7 @@ export class FeedbackManagementComponent implements OnInit {
 
   loadFeedbacks(): void {
     this.isLoading = true;
-    this.feedbackService.getAll().subscribe({
+    this.apiClient.feedbacksAll().subscribe({
       next: (feedbacks) => {
         this.feedbacks = feedbacks;
         this.isLoading = false;
@@ -47,8 +67,6 @@ export class FeedbackManagementComponent implements OnInit {
       }
     });
   }
-
-
 
   isFieldInvalid(fieldName: string): boolean {
     const control = this.feedbackForm.get(fieldName);
@@ -75,7 +93,8 @@ export class FeedbackManagementComponent implements OnInit {
     }
 
     this.isSubmitting = true;
-    this.feedbackService.create(this.feedbackForm.value).subscribe({
+    const payload = new CreateFeedbackDto(this.feedbackForm.value);
+    this.apiClient.feedbacksPOST(payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.closeModal();
@@ -88,18 +107,24 @@ export class FeedbackManagementComponent implements OnInit {
     });
   }
 
-  onDelete(feedback: Feedback): void {
+  onDelete(feedback: FeedbackDto): void {
     const confirmed = window.confirm(`Delete feedback from ${feedback.name}?`);
-    if (!confirmed) {
+    if (!confirmed || !feedback.id) {
       return;
     }
 
-    this.feedbackService.delete(feedback.id).subscribe({
+    this.apiClient.feedbacksDELETE(feedback.id).subscribe({
       next: () => this.loadFeedbacks(),
       error: () => {
         window.alert('Could not delete this feedback. Please try again.');
       }
     });
+  }
+
+  onTableAction(event: DataTableAction<FeedbackDto>): void {
+    if (event.action === 'delete') {
+      this.onDelete(event.row);
+    }
   }
 
   onPhotoSelected(event: Event): void {

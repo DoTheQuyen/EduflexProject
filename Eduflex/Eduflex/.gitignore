@@ -20,7 +20,8 @@ out/
 *.snupkg
 packages/
 
-# Local per-developer MongoDB connection strings (never commit — see DBMigration/appsettings.json)
+# Local per-developer MongoDB connection strings (never commit)
+appsettings.local.json
 appsettings.Development.json
 appsettings.Local.json
 

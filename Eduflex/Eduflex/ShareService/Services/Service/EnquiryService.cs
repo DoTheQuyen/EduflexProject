@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using ShareService.Common;
 using ShareService.DataAccess;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums.Roles;
@@ -72,15 +73,15 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<List<EnquiryModel>> GetAllEnquiriesAsync(EnquiryEnums? status)
+        public async Task<PagedResult<EnquiryModel>> GetEnquiries(EnquiryFilter filter)
         {
             try
             {
-                return await _enquiryDataAccess.GetAllEnquiriesAsync(status.ToString());
+                return await _enquiryDataAccess.GetEnquiriesAsync(filter);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all enquiries");
+                _logger.LogError(ex, "Error getting enquiries");
                 throw;
             }
         }

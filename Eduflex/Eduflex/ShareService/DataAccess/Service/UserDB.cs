@@ -64,27 +64,27 @@ namespace ShareService.DataAccess
             return await ReplaceOneAsync(p => p.Id == id, user);
         }
 
-        public Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive)
+        public Task<PagedResult<UserModel>> GetUsersAsync(UserFilter filter)
         {
-            var filters = new List<FilterDefinition<UserModel>>
+            var mongoFilters = new List<FilterDefinition<UserModel>>
             {
-                BuildSearchFilter(query.SearchTerm, u => u.Email, u => u.FirstName, u => u.LastName)
+                BuildSearchFilter(filter.SearchTerm, u => u.Email, u => u.FirstName, u => u.LastName)
             };
 
-            if (!string.IsNullOrWhiteSpace(roleId))
+            if (!string.IsNullOrWhiteSpace(filter.RoleId))
             {
-                filters.Add(Builders<UserModel>.Filter.Eq(u => u.RoleId, roleId));
+                mongoFilters.Add(Builders<UserModel>.Filter.Eq(u => u.RoleId, filter.RoleId));
             }
 
-            if (isActive.HasValue)
+            if (filter.IsActive.HasValue)
             {
-                filters.Add(Builders<UserModel>.Filter.Eq(u => u.IsActive, isActive.Value));
+                mongoFilters.Add(Builders<UserModel>.Filter.Eq(u => u.IsActive, filter.IsActive.Value));
             }
 
-            var filter = Builders<UserModel>.Filter.And(filters);
+            var mongoFilter = Builders<UserModel>.Filter.And(mongoFilters);
             var sort = Builders<UserModel>.Sort.Descending(u => u.CreatedAt);
 
-            return GetPagedAsync(filter, sort, query.PageNumber, query.PageSize);
+            return GetPagedAsync(mongoFilter, sort, filter.PageNumber, filter.PageSize);
         }
     }
 }

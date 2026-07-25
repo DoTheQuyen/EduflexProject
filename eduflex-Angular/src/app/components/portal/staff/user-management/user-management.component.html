@@ -28,12 +28,24 @@
               [columns]="columns"
               [data]="users"
               [rowActions]="rowActions"
-              [pageNumber]="pageNumber"
-              [pageSize]="pageSize"
-              [totalCount]="totalCount"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search name or email..."
+              (searchChange)="onSearchChange($event)"
               (pageChange)="onPageChange($event)"
               (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
+              <select tableFilters class="form-select" style="max-width: 180px;" (change)="onRoleFilterChange($event)">
+                <option value="">All roles</option>
+                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+              </select>
+              <select tableFilters class="form-select" style="max-width: 150px;" (change)="onActiveFilterChange($event)">
+                <option value="all">All statuses</option>
+                <option value="true">Active only</option>
+                <option value="false">Inactive only</option>
+              </select>
             </app-data-table>
             <p *ngIf="!isLoading && users.length === 0" class="text-center text-muted py-4 mb-0">
               No users yet. Click "Add User" to create one.

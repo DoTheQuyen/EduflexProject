@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, CoursePromotionDto, CreateCoursePromotionDto } from '@services/api.services';
+import { Client, CoursePromotionDto, CoursePromotionFilterDto, CreateCoursePromotionDto } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 import { PermissionKeys } from '../../../../shared/constants/permission-keys';
@@ -25,9 +26,8 @@ export class CoursePromotionManagementComponent implements OnInit {
   errorMessage = '';
   editingId: string | null = null;
 
-  pageNumber = 1;
-  pageSize = 10;
-  totalCount = 0;
+  pager = new TablePagerState();
+  isFeaturedFilter = 'all';
 
   canAdd = false;
   canEdit = false;
@@ -89,10 +89,17 @@ export class CoursePromotionManagementComponent implements OnInit {
 
   loadPromotions(): void {
     this.isLoading = true;
-    this.apiClient.coursePromotionsGET(this.pageNumber, this.pageSize).subscribe({
+    const isFeatured = this.isFeaturedFilter === 'all' ? undefined : this.isFeaturedFilter === 'true';
+    const filter = new CoursePromotionFilterDto({
+      pageNumber: this.pager.pageNumber,
+      pageSize: this.pager.pageSize,
+      searchTerm: this.pager.searchTerm || undefined,
+      isFeatured
+    });
+    this.apiClient.searchCoursePromotions(filter).subscribe({
       next: (result) => {
         this.promotions = result.items ?? [];
-        this.totalCount = result.totalCount ?? 0;
+        this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
@@ -102,7 +109,18 @@ export class CoursePromotionManagementComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.pageNumber = page;
+    this.pager.goToPage(page);
+    this.loadPromotions();
+  }
+
+  onSearchChange(term: string): void {
+    this.pager.search(term);
+    this.loadPromotions();
+  }
+
+  onFeaturedFilterChange(event: Event): void {
+    this.isFeaturedFilter = (event.target as HTMLSelectElement).value;
+    this.pager.goToPage(1);
     this.loadPromotions();
   }
 

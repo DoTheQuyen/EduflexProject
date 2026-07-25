@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, FeedbackDto, CreateFeedbackDto } from '@services/api.services';
+import { Client, FeedbackDto, CreateFeedbackDto, FeedbackFilterDto } from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
@@ -25,9 +26,7 @@ export class FeedbackManagementComponent implements OnInit {
   errorMessage = '';
   photoPreview: string = '';
 
-  pageNumber = 1;
-  pageSize = 10;
-  totalCount = 0;
+  pager = new TablePagerState();
 
   feedbackForm: FormGroup;
 
@@ -62,10 +61,15 @@ export class FeedbackManagementComponent implements OnInit {
 
   loadFeedbacks(): void {
     this.isLoading = true;
-    this.apiClient.feedbacksGET(this.pageNumber, this.pageSize).subscribe({
+    const filter = new FeedbackFilterDto({
+      pageNumber: this.pager.pageNumber,
+      pageSize: this.pager.pageSize,
+      searchTerm: this.pager.searchTerm || undefined
+    });
+    this.apiClient.searchFeedbacks(filter).subscribe({
       next: (result) => {
         this.feedbacks = result.items ?? [];
-        this.totalCount = result.totalCount ?? 0;
+        this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
@@ -75,7 +79,12 @@ export class FeedbackManagementComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.pageNumber = page;
+    this.pager.goToPage(page);
+    this.loadFeedbacks();
+  }
+
+  onSearchChange(term: string): void {
+    this.pager.search(term);
     this.loadFeedbacks();
   }
 

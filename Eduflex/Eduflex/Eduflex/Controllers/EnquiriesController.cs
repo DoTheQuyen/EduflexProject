@@ -3,6 +3,7 @@ using Eduflex.DTOs.Enquiry;
 using Eduflex.Mapping.Enquiry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShareService.Common;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
 using ShareService.Services.Interface;
@@ -45,15 +46,21 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost("search-enquiries")]
         [RequirePermission(PermissionKey.EnquiryView)]
         [ApiExplorerSettings(GroupName = "app")]
-        public Task<ActionResult<List<EnquiryDto>>> GetAll(EnquiryEnums status)
+        public Task<ActionResult<PagedResult<EnquiryDto>>> SearchEnquiries([FromBody] EnquiryFilterDto filterDto)
         {
-            return HandleRequestAsync(_logger, "Error in GetAll enquiries endpoint", async () =>
+            return HandleRequestAsync(_logger, "Error in Search enquiries endpoint", async () =>
             {
-                var enquiries = await _enquiryService.GetAllEnquiriesAsync(status);
-                return enquiries.Select(p => p.ToDto()).ToList();
+                var result = await _enquiryService.GetEnquiries(filterDto.ToFilter());
+                return new PagedResult<EnquiryDto>
+                {
+                    Items = result.Items.Select(e => e.ToDto()).ToList(),
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
             });
         }
       

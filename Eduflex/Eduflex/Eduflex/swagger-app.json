@@ -185,43 +185,30 @@
         }
       }
     },
-    "/api/CoursePromotions": {
-      "get": {
+    "/api/CoursePromotions/search-course-promotions": {
+      "post": {
         "tags": [
           "CoursePromotions"
         ],
-        "parameters": [
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "SearchTerm",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "isFeatured",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoursePromotionFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoursePromotionFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoursePromotionFilterDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -244,7 +231,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/CoursePromotions": {
       "post": {
         "tags": [
           "CoursePromotions"
@@ -485,46 +474,47 @@
         }
       }
     },
-    "/api/Enquiries": {
-      "get": {
+    "/api/Enquiries/search-enquiries": {
+      "post": {
         "tags": [
           "Enquiries"
         ],
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/EnquiryEnums"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnquiryFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnquiryFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnquiryFilterDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/EnquiryDto"
-                  }
+                  "$ref": "#/components/schemas/EnquiryDtoPagedResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/EnquiryDto"
-                  }
+                  "$ref": "#/components/schemas/EnquiryDtoPagedResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/EnquiryDto"
-                  }
+                  "$ref": "#/components/schemas/EnquiryDtoPagedResult"
                 }
               }
             }
@@ -578,36 +568,32 @@
             }
           }
         }
-      },
-      "get": {
+      }
+    },
+    "/api/Feedbacks/search-feedbacks": {
+      "post": {
         "tags": [
           "Feedbacks"
         ],
-        "parameters": [
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "SearchTerm",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackFilterDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -703,36 +689,30 @@
         }
       }
     },
-    "/api/Roles": {
-      "get": {
+    "/api/Roles/search-roles": {
+      "post": {
         "tags": [
           "Roles"
         ],
-        "parameters": [
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "SearchTerm",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleFilterDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -755,7 +735,47 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Roles/permissions": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Roles": {
       "post": {
         "tags": [
           "Roles"
@@ -796,44 +816,6 @@
               "text/json": {
                 "schema": {
                   "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Roles/permissions": {
-      "get": {
-        "tags": [
-          "Roles"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PermissionDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PermissionDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PermissionDto"
-                  }
                 }
               }
             }
@@ -947,50 +929,30 @@
         }
       }
     },
-    "/api/Users": {
-      "get": {
+    "/api/Users/search-users": {
+      "post": {
         "tags": [
           "Users"
         ],
-        "parameters": [
-          {
-            "name": "PageNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "PageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "SearchTerm",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "roleId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "isActive",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserFilterDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserFilterDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserFilterDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -1013,7 +975,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Users": {
       "post": {
         "tags": [
           "Users"
@@ -1407,6 +1371,28 @@
         },
         "additionalProperties": false
       },
+      "CoursePromotionFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFeatured": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateApplicationDto": {
         "type": "object",
         "properties": {
@@ -1605,6 +1591,36 @@
         },
         "additionalProperties": false
       },
+      "EnquiryDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EnquiryDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "EnquiryEnums": {
         "enum": [
           1,
@@ -1614,6 +1630,27 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "EnquiryFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/EnquiryEnums"
+          }
+        },
+        "additionalProperties": false
       },
       "FeedbackDto": {
         "type": "object",
@@ -1671,6 +1708,24 @@
             "type": "integer",
             "format": "int32",
             "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeedbackFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1774,6 +1829,24 @@
         },
         "additionalProperties": false
       },
+      "RoleFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateUserProfileDto": {
         "type": "object",
         "properties": {
@@ -1825,6 +1898,32 @@
           "lastLogin": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserFilterDto": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchTerm": {
+            "type": "string",
+            "nullable": true
+          },
+          "roleId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
             "nullable": true
           }
         },

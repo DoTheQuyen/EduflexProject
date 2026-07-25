@@ -45,14 +45,14 @@ namespace Eduflex.API.Controllers
             return HandleCreateAsync(_logger, "Error in CreateFeedback endpoint", () => _feedbackService.CreateFeedback(createDto.ToModel()));
         }
 
-        [HttpGet]
+        [HttpPost("search-feedbacks")]
         [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
-        public Task<ActionResult<PagedResult<FeedbackDto>>> GetAll([FromQuery] PaginationQuery query)
+        public Task<ActionResult<PagedResult<FeedbackDto>>> SearchFeedbacks([FromBody] FeedbackFilterDto filterDto)
         {
-            return HandleRequestAsync(_logger, "Error in GetAll feedback endpoint", async () =>
+            return HandleRequestAsync(_logger, "Error in Search feedback endpoint", async () =>
             {
-                var result = await _feedbackService.GetFeedback(query);
+                var result = await _feedbackService.GetFeedback(filterDto.ToFilter());
                 return new PagedResult<FeedbackDto>
                 {
                     Items = result.Items.Select(f => f.ToDto()).ToList(),

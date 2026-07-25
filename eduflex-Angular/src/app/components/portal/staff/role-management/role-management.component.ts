@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, RoleDto, CreateRoleDto, PermissionDto } from '@services/api.services';
+import { Client, RoleDto, CreateRoleDto, PermissionDto, RoleFilterDto } from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn } from '@generic/data-table/data-table.models';
+import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
@@ -31,9 +32,7 @@ export class RoleManagementComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
 
-  pageNumber = 1;
-  pageSize = 10;
-  totalCount = 0;
+  pager = new TablePagerState();
 
   roleForm: FormGroup;
 
@@ -57,10 +56,15 @@ export class RoleManagementComponent implements OnInit {
 
   loadRoles(): void {
     this.isLoading = true;
-    this.apiClient.rolesGET(this.pageNumber, this.pageSize).subscribe({
+    const filter = new RoleFilterDto({
+      pageNumber: this.pager.pageNumber,
+      pageSize: this.pager.pageSize,
+      searchTerm: this.pager.searchTerm || undefined
+    });
+    this.apiClient.searchRoles(filter).subscribe({
       next: (result) => {
         this.roles = result.items ?? [];
-        this.totalCount = result.totalCount ?? 0;
+        this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
@@ -70,7 +74,12 @@ export class RoleManagementComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.pageNumber = page;
+    this.pager.goToPage(page);
+    this.loadRoles();
+  }
+
+  onSearchChange(term: string): void {
+    this.pager.search(term);
     this.loadRoles();
   }
 
@@ -137,7 +146,7 @@ export class RoleManagementComponent implements OnInit {
       permissionIds: this.selectedPermissionIds
     });
 
-    this.apiClient.rolesPOST(payload).subscribe({
+    this.apiClient.roles(payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.closeModal();

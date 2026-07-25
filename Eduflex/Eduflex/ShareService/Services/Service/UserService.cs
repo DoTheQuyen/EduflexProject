@@ -251,11 +251,11 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive)
+        public async Task<PagedResult<UserModel>> GetUsersAsync(UserFilter filter)
         {
             try
             {
-                return await _userDB.GetUsersAsync(query, roleId, isActive);
+                return await _userDB.GetUsersAsync(filter);
             }
             catch (Exception ex)
             {

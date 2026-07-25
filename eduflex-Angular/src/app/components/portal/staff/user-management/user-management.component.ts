@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, UserSummaryDto, CreateUserDto, UserDto, RoleDto } from '@services/api.services';
+import { Client, UserSummaryDto, CreateUserDto, UserDto, RoleDto, UserFilterDto, RoleFilterDto } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { PermissionKeys } from '../../../../shared/constants/permission-keys';
@@ -28,9 +29,9 @@ export class UserManagementComponent implements OnInit {
   errorMessage = '';
   editingId: string | null = null;
 
-  pageNumber = 1;
-  pageSize = 10;
-  totalCount = 0;
+  pager = new TablePagerState();
+  roleFilter = '';
+  activeFilter = 'all';
 
   canView = false;
   canAdd = false;
@@ -74,10 +75,18 @@ this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
 
   loadUsers(): void {
     this.isLoading = true;
-    this.apiClient.usersGET(this.pageNumber, this.pageSize).subscribe({
+    const isActive = this.activeFilter === 'all' ? undefined : this.activeFilter === 'true';
+    const filter = new UserFilterDto({
+      pageNumber: this.pager.pageNumber,
+      pageSize: this.pager.pageSize,
+      searchTerm: this.pager.searchTerm || undefined,
+      roleId: this.roleFilter || undefined,
+      isActive
+    });
+    this.apiClient.searchUsers(filter).subscribe({
       next: (result) => {
         this.users = result.items ?? [];
-        this.totalCount = result.totalCount ?? 0;
+        this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
@@ -87,7 +96,24 @@ this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
   }
 
   onPageChange(page: number): void {
-    this.pageNumber = page;
+    this.pager.goToPage(page);
+    this.loadUsers();
+  }
+
+  onSearchChange(term: string): void {
+    this.pager.search(term);
+    this.loadUsers();
+  }
+
+  onRoleFilterChange(event: Event): void {
+    this.roleFilter = (event.target as HTMLSelectElement).value;
+    this.pager.goToPage(1);
+    this.loadUsers();
+  }
+
+  onActiveFilterChange(event: Event): void {
+    this.activeFilter = (event.target as HTMLSelectElement).value;
+    this.pager.goToPage(1);
     this.loadUsers();
   }
 
@@ -95,7 +121,7 @@ this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
     // Roles power the dropdown below, not a paginated list view — fetching the
     // server's max page size (100) is effectively "all roles" for a reference
     // table this small, without needing a separate unpaginated endpoint.
-    this.apiClient.rolesGET(1, 100).subscribe({
+    this.apiClient.searchRoles(new RoleFilterDto({ pageNumber: 1, pageSize: 100 })).subscribe({
       next: (result) => {
         this.roles = result.items ?? [];
       },

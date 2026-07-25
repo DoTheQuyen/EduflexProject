@@ -46,9 +46,9 @@ namespace ShareService.Services
             return await _coursePromotionDataAccess.GetFeaturedActiveCoursePromotionsAsync(count);
         }
 
-        public async Task<PagedResult<CoursePromotionModel>> GetCoursePromotions(PaginationQuery query, bool? isFeatured)
+        public async Task<PagedResult<CoursePromotionModel>> GetCoursePromotions(CoursePromotionFilter filter)
         {
-            return await _coursePromotionDataAccess.GetCoursePromotionsAsync(query, isFeatured);
+            return await _coursePromotionDataAccess.GetCoursePromotionsAsync(filter);
         }
 
         public async Task<bool> UpdateCoursePromotion(string id, CoursePromotionModel promotion)

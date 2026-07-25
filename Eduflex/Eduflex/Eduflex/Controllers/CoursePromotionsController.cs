@@ -43,14 +43,14 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost("search-course-promotions")]
         [RequirePermission(PermissionKey.CoursePromotionsView)]
         [ApiExplorerSettings(GroupName = "app")]
-        public Task<ActionResult<PagedResult<CoursePromotionDto>>> GetAll([FromQuery] PaginationQuery query, [FromQuery] bool? isFeatured)
+        public Task<ActionResult<PagedResult<CoursePromotionDto>>> SearchCoursePromotions([FromBody] CoursePromotionFilterDto filterDto)
         {
-            return HandleRequestAsync(_logger, "Error in GetAll course promotions endpoint", async () =>
+            return HandleRequestAsync(_logger, "Error in Search course promotions endpoint", async () =>
             {
-                var result = await _coursePromotionService.GetCoursePromotions(query, isFeatured);
+                var result = await _coursePromotionService.GetCoursePromotions(filterDto.ToFilter());
                 return new PagedResult<CoursePromotionDto>
                 {
                     Items = result.Items.Select(p => p.ToDto()).ToList(),

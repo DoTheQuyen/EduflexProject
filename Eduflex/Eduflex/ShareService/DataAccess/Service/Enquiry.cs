@@ -33,15 +33,22 @@ namespace ShareService.DataAccess
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<EnquiryModel>> GetAllEnquiriesAsync(string? status)
+        public Task<PagedResult<EnquiryModel>> GetEnquiriesAsync(EnquiryFilter filter)
         {
-            var filter = string.IsNullOrEmpty(status)
-                ? FilterDefinition<EnquiryModel>.Empty
-                : Builders<EnquiryModel>.Filter.Eq(e => e.Status, status);
+            var filters = new List<FilterDefinition<EnquiryModel>>
+            {
+                BuildSearchFilter(filter.SearchTerm, e => e.FirstName, e => e.LastName, e => e.Email, e => e.Mobile)
+            };
 
-            return await Collection
-                .Find(filter)
-                .ToListAsync();
+            if (filter.Status.HasValue)
+            {
+                filters.Add(Builders<EnquiryModel>.Filter.Eq(e => e.Status, filter.Status.Value.ToString()));
+            }
+
+            var mongoFilter = Builders<EnquiryModel>.Filter.And(filters);
+            var sort = Builders<EnquiryModel>.Sort.Descending(e => e.CreatedAt);
+
+            return GetPagedAsync(mongoFilter, sort, filter.PageNumber, filter.PageSize);
         }
 
         public async Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel enquiry)

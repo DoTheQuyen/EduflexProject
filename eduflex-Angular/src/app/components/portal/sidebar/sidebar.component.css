@@ -1,6 +1,6 @@
 .sidebar {
-  width: 200px;
-  background: var(--color-navy-900);
+  width: 250px;
+  background: #2c3e50;
   color: white;
   position: fixed;
   height: 100vh;
@@ -13,33 +13,30 @@
   width: 64px;
 }
 
+.logo {
+  height: 60px;
+  width: 60px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
 .sidebar-header {
-  padding: 1rem;
-  border-bottom: 1px solid var(--color-navy-700);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.sidebar-toggle-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1.1rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.sidebar-toggle-btn:hover {
-  background: var(--color-navy-700);
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #34495e;
+  text-align: center;
 }
 
 .sidebar-title {
   margin: 0;
   color: white;
   font-size: 1.1rem;
+}
+
+.sidebar-icon {
+  font-size: 1.5rem;
+  color: #3498db;
 }
 
 .sidebar-menu {
@@ -56,22 +53,22 @@
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  color: var(--color-muted);
+  color: #bdc3c7;
   text-decoration: none;
   transition: all 0.3s ease;
   border-left: 3px solid transparent;
 }
 
 .menu-link:hover {
-  background: var(--color-navy-700);
+  background: #34495e;
   color: white;
-  border-left-color: var(--color-accent);
+  border-left-color: #3498db;
 }
 
 .menu-link.active {
-  background: var(--color-navy-700);
+  background: #34495e;
   color: white;
-  border-left-color: var(--color-accent);
+  border-left-color: #3498db;
 }
 
 .menu-icon {

@@ -1,3 +1,4 @@
+using ShareService.Common;
 using ShareService.Models.Enquiry;
 
 namespace ShareService.DataAccess.Interface
@@ -7,7 +8,7 @@ namespace ShareService.DataAccess.Interface
         Task<bool> CreateEnquiryAsync(EnquiryModel enquiry);
         Task<EnquiryModel?> GetEnquiryAsync(string id);
         Task<EnquiryModel?> GetEnquiryAsync(string? email, string? mobile);
-        Task<List<EnquiryModel>> GetAllEnquiriesAsync(string? status);
+        Task<PagedResult<EnquiryModel>> GetEnquiriesAsync(EnquiryFilter filter);
         Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel enquiry);
         Task<bool> DeleteEnquiriesAsync(string id);
     }

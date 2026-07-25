@@ -12,6 +12,6 @@ namespace ShareService.DataAccess.Interface
         Task<bool> UpdatePasswordAsync(string userId, string newPasswordHash);
         Task<bool> CreateUserAsync(UserModel user);
         Task<bool> UpdateUserAsync(string id, UserModel user);
-        Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive);
+        Task<PagedResult<UserModel>> GetUsersAsync(UserFilter filter);
     }
 }

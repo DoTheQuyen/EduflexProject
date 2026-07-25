@@ -1,10 +1,23 @@
 ﻿using Eduflex.DTOs.Auth;
+using ShareService.Common;
 using ShareService.Models.Auth;
 
 namespace Eduflex.Mapping.Auth
 {
     public static class UserMappingExtension
     {
+        public static UserFilter ToFilter(this UserFilterDto dto)
+        {
+            return new UserFilter
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm,
+                RoleId = dto.RoleId,
+                IsActive = dto.IsActive
+            };
+        }
+
         public static UserDto ToDto(this UserModel model)
         {
             return new UserDto

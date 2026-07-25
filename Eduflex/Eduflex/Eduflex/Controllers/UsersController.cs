@@ -24,13 +24,13 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost("search-users")]
         [RequirePermission(PermissionKey.UsersView)]
-        public Task<ActionResult<PagedResult<UserSummaryDto>>> GetAll([FromQuery] PaginationQuery query, [FromQuery] string? roleId, [FromQuery] bool? isActive)
+        public Task<ActionResult<PagedResult<UserSummaryDto>>> SearchUsers([FromBody] UserFilterDto filterDto)
         {
-            return HandleRequestAsync(_logger, "Error in GetAll users endpoint", async () =>
+            return HandleRequestAsync(_logger, "Error in Search users endpoint", async () =>
             {
-                var result = await _userService.GetUsersAsync(query, roleId, isActive);
+                var result = await _userService.GetUsersAsync(filterDto.ToFilter());
                 var roles = await _roleService.GetAllRolesAsync();
                 var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
 

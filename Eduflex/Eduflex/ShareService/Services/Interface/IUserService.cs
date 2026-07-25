@@ -10,6 +10,6 @@ namespace ShareService.Services.Interface
         Task<bool> ChangePasswordAsync(string userId, ChangePasswordModel changePasswordDto);
         Task<bool> CreateUserAsync(UserModel user);
         Task<bool> UpdateUserAsync(string userId, UserModel updateModel);
-        Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive);
+        Task<PagedResult<UserModel>> GetUsersAsync(UserFilter filter);
     }
 }

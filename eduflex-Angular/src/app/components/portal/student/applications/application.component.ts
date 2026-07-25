@@ -52,7 +52,7 @@ export class ApplicationComponent implements OnInit {
     // person has applied to) and the search/filter below runs client-side across
     // the whole list, so we fetch one generous page (the server's max page size)
     // rather than wiring real prev/next paging into this screen.
-    this.appService.applicationsGET(1, 100).subscribe({
+    this.appService.applicationsGET(1, 100, undefined).subscribe({
       next: (result) => {
         const apps = result.items ?? [];
         this.applications = apps;

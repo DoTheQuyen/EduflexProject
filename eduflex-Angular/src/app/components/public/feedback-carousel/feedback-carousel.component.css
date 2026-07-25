@@ -1,5 +1,6 @@
-section {
-  padding: 3rem 0;
+.feedback-section {
+  padding: 4rem 0;
+  background: var(--color-surface);
 }
 
 .container {
@@ -8,27 +9,23 @@ section {
   padding: 0 2rem;
 }
 
-.feedback-section {
-  background: var(--color-surface);
+.center-head {
+  max-width: 60ch;
+  margin: 0 auto 2.5rem;
+  text-align: center;
 }
 
-/* .eyebrow {
+.eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--color-accent-dark);
-} */
-
-.center-head {
-  text-align: center;
-  margin: 0 auto 2.5rem;
-  max-width: 50ch;
+  display: block;
+  margin-bottom: 0.4rem;
 }
 
 .center-head h2 {
-  font-family: var(--font-display);
-  font-weight: 400;
   font-size: 1.9rem;
   color: var(--color-navy-900);
   margin-top: 0.4rem;
@@ -62,6 +59,74 @@ section {
   color: white;
 }
 
+.feedback-card {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  min-height: 320px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: white;
+  overflow: hidden;
+}
+
+.feedback-photo {
+  position: relative;
+  height: 100%;
+  min-height: 320px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.feedback-photo-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem;
+  background: linear-gradient(to top, rgba(22, 35, 58, 0.85), rgba(22, 35, 58, 0));
+  color: white;
+}
+
+.feedback-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.feedback-course {
+  font-size: 0.8rem;
+  color: #C7CEDA;
+  margin: 0.15rem 0 0;
+}
+
+.feedback-quote-wrap {
+  min-width: 0;
+  padding: 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quote-mark {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--color-accent);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.feedback-quote-wrap p {
+  color: var(--color-ink);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
 .dots {
   display: flex;
   justify-content: center;
@@ -85,89 +150,19 @@ section {
   background: var(--color-accent);
 }
 
-.feedback-card {
-  flex: 1;
-  display: flex;
-  min-height: 280px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background: white;
-  overflow: hidden;
-}
-
-.feedback-photo {
-  width: 35%;
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  background-color: var(--color-navy-700);
-  display: flex;
-  align-items: flex-end;
-}
-
-.feedback-photo-overlay {
-  width: 100%;
-  padding: 1.5rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
-}
-
-.feedback-name {
-  color: white;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.2rem;
-  margin: 0 0 0.25rem;
-}
-
-.feedback-course {
-  color: #D9B876;
-  font-weight: 600;
-  font-size: 0.85rem;
-  margin: 0;
-}
-
-.feedback-quote-wrap {
-  width: 65%;
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.quote-mark {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  color: var(--color-accent);
-  line-height: 1;
-}
-
-.feedback-quote-wrap p {
-  font-size: 1.02rem;
-  line-height: 1.7;
-  color: var(--color-ink);
-  margin: 0;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .feedback-card {
-    flex-direction: column;
-    min-height: unset;
-  }
-
-  .feedback-photo,
-  .feedback-quote-wrap {
-    width: 100%;
+    grid-template-columns: 1fr;
+    min-height: 0;
   }
 
   .feedback-photo {
-    height: 220px;
+    height: 200px;
+    min-height: 0;
   }
+}
 
-  .feedback-quote-wrap {
-    padding: 2rem;
-  }
-
+@media (max-width: 768px) {
   .carousel-arrow {
     display: none;
   }

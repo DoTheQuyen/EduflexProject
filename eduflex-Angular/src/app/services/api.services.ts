@@ -260,46 +260,31 @@ export class Client {
     }
 
     /**
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
-     * @param isFeatured (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    coursePromotionsGET(pageNumber: number | undefined, pageSize: number | undefined, searchTerm: string | undefined, isFeatured: boolean | undefined): Observable<CoursePromotionDtoPagedResult> {
-        let url_ = this.baseUrl + "/api/CoursePromotions?";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (searchTerm === null)
-            throw new Error("The parameter 'searchTerm' cannot be null.");
-        else if (searchTerm !== undefined)
-            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
-        if (isFeatured === null)
-            throw new Error("The parameter 'isFeatured' cannot be null.");
-        else if (isFeatured !== undefined)
-            url_ += "isFeatured=" + encodeURIComponent("" + isFeatured) + "&";
+    searchCoursePromotions(body: CoursePromotionFilterDto | undefined): Observable<CoursePromotionDtoPagedResult> {
+        let url_ = this.baseUrl + "/api/CoursePromotions/search-course-promotions";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCoursePromotionsGET(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchCoursePromotions(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCoursePromotionsGET(response_ as any);
+                    return this.processSearchCoursePromotions(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<CoursePromotionDtoPagedResult>;
                 }
@@ -308,7 +293,7 @@ export class Client {
         }));
     }
 
-    protected processCoursePromotionsGET(response: HttpResponseBase): Observable<CoursePromotionDtoPagedResult> {
+    protected processSearchCoursePromotions(response: HttpResponseBase): Observable<CoursePromotionDtoPagedResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -662,40 +647,40 @@ export class Client {
     }
 
     /**
-     * @param status (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    enquiriesAll(status: EnquiryEnums | undefined): Observable<EnquiryDto[]> {
-        let url_ = this.baseUrl + "/api/Enquiries?";
-        if (status === null)
-            throw new Error("The parameter 'status' cannot be null.");
-        else if (status !== undefined)
-            url_ += "status=" + encodeURIComponent("" + status) + "&";
+    searchEnquiries(body: EnquiryFilterDto | undefined): Observable<EnquiryDtoPagedResult> {
+        let url_ = this.baseUrl + "/api/Enquiries/search-enquiries";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processEnquiriesAll(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchEnquiries(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processEnquiriesAll(response_ as any);
+                    return this.processSearchEnquiries(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<EnquiryDto[]>;
+                    return _observableThrow(e) as any as Observable<EnquiryDtoPagedResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<EnquiryDto[]>;
+                return _observableThrow(response_) as any as Observable<EnquiryDtoPagedResult>;
         }));
     }
 
-    protected processEnquiriesAll(response: HttpResponseBase): Observable<EnquiryDto[]> {
+    protected processSearchEnquiries(response: HttpResponseBase): Observable<EnquiryDtoPagedResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -706,14 +691,7 @@ export class Client {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(EnquiryDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = EnquiryDtoPagedResult.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -782,41 +760,31 @@ export class Client {
     }
 
     /**
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    feedbacksGET(pageNumber: number | undefined, pageSize: number | undefined, searchTerm: string | undefined): Observable<FeedbackDtoPagedResult> {
-        let url_ = this.baseUrl + "/api/Feedbacks?";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (searchTerm === null)
-            throw new Error("The parameter 'searchTerm' cannot be null.");
-        else if (searchTerm !== undefined)
-            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
+    searchFeedbacks(body: FeedbackFilterDto | undefined): Observable<FeedbackDtoPagedResult> {
+        let url_ = this.baseUrl + "/api/Feedbacks/search-feedbacks";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFeedbacksGET(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchFeedbacks(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processFeedbacksGET(response_ as any);
+                    return this.processSearchFeedbacks(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<FeedbackDtoPagedResult>;
                 }
@@ -825,7 +793,7 @@ export class Client {
         }));
     }
 
-    protected processFeedbacksGET(response: HttpResponseBase): Observable<FeedbackDtoPagedResult> {
+    protected processSearchFeedbacks(response: HttpResponseBase): Observable<FeedbackDtoPagedResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -957,77 +925,11 @@ export class Client {
     }
 
     /**
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
-     * @return OK
-     */
-    rolesGET(pageNumber: number | undefined, pageSize: number | undefined, searchTerm: string | undefined): Observable<RoleDtoPagedResult> {
-        let url_ = this.baseUrl + "/api/Roles?";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (searchTerm === null)
-            throw new Error("The parameter 'searchTerm' cannot be null.");
-        else if (searchTerm !== undefined)
-            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRolesGET(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processRolesGET(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<RoleDtoPagedResult>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<RoleDtoPagedResult>;
-        }));
-    }
-
-    protected processRolesGET(response: HttpResponseBase): Observable<RoleDtoPagedResult> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = RoleDtoPagedResult.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
      * @param body (optional) 
      * @return OK
      */
-    rolesPOST(body: CreateRoleDto | undefined): Observable<boolean> {
-        let url_ = this.baseUrl + "/api/Roles";
+    searchRoles(body: RoleFilterDto | undefined): Observable<RoleDtoPagedResult> {
+        let url_ = this.baseUrl + "/api/Roles/search-roles";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1043,20 +945,20 @@ export class Client {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRolesPOST(response_);
+            return this.processSearchRoles(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processRolesPOST(response_ as any);
+                    return this.processSearchRoles(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<boolean>;
+                    return _observableThrow(e) as any as Observable<RoleDtoPagedResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<boolean>;
+                return _observableThrow(response_) as any as Observable<RoleDtoPagedResult>;
         }));
     }
 
-    protected processRolesPOST(response: HttpResponseBase): Observable<boolean> {
+    protected processSearchRoles(response: HttpResponseBase): Observable<RoleDtoPagedResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1067,8 +969,7 @@ export class Client {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+            result200 = RoleDtoPagedResult.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1127,6 +1028,63 @@ export class Client {
             else {
                 result200 = <any>null;
             }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    roles(body: CreateRoleDto | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Roles";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRoles(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRoles(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processRoles(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1297,51 +1255,31 @@ export class Client {
     }
 
     /**
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param searchTerm (optional) 
-     * @param roleId (optional) 
-     * @param isActive (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    usersGET(pageNumber: number | undefined, pageSize: number | undefined, searchTerm: string | undefined, roleId: string | undefined, isActive: boolean | undefined): Observable<UserSummaryDtoPagedResult> {
-        let url_ = this.baseUrl + "/api/Users?";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (searchTerm === null)
-            throw new Error("The parameter 'searchTerm' cannot be null.");
-        else if (searchTerm !== undefined)
-            url_ += "SearchTerm=" + encodeURIComponent("" + searchTerm) + "&";
-        if (roleId === null)
-            throw new Error("The parameter 'roleId' cannot be null.");
-        else if (roleId !== undefined)
-            url_ += "roleId=" + encodeURIComponent("" + roleId) + "&";
-        if (isActive === null)
-            throw new Error("The parameter 'isActive' cannot be null.");
-        else if (isActive !== undefined)
-            url_ += "isActive=" + encodeURIComponent("" + isActive) + "&";
+    searchUsers(body: UserFilterDto | undefined): Observable<UserSummaryDtoPagedResult> {
+        let url_ = this.baseUrl + "/api/Users/search-users";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUsersGET(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSearchUsers(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processUsersGET(response_ as any);
+                    return this.processSearchUsers(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<UserSummaryDtoPagedResult>;
                 }
@@ -1350,7 +1288,7 @@ export class Client {
         }));
     }
 
-    protected processUsersGET(response: HttpResponseBase): Observable<UserSummaryDtoPagedResult> {
+    protected processSearchUsers(response: HttpResponseBase): Observable<UserSummaryDtoPagedResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1966,6 +1904,54 @@ export interface ICoursePromotionDtoPagedResult {
     totalPages?: number;
 }
 
+export class CoursePromotionFilterDto implements ICoursePromotionFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    isFeatured?: boolean | undefined;
+
+    constructor(data?: ICoursePromotionFilterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.searchTerm = _data["searchTerm"];
+            this.isFeatured = _data["isFeatured"];
+        }
+    }
+
+    static fromJS(data: any): CoursePromotionFilterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CoursePromotionFilterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["searchTerm"] = this.searchTerm;
+        data["isFeatured"] = this.isFeatured;
+        return data;
+    }
+}
+
+export interface ICoursePromotionFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    isFeatured?: boolean | undefined;
+}
+
 export class CreateApplicationDto implements ICreateApplicationDto {
     studentId?: string | undefined;
     userId?: string | undefined;
@@ -2326,11 +2312,119 @@ export interface IEnquiryDto {
     response?: string | undefined;
 }
 
+export class EnquiryDtoPagedResult implements IEnquiryDtoPagedResult {
+    items?: EnquiryDto[] | undefined;
+    totalCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
+    readonly totalPages?: number;
+
+    constructor(data?: IEnquiryDtoPagedResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items!.push(EnquiryDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            (<any>this).totalPages = _data["totalPages"];
+        }
+    }
+
+    static fromJS(data: any): EnquiryDtoPagedResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnquiryDtoPagedResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        return data;
+    }
+}
+
+export interface IEnquiryDtoPagedResult {
+    items?: EnquiryDto[] | undefined;
+    totalCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
+    totalPages?: number;
+}
+
 export enum EnquiryEnums {
     _1 = 1,
     _2 = 2,
     _3 = 3,
     _4 = 4,
+}
+
+export class EnquiryFilterDto implements IEnquiryFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    status?: EnquiryEnums;
+
+    constructor(data?: IEnquiryFilterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.searchTerm = _data["searchTerm"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): EnquiryFilterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EnquiryFilterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["searchTerm"] = this.searchTerm;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface IEnquiryFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    status?: EnquiryEnums;
 }
 
 export class FeedbackDto implements IFeedbackDto {
@@ -2447,6 +2541,50 @@ export interface IFeedbackDtoPagedResult {
     pageNumber?: number;
     pageSize?: number;
     totalPages?: number;
+}
+
+export class FeedbackFilterDto implements IFeedbackFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+
+    constructor(data?: IFeedbackFilterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.searchTerm = _data["searchTerm"];
+        }
+    }
+
+    static fromJS(data: any): FeedbackFilterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FeedbackFilterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["searchTerm"] = this.searchTerm;
+        return data;
+    }
+}
+
+export interface IFeedbackFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
 }
 
 export class FileUploadResultDto implements IFileUploadResultDto {
@@ -2661,6 +2799,50 @@ export interface IRoleDtoPagedResult {
     totalPages?: number;
 }
 
+export class RoleFilterDto implements IRoleFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+
+    constructor(data?: IRoleFilterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.searchTerm = _data["searchTerm"];
+        }
+    }
+
+    static fromJS(data: any): RoleFilterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleFilterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["searchTerm"] = this.searchTerm;
+        return data;
+    }
+}
+
+export interface IRoleFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+}
+
 export class UpdateUserProfileDto implements IUpdateUserProfileDto {
     firstName?: string | undefined;
     lastName?: string | undefined;
@@ -2767,6 +2949,58 @@ export interface IUserDto {
     roleId?: string | undefined;
     isActive?: boolean;
     lastLogin?: Date | undefined;
+}
+
+export class UserFilterDto implements IUserFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    roleId?: string | undefined;
+    isActive?: boolean | undefined;
+
+    constructor(data?: IUserFilterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
+            this.searchTerm = _data["searchTerm"];
+            this.roleId = _data["roleId"];
+            this.isActive = _data["isActive"];
+        }
+    }
+
+    static fromJS(data: any): UserFilterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserFilterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
+        data["searchTerm"] = this.searchTerm;
+        data["roleId"] = this.roleId;
+        data["isActive"] = this.isActive;
+        return data;
+    }
+}
+
+export interface IUserFilterDto {
+    pageNumber?: number;
+    pageSize?: number;
+    searchTerm?: string | undefined;
+    roleId?: string | undefined;
+    isActive?: boolean | undefined;
 }
 
 export class UserSummaryDto implements IUserSummaryDto {

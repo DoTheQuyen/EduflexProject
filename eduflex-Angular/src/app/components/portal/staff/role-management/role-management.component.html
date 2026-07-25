@@ -27,9 +27,12 @@
             <app-data-table
               [columns]="columns"
               [data]="roles"
-              [pageNumber]="pageNumber"
-              [pageSize]="pageSize"
-              [totalCount]="totalCount"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search role name..."
+              (searchChange)="onSearchChange($event)"
               (pageChange)="onPageChange($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>

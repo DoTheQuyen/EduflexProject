@@ -40,25 +40,25 @@ namespace ShareService.DataAccess
                 .ToListAsync();
         }
 
-        public Task<PagedResult<CoursePromotionModel>> GetCoursePromotionsAsync(PaginationQuery query, bool? isFeatured)
+        public Task<PagedResult<CoursePromotionModel>> GetCoursePromotionsAsync(CoursePromotionFilter filter)
         {
-            var filters = new List<FilterDefinition<CoursePromotionModel>>
+            var mongoFilters = new List<FilterDefinition<CoursePromotionModel>>
             {
-                BuildSearchFilter(query.SearchTerm, p => p.CourseName, p => p.UniversityName)
+                BuildSearchFilter(filter.SearchTerm, p => p.CourseName, p => p.UniversityName)
             };
 
-            if (isFeatured.HasValue)
+            if (filter.IsFeatured.HasValue)
             {
-                filters.Add(Builders<CoursePromotionModel>.Filter.Eq(p => p.IsFeatured, isFeatured.Value));
+                mongoFilters.Add(Builders<CoursePromotionModel>.Filter.Eq(p => p.IsFeatured, filter.IsFeatured.Value));
             }
 
-            var filter = Builders<CoursePromotionModel>.Filter.And(filters);
+            var mongoFilter = Builders<CoursePromotionModel>.Filter.And(mongoFilters);
 
             var sort = Builders<CoursePromotionModel>.Sort
                 .Ascending(p => p.DisplayOrder)
                 .Descending(p => p.CreatedAt);
 
-            return GetPagedAsync(filter, sort, query.PageNumber, query.PageSize);
+            return GetPagedAsync(mongoFilter, sort, filter.PageNumber, filter.PageSize);
         }
 
         public async Task<bool> UpdateCoursePromotionAsync(string id, CoursePromotionModel promotion)

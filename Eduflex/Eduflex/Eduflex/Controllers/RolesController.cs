@@ -31,13 +31,13 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost("search-roles")]
         [RequirePermission(PermissionKey.RolesView)]
-        public Task<ActionResult<PagedResult<RoleDto>>> GetAll([FromQuery] PaginationQuery query)
+        public Task<ActionResult<PagedResult<RoleDto>>> SearchRoles([FromBody] RoleFilterDto filterDto)
         {
-            return HandleRequestAsync(_logger, "Error in GetAll roles endpoint", async () =>
+            return HandleRequestAsync(_logger, "Error in Search roles endpoint", async () =>
             {
-                var result = await _roleService.GetRolesAsync(query);
+                var result = await _roleService.GetRolesAsync(filterDto.ToFilter());
                 return new PagedResult<RoleDto>
                 {
                     Items = result.Items.Select(r => r.ToDto()).ToList(),

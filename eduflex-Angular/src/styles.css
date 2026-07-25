@@ -72,7 +72,7 @@
   --radius: 0.5rem;
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow-md: 0 4px 12px rgba(22, 35, 58, 0.3);
-  --font-display: Cambria, Georgia, "Times New Roman", serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-body: Arial, sans-serif;
 }
 

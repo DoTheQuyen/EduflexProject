@@ -1,4 +1,6 @@
 {
+   "//": "index.html stays uncached so it always points at the latest chunk hashes; js/css get long-lived caching since their filenames change on every build",
+   
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": ["/assets/*", "/*.{css,scss,js,png,gif,jpg,jpeg,svg,ico,json,woff,woff2,ttf}"]

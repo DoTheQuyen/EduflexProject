@@ -1,11 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Client, FeedbackDto } from '@services/content.services';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-feedback-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './feedback-carousel.component.html',
   styleUrls: ['./feedback-carousel.component.css']
 })

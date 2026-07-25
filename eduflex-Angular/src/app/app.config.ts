@@ -1,6 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { authInterceptor } from '../app/guards/interceptors/auth.interceptor';
 import { AUTH_API_BASE_URL } from '../app/services/public.services';
@@ -16,6 +18,11 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     { provide: APPLICATION_API_BASE_URL, useValue: environment.apiClientUrl },
     { provide: CONTENT_API_BASE_URL, useValue: environment.apiClientUrl },
-    { provide: AUTH_API_BASE_URL, useValue: environment.publicApiUrl }
+    { provide: AUTH_API_BASE_URL, useValue: environment.publicApiUrl },
+    provideTranslateService({
+      loader: provideTranslateHttpLoader({ prefix: '/assets/language/', suffix: '.json' }),
+      fallbackLang: 'en',
+      lang: 'en'
+    })
   ]
 };

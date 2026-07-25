@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
+// Needed by ICurrentUserService to read the acting user's id for audit stamping (CreatedBy/UpdatedBy)
+builder.Services.AddHttpContextAccessor();
+
 // ✅ Register Swagger/OpenAPI services
 builder.Services.AddEndpointsApiExplorer();
 

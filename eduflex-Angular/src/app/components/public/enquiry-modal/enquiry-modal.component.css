@@ -34,11 +34,11 @@
 }
 
 .modal-close:hover {
-  color: #2c3e50;
+  color: var(--color-navy-900);
 }
 
 .modal-panel h2 {
-  color: #2c3e50;
+  color: var(--color-navy-900);
   margin-bottom: 0.5rem;
   font-size: 1.75rem;
 }
@@ -62,7 +62,7 @@
 
 .form-group label {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--color-navy-900);
   margin-bottom: 0.35rem;
   font-size: 0.9rem;
 }
@@ -127,6 +127,6 @@
 .success-panel {
   text-align: center;
   padding: 2rem 0;
-  color: #2c3e50;
+  color: var(--color-navy-900);
   font-size: 1.1rem;
 }

@@ -1,29 +1,28 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
+using ShareService.Common;
+using ShareService.DataAccess.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Auth;
-using ShareService.Services.Interface;
 
 namespace ShareService.DataAccess
 {
-    public class UserDB : IUserDB
+    public class UserDB : AuditableCollectionBase<UserModel>, IUserDB
     {
-        private readonly IMongoCollection<UserModel> _usersCollection;
-
-        public UserDB(IMongoDatabase database)
+        public UserDB(IMongoDatabase database, ICurrentUserService currentUser)
+            : base(database.GetCollection<UserModel>("Users"), currentUser)
         {
-            _usersCollection = database.GetCollection<UserModel>("Users");
         }
 
         public async Task<UserModel?> GetUserByIdAsync(string userId)
         {
-            return await _usersCollection
+            return await Collection
                 .Find(u => u.Id == userId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
-            return await _usersCollection
+            return await Collection
                 .Find(u => u.Email == email)
                 .FirstOrDefaultAsync();
         }
@@ -34,15 +33,13 @@ namespace ShareService.DataAccess
                 .Set(u => u.FirstName, updateDto.FirstName)
                 .Set(u => u.LastName, updateDto.LastName)
                 .Set(u => u.Email, updateDto.Email);
-                //.Set(u => u.UpdatedAt, DateTime.UtcNow);
 
             var options = new FindOneAndUpdateOptions<UserModel>
             {
                 ReturnDocument = ReturnDocument.After
             };
 
-            return await _usersCollection
-                .FindOneAndUpdateAsync(u => u.Id == userId, update, options);
+            return await FindOneAndUpdateAsync(u => u.Id == userId, update, options);
         }
 
         public async Task<bool> UpdatePasswordAsync(string userId, string newPasswordHash)
@@ -51,23 +48,43 @@ namespace ShareService.DataAccess
                 .Set(u => u.PasswordHash, newPasswordHash)
                 .Set(u => u.MustChangePassword, false);
 
-            var result = await _usersCollection
-                .UpdateOneAsync(u => u.Id == userId, update);
+            var result = await UpdateOneAsync(u => u.Id == userId, update);
 
             return result.ModifiedCount > 0;
         }
 
-        public async Task<UserModel> CreateUserAsync(UserModel user)
+        public async Task<bool> CreateUserAsync(UserModel user)
         {
-            await _usersCollection.InsertOneAsync(user);
-            return user;
+            await InsertOneAsync(user);
+            return true;
         }
 
-        public async Task<List<UserModel>> GetAllUsersAsync()
+        public async Task<bool> UpdateUserAsync(string id, UserModel user)
         {
-            return await _usersCollection
-                .Find(FilterDefinition<UserModel>.Empty)
-                .ToListAsync();
+            return await ReplaceOneAsync(p => p.Id == id, user);
+        }
+
+        public Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive)
+        {
+            var filters = new List<FilterDefinition<UserModel>>
+            {
+                BuildSearchFilter(query.SearchTerm, u => u.Email, u => u.FirstName, u => u.LastName)
+            };
+
+            if (!string.IsNullOrWhiteSpace(roleId))
+            {
+                filters.Add(Builders<UserModel>.Filter.Eq(u => u.RoleId, roleId));
+            }
+
+            if (isActive.HasValue)
+            {
+                filters.Add(Builders<UserModel>.Filter.Eq(u => u.IsActive, isActive.Value));
+            }
+
+            var filter = Builders<UserModel>.Filter.And(filters);
+            var sort = Builders<UserModel>.Sort.Descending(u => u.CreatedAt);
+
+            return GetPagedAsync(filter, sort, query.PageNumber, query.PageSize);
         }
     }
 }

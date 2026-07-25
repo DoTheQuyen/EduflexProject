@@ -1,5 +1,6 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Application;
 using ShareService.Models.Student;
@@ -32,6 +33,28 @@ namespace ShareService.DataAccess
                 .Find(a => a.StudentId == studentId)
                 .SortByDescending(a => a.DateApplied)
                 .ToListAsync();
+        }
+
+        public async Task<PagedResult<ApplicationModel>> GetApplicationsByStudentIdAsync(string studentId, PaginationQuery query)
+        {
+            var filter = Builders<ApplicationModel>.Filter.Eq(a => a.StudentId, studentId);
+
+            var totalCount = await _applicationsCollection.CountDocumentsAsync(filter);
+
+            var items = await _applicationsCollection
+                .Find(filter)
+                .SortByDescending(a => a.DateApplied)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Limit(query.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<ApplicationModel>
+            {
+                Items = items,
+                TotalCount = (int)totalCount,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            };
         }
 
         public async Task<ApplicationModel?> GetApplicationByIdAsync(string id)

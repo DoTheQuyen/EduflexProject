@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Client, CreateEnquiryDto } from '@services/content.services';
 import { environment } from '../../../environments/environment';
+import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
+import { TranslatePipe } from '@ngx-translate/core';
 
 declare const grecaptcha: any;
 
 @Component({
   selector: 'app-enquiry-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './enquiry-modal.component.html',
   styleUrls: ['./enquiry-modal.component.css']
 })
@@ -119,7 +121,7 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = err.error || 'Something went wrong submitting your enquiry. Please try again.';
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong submitting your enquiry. Please try again.');
         if (this.recaptchaWidgetId !== null && (window as any).grecaptcha) {
           (window as any).grecaptcha.reset(this.recaptchaWidgetId);
           this.recaptchaToken = '';

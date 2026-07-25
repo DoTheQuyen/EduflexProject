@@ -259,3 +259,30 @@
     text-align: center;
   }
 }
+
+.lang-switch {
+  display: flex;
+  gap: 0.25rem;
+  margin-right: 0.5rem;
+}
+
+.lang-switch button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lang-switch button:hover {
+  border-color: var(--color-accent);
+}
+
+.lang-switch button.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}

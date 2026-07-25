@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DataTablesModule } from 'angular-datatables';
 import { Client, CoursePromotionDto, CreateCoursePromotionDto } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
+import { PermissionKeys } from '../../../../shared/constants/permission-keys';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-course-promotion-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent],
+  imports: [CommonModule, ReactiveFormsModule, DataTableComponent],
   templateUrl: './course-promotion-management.component.html',
   styleUrls: ['./course-promotion-management.component.css']
 })
@@ -22,6 +24,10 @@ export class CoursePromotionManagementComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
   editingId: string | null = null;
+
+  pageNumber = 1;
+  pageSize = 10;
+  totalCount = 0;
 
   canAdd = false;
   canEdit = false;
@@ -51,7 +57,7 @@ export class CoursePromotionManagementComponent implements OnInit {
 
   rowActions: DataTableRowAction<CoursePromotionDto>[] = [];
 
-  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService) {
+  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService, private notificationService: NotificationService) {
     this.promotionForm = this.fb.group({
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
       universityName: ['', [Validators.required, Validators.maxLength(150)]],
@@ -67,9 +73,9 @@ export class CoursePromotionManagementComponent implements OnInit {
       displayOrder: [0, [Validators.required, Validators.min(0)]]
     });
 
-    this.canAdd = this.authHelper.hasPermission('coursepromotions.add');
-    this.canEdit = this.authHelper.hasPermission('coursepromotions.edit');
-    this.canDelete = this.authHelper.hasPermission('coursepromotions.delete');
+    this.canAdd = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsAdd);
+    this.canEdit = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsEdit);
+    this.canDelete = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsDelete);
 
     this.rowActions = [
       ...(this.canEdit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
@@ -83,15 +89,21 @@ export class CoursePromotionManagementComponent implements OnInit {
 
   loadPromotions(): void {
     this.isLoading = true;
-    this.apiClient.coursePromotionsAll().subscribe({
-      next: (promotions) => {
-        this.promotions = promotions;
+    this.apiClient.coursePromotionsGET(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.promotions = result.items ?? [];
+        this.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  onPageChange(page: number): void {
+    this.pageNumber = page;
+    this.loadPromotions();
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -154,10 +166,12 @@ export class CoursePromotionManagementComponent implements OnInit {
         this.isSubmitting = false;
         this.closeModal();
         this.loadPromotions();
+        this.notificationService.success(this.editingId ? 'Course promotion updated successfully.' : 'Course promotion created successfully.');
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = err.error || 'Something went wrong saving the course promotion. Please try again.';
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the course promotion. Please try again.');
+        this.notificationService.error(this.errorMessage);
       }
     });
   }
@@ -169,9 +183,12 @@ export class CoursePromotionManagementComponent implements OnInit {
     }
 
     this.apiClient.coursePromotionsDELETE(promotion.id).subscribe({
-      next: () => this.loadPromotions(),
+      next: () => {
+        this.loadPromotions();
+        this.notificationService.success('Course promotion deleted successfully.');
+      },
       error: () => {
-        window.alert('Could not delete this course promotion. Please try again.');
+        this.notificationService.error('Could not delete this course promotion. Please try again.');
       }
     });
   }

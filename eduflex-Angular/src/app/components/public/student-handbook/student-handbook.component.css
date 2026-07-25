@@ -14,11 +14,12 @@ h1, h2, h3 {
 }
 
 .eyebrow {
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight:900;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--color-accent-dark);
+  color: var(--color-accent-dark) !important;
 }
 
 /* Header */
@@ -28,7 +29,7 @@ h1, h2, h3 {
   padding: 4rem 2rem 3rem;
   background-color: var(--color-navy-900);
   background-image:
-    linear-gradient(180deg, rgba(142, 168, 212, 0.82) 0%, rgba(22, 35, 58, 0.9) 100%),
+    linear-gradient(180deg, rgba(240, 243, 247, 0.7) 0%, rgba(22, 35, 58, 0.9) 100%),
     url('assets/hero/students-travel.jpg');
   background-size: cover, cover;
   background-position: center, center;

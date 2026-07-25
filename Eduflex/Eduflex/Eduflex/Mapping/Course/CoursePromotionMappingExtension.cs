@@ -5,9 +5,9 @@ namespace Eduflex.Mapping.Course
 {
     public static class CoursePromotionMappingExtension
     {
-        public static CreateCoursePromotionModel ToModel(this CreateCoursePromotionDto dto)
+        public static CoursePromotionModel ToModel(this CreateCoursePromotionDto dto)
         {
-            return new CreateCoursePromotionModel
+            return new CoursePromotionModel
             {
                 CourseName = dto.CourseName,
                 UniversityName = dto.UniversityName,

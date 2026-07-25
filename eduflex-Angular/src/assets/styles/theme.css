@@ -3,6 +3,15 @@
    (int). Colors come from the unified brand tokens defined in styles.css. */
 
 /* === Buttons === */
+.eyebrow {
+  font-size: 0.9rem;
+  font-weight:900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-accent-dark) !important;
+}
+
 .btn {
   border-radius: var(--radius);
   font-weight: 500;

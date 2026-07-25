@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DataTablesModule } from 'angular-datatables';
 import { Client, RoleDto, CreateRoleDto, PermissionDto } from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn } from '@generic/data-table/data-table.models';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
+import { NotificationService } from '@services/notification.service';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
 interface ModuleGroup {
   moduleName: string;
@@ -16,7 +17,7 @@ interface ModuleGroup {
 @Component({
   selector: 'app-role-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent, ModalComponent, NotificationComponent],
+  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, ModalComponent, NotificationComponent],
   templateUrl: './role-management.component.html',
   styleUrls: ['./role-management.component.css']
 })
@@ -30,6 +31,10 @@ export class RoleManagementComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
 
+  pageNumber = 1;
+  pageSize = 10;
+  totalCount = 0;
+
   roleForm: FormGroup;
 
   columns: DataTableColumn<RoleDto>[] = [
@@ -38,7 +43,7 @@ export class RoleManagementComponent implements OnInit {
     { field: 'permissionIds', title: 'Permissions', formatter: (value) => (value?.length ?? 0) + ' permission(s)' }
   ];
 
-  constructor(private fb: FormBuilder, private apiClient: Client) {
+  constructor(private fb: FormBuilder, private apiClient: Client, private notificationService: NotificationService) {
     this.roleForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(200)]]
@@ -52,15 +57,21 @@ export class RoleManagementComponent implements OnInit {
 
   loadRoles(): void {
     this.isLoading = true;
-    this.apiClient.rolesAll().subscribe({
-      next: (roles) => {
-        this.roles = roles;
+    this.apiClient.rolesGET(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.roles = result.items ?? [];
+        this.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  onPageChange(page: number): void {
+    this.pageNumber = page;
+    this.loadRoles();
   }
 
   loadPermissions(): void {
@@ -126,15 +137,17 @@ export class RoleManagementComponent implements OnInit {
       permissionIds: this.selectedPermissionIds
     });
 
-    this.apiClient.roles(payload).subscribe({
+    this.apiClient.rolesPOST(payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.closeModal();
         this.loadRoles();
+        this.notificationService.success('Role saved successfully.');
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = err.error || 'Something went wrong saving the role. Please try again.';
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the role. Please try again.');
+        this.notificationService.error(this.errorMessage);
       }
     });
   }

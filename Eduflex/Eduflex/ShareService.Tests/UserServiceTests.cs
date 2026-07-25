@@ -10,6 +10,7 @@ using ShareService.Models;
 using ShareService.Models.Auth;
 using ShareService.Models.Setting;
 using ShareService.Services;
+using ShareService.Services.Interface;
 using ShareService.Services.Interface.Integration;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,11 +23,12 @@ namespace ShareService.Tests
         private Mock<IUserDB> _userDbMock;
         private Mock<IValidator<UpdateUserProfileModel>> _profileValidatorMock;
         private Mock<IValidator<ChangePasswordModel>> _passwordValidatorMock;
-        private Mock<IValidator<CreateUserModel>> _createUserValidatorMock;
+        private Mock<IValidator<UserModel>> _createUserValidatorMock;
         private Mock<ILogger<UserService>> _loggerMock;
         private Mock<IConfiguration> _configMock;
         private UserService _service;
         private Mock<IAzureEmailService> _emailService;
+        private Mock<IRoleService> _roleServiceMock;
         private Mock<IOptions<WebURLSettings>> _appSettings;
 
         [SetUp]
@@ -35,10 +37,11 @@ namespace ShareService.Tests
             _userDbMock = new Mock<IUserDB>();
             _profileValidatorMock = new Mock<IValidator<UpdateUserProfileModel>>();
             _passwordValidatorMock = new Mock<IValidator<ChangePasswordModel>>();
-            _createUserValidatorMock = new Mock<IValidator<CreateUserModel>>();
+            _createUserValidatorMock = new Mock<IValidator<UserModel>>();
             _loggerMock = new Mock<ILogger<UserService>>();
             _configMock = new Mock<IConfiguration>();
             _emailService = new Mock<IAzureEmailService>();
+            _roleServiceMock = new Mock<IRoleService>();
             _appSettings = new Mock<IOptions<WebURLSettings>>();
 
             // Default validators: valid
@@ -69,6 +72,7 @@ namespace ShareService.Tests
                 _loggerMock.Object,
                 _configMock.Object,
                 _emailService.Object,
+                _roleServiceMock.Object,
                 _appSettings.Object
             );
         }

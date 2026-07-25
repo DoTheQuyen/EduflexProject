@@ -1,22 +1,49 @@
-<nav class="sidebar" [class.collapsed]="isCollapsed">
-  <div class="sidebar-header">
-    <button class="sidebar-toggle-btn" (click)="onToggleClick()" aria-label="Toggle sidebar">
-      <i class="fas fa-bars"></i>
-    </button>
-    <h5 *ngIf="!isCollapsed" class="sidebar-title">
-      {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
-    </h5>
+<nav
+  class="fixed inset-y-0 left-0 z-[1000] flex h-screen flex-col overflow-y-auto bg-navy-700 font-sans text-white transition-[width] duration-300 ease-in-out"
+  [class.w-64]="!isCollapsed"
+  [class.w-16]="isCollapsed">
+
+  <!-- Brand -->
+  <div
+    class="flex items-center gap-3 border-b border-navy-900/40 px-1 py-1"
+    [class.justify-center]="isCollapsed">
+        <img src="assets/logo/eduflex-logo-mark.png" alt="Eduflex logo" class="h-[60px] w-auto shrink-0" />
+    <span *ngIf="!isCollapsed" class="text-[25px] font-semibold tracking-wide text-white">Eduflex</span>
   </div>
 
-  <ul class="sidebar-menu">
-    <li *ngFor="let item of menuItems" class="menu-item">
-      <a 
-        [routerLink]="item.route" 
-        routerLinkActive="active"
+  <!-- Toggle + section label, same row -->
+  <div class="flex items-center gap-2 px-3 py-2" [class.justify-center]="isCollapsed">
+    <button
+      type="button"
+      class="d-btn d-btn-ghost d-btn-sm text-white/70 hover:bg-navy-900/50 hover:text-white"
+      (click)="onToggleClick()"
+      aria-label="Toggle sidebar">
+      <i class="fas text-sm" [class.fa-angles-left]="!isCollapsed" [class.fa-angles-right]="isCollapsed"></i>
+    </button>
+    <span
+      *ngIf="!isCollapsed"
+      class="text-[18px] font-semibold uppercase tracking-widest text-white/90">
+      {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
+    </span>
+  </div>
+
+  <!-- Menu -->
+    <ul class="flex w-full flex-1 flex-col gap-1 p-1">
+    <li *ngFor="let item of menuItems">
+      <a
+        [routerLink]="item.route"
+        routerLinkActive
+        #rla="routerLinkActive"
         [routerLinkActiveOptions]="{ exact: false }"
-        class="menu-link">
-        <i class="fas fa-{{item.icon}} menu-icon"></i>
-        <span *ngIf="!isCollapsed" class="menu-text">{{item.title}}</span>
+        class="flex items-center gap-2 rounded-lg border-solid border-l-4 p-1 py-1 text-md !no-underline transition-colors"
+        [ngClass]="rla.isActive
+          ? 'border-accent bg-navy-900/50 font-semibold !text-white'
+          : 'border-transparent font-medium !text-white/80 hover:bg-navy-900/40 hover:!text-white'"
+        [class.justify-center]="isCollapsed">
+        <i
+          class="fas fa-{{item.icon}} w-4 text-center text-[13px]"
+          [ngClass]="rla.isActive ? 'text-accent' : 'text-white/90'"></i>
+        <span *ngIf="!isCollapsed">{{ item.title }}</span>
       </a>
     </li>
   </ul>

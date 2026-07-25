@@ -3,9 +3,9 @@ using ShareService.Models.Application;
 
 namespace ShareService.Validations.Application
 {
-    public class CreateApplicationModelValidator : AbstractValidator<CreateApplicationModel>
+    public class ApplicationModelValidator : AbstractValidator<ApplicationModel>
     {
-        public CreateApplicationModelValidator()
+        public ApplicationModelValidator()
         {
             RuleFor(x => x.StudentId)
                 .NotEmpty().WithMessage("Student ID is required")

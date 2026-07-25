@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Models.Common;
 
 namespace ShareService.Models.Auth
 {
     [BsonIgnoreExtraElements]
-    public class UserModel
+    public class UserModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -24,9 +25,6 @@ namespace ShareService.Models.Auth
         [BsonElement("lastName")]
         public string LastName { get; set; }
 
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         [BsonElement("roleId")]
         public string RoleId { get; set; }
 
@@ -38,5 +36,20 @@ namespace ShareService.Models.Auth
 
         [BsonElement("lastLogin")]
         public DateTime? LastLogin { get; set; }
+
+        /// <summary>
+        /// Plaintext password supplied on create, hashed into PasswordHash by the service layer, never persisted.
+        /// </summary>
+        [BsonIgnore]
+        public string Password { get; set; } = string.Empty;
+
+        public void ApplyEditableFields(UserModel updateModel)
+        {
+            Email = updateModel.Email;
+            FirstName = updateModel.FirstName;
+            LastName = updateModel.LastName;
+            RoleId = updateModel.RoleId;
+            IsActive = updateModel.IsActive;
+        }
     }
 }

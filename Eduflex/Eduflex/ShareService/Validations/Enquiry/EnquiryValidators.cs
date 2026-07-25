@@ -3,9 +3,9 @@ using ShareService.Models.Enquiry;
 
 namespace ShareService.Validations.Enquiry
 {
-    public class CreateEnquiryModelValidator : AbstractValidator<CreateEnquiryModel>
+    public class EnquiryModelValidator : AbstractValidator<EnquiryModel>
     {
-        public CreateEnquiryModelValidator()
+        public EnquiryModelValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required")

@@ -3,6 +3,7 @@ using Eduflex.DTOs.Auth;
 using Eduflex.Mapping.Auth;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Common;
+using ShareService.Enums.Permissions;
 using ShareService.Services.Interface;
 
 namespace Eduflex.API.Controllers
@@ -10,7 +11,7 @@ namespace Eduflex.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "app")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
@@ -24,46 +25,56 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet]
-        [RequirePermission(PermissionKeys.UsersView)]
-        public async Task<ActionResult<List<UserSummaryDto>>> GetAll()
+        [RequirePermission(PermissionKey.UsersView)]
+        public Task<ActionResult<PagedResult<UserSummaryDto>>> GetAll([FromQuery] PaginationQuery query, [FromQuery] string? roleId, [FromQuery] bool? isActive)
         {
-            var users = await _userService.GetAllUsersAsync();
-            var roles = await _roleService.GetAllRolesAsync();
-            var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
-
-            var result = users.Select(u => new UserSummaryDto
+            return HandleRequestAsync(_logger, "Error in GetAll users endpoint", async () =>
             {
-                Id = u.Id,
-                Email = u.Email,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                RoleId = u.RoleId,
-                RoleName = roleNameById.TryGetValue(u.RoleId ?? string.Empty, out var name) ? name : "Unknown",
-                IsActive = u.IsActive,
-                LastLogin = u.LastLogin
-            }).ToList();
+                var result = await _userService.GetUsersAsync(query, roleId, isActive);
+                var roles = await _roleService.GetAllRolesAsync();
+                var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
 
-            return Ok(result);
+                var items = result.Items.Select(u => new UserSummaryDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    RoleId = u.RoleId,
+                    RoleName = roleNameById.TryGetValue(u.RoleId ?? string.Empty, out var name) ? name : "Unknown",
+                    IsActive = u.IsActive,
+                    LastLogin = u.LastLogin
+                }).ToList();
+
+                return new PagedResult<UserSummaryDto>
+                {
+                    Items = items,
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
+            });
         }
 
         [HttpPost]
-        [RequirePermission(PermissionKeys.UsersAdd)]
-        public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createDto)
+        [RequirePermission(PermissionKey.UsersAdd)]
+        public Task<ActionResult<bool>> CreateUser(CreateUserDto createDto)
         {
-            try
+            return HandleCreateAsync(_logger, "Error in CreateUser endpoint", () => _userService.CreateUserAsync(createDto.ToModel()));
+        }
+
+        [HttpPut("{id}")]
+        [RequirePermission(PermissionKey.UsersEdit)]
+        public Task<ActionResult<bool>> UpdateUser(string id, UserDto updateDto)
+        {
+            return HandleUpdateAsync(_logger, $"Error updating user: {id}", async () =>
             {
-                var user = await _userService.CreateUserAsync(createDto.ToModel());
-                return Ok(user.ToDto());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in CreateUser endpoint");
-                return StatusCode(500, "An error occurred while creating the user");
-            }
+                var actingUserId = GetActingUserId();
+                if (string.IsNullOrEmpty(actingUserId))
+                    throw new UnauthorizedAccessException("User not authenticated");
+
+                return await _userService.UpdateUserAsync(actingUserId, updateDto.ToModel(id));
+            });
         }
     }
 }

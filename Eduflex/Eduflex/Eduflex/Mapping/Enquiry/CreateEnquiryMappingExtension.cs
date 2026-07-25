@@ -5,9 +5,9 @@ namespace Eduflex.Mapping.Enquiry
 {
     public static class CreateEnquiryMappingExtension
     {
-        public static CreateEnquiryModel ToModel(this CreateEnquiryDto dto)
+        public static EnquiryModel ToModel(this CreateEnquiryDto dto)
         {
-            return new CreateEnquiryModel
+            return new EnquiryModel
             {
                 FirstName = dto.FirstName,
                 MiddleName = dto.MiddleName,
@@ -31,7 +31,23 @@ namespace Eduflex.Mapping.Enquiry
                 Mobile = model.Mobile,
                 Enquiry = model.Enquiry,
                 Status = model.Status,
-                CreatedAt = model.CreatedAt
+                Response = model.Response,
+            };
+        }
+
+        public static EnquiryModel ToModel(this EnquiryDto model)
+        {
+            return new EnquiryModel
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Mobile = model.Mobile,
+                Enquiry = model.Enquiry,
+                Status = model.Status,
+                Response = model.Response,
             };
         }
     }

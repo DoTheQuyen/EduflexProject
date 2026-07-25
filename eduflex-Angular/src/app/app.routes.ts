@@ -12,6 +12,7 @@ import { FeedbackManagementComponent } from './components/portal/staff/feedback-
 import { CoursePromotionManagementComponent } from './components/portal/staff/course-promotion-management/course-promotion-management.component';
 import { RoleManagementComponent } from './components/portal/staff/role-management/role-management.component';
 import { UserManagementComponent } from './components/portal/staff/user-management/user-management.component';
+import { DashboardComponent } from './components/portal/staff/dashboard/dashboard.component';
 import { StudentHandbookComponent } from './components/public/student-handbook/student-handbook.component';
 
 export const routes: Routes = [
@@ -33,12 +34,14 @@ export const routes: Routes = [
       {
         path: 'application',
         component: ApplicationComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Application' }
       },
       {
         path: 'profile',
         component: ProfileComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Profile' }
       },
       { path: '', redirectTo: 'application', pathMatch: 'full' } // default child
     ]
@@ -50,13 +53,14 @@ export const routes: Routes = [
     component: HomepageComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'applications', component: ApplicationComponent, canActivate: [AuthGuard] },
-      { path: 'feedback', component: FeedbackManagementComponent, canActivate: [AuthGuard] },
-      { path: 'course-promotions', component: CoursePromotionManagementComponent, canActivate: [AuthGuard] },
-      { path: 'roles', component: RoleManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'] } },
-      { path: 'users', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'] } },
-      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-      { path: '', redirectTo: 'applications', pathMatch: 'full' }
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { breadcrumb: 'Dashboard' } },
+      { path: 'applications', component: ApplicationComponent, canActivate: [AuthGuard], data: { breadcrumb: 'Applications' } },
+      { path: 'feedback', component: FeedbackManagementComponent, canActivate: [AuthGuard], data: { breadcrumb: 'Feedback' } },
+      { path: 'course-promotions', component: CoursePromotionManagementComponent, canActivate: [AuthGuard], data: { breadcrumb: 'Course Promotions' } },
+      { path: 'roles', component: RoleManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'], breadcrumb: 'Roles' } },
+      { path: 'users', component: UserManagementComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['Admin'], breadcrumb: 'Users' } },
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { breadcrumb: 'Profile' } },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 

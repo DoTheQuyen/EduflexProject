@@ -1,23 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { AuthHelperService } from '../../../services/auth-helper.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent], // Remove ApplicationComponent from imports
+  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent implements OnInit, OnDestroy {
   userInfo: any;
   isSidebarCollapsed = false;
+  currentBreadcrumb = '';
+  portalRootLabel = 'Staff Portal';
+  portalRootLink = '/staff-portal';
+
+  private routerSub?: Subscription;
 
   constructor(
     private authHelper: AuthHelperService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +35,27 @@ export class HomepageComponent implements OnInit {
     }
 
     this.userInfo = this.authHelper.getCurrentUser();
+
+    if (this.userInfo?.role === 'Student') {
+      this.portalRootLabel = 'Student Portal';
+      this.portalRootLink = '/student-portal';
+    } else {
+      this.portalRootLabel = 'Staff Portal';
+      this.portalRootLink = '/staff-portal';
+    }
+
+    this.updateBreadcrumb();
+    this.routerSub = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => this.updateBreadcrumb());
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub?.unsubscribe();
+  }
+
+  private updateBreadcrumb(): void {
+    this.currentBreadcrumb = this.route.firstChild?.snapshot.data['breadcrumb'] ?? '';
   }
 
   toggleSidebar(): void {

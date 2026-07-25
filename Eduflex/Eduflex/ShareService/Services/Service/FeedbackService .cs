@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Feedback;
 using ShareService.Services.Interface;
@@ -9,12 +10,12 @@ namespace ShareService.Services
     public class FeedbackService : IFeedbackService
     {
         private readonly IFeedback _feedbackDataAccess;
-        private readonly IValidator<CreateFeedbackModel> _createFeedbackValidator;
+        private readonly IValidator<FeedbackModel> _createFeedbackValidator;
         private readonly ILogger<FeedbackService> _logger;
 
         public FeedbackService(
             IFeedback feedbackDataAccess,
-            IValidator<CreateFeedbackModel> createFeedbackValidator,
+            IValidator<FeedbackModel> createFeedbackValidator,
             ILogger<FeedbackService> logger)
         {
             _feedbackDataAccess = feedbackDataAccess;
@@ -22,9 +23,9 @@ namespace ShareService.Services
             _logger = logger;
         }
 
-        public async Task<FeedbackModel> CreateFeedback(CreateFeedbackModel createDto)
+        public async Task<bool> CreateFeedback(FeedbackModel feedback)
         {
-            var validate = await _createFeedbackValidator.ValidateAsync(createDto);
+            var validate = await _createFeedbackValidator.ValidateAsync(feedback);
             if (!validate.IsValid)
             {
                 var errors = string.Join("; ", validate.Errors.Select(e => e.ErrorMessage));
@@ -32,18 +33,11 @@ namespace ShareService.Services
                 throw new ArgumentException($"Validation failed: {errors}");
             }
 
-            var feedback = new FeedbackModel
-            {
-                Name = createDto.Name,
-                PhotoData = createDto.PhotoData,
-                PhotoContentType = createDto.PhotoContentType,
-                CourseName = createDto.CourseName,
-                Comment = createDto.Comment,
-                CreatedAt = DateTime.UtcNow
-            };
+            feedback.Id = string.Empty;
+            feedback.CreatedAt = DateTime.UtcNow;
 
             var created = await _feedbackDataAccess.CreateFeedbackAsync(feedback);
-            _logger.LogInformation("Created new feedback with ID: {FeedbackId} for {Name}", created.Id, created.Name);
+            _logger.LogInformation("Created new feedback with ID: {FeedbackId} for {Name}", feedback.Id, feedback.Name);
             return created;
         }
 
@@ -52,9 +46,9 @@ namespace ShareService.Services
             return await _feedbackDataAccess.GetLatestFeedbackAsync(count);
         }
 
-        public async Task<List<FeedbackModel>> GetAllFeedback()
+        public async Task<PagedResult<FeedbackModel>> GetFeedback(PaginationQuery query)
         {
-            return await _feedbackDataAccess.GetAllFeedbackAsync();
+            return await _feedbackDataAccess.GetFeedbackAsync(query);
         }
 
         public async Task<bool> DeleteFeedback(string id)

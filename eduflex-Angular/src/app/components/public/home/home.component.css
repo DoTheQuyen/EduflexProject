@@ -25,7 +25,7 @@ h1, h2, h3 {
 .hero {
   background-color: var(--color-navy-900);
   color: white;
-  padding: 4.5rem 2rem 3.5rem;
+  padding: 2rem 1.5rem 1.5rem;
   background-image:
     linear-gradient(rgba(184, 134, 47, 0.18) 1px, transparent 1px),
     linear-gradient(90deg, rgba(184, 134, 47, 0.18) 1px, transparent 1px),
@@ -170,7 +170,7 @@ h1, h2, h3 {
 .stats {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  padding: 2.1rem 2rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .stats-grid {

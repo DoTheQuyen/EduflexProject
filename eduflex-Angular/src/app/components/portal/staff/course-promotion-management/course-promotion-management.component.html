@@ -29,9 +29,20 @@
               [columns]="columns"
               [data]="promotions"
               [rowActions]="rowActions"
-              [settings]="{ pageLength: 10, responsive: true }"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search course or university..."
+              (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)"
               (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
+              <select tableFilters class="form-select" style="max-width: 180px;" (change)="onFeaturedFilterChange($event)">
+                <option value="all">All</option>
+                <option value="true">Featured only</option>
+                <option value="false">Not featured</option>
+              </select>
             </app-data-table>
             <p *ngIf="!isLoading && promotions.length === 0" class="text-center text-muted py-4 mb-0">
               No course promotions yet. Click "Add Course Promotion" to create one.

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using ShareService.Common;
 using ShareService.DataAccess;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Application;
@@ -29,6 +30,7 @@ namespace ShareService.Inject
             // Add your shared DataAccess here
             #region DataAccess
             //services.AddScoped<IMongoDbContext, MongoDbContext>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAuthentication, Authentication>();
             services.AddScoped<IRole, Role>();
             services.AddScoped<IPermissionCatalog, PermissionCatalog>();
@@ -61,14 +63,14 @@ namespace ShareService.Inject
             // Register all validators here
             #region Validators
             services.AddScoped<IValidator<LoginModel>, LoginModelValidator>();
-            services.AddScoped<IValidator<CreateApplicationModel>, CreateApplicationModelValidator>();
+            services.AddScoped<IValidator<ApplicationModel>, ApplicationModelValidator>();
             services.AddScoped<IValidator<UpdateUserProfileModel>, UpdateUserProfileValidator>();
             services.AddScoped<IValidator<ChangePasswordModel>, ChangePasswordValidator>();
-            services.AddScoped<IValidator<CreateEnquiryModel>, CreateEnquiryModelValidator>();
-            services.AddScoped<IValidator<CreateFeedbackModel>, CreateFeedbackModelValidator>();
-            services.AddScoped<IValidator<CreateCoursePromotionModel>, CreateCoursePromotionModelValidator>();
-            services.AddScoped<IValidator<CreateRoleModel>, CreateRoleModelValidator>();
-            services.AddScoped<IValidator<CreateUserModel>, CreateUserModelValidator>();
+            services.AddScoped<IValidator<EnquiryModel>, EnquiryModelValidator>();
+            services.AddScoped<IValidator<FeedbackModel>, FeedbackModelValidator>();
+            services.AddScoped<IValidator<CoursePromotionModel>, CoursePromotionModelValidator>();
+            services.AddScoped<IValidator<RoleModel>, RoleModelValidator>();
+            services.AddScoped<IValidator<UserModel>, CreateUserModelValidator>();
 
             #endregion
 

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Role;
 using ShareService.Services.Interface;
@@ -10,13 +11,13 @@ namespace ShareService.Services
     {
         private readonly IRole _role;
         private readonly IPermissionCatalog _permissionCatalog;
-        private readonly IValidator<CreateRoleModel> _createRoleValidator;
+        private readonly IValidator<RoleModel> _createRoleValidator;
         private readonly ILogger<RoleService> _logger;
 
         public RoleService(
             IRole role,
             IPermissionCatalog permissionCatalog,
-            IValidator<CreateRoleModel> createRoleValidator,
+            IValidator<RoleModel> createRoleValidator,
             ILogger<RoleService> logger)
         {
             _role = role;
@@ -63,29 +64,38 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<RoleModel> CreateRoleAsync(CreateRoleModel createRoleModel)
+        public async Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query)
         {
             try
             {
-                var validate = await _createRoleValidator.ValidateAsync(createRoleModel);
+                return await _role.GetRolesAsync(query);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting paged roles");
+                throw;
+            }
+        }
+
+        public async Task<bool> CreateRoleAsync(RoleModel role)
+        {
+            try
+            {
+                var validate = await _createRoleValidator.ValidateAsync(role);
                 if (!validate.IsValid)
                 {
                     var errors = string.Join("; ", validate.Errors.Select(e => e.ErrorMessage));
                     throw new ArgumentException($"Validation failed: {errors}");
                 }
 
-                var existing = await _role.GetByNameAsync(createRoleModel.Name);
+                var existing = await _role.GetByNameAsync(role.Name);
                 if (existing != null)
                 {
-                    throw new ArgumentException($"A role named '{createRoleModel.Name}' already exists");
+                    throw new ArgumentException($"A role named '{role.Name}' already exists");
                 }
 
-                var role = new RoleModel
-                {
-                    Name = createRoleModel.Name,
-                    Description = createRoleModel.Description,
-                    PermissionIds = createRoleModel.PermissionIds ?? new List<string>()
-                };
+                role.Id = string.Empty;
+                role.PermissionIds ??= new List<string>();
 
                 return await _role.CreateAsync(role);
             }
@@ -95,7 +105,7 @@ namespace ShareService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating role: {RoleName}", createRoleModel.Name);
+                _logger.LogError(ex, "Error creating role: {RoleName}", role.Name);
                 throw;
             }
         }

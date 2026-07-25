@@ -1,13 +1,25 @@
 using Eduflex.DTOs.Enquiry;
+using ShareService.Common;
 using ShareService.Models.Enquiry;
 
 namespace Eduflex.Mapping.Enquiry
 {
     public static class CreateEnquiryMappingExtension
     {
-        public static CreateEnquiryModel ToModel(this CreateEnquiryDto dto)
+        public static EnquiryFilter ToFilter(this EnquiryFilterDto dto)
         {
-            return new CreateEnquiryModel
+            return new EnquiryFilter
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm,
+                Status = dto.Status
+            };
+        }
+
+        public static EnquiryModel ToModel(this CreateEnquiryDto dto)
+        {
+            return new EnquiryModel
             {
                 FirstName = dto.FirstName,
                 MiddleName = dto.MiddleName,
@@ -31,7 +43,23 @@ namespace Eduflex.Mapping.Enquiry
                 Mobile = model.Mobile,
                 Enquiry = model.Enquiry,
                 Status = model.Status,
-                CreatedAt = model.CreatedAt
+                Response = model.Response,
+            };
+        }
+
+        public static EnquiryModel ToModel(this EnquiryDto model)
+        {
+            return new EnquiryModel
+            {
+                Id = model.Id,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Mobile = model.Mobile,
+                Enquiry = model.Enquiry,
+                Status = model.Status,
+                Response = model.Response,
             };
         }
     }

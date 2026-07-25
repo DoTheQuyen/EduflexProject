@@ -1,10 +1,8 @@
-import { Client, ApplicationDetailDto } from '@services/api.services';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Client, ApplicationDto } from '@services/api.services';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { DataTablesModule } from 'angular-datatables';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction  } from '@generic/data-table/data-table.models';
@@ -13,24 +11,22 @@ import { formatDateTime } from '../../../../shared/utils/date-time.util';
 @Component({
   selector: 'app-student-portal',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, DataTablesModule, DataTableComponent],
+  imports: [CommonModule, RouterModule, FormsModule, DataTableComponent],
   templateUrl: './application.component.html',
   // styleUrls: ['./application.component.css']
 })
-export class ApplicationComponent implements OnInit, OnDestroy {
+export class ApplicationComponent implements OnInit {
   userInfo: any;
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject<any>();
 
   studentName: string = 'Student';
   isLoading = true;
-  applications: ApplicationDetailDto[] = [];
-  filteredApplications: ApplicationDetailDto[] = [];
+  applications: ApplicationDto[] = [];
+  filteredApplications: ApplicationDto[] = [];
 
   searchTerm: string = '';
   statusFilter: string = 'all';
 
-  columns: DataTableColumn<ApplicationDetailDto>[] = [
+  columns: DataTableColumn<ApplicationDto>[] = [
   { field: 'description', title: 'Description' },
   { field: 'applicationType', title: 'Type' },
   { field: 'dateApplied', title: 'Date Applied', className: 'text-center',
@@ -47,44 +43,21 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.initializeDataTable();
     this.loadStudentApplications();
     this.userInfo = this.authHelper.getCurrentUser();
   }
 
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
-  initializeDataTable(): void {
-    this.dtOptions = {
-      paging: true,
-      pagingType: 'simple_numbers',
-      pageLength: 10,
-      lengthMenu: [5, 10, 25, 50],
-      searching: true,
-      ordering: true,
-      order: [[2, 'desc']], // sort by DateApplied
-      info: true,
-      autoWidth: false,
-      responsive: true,
-      language: {
-        searchPlaceholder: 'Search applications...'
-      }
-    };
-  }
-
   loadStudentApplications(): void {
-    // 🔑 Assume we store studentId in localStorage after login
-    const userData = localStorage.getItem('userData');
-    const userId: string = userData ? JSON.parse(userData).id ?? '' : '';
-
-    this.appService.applicationsAll().subscribe({
-      next: (apps) => {
+    // A student's own application list is inherently small (bounded by what one
+    // person has applied to) and the search/filter below runs client-side across
+    // the whole list, so we fetch one generous page (the server's max page size)
+    // rather than wiring real prev/next paging into this screen.
+    this.appService.applicationsGET(1, 100, undefined).subscribe({
+      next: (result) => {
+        const apps = result.items ?? [];
         this.applications = apps;
         this.filteredApplications = [...apps];
         this.isLoading = false;
-        this.dtTrigger.next(null); // trigger datatable render
       },
       error: (err) => {
         console.error('Error loading applications', err);
@@ -110,7 +83,6 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     }
 
     this.filteredApplications = filtered;
-    this.dtTrigger.next(null);
   }
 
   onSearchChange(event: any): void {

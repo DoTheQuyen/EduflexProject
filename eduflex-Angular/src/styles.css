@@ -55,11 +55,11 @@
   --color-navy-900: #16233A;
   --color-navy-700: #2E4258;
   --color-accent: #B8862F;
-  --color-accent-dark: #8F6A24;
+  --color-accent-dark: color-mix(in srgb, #B8862F 80%, black);
   --color-success: #1F7A5C;
-  --color-success-dark: #14523F;
+  --color-success-dark: color-mix(in srgb, #1F7A5C 80%, black);
   --color-error: #B3413A;
-  --color-error-dark: #8F332D;
+  --color-error-dark: color-mix(in srgb, #B3413A 80%, black);
   --color-ink: #1B2430;
   --color-muted: #5C6B7A;
   --color-surface: #F5F6F7;
@@ -73,6 +73,7 @@
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow-md: 0 4px 12px rgba(22, 35, 58, 0.3);
   --font-display: Cambria, Georgia, "Times New Roman", serif;
+  --font-body: Arial, sans-serif;
 }
 
 * {
@@ -82,6 +83,6 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
 }

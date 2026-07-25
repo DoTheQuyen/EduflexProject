@@ -1,19 +1,20 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Models.Common;
 
 namespace ShareService.Models.Application
 {
-    public class ApplicationModel
+    public class ApplicationModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [BsonElement("studentId")]
-        public string StudentId { get; set; }
+        public string StudentId { get; set; } = string.Empty;
 
         [BsonElement("studentName")]
-        public string StudentName { get; set; }
+        public string StudentName { get; set; } = string.Empty;
 
         [BsonElement("studentEmail")]
         public string StudentEmail { get; set; }
@@ -32,11 +33,5 @@ namespace ShareService.Models.Application
 
         [BsonElement("status")]
         public string Status { get; set; } = "Pending";
-
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [BsonElement("updatedAt")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

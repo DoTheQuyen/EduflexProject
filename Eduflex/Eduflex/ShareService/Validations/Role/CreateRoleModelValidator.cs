@@ -3,9 +3,9 @@ using ShareService.Models.Role;
 
 namespace ShareService.Validations.Role
 {
-    public class CreateRoleModelValidator : AbstractValidator<CreateRoleModel>
+    public class RoleModelValidator : AbstractValidator<RoleModel>
     {
-        public CreateRoleModelValidator()
+        public RoleModelValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Role name is required")

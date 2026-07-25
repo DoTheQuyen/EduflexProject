@@ -1,13 +1,24 @@
 using Eduflex.DTOs.Feedback;
+using ShareService.Common;
 using ShareService.Models.Feedback;
 
 namespace Eduflex.Mapping.Feedback
 {
     public static class FeedbackMappingExtension
     {
-        public static CreateFeedbackModel ToModel(this CreateFeedbackDto dto)
+        public static PaginationQuery ToFilter(this FeedbackFilterDto dto)
         {
-            return new CreateFeedbackModel
+            return new PaginationQuery
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm
+            };
+        }
+
+        public static FeedbackModel ToModel(this CreateFeedbackDto dto)
+        {
+            return new FeedbackModel
             {
                 Name = dto.Name,
                 PhotoData = dto.PhotoData,

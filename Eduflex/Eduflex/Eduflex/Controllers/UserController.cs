@@ -1,4 +1,4 @@
-﻿using Eduflex.Authorization;
+using Eduflex.Authorization;
 using Eduflex.DTOs.Auth;
 using Eduflex.Mapping.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +13,7 @@ namespace Eduflex.API.Controllers
     [ApiExplorerSettings(GroupName = "app")]
     [Route("api/[controller]")]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UserController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly ILogger<UserController> _logger;
@@ -25,41 +25,34 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet("profile")]
-        public async Task<ActionResult<UserDto>> GetUserProfile()
+        public Task<ActionResult<UserDto>> GetUserProfile()
         {
-            try
+            return HandleRequestAsync(_logger, "Error getting user profile", async () =>
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = GetActingUserId();
                 if (string.IsNullOrEmpty(userId))
-                    return Unauthorized("User not authenticated");
+                    throw new UnauthorizedAccessException("User not authenticated");
 
-                var user = await _userService.GetUserByIdAsync(userId);
-                if (user == null)
-                    return NotFound("User not found");
+                var user = await _userService.GetUserByIdAsync(userId)
+                    ?? throw new KeyNotFoundException("User not found");
 
-                return Ok(user.ToDto());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting user profile for user: {UserId}", User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                return StatusCode(500, "An error occurred while retrieving user profile");
-            }
+                return user.ToDto();
+            });
         }
 
         [HttpPut("profile")]
-        public async Task<ActionResult<UserDto>> UpdateUserProfile(UpdateUserProfileDto updateDto)
+        public Task<ActionResult<UserDto>> UpdateUserProfile(UpdateUserProfileDto updateDto)
         {
-            try
+            return HandleRequestAsync(_logger, "Error updating user profile", async () =>
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = GetActingUserId();
                 if (string.IsNullOrEmpty(userId))
-                    return Unauthorized("User not authenticated");
+                    throw new UnauthorizedAccessException("User not authenticated");
 
-                var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto.ToModel());
-                if (updatedUser == null)
-                    return NotFound("User not found");
+                var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto.ToModel())
+                    ?? throw new KeyNotFoundException("User not found");
 
-                return Ok(new UserDto
+                return new UserDto
                 {
                     Id = updatedUser.Id,
                     Email = updatedUser.Email,
@@ -69,13 +62,8 @@ namespace Eduflex.API.Controllers
                     CreatedAt = updatedUser.CreatedAt,
                     LastLogin = updatedUser.LastLogin,
                     IsActive = updatedUser.IsActive
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating user profile for user: {UserId}", User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                return StatusCode(500, "An error occurred while updating user profile");
-            }
+                };
+            });
         }
 
         [HttpPost("change-password")]
@@ -101,6 +89,4 @@ namespace Eduflex.API.Controllers
             }
         }
     }
-
-   
 }

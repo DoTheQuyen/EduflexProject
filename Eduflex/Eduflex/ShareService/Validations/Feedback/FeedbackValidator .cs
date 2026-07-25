@@ -3,9 +3,9 @@ using ShareService.Models.Feedback;
 
 namespace ShareService.Validations.Feedback
 {
-    public class CreateFeedbackModelValidator : AbstractValidator<CreateFeedbackModel>
+    public class FeedbackModelValidator : AbstractValidator<FeedbackModel>
     {
-        public CreateFeedbackModelValidator()
+        public FeedbackModelValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required")

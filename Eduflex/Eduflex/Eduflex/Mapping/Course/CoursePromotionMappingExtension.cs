@@ -1,13 +1,25 @@
 using Eduflex.DTOs.Course;
+using ShareService.Common;
 using ShareService.Models.CoursePromotion;
 
 namespace Eduflex.Mapping.Course
 {
     public static class CoursePromotionMappingExtension
     {
-        public static CreateCoursePromotionModel ToModel(this CreateCoursePromotionDto dto)
+        public static CoursePromotionFilter ToFilter(this CoursePromotionFilterDto dto)
         {
-            return new CreateCoursePromotionModel
+            return new CoursePromotionFilter
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm,
+                IsFeatured = dto.IsFeatured
+            };
+        }
+
+        public static CoursePromotionModel ToModel(this CreateCoursePromotionDto dto)
+        {
+            return new CoursePromotionModel
             {
                 CourseName = dto.CourseName,
                 UniversityName = dto.UniversityName,

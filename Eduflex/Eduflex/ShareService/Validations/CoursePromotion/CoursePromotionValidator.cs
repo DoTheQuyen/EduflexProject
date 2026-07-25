@@ -3,9 +3,9 @@ using ShareService.Models.CoursePromotion;
 
 namespace ShareService.Validations.CoursePromotion
 {
-    public class CreateCoursePromotionModelValidator : AbstractValidator<CreateCoursePromotionModel>
+    public class CoursePromotionModelValidator : AbstractValidator<CoursePromotionModel>
     {
-        public CreateCoursePromotionModelValidator()
+        public CoursePromotionModelValidator()
         {
             RuleFor(x => x.CourseName)
                 .NotEmpty().WithMessage("Course name is required")

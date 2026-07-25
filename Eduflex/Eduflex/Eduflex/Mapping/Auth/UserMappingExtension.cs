@@ -1,10 +1,23 @@
 ﻿using Eduflex.DTOs.Auth;
+using ShareService.Common;
 using ShareService.Models.Auth;
 
 namespace Eduflex.Mapping.Auth
 {
     public static class UserMappingExtension
     {
+        public static UserFilter ToFilter(this UserFilterDto dto)
+        {
+            return new UserFilter
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm,
+                RoleId = dto.RoleId,
+                IsActive = dto.IsActive
+            };
+        }
+
         public static UserDto ToDto(this UserModel model)
         {
             return new UserDto
@@ -35,15 +48,28 @@ namespace Eduflex.Mapping.Auth
             };
         }
 
-        public static CreateUserModel ToModel(this CreateUserDto dto)
+        public static UserModel ToModel(this CreateUserDto dto)
         {
-            return new CreateUserModel
+            return new UserModel
             {
                 Email = dto.Email,
                 Password = dto.Password,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                RoleId = dto.RoleId
+                RoleId = dto.RoleId,
+            };
+        }
+
+        public static UserModel ToModel(this UserDto dto, string id)
+        {
+            return new UserModel
+            {
+                Id = id,
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                RoleId = dto.RoleId,
+                IsActive = dto.IsActive
             };
         }
     }

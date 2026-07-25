@@ -3,15 +3,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-   background:
-    radial-gradient(120% 90% at 12% -10%, var(--color-navy-700), transparent 85%),
-    linear-gradient(90deg, var(--color-navy-700) 0%, #0c4e83 55%, var(--color-navy-900) 100%);
+  background: linear-gradient(135deg, var(--color-navy-900) 0%, #074dc7 65%, #163a73 100%);
   color: #fff;
-  padding: 0rem 2rem; /* Increased padding to match home container */
+  padding: 0.2rem 2rem; /* Increased padding to match home container */
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Add subtle shadow */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.navbar.navbar-hidden {
+  transform: translateY(-100%);
 }
 
 /* Brand - Updated to be more prominent */
@@ -23,17 +26,14 @@
 
 .nav-brand .logo {
   height: 60px;
-  width: auto;
+  width: 60px;
   object-fit: contain;
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
-  transition: transform 0.3s ease;
+  border-radius: 50%;
+  /* background: #fff; */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.nav-brand .logo:hover {
-  transform: scale(1.06);
-}
-
-.nav-brand h3 {
+.nav-brand h2 {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 700; /* Match home component font weight */
@@ -43,9 +43,8 @@
 .nav-main {
   display: flex;
   align-items: center;
-  gap: 2rem; /* Space between menu and auth section */
+  gap: 1.25rem;
   flex: 1;
-  justify-content: space-between;
 }
 
 /* Navigation Menu - Now next to logo */
@@ -54,6 +53,7 @@
   align-items: center;
   gap: 1.5rem;
   margin-left: 2rem; /* Space from logo */
+  margin-right: auto; /* pushes lang-switch + login button into a grouped cluster on the right */
 }
 
 .nav-menu a {
@@ -67,7 +67,7 @@
 
 .nav-menu a.active,
 .nav-menu a:hover {
-  color: var(--color-accent); /* brass highlight */
+  color: #ffca28; /* gold highlight */
 }
 
 .nav-menu a.active::after {
@@ -77,11 +77,35 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--color-accent);
+  background: #ffca28;
 }
 
-.navbar.navbar-hidden {
-  transform: translateY(-100%);
+.lang-switch {
+  display: flex;
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.lang-switch button {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.lang-switch button:hover {
+  color: #fff;
+}
+
+.lang-switch button.active {
+  background: #ffca28;
+  color: #1e3c72;
 }
 
 /* Auth Section - Moved to right */
@@ -93,7 +117,7 @@
 
 .welcome-text {
   font-size: 0.9rem;
-  color: var(--color-accent);
+  color: #ffca28;
   font-weight: 500;
 }
 
@@ -106,8 +130,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-accent);
-  color: #fff;
+  background: #ffca28;
+  color: #1e3c72;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +174,7 @@
 }
 
 .user-dropdown .dropdown-links a:hover {
-  color: var(--color-navy-900);
+  color: #1e3c72;
 }
 
 .logout-button {
@@ -158,7 +182,7 @@
   width: 100%;
   margin-top: 0.5rem;
   padding: 0.6rem;
-  background: var(--color-error);
+  background: #e53935;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -168,14 +192,14 @@
 }
 
 .logout-button:hover {
-  background: var(--color-error-dark);
+  background: #c62828;
 }
 
-/* Login Button - Updated to match home button style */
+/* Login Button - matches the site's accent (gold) buttons, e.g. "Đặt lịch tư vấn miễn phí" */
 .login-button {
-  background: var(--color-accent);
+  background: #B8862F;
   color: #fff;
-  padding: 0.6rem 1.2rem;
+  padding: 0.2rem 0.8rem;
   border-radius: 6px;
   text-decoration: none;
   font-weight: bold;
@@ -186,7 +210,7 @@
 }
 
 .login-button:hover {
-  background: var(--color-accent-dark);
+  background: #9c7128;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
@@ -207,7 +231,7 @@
   .navbar {
     padding: 0.8rem 1rem;
   }
-  
+
   .mobile-menu-button {
     display: block;
   }
@@ -217,7 +241,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
     flex-direction: column;
     align-items: flex-start;
     padding: 1rem;

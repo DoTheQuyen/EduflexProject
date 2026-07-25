@@ -1,105 +1,98 @@
-import { Component, Input, Output, OnInit, OnDestroy, 
-  Inject, PLATFORM_ID, EventEmitter
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs';
-import { DataTablesModule } from 'angular-datatables'; 
-import { isPlatformBrowser } from '@angular/common';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+import { DataTableColumn, DataTableAction, DataTableRowAction } from './data-table.models';
 
-import { DataTableColumn, DataTableSettings, DataTableAction, DataTableRowAction } from './data-table.models';
-
-type ADTSettingsCompat = any;
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, DataTablesModule],
+  imports: [CommonModule],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css']
 })
-
-
-
-export class DataTableComponent<T> implements OnInit, OnDestroy {
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+export class DataTableComponent<T> implements OnDestroy {
   @Input() columns: DataTableColumn<T>[] = [];
   @Input() data: T[] = [];
   @Input() tableClass: string = 'table table-bordered table-hover mb-0';
-  @Input() settings?: DataTableSettings;
   @Input() rowActions: DataTableRowAction<T>[] = [
     { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' }
   ];
+
+  @Input() pageNumber = 1;
+  @Input() pageSize = 10;
+  @Input() totalCount = 0;
+  @Output() pageChange = new EventEmitter<number>();
+
+  @Input() showSearch = false;
+  @Input() searchPlaceholder = 'Search...';
+  @Output() searchChange = new EventEmitter<string>();
+
   @Output() actionClick = new EventEmitter<DataTableAction<T>>();
 
-  
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<void> = new Subject<void>();
+  private searchInput$ = new Subject<string>();
+  private searchSub: Subscription;
 
-get compatOptions(): ADTSettingsCompat {
-    return this.dtOptions as unknown as ADTSettingsCompat;
-  }
-
-  get compatTrigger(): Subject<ADTSettingsCompat> {
-    return this.dtTrigger as unknown as Subject<ADTSettingsCompat>;
-  }
-
-
-  ngOnInit(): void {
-    this.dtOptions = {
-      paging: true,
-      pageLength: this.settings?.pageLength ?? 10,
-      lengthMenu: this.settings?.lengthMenu ?? [5, 10, 25, 50],
-      searching: this.settings?.searching ?? true,
-      ordering: this.settings?.ordering ?? true,
-      responsive: this.settings?.responsive ?? true,
-    };
-
-    if (isPlatformBrowser(this.platformId)) {
-      // Only trigger DataTables once the plugin has actually attached
-      // itself to jQuery — triggering earlier races the dynamic import.
-      import('datatables.net-bs5').then(() => {
-        this.dtTrigger.next();
-      });
-    }
+  constructor() {
+    this.searchSub = this.searchInput$.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(term => this.searchChange.emit(term));
   }
 
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+    this.searchSub.unsubscribe();
+  }
+
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchInput$.next(value);
+  }
+
+  get totalPages(): number {
+    return this.pageSize === 0 ? 0 : Math.ceil(this.totalCount / this.pageSize);
+  }
+
+  get rangeStart(): number {
+    return this.totalCount === 0 ? 0 : (this.pageNumber - 1) * this.pageSize + 1;
+  }
+
+  get rangeEnd(): number {
+    return Math.min(this.pageNumber * this.pageSize, this.totalCount);
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.pageNumber) {
+      return;
+    }
+    this.pageChange.emit(page);
   }
 
   // Nested field accessor
-  // getCellData(row: T, field: keyof T | string): unknown {
-  //   return (field as string).split('.').reduce(
-  //     (acc: unknown, key: string) => (acc as Record<string, unknown>)?.[key],
-  //     row as Record<string, unknown>
-  //   );
-  // }
-  
-getCellData<T>(
-  row: T,
-  field: keyof T | string,
-  formatter?: (value: T[keyof T], row: T) => string | number
-): string | number {
-  const value = (row as any)[field]; // safe access
+  getCellData<T>(
+    row: T,
+    field: keyof T | string,
+    formatter?: (value: T[keyof T], row: T) => string | number
+  ): string | number {
+    const value = (row as any)[field]; // safe access
 
-  if (formatter) return formatter(value, row);
+    if (formatter) return formatter(value, row);
 
-  if (value == null) return '';
-  if (typeof value === 'string' || typeof value === 'number') return value;
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  return JSON.stringify(value);
-}
-
-
-getStatusBadgeClass(status: unknown): string {
-  const value = String(status);
-  switch (value) {
-    case 'Approved': return 'bg-success';
-    case 'Rejected': return 'bg-danger';
-    case 'Under Review': return 'bg-warning text-dark';
-    case 'Documents Required': return 'bg-info text-dark';
-    default: return 'bg-secondary';
+    if (value == null) return '';
+    if (typeof value === 'string' || typeof value === 'number') return value;
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    return JSON.stringify(value);
   }
-}
 
+  getStatusBadgeClass(status: unknown): string {
+    const value = String(status);
+    switch (value) {
+      case 'Approved': return 'bg-success';
+      case 'Rejected': return 'bg-danger';
+      case 'Under Review': return 'bg-warning text-dark';
+      case 'Documents Required': return 'bg-info text-dark';
+      default: return 'bg-secondary';
+    }
+  }
 }

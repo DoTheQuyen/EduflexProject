@@ -1,9 +1,12 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Enums.Roles;
+using ShareService.Models.Common;
+using ShareService.Models.CoursePromotion;
 
 namespace ShareService.Models.Enquiry
 {
-    public class EnquiryModel
+    public class EnquiryModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -28,9 +31,27 @@ namespace ShareService.Models.Enquiry
         public string Enquiry { get; set; }
 
         [BsonElement("status")]
-        public string Status { get; set; } = "New";
+        public string Status { get; set; } = EnquiryEnums.New.ToString();
 
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [BsonElement("response")]
+        public string? Response { get; set; }
+
+        /// <summary>
+        /// Token returned by the Google reCAPTCHA v2 widget on the client, verified server-side but never persisted.
+        /// </summary>
+        [BsonIgnore]
+        public string RecaptchaToken { get; set; } = string.Empty;
+
+        public void ApplyEditableFields(EnquiryModel updateModel)
+        {
+            FirstName = updateModel.FirstName;
+            MiddleName = updateModel.MiddleName;
+            LastName = updateModel.LastName;
+            Email = updateModel.Email;
+            Mobile = updateModel.Mobile;
+            Enquiry = updateModel.Enquiry;
+            Status = updateModel.Status;
+            Response = updateModel.Response;
+        }
     }
 }

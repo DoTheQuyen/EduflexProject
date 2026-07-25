@@ -3,11 +3,13 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user';
+import { LanguageService } from '../../../services/language.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslatePipe],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -21,6 +23,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
+    public languageService: LanguageService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -40,6 +43,10 @@ export class NavbarComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  setLang(lang: string): void {
+    this.languageService.setLang(lang);
   }
 
   toggleUserDropdown(): void {

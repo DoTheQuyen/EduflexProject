@@ -1,18 +1,20 @@
+using Eduflex.Authorization;
 using Eduflex.DTOs.Course;
 using Eduflex.Mapping.Course;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ShareService.Common;
+using ShareService.Enums.Permissions;
 using ShareService.Models.Setting;
+using ShareService.Services;
 using ShareService.Services.Interface;
-using Eduflex.Authorization;
 
 namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CoursePromotionsController : ControllerBase
+    public class CoursePromotionsController : BaseApiController
     {
         private readonly ICoursePromotionService _coursePromotionService;
         private readonly ILogger<CoursePromotionsController> _logger;
@@ -31,79 +33,58 @@ namespace Eduflex.API.Controllers
         [HttpGet("course-latest")]
         [AllowAnonymous]
         [ApiExplorerSettings(GroupName = "public")]
-        public async Task<ActionResult<List<CoursePromotionDto>>> GetFeaturedActiveCoursePromotions([FromQuery] int? count = null)
+        public Task<ActionResult<List<CoursePromotionDto>>> GetFeaturedActiveCoursePromotions([FromQuery] int? count = null)
         {
-            var effectiveCount = count ?? _coursePromotionSettings.DefaultLatestCount;
-            var promotions = await _coursePromotionService.GetFeaturedActiveCoursePromotions(effectiveCount);
-            return Ok(promotions.Select(p => p.ToDto()).ToList());
+            return HandleRequestAsync(_logger, "Error in GetFeaturedActiveCoursePromotions endpoint", async () =>
+            {
+                var effectiveCount = count ?? _coursePromotionSettings.DefaultLatestCount;
+                var promotions = await _coursePromotionService.GetFeaturedActiveCoursePromotions(effectiveCount);
+                return promotions.Select(p => p.ToDto()).ToList();
+            });
         }
 
-        [HttpGet]
-        [RequirePermission(PermissionKeys.CoursePromotionsView)]
+        [HttpPost("search-course-promotions")]
+        [RequirePermission(PermissionKey.CoursePromotionsView)]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<ActionResult<List<CoursePromotionDto>>> GetAll()
+        public Task<ActionResult<PagedResult<CoursePromotionDto>>> SearchCoursePromotions([FromBody] CoursePromotionFilterDto filterDto)
         {
-            var promotions = await _coursePromotionService.GetAllCoursePromotions();
-            return Ok(promotions.Select(p => p.ToDto()).ToList());
+            return HandleRequestAsync(_logger, "Error in Search course promotions endpoint", async () =>
+            {
+                var result = await _coursePromotionService.GetCoursePromotions(filterDto.ToFilter());
+                return new PagedResult<CoursePromotionDto>
+                {
+                    Items = result.Items.Select(p => p.ToDto()).ToList(),
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
+            });
         }
 
         [HttpPost]
-        [RequirePermission(PermissionKeys.CoursePromotionsAdd)]
+        [RequirePermission(PermissionKey.CoursePromotionsAdd)]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<ActionResult<CoursePromotionDto>> CreateCoursePromotion(CreateCoursePromotionDto createDto)
+        public Task<ActionResult<bool>> CreateCoursePromotion(CreateCoursePromotionDto createDto)
         {
-            try
-            {
-                var promotion = await _coursePromotionService.CreateCoursePromotion(createDto.ToModel());
-                return Ok(promotion.ToDto());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in CreateCoursePromotion endpoint");
-                return StatusCode(500, "An error occurred while saving the course promotion");
-            }
+            return HandleCreateAsync(_logger, "Error in CreateCoursePromotion endpoint", () => _coursePromotionService.CreateCoursePromotion(createDto.ToModel()));
         }
 
         [HttpPut("{id}")]
-        [RequirePermission(PermissionKeys.CoursePromotionsEdit)]
+        [RequirePermission(PermissionKey.CoursePromotionsEdit)]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<ActionResult<CoursePromotionDto>> UpdateCoursePromotion(string id, CreateCoursePromotionDto updateDto)
+        public Task<ActionResult<bool>> UpdateCoursePromotion(string id, CreateCoursePromotionDto updateDto)
         {
-            try
-            {
-                var promotion = await _coursePromotionService.UpdateCoursePromotion(id, updateDto.ToModel());
-                if (promotion == null)
-                {
-                    return NotFound();
-                }
-                return Ok(promotion.ToDto());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in UpdateCoursePromotion endpoint");
-                return StatusCode(500, "An error occurred while updating the course promotion");
-            }
+            return HandleUpdateAsync(_logger, "Error in UpdateCoursePromotion endpoint", () => _coursePromotionService.UpdateCoursePromotion(id, updateDto.ToModel()));
         }
 
         [HttpDelete("{id}")]
-        [RequirePermission(PermissionKeys.CoursePromotionsDelete)]
+        [RequirePermission(PermissionKey.CoursePromotionsDelete)]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<IActionResult> DeleteCoursePromotion(string id)
+        public Task<IActionResult> DeleteCoursePromotion(string id)
         {
-            var deleted = await _coursePromotionService.DeleteCoursePromotion(id);
-            if (!deleted)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            return HandleDeleteAsync(_logger, "Error in DeleteCoursePromotion endpoint", () =>
+                _coursePromotionService.DeleteCoursePromotion(id)
+            );
         }
     }
 }

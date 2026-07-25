@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using ShareService.Models.Application;
+using ShareService.Enums.Permissions;
 using ShareService.Common;
 using Eduflex.DTOs.Application;
 using Eduflex.Mapping.Application;
 using Eduflex.Authorization;
+using Eduflex.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 [ApiExplorerSettings(GroupName = "app")]
-public class ApplicationsController : ControllerBase
+public class ApplicationsController : BaseApiController
 {
     private readonly IApplicationService _applicationService;
     private readonly ILogger<ApplicationsController> _logger;
@@ -25,24 +28,23 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ApplicationDto>>> GetApplications()
+    public Task<ActionResult<PagedResult<ApplicationDto>>> GetApplications([FromQuery] PaginationQuery query)
     {
-        try
+        return HandleRequestAsync(_logger, "Error in GetApplications endpoint", async () =>
         {
             var userId = GetUserIdFromToken();
             if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User ID not found in token");
-            }
+                throw new UnauthorizedAccessException("User ID not found in token");
 
-            var applications = await _applicationService.GetApplicationsByUserId(userId);
-            return Ok(applications);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in GetApplications endpoint");
-            return StatusCode(500, "An error occurred while retrieving applications");
-        }
+            var result = await _applicationService.GetApplicationsByUserId(userId, query);
+            return new PagedResult<ApplicationDto>
+            {
+                Items = result.Items.Select(a => a.ToDto()).ToList(),
+                TotalCount = result.TotalCount,
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize
+            };
+        });
     }
 
     [HttpGet("{id}")]
@@ -104,7 +106,7 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPut("{id}/status")]
-    [RequirePermission(PermissionKeys.ApplicationsEdit)]
+    [RequirePermission(PermissionKey.ApplicationsEdit)]
     public async Task<ActionResult> UpdateApplicationStatus(string id, [FromBody] string status)
     {
         try
@@ -146,4 +148,3 @@ public class ApplicationsController : ControllerBase
     }
 
 }
-

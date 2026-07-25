@@ -2,34 +2,34 @@
 <header class="hero">
   <div class="hero-grid">
     <div>
-      <span class="eyebrow hero-eyebrow">Education consultancy · Australia</span>
-      <h1>Your gateway to studying and migrating in Australia</h1>
-      <p class="hero-sub">Personalised guidance from course selection to visa outcomes — we walk you through each step.</p>
+      <span class="eyebrow hero-eyebrow">{{ 'HOME.HERO.EYEBROW' | translate }}</span>
+      <h1>{{ 'HOME.HERO.TITLE' | translate }}</h1>
+      <p class="hero-sub">{{ 'HOME.HERO.SUBTITLE' | translate }}</p>
       <div class="hero-ctas">
-        <button (click)="openEnquiryModal()" class="btn-primary">Book a free consultation</button>
+        <button (click)="openEnquiryModal()" class="btn-primary">{{ 'HOME.HERO.CTA' | translate }}</button>
         <!-- <button routerLink="/services" class="btn-outline">Explore services</button> -->
       </div>
     </div>
     <div class="journey">
       <div class="journey-step is-active">
-        <div class="journey-label">Enquire</div>
-        <div class="journey-sub">Tell us your goals and background</div>
+        <div class="journey-label">{{ 'HOME.JOURNEY.ENQUIRE_LABEL' | translate }}</div>
+        <div class="journey-sub">{{ 'HOME.JOURNEY.ENQUIRE_SUB' | translate }}</div>
       </div>
       <div class="journey-step">
-        <div class="journey-label">Match your course</div>
-        <div class="journey-sub">Shortlist from 30+ partner institutions</div>
+        <div class="journey-label">{{ 'HOME.JOURNEY.MATCH_LABEL' | translate }}</div>
+        <div class="journey-sub">{{ 'HOME.JOURNEY.MATCH_SUB' | translate }}</div>
       </div>
       <div class="journey-step">
-        <div class="journey-label">Lodge your visa</div>
-        <div class="journey-sub">Subclass 500 or 485, prepared with you</div>
+        <div class="journey-label">{{ 'HOME.JOURNEY.VISA_LABEL' | translate }}</div>
+        <div class="journey-sub">{{ 'HOME.JOURNEY.VISA_SUB' | translate }}</div>
       </div>
       <div class="journey-step">
-        <div class="journey-label">Enrol</div>
-        <div class="journey-sub">Confirm your offer and start dates</div>
+        <div class="journey-label">{{ 'HOME.JOURNEY.ENROL_LABEL' | translate }}</div>
+        <div class="journey-sub">{{ 'HOME.JOURNEY.ENROL_SUB' | translate }}</div>
       </div>
       <div class="journey-step">
-        <div class="journey-label">Arrive in Australia</div>
-        <div class="journey-sub">Settle in with ongoing support</div>
+        <div class="journey-label">{{ 'HOME.JOURNEY.ARRIVE_LABEL' | translate }}</div>
+        <div class="journey-sub">{{ 'HOME.JOURNEY.ARRIVE_SUB' | translate }}</div>
       </div>
     </div>
   </div>
@@ -38,9 +38,9 @@
 <!-- Stats -->
 <section class="stats">
   <div class="container stats-grid">
-    <div><div class="stat-num">500+</div><div class="stat-label">Students assisted</div></div>
-    <div><div class="stat-num">95%</div><div class="stat-label">Visa success rate</div></div>
-    <div><div class="stat-num">30+</div><div class="stat-label">Partner institutions</div></div>
+    <div><div class="stat-num">500+</div><div class="stat-label">{{ 'HOME.STATS.STUDENTS' | translate }}</div></div>
+    <div><div class="stat-num">95%</div><div class="stat-label">{{ 'HOME.STATS.VISA_RATE' | translate }}</div></div>
+    <div><div class="stat-num">30+</div><div class="stat-label">{{ 'HOME.STATS.PARTNERS' | translate }}</div></div>
   </div>
 </section>
 
@@ -48,29 +48,29 @@
 <section class="band why-band">
   <div class="container">
     <div class="band-head">
-      <span class="eyebrow">Why Eduflex</span>
-      <h2>Guidance built around your journey, not our process</h2>
+      <span class="eyebrow">{{ 'HOME.WHY.EYEBROW' | translate }}</span>
+      <h2>{{ 'HOME.WHY.TITLE' | translate }}</h2>
     </div>
     <div class="feature-grid">
       <div class="feature-card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"/></svg>
-        <h3>Comprehensive services</h3>
-        <p>From course selection to post-arrival support, all in one place.</p>
+        <h3>{{ 'HOME.WHY.FEATURE1_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.WHY.FEATURE1_DESC' | translate }}</p>
       </div>
       <div class="feature-card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
-        <h3>A transparent process</h3>
-        <p>We map your pathway clearly, with no hidden surprises.</p>
+        <h3>{{ 'HOME.WHY.FEATURE2_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.WHY.FEATURE2_DESC' | translate }}</p>
       </div>
       <div class="feature-card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3 5 6v6c0 4.2 3 7.4 7 9 4-1.6 7-4.8 7-9V6l-7-3Z"/></svg>
-        <h3>High success rates</h3>
-        <p>Strong outcomes in visa approvals and academic placement.</p>
+        <h3>{{ 'HOME.WHY.FEATURE3_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.WHY.FEATURE3_DESC' | translate }}</p>
       </div>
       <div class="feature-card">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.35-9.5-8.8C.7 8.4 2.3 5 5.8 5c1.9 0 3.3 1 4.2 2.3C11 6 12.4 5 14.3 5c3.4 0 5 3.4 3.2 7.2C15 16.65 12 21 12 21Z"/></svg>
-        <h3>Ongoing support</h3>
-        <p>Your journey doesn't end at enrolment — we help you settle in.</p>
+        <h3>{{ 'HOME.WHY.FEATURE4_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.WHY.FEATURE4_DESC' | translate }}</p>
       </div>
     </div>
   </div>
@@ -80,22 +80,22 @@
 <section class="band story-band">
   <div class="container story-grid">
     <div class="story-text">
-      <span class="eyebrow">Our story</span>
-      <h2>Started by people who once stood where you stand</h2>
-      <p>Founded by professionals who once stood where you stand now, Eduflex was built to fill a gap — to offer personalized, trustworthy guidance to international students pursuing education in Australia.</p>
-      <p class="pull-quote">"Every student deserves clarity, respect, and a roadmap toward success."</p>
-      <p>With over 5 years of combined experience, our team members have helped numerous students navigate visa challenges, study pathways, and life transitions.</p>
+      <span class="eyebrow">{{ 'HOME.STORY.EYEBROW' | translate }}</span>
+      <h2>{{ 'HOME.STORY.TITLE' | translate }}</h2>
+      <p>{{ 'HOME.STORY.PARA1' | translate }}</p>
+      <p class="pull-quote">"{{ 'HOME.STORY.QUOTE' | translate }}"</p>
+      <p>{{ 'HOME.STORY.PARA2' | translate }}</p>
     </div>
     <div class="mission-list">
       <div class="mission-item">
-        <span class="eyebrow">Our mission</span>
-        <h3>Informed decisions, real outcomes</h3>
-        <p>Empower students to make informed decisions and achieve their academic dreams in Australia.</p>
+        <span class="eyebrow">{{ 'HOME.MISSION.EYEBROW' | translate }}</span>
+        <h3>{{ 'HOME.MISSION.TITLE' | translate }}</h3>
+        <p>{{ 'HOME.MISSION.DESC' | translate }}</p>
       </div>
       <div class="mission-item">
-        <span class="eyebrow">Our vision</span>
-        <h3>A trusted name, globally</h3>
-        <p>To be the most trusted education & migration consultancy for students globally.</p>
+        <span class="eyebrow">{{ 'HOME.VISION.EYEBROW' | translate }}</span>
+        <h3>{{ 'HOME.VISION.TITLE' | translate }}</h3>
+        <p>{{ 'HOME.VISION.DESC' | translate }}</p>
       </div>
     </div>
   </div>
@@ -111,28 +111,28 @@
 <section class="band">
   <div class="container">
     <div class="band-head">
-      <span class="eyebrow">Our services</span>
-      <h2>What we help you with</h2>
+      <span class="eyebrow">{{ 'HOME.SERVICES.EYEBROW' | translate }}</span>
+      <h2>{{ 'HOME.SERVICES.TITLE' | translate }}</h2>
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <span class="eyebrow">Subclass 500</span>
-        <h3>Student visa</h3>
-        <p>Advice, application, and renewal support.</p>
+        <span class="eyebrow">{{ 'HOME.SERVICES.STUDENT_VISA_TAG' | translate }}</span>
+        <h3>{{ 'HOME.SERVICES.STUDENT_VISA_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.SERVICES.STUDENT_VISA_DESC' | translate }}</p>
       </div>
       <div class="service-card">
-        <span class="eyebrow">Subclass 485</span>
-        <h3>Graduate visa</h3>
-        <p>Post-study work rights guidance and application.</p>
+        <span class="eyebrow">{{ 'HOME.SERVICES.GRAD_VISA_TAG' | translate }}</span>
+        <h3>{{ 'HOME.SERVICES.GRAD_VISA_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.SERVICES.GRAD_VISA_DESC' | translate }}</p>
       </div>
       <div class="service-card">
-        <span class="eyebrow">Placement</span>
-        <h3>University & course placement</h3>
-        <p>Match your profile to the best institutions across Australia.</p>
+        <span class="eyebrow">{{ 'HOME.SERVICES.PLACEMENT_TAG' | translate }}</span>
+        <h3>{{ 'HOME.SERVICES.PLACEMENT_TITLE' | translate }}</h3>
+        <p>{{ 'HOME.SERVICES.PLACEMENT_DESC' | translate }}</p>
       </div>
     </div>
     <div class="services-foot">
-      <button routerLink="/services" class="btn-quiet">Explore all services</button>
+      <button routerLink="/services" class="btn-quiet">{{ 'HOME.SERVICES.EXPLORE_BTN' | translate }}</button>
     </div>
   </div>
 </section>
@@ -141,10 +141,10 @@
 <section class="cta-band">
   <div class="cta-panel">
     <div>
-      <h2>Ready to start?</h2>
-      <p>Book a free consultation with Eduflex today and let us help you design your future in Australia.</p>
+      <h2>{{ 'HOME.CTA.TITLE' | translate }}</h2>
+      <p>{{ 'HOME.CTA.DESC' | translate }}</p>
     </div>
-    <button (click)="openEnquiryModal()" class="btn-primary">Book a free consultation now</button>
+    <button (click)="openEnquiryModal()" class="btn-primary">{{ 'HOME.CTA.BUTTON' | translate }}</button>
   </div>
 </section>
 
@@ -156,6 +156,6 @@
 
 <div class="enquiry-toast" *ngIf="showEnquirySuccess">
   <span class="enquiry-toast-icon">✓</span>
-  <span class="enquiry-toast-text">Your enquiry has been submitted. Our staff will contact you shortly.</span>
+  <span class="enquiry-toast-text">{{ 'HOME.TOAST_SUCCESS' | translate }}</span>
   <button type="button" class="enquiry-toast-close" (click)="dismissEnquirySuccess()" aria-label="Dismiss">&times;</button>
 </div>

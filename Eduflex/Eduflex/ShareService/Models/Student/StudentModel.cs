@@ -2,11 +2,12 @@
 using MongoDB.Bson.Serialization.Attributes;
 using ShareService.Models.Address;
 using ShareService.Models.Application;
+using ShareService.Models.Common;
 using ShareService.Models.Education;
 
 namespace ShareService.Models.Student
 {
-    public class StudentModel
+    public class StudentModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -45,7 +46,5 @@ namespace ShareService.Models.Student
         [BsonElement("applications")]
         public List<ApplicationModel> Applications { get; set; } = new List<ApplicationModel>();
 
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

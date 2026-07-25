@@ -1,12 +1,13 @@
-﻿using ShareService.Models.Feedback;
+using ShareService.Common;
+using ShareService.Models.Feedback;
 
 namespace ShareService.DataAccess.Interface
 {
     public interface IFeedback
     {
-        Task<FeedbackModel> CreateFeedbackAsync(FeedbackModel feedback);
+        Task<bool> CreateFeedbackAsync(FeedbackModel feedback);
         Task<List<FeedbackModel>> GetLatestFeedbackAsync(int count);
-        Task<List<FeedbackModel>> GetAllFeedbackAsync();
+        Task<PagedResult<FeedbackModel>> GetFeedbackAsync(PaginationQuery query);
         Task<bool> DeleteFeedbackAsync(string id);
     }
 }

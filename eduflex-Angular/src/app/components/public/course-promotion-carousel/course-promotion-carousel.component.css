@@ -12,13 +12,13 @@ section {
   background: white;
 }
 
-.eyebrow {
+/* .eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--color-accent-dark);
-}
+} */
 
 .center-head {
   text-align: center;

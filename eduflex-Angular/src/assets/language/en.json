@@ -1,0 +1,425 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "ABOUT": "About Us",
+    "HANDBOOK": "Student Handbook",
+    "CONTACT": "Contact",
+    "LOGIN": "Login"
+  },
+  "ENQUIRY": {
+    "TITLE": "Book a free consultation",
+    "SUBTITLE": "Tell us a bit about yourself and we'll get back to you shortly.",
+    "FIRST_NAME": "First Name *",
+    "MIDDLE_NAME": "Middle Name",
+    "LAST_NAME": "Last Name *",
+    "EMAIL": "Email *",
+    "MOBILE": "Mobile *",
+    "ENQUIRY_LABEL": "Enquiry *",
+    "SUBMIT": "Submit Enquiry",
+    "SUBMITTING": "Submitting..."
+  },
+  "HOME": {
+    "HERO": {
+      "EYEBROW": "Education consultancy · Australia",
+      "TITLE": "Your gateway to studying and migrating in Australia",
+      "SUBTITLE": "Personalised guidance from course selection to visa outcomes — we walk you through each step.",
+      "CTA": "Book a free consultation"
+    },
+    "JOURNEY": {
+      "ENQUIRE_LABEL": "Enquire",
+      "ENQUIRE_SUB": "Tell us your goals and background",
+      "MATCH_LABEL": "Match your course",
+      "MATCH_SUB": "Shortlist from 30+ partner institutions",
+      "VISA_LABEL": "Lodge your visa",
+      "VISA_SUB": "Subclass 500 or 485, prepared with you",
+      "ENROL_LABEL": "Enrol",
+      "ENROL_SUB": "Confirm your offer and start dates",
+      "ARRIVE_LABEL": "Arrive in Australia",
+      "ARRIVE_SUB": "Settle in with ongoing support"
+    },
+    "STATS": {
+      "STUDENTS": "Students assisted",
+      "VISA_RATE": "Visa success rate",
+      "PARTNERS": "Partner institutions"
+    },
+    "WHY": {
+      "EYEBROW": "Why Eduflex",
+      "TITLE": "Guidance built around your journey, not our process",
+      "FEATURE1_TITLE": "Comprehensive services",
+      "FEATURE1_DESC": "From course selection to post-arrival support, all in one place.",
+      "FEATURE2_TITLE": "A transparent process",
+      "FEATURE2_DESC": "We map your pathway clearly, with no hidden surprises.",
+      "FEATURE3_TITLE": "High success rates",
+      "FEATURE3_DESC": "Strong outcomes in visa approvals and academic placement.",
+      "FEATURE4_TITLE": "Ongoing support",
+      "FEATURE4_DESC": "Your journey doesn't end at enrolment — we help you settle in."
+    },
+    "STORY": {
+      "EYEBROW": "Our story",
+      "TITLE": "Started by people who once stood where you stand",
+      "PARA1": "Founded by professionals who once stood where you stand now, Eduflex was built to fill a gap — to offer personalized, trustworthy guidance to international students pursuing education in Australia.",
+      "QUOTE": "Every student deserves clarity, respect, and a roadmap toward success.",
+      "PARA2": "With over 5 years of combined experience, our team members have helped numerous students navigate visa challenges, study pathways, and life transitions."
+    },
+    "MISSION": {
+      "EYEBROW": "Our mission",
+      "TITLE": "Informed decisions, real outcomes",
+      "DESC": "Empower students to make informed decisions and achieve their academic dreams in Australia."
+    },
+    "VISION": {
+      "EYEBROW": "Our vision",
+      "TITLE": "A trusted name, globally",
+      "DESC": "To be the most trusted education & migration consultancy for students globally."
+    },
+    "SERVICES": {
+      "EYEBROW": "Our services",
+      "TITLE": "What we help you with",
+      "STUDENT_VISA_TAG": "Subclass 500",
+      "STUDENT_VISA_TITLE": "Student visa",
+      "STUDENT_VISA_DESC": "Advice, application, and renewal support.",
+      "GRAD_VISA_TAG": "Subclass 485",
+      "GRAD_VISA_TITLE": "Graduate visa",
+      "GRAD_VISA_DESC": "Post-study work rights guidance and application.",
+      "PLACEMENT_TAG": "Placement",
+      "PLACEMENT_TITLE": "University & course placement",
+      "PLACEMENT_DESC": "Match your profile to the best institutions across Australia.",
+      "EXPLORE_BTN": "Explore all services"
+    },
+    "CTA": {
+      "TITLE": "Ready to start?",
+      "DESC": "Book a free consultation with Eduflex today and let us help you design your future in Australia.",
+      "BUTTON": "Book a free consultation now"
+    },
+    "TOAST_SUCCESS": "Your enquiry has been submitted. Our staff will contact you shortly."
+  },
+  "ABOUT": {
+    "HEADER": {
+      "EYEBROW": "About Eduflex",
+      "TITLE": "Guiding international students to success in Australia",
+      "SUBTITLE": "We've spent over 5 years helping students turn a confusing process into a clear, confident path to studying and settling in Australia."
+    },
+    "MISSION": {
+      "TITLE": "Our mission",
+      "DESC": "To empower international students with clear guidance, transparent advice, and end-to-end support throughout their education journey in Australia."
+    },
+    "VISION": {
+      "TITLE": "Our vision",
+      "DESC": "To be the most trusted education consultancy in Australia, helping students reach their academic and career goals with confidence."
+    },
+    "VALUES": {
+      "TITLE": "Our values",
+      "ITEM1_STRONG": "Integrity & transparency",
+      "ITEM1_REST": "no hidden steps, no surprise costs.",
+      "ITEM2_STRONG": "Student-centric approach",
+      "ITEM2_REST": "advice built around your goals, not a quota.",
+      "ITEM3_STRONG": "Professional excellence",
+      "ITEM3_REST": "consultants held to a consistent standard of care.",
+      "ITEM4_STRONG": "Cultural understanding",
+      "ITEM4_REST": "guidance shaped by lived experience abroad.",
+      "ITEM5_STRONG": "Long-term success",
+      "ITEM5_REST": "support that continues past enrolment."
+    },
+    "APPROACH": {
+      "EYEBROW": "Our approach",
+      "TITLE": "How we work with every student",
+      "STEP1_TITLE": "Enquire",
+      "STEP1_DESC": "Tell us your goals, background, and timeline.",
+      "STEP2_TITLE": "Match your course",
+      "STEP2_DESC": "We shortlist options from 30+ partner institutions.",
+      "STEP3_TITLE": "Lodge your visa",
+      "STEP3_DESC": "Subclass 500 or 485, prepared together, step by step.",
+      "STEP4_TITLE": "Enrol",
+      "STEP4_DESC": "Confirm your offer and lock in start dates.",
+      "STEP5_TITLE": "Arrive in Australia",
+      "STEP5_DESC": "Settle in with ongoing, practical support."
+    },
+    "STORY": {
+      "EYEBROW": "Our story",
+      "TITLE": "Over 5 years of experience",
+      "PARA1": "Eduflex was founded by consultants who personally experienced the challenges of studying and living abroad. With a strong passion for education, we focus on helping international students achieve their dream of studying in Australia with confidence.",
+      "QUOTE": "Education is more than just a degree — it's a life-changing journey.",
+      "PARA2": "Our team combines more than 5 years of hands-on experience guiding students through university admissions, visa processes, and settlement in Australia. Our support doesn't stop at enrolment — we continue helping students find accommodation, adjust to Australian culture, and plan for their future careers."
+    },
+    "STATS": {
+      "STUDENTS": "Students supported",
+      "VISA_RATE": "Visa success rate",
+      "PARTNERS": "Partner institutions"
+    },
+    "TEAM": {
+      "EYEBROW": "Our team",
+      "TITLE": "Meet our consultants",
+      "MEMBER1_NAME": "Tuyet Nguyen",
+      "MEMBER1_TITLE": "Senior Education Consultant",
+      "MEMBER1_TAG": "Visa & settlement guidance",
+      "MEMBER1_BIO": "Tuyet has over 5 years' experience assisting students and families with visa, immigration, and settlement in Australia. She supports each student's journey holistically — beyond just paperwork.",
+      "MEMBER2_NAME": "Quyen Do",
+      "MEMBER2_TITLE": "Senior Education Consultant",
+      "MEMBER2_TAG": "Course selection & placement",
+      "MEMBER2_BIO": "With more than 5 years' experience, Quyen specialises in course selection, university placements, and visa guidance for students entering Australia. She brings a compassionate, detail-oriented approach to each case."
+    }
+  },
+  "HANDBOOK": {
+    "HEADER": {
+      "EYEBROW": "Student Handbook",
+      "TITLE": "Starting your studies in Australia",
+      "SUBTITLE": "A practical reference for arriving, enrolling, and settling in — from the week before you land to your first exam period. Bookmark this page; you won't need all of it on day one."
+    },
+    "TOC": {
+      "LABEL": "Contents",
+      "ITEM01": "01 · Before you arrive",
+      "ITEM02": "02 · First two weeks",
+      "ITEM03": "03 · Enrolment & calendar",
+      "ITEM04": "04 · Classes & support",
+      "ITEM05": "05 · Culture & life",
+      "ITEM06": "06 · Money & cost of living",
+      "ITEM07": "07 · Housing",
+      "ITEM08": "08 · Transport",
+      "ITEM09": "09 · Work rights & jobs",
+      "ITEM10": "10 · Health & safety",
+      "ITEM11": "11 · Getting help",
+      "ITEM12": "12 · Quick reference"
+    },
+    "CH01": {
+      "EYEBROW": "01 · Before you arrive",
+      "TITLE": "Six weeks out: what to lock in first",
+      "CHECK1": "<strong>Confirmation of Enrolment (CoE)</strong> issued by your institution — everything else, including your visa, is built on this.",
+      "CHECK2": "<strong>Student visa (subclass 500)</strong> granted, with your visa grant letter saved as PDF and printed.",
+      "CHECK3": "<strong>Overseas Student Health Cover (OSHC)</strong> purchased for your full visa duration — it's a visa condition, not optional.",
+      "CHECK4": "<strong>Accommodation</strong> booked for at least your first 2–4 weeks so you're not house-hunting jet-lagged.",
+      "CHECK5": "<strong>Flights</strong> booked to arrive a few days before orientation, not the night before.",
+      "CHECK6": "Scans of your <strong>passport, visa grant, CoE, OSHC certificate, and transcripts</strong> saved to cloud storage, separate from your luggage.",
+      "NOTE": "<strong>Seasons are reversed.</strong> December–February is summer, June–August is winter. A Semester 1 start (February) means arriving in late-summer heat; a Semester 2 start (July) means arriving in winter — pack accordingly.",
+      "LUGGAGE_TITLE": "Hand luggage, not checked bags",
+      "LUGGAGE1": "Passport, visa grant letter, CoE, and OSHC certificate",
+      "LUGGAGE2": "Proof of accommodation for your first nights",
+      "LUGGAGE3": "A small amount of Australian dollars for transport and food on arrival",
+      "LUGGAGE4": "Prescription medication, in original packaging with your name on it"
+    },
+    "CH02": {
+      "EYEBROW": "02 · Your first two weeks",
+      "TITLE": "The admin chain: do these in order",
+      "INTRO": "A bank account needs an address, a phone plan often needs a bank card, and paid work needs a tax number — each step unlocks the next.",
+      "TH_TASK": "Task",
+      "TH_WHY": "Why it matters",
+      "TH_NEED": "What you'll need",
+      "ROW1_TASK": "Attend orientation",
+      "ROW1_WHY": "Finalises enrolment, campus tour, ID card, support services",
+      "ROW1_NEED": "CoE, passport",
+      "ROW2_TASK": "Get your student ID",
+      "ROW2_WHY": "Needed for library, labs, printing, transport concessions",
+      "ROW2_NEED": "Enrolment confirmation",
+      "ROW3_TASK": "Open a bank account",
+      "ROW3_WHY": "Get paid if you work; pay rent and bills without cash",
+      "ROW3_NEED": "Passport, visa, enrolment letter, local address",
+      "ROW4_TASK": "Apply for a Tax File Number",
+      "ROW4_WHY": "Required before starting any paid job — free via the ATO",
+      "ROW4_NEED": "Passport, visa details, address",
+      "ROW5_TASK": "Set up myGov",
+      "ROW5_WHY": "Links Medicare/OSHC, tax, and (if eligible) Centrelink",
+      "ROW5_NEED": "Email, mobile number",
+      "ROW6_TASK": "Activate OSHC",
+      "ROW6_WHY": "Confirms you can claim doctor visits from day one",
+      "ROW6_NEED": "OSHC certificate, policy number",
+      "TIP": "<strong>Some banks let you open an account online before you land</strong> — CommBank, NAB, and ANZ all offer this to international students with a CoE, so you're not carrying cash for two weeks."
+    },
+    "CH03": {
+      "EYEBROW": "03 · Enrolment & the academic calendar",
+      "TITLE": "Know your census date",
+      "CARD1_TITLE": "Typical semester structure",
+      "CARD1_ITEM1": "Semester 1: late February – June",
+      "CARD1_ITEM2": "Semester 2: July – November",
+      "CARD1_ITEM3": "A mid-year and end-of-year break of several weeks",
+      "CARD1_ITEM4": "Some courses run trimesters instead — check your own calendar",
+      "CARD2_TITLE": "Inside each semester",
+      "CARD2_ITEM1": "Orientation / O-Week before teaching starts",
+      "CARD2_ITEM2": "A census date, usually ~3–4 weeks in",
+      "CARD2_ITEM3": "A mid-semester break (~1 week)",
+      "CARD2_ITEM4": "A formal exam or assessment period at the end",
+      "WARN": "<strong>The census date is the most important date each semester.</strong> Withdraw before it and there's no financial or academic penalty. Withdraw after, and you're generally still billed, and it can appear as a fail. Put every census date in your calendar the day enrolment opens.",
+      "ENROL_TITLE": "Enrolling in units each semester",
+      "ENROL1": "Check your course structure — core vs elective units, prerequisites — in your course handbook.",
+      "ENROL2": "Enrol via the student portal before the deadline.",
+      "ENROL3": "Confirm your study load meets your visa's full-time requirement.",
+      "ENROL4": "Check your timetable for clashes before census."
+    },
+    "CH04": {
+      "EYEBROW": "04 · Classes, grading & support",
+      "TITLE": "What's different from many overseas systems",
+      "ITEM1": "<strong>Lectures and tutorials are separate</strong> — the tutorial or lab is small, discussion-based, and usually where attendance is actually tracked.",
+      "ITEM2": "<strong>Assessment is continuous</strong>, not one final exam — expect essays, quizzes, presentations, and group work across the semester.",
+      "ITEM3": "<strong>Academic integrity is enforced strictly</strong>, including on AI-generated text. When in doubt, cite it.",
+      "ITEM4": "<strong>Grades</strong> typically run High Distinction / Distinction / Credit / Pass / Fail — exact bands vary by institution.",
+      "ITEM5": "<strong>Emailing academic staff is normal</strong> — most list consultation hours and reply within a few working days.",
+      "CARD1_TITLE": "Academic support",
+      "CARD1_ITEM1": "Academic skills / writing centres",
+      "CARD1_ITEM2": "Peer mentoring and study groups",
+      "CARD1_ITEM3": "Library research consultations",
+      "CARD1_ITEM4": "Disability and accessibility services",
+      "CARD2_TITLE": "Personal support",
+      "CARD2_ITEM1": "Free, confidential counselling",
+      "CARD2_ITEM2": "International student advisors",
+      "CARD2_ITEM3": "Student union / guild advocacy",
+      "CARD2_ITEM4": "Cultural, faith, and LGBTQ+ societies"
+    },
+    "CH05": {
+      "EYEBROW": "05 · Culture & everyday life",
+      "TITLE": "Settling into a multicultural country",
+      "INTRO": "Roughly a third of Australia's residents were born overseas. You will not be the only international student, and you won't be far from food, faith communities, or language from home.",
+      "QUOTE": "Before European settlement, this land was cared for by hundreds of Aboriginal and Torres Strait Islander nations, whose connection to it spans over 60,000 years. You'll hear an \"Acknowledgement of Country\" at orientation, graduations, and public events — a normal, respectful part of Australian civic life.",
+      "SUB_TITLE": "Social norms worth knowing early",
+      "ITEM1": "<strong>Directness reads as normal, not rude</strong> — first names are used quickly, including with lecturers.",
+      "ITEM2": "<strong>Tipping isn't expected</strong> — hospitality staff earn a legal minimum wage.",
+      "ITEM3": "<strong>Punctuality matters for class</strong>; social plans are looser.",
+      "ITEM4": "<strong>Queuing is taken seriously</strong> — wait your turn.",
+      "ITEM5": "<strong>Public conversation is kept low-key</strong>, especially on transport."
+    },
+    "CH06": {
+      "EYEBROW": "06 · Money & cost of living",
+      "TITLE": "Budgeting week to week",
+      "INTRO": "Costs vary sharply by city — Sydney and Melbourne run highest, regional campuses noticeably cheaper. Broad weekly ranges for a student sharing accommodation, in AUD:",
+      "TH_CAT": "Category",
+      "TH_RANGE": "Typical weekly range",
+      "TH_NOTES": "Notes",
+      "ROW1_CAT": "Shared rent",
+      "ROW1_NOTES": "Higher in inner-city Sydney/Melbourne; lower regionally",
+      "ROW2_CAT": "Groceries",
+      "ROW2_NOTES": "Cooking at home is far cheaper than eating out",
+      "ROW3_CAT": "Public transport",
+      "ROW3_NOTES": "Concession fares reduce this where eligible",
+      "ROW4_CAT": "Utilities (shared)",
+      "ROW4_NOTES": "Spikes in summer (aircon) and winter (heating)",
+      "ROW5_CAT": "Phone plan",
+      "ROW5_NOTES": "Prepaid resellers are usually cheapest",
+      "WARN": "<strong>Never wire money, share your banking password, or send a rental deposit before inspecting in person or by video call.</strong> Rental and job scams specifically target new arrivals in their first weeks."
+    },
+    "CH07": {
+      "EYEBROW": "07 · Housing",
+      "TITLE": "On-campus vs share housing",
+      "CARD1_TITLE": "On-campus / residential colleges",
+      "CARD1_ITEM1": "Simplest option for your first semester — no lease, bills usually included",
+      "CARD1_ITEM2": "Built-in social community, closest to classes",
+      "CARD1_ITEM3": "Apply early; popular colleges fill months ahead",
+      "CARD2_TITLE": "Off-campus share housing",
+      "CARD2_ITEM1": "Cheaper long-term; listed on realestate.com.au, domain.com.au, flatmates.com.au",
+      "CARD2_ITEM2": "Requires a lease and a bond (typically 4 weeks' rent, held by a government bond authority)",
+      "CARD2_ITEM3": "Inspect in person or via live video call before paying anything",
+      "TIP": "<strong>Book temporary accommodation for your first two to four weeks</strong> rather than signing a 12-month lease sight-unseen. It gives you time to inspect share houses in person once you know your timetable."
+    },
+    "CH08": {
+      "EYEBROW": "08 · Transport & getting around",
+      "TITLE": "Get your smart card in week one",
+      "TH_CITY": "City / state",
+      "TH_CARD": "Smart card",
+      "TH_COVERS": "Covers",
+      "ROW1_CITY": "Sydney, NSW",
+      "ROW1_COVERS": "Train, bus, ferry, light rail",
+      "ROW2_CITY": "Melbourne, VIC",
+      "ROW2_COVERS": "Train, tram, bus",
+      "ROW3_CITY": "Brisbane, QLD",
+      "ROW3_COVERS": "Train, bus, ferry",
+      "ROW4_CITY": "Perth, WA",
+      "ROW4_COVERS": "Train, bus, ferry",
+      "ROW5_CITY": "Adelaide, SA",
+      "ROW5_COVERS": "Train, tram, bus",
+      "NOTE": "<strong>Concession fares aren't automatic for international students</strong> — eligibility differs by state and sometimes visa subclass. Ask your international student office which concession, if any, applies to you.",
+      "INTRO": "Australia drives on the <strong>left</strong>. You can generally drive on a valid overseas licence for a limited period after arrival — the exact window is set by your state's road authority."
+    },
+    "CH09": {
+      "EYEBROW": "09 · Work rights & jobs",
+      "TITLE": "Know your visa's work-hour limit",
+      "WARN": "<strong>Subclass 500 work rights are currently capped at 48 hours per fortnight while your course is in session</strong>, uncapped during official breaks. These rules change periodically — confirm the current limit with the Department of Home Affairs or your institution before starting any job.",
+      "ITEM1": "Get your <strong>Tax File Number</strong> ready — without one, tax is withheld at the top rate.",
+      "ITEM2": "Confirm you'll be paid at least the national minimum wage, with payslips.",
+      "ITEM3": "Check you're being paid <strong>superannuation</strong> if eligible.",
+      "ITEM4": "The Fair Work Ombudsman investigates underpayment for free and confidentially, regardless of visa status."
+    },
+    "CH10": {
+      "EYEBROW": "10 · Health & safety",
+      "TITLE": "Cover, sun, and emergencies",
+      "ITEM1": "<strong>OSHC</strong> is your primary cover for the length of your visa and is compulsory.",
+      "ITEM2": "Some nationalities have a <strong>Reciprocal Health Care Agreement</strong> with Australia — check if yours applies.",
+      "ITEM3": "Book a GP for non-urgent issues; save emergency departments for genuine emergencies.",
+      "TIP": "<strong>Australia has some of the world's highest UV levels</strong>, even on mild days. Slip on a shirt, slop on SPF 30+, slap on a hat, seek shade, slide on sunglasses.",
+      "TH_SITUATION": "Situation",
+      "TH_NUMBER": "Number",
+      "ROW1_SITUATION": "Police / Fire / Ambulance (life-threatening)",
+      "ROW2_SITUATION": "Police assistance (non-urgent)",
+      "ROW3_SITUATION": "Poisons Information Centre",
+      "ROW4_SITUATION": "Lifeline (24/7 crisis support)",
+      "ROW5_SITUATION": "Beyond Blue (mental health support)",
+      "ROW6_SITUATION": "1800RESPECT"
+    },
+    "CH11": {
+      "EYEBROW": "11 · Getting help",
+      "TITLE": "Use your support services early",
+      "ITEM1": "<strong>International student advisors</strong> — visa conditions, OSHC claims, general welfare.",
+      "ITEM2": "<strong>Student union / guild</strong> — free advocacy for academic and tenancy disputes.",
+      "ITEM3": "<strong>Counselling services</strong> — confidential, usually free for a set number of sessions.",
+      "ITEM4": "<strong>Study Australia</strong> and the <strong>Department of Home Affairs</strong> websites are the authoritative sources for visa condition changes."
+    },
+    "CH12": {
+      "EYEBROW": "12 · Quick reference",
+      "TITLE": "Slang you'll hear in week one",
+      "TH_TERM": "Term",
+      "TH_MEANS": "Means",
+      "ROW1_MEANS": "Afternoon",
+      "ROW2_MEANS": "Petrol / service station",
+      "ROW3_MEANS": "You're welcome / it's fine",
+      "ROW4_MEANS": "A greeting, not a real question",
+      "ROW5_MEANS": "University",
+      "ROW6_MEANS": "Duvet / quilt",
+      "ROW7_MEANS": "Bring a dish to share at a gathering"
+    },
+    "FOOTER": "General guidance only, current as of publication — visa conditions, transport cards, and fees change over time. Always confirm current rules with your institution's international student office and the Department of Home Affairs before acting on anything time-sensitive."
+  },
+  "LOGIN": {
+    "TITLE": "Welcome to Eduflex",
+    "SUBTITLE": "Sign in to your account to continue",
+    "EMAIL_LABEL": "Email Address",
+    "EMAIL_PLACEHOLDER": "Enter your email address",
+    "PASSWORD_LABEL": "Password",
+    "PASSWORD_PLACEHOLDER": "Enter your password",
+    "REMEMBER_ME": "Remember me",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "SIGNING_IN": "Signing in...",
+    "SIGN_IN": "Sign In",
+    "DIVIDER": "Or continue with",
+    "NO_ACCOUNT": "Don't have an account?",
+    "CONTACT_TO_REGISTER": "Contact us to register",
+    "LOGIN_SUCCESS": "Login successful! Redirecting...",
+    "FORGOT_PASSWORD_MSG": "Password reset functionality coming soon! Please contact support.",
+    "ERRORS": {
+      "REQUIRED": "This field is required",
+      "EMAIL_INVALID": "Please enter a valid email address",
+      "PASSWORD_MIN_LENGTH": "Password must be at least {{length}} characters",
+      "INVALID_FIELD": "Invalid field",
+      "UNAUTHORIZED": "Invalid email or password.",
+      "BAD_REQUEST": "Check your email and password format.",
+      "NO_CONNECTION": "Unable to connect to server.",
+      "UNEXPECTED": "Unexpected error. Try again."
+    }
+  },
+  "PROMO_CAROUSEL": {
+    "EYEBROW": "Course offers this semester",
+    "TITLE": "Scholarships from our partner universities",
+    "LOCATION": "Location",
+    "TUITION": "Tuition",
+    "OPPORTUNITIES": "Opportunities",
+    "OFFER_ENDS": "Offer ends",
+    "VISIT_WEBSITE": "Visit university website",
+    "ENQUIRE": "Enquire about this course",
+    "PREV_ARIA": "Previous offer",
+    "NEXT_ARIA": "Next offer",
+    "GO_TO_ARIA": "Go to offer {{num}}"
+  },
+  "FEEDBACK_CAROUSEL": {
+    "EYEBROW": "What our students say",
+    "TITLE": "Real feedback from students we've guided",
+    "PREV_ARIA": "Previous feedback",
+    "NEXT_ARIA": "Next feedback",
+    "GO_TO_ARIA": "Go to feedback {{num}}"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© {{year}} Quyen Do. All rights reserved."
+  }
+}

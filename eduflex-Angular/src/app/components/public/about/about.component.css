@@ -1,5 +1,5 @@
 section {
-  padding: 3rem 0;
+  padding: 4rem 0;
 }
 
 .container {
@@ -8,44 +8,45 @@ section {
   padding: 0 2rem;
 }
 
-h1, h2, h3 {
-  font-family: var(--font-display);
-  font-weight: 400;
-}
-
 .eyebrow {
   font-size: 0.8rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--color-accent-dark);
+  display: block;
+  margin-bottom: 0.4rem;
 }
 
 /* Header */
 .about-header {
   text-align: center;
-  padding: 4rem 2rem 3rem;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  padding: 4rem 0 2rem;
+  background: white;
 }
 
 .about-header h1 {
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   color: var(--color-navy-900);
-  margin: 0.6rem 0 1rem;
+  margin: 0.4rem 0 1rem;
 }
 
 .header-sub {
-  max-width: 56ch;
-  margin: 0 auto;
+  font-size: 1.1rem;
   color: var(--color-muted);
-  font-size: 1.05rem;
+  max-width: 60ch;
+  margin: 0 auto;
 }
 
-/* Section heading block */
+/* Bands */
+.band {
+  background: white;
+}
+
 .band-head {
   max-width: 60ch;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
 }
 
 .band-head h2 {
@@ -57,93 +58,84 @@ h1, h2, h3 {
 /* Mission / Vision / Values */
 .mission-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
 .mission-card {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 1.75rem;
+  padding: 2rem;
+  text-align: center;
   background: white;
+  transition: border-color 0.15s ease;
+}
+
+.mission-card:hover {
+  border-color: var(--color-accent);
 }
 
 .mission-icon {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 1rem;
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 1rem;
   color: var(--color-accent);
 }
 
 .mission-card h3 {
-  font-size: 1.15rem;
   color: var(--color-ink);
   margin-bottom: 0.75rem;
+  font-size: 1.1rem;
 }
 
 .mission-card p {
   color: var(--color-muted);
+  font-size: 0.9rem;
   line-height: 1.6;
-  font-size: 0.95rem;
-  margin: 0;
 }
 
 .values-list {
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-}
-
-.values-list li {
+  gap: 0.6rem;
+  text-align: left;
   color: var(--color-muted);
-  line-height: 1.5;
   font-size: 0.9rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 0.75rem;
+  line-height: 1.6;
 }
 
-.values-list li:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.values-list strong {
-  color: var(--color-ink);
-  font-weight: 600;
-}
-
-/* How we work */
+/* Approach / Steps */
 .approach-band {
   background: var(--color-surface);
 }
 
 .step-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
 }
 
 .step-card {
+  background: white;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 1.5rem 1.25rem;
-  background: white;
+  padding: 1.5rem;
 }
 
 .step-num {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent-dark);
+  background: var(--color-navy-900);
+  color: white;
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   margin-bottom: 0.9rem;
 }
 
@@ -154,18 +146,25 @@ h1, h2, h3 {
 }
 
 .step-card p {
-  font-size: 0.85rem;
   color: var(--color-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
   margin: 0;
 }
 
 /* Story */
+.story-band {
+  background: white;
+}
+
 .story-text {
-  max-width: 72ch;
+  max-width: 75ch;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .story-text h2 {
-  font-size: 1.9rem;
+  font-size: 1.75rem;
   color: var(--color-navy-900);
   margin-top: 0.4rem;
 }
@@ -173,8 +172,8 @@ h1, h2, h3 {
 .story-text p {
   color: var(--color-muted);
   font-size: 1rem;
-  line-height: 1.65;
   margin-top: 1rem;
+  line-height: 1.6;
 }
 
 .pull-quote {
@@ -184,13 +183,17 @@ h1, h2, h3 {
   color: var(--color-navy-900);
   border-left: 2px solid var(--color-accent);
   padding-left: 1.1rem;
-  margin: 1.5rem 0;
+  margin: 1.5rem auto;
   line-height: 1.5;
+  text-align: left;
+  max-width: 55ch;
 }
 
 /* Stats */
 .stats {
-  background: var(--color-navy-900);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding: 2.1rem 2rem;
 }
 
@@ -201,52 +204,54 @@ h1, h2, h3 {
 }
 
 .stats-grid > div + div {
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid var(--color-border);
 }
 
 .stat-num {
   font-family: var(--font-display);
-  font-size: 3rem;
-  color: white;
+  font-size: 2rem;
+  color: var(--color-navy-900);
 }
 
 .stat-label {
   font-size: 0.85rem;
-  color: #C7CEDA;
+  color: var(--color-muted);
   margin-top: 0.2rem;
 }
 
 /* Team */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
 }
 
 .team-member {
+  background: white;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  background: white;
-  overflow: hidden;
-}
-.team-member img {
-  width: 50%;
-  height: 300px;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  transition: border-color 0.15s ease;
 }
 
-.team-body {
-  padding: 1.5rem;
-  text-align: center;
+.team-member:hover {
+  border-color: var(--color-accent);
+}
+
+.team-member img {
+  width: 240px;
+  height: 300px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 5%;
+  margin-bottom: 1rem;
 }
 
 .team-body h3 {
   font-size: 1.2rem;
-  color: var(--color-ink);
-  margin-bottom: 0.2rem;
+  color: var(--color-navy-900);
+  margin-bottom: 0.25rem;
 }
 
 .team-body .title {
@@ -257,15 +262,15 @@ h1, h2, h3 {
 
 .pill {
   display: inline-block;
-  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
   font-weight: 600;
-  padding: 0.3rem 0.7rem;
-  border-radius: 20px;
   margin-bottom: 0.9rem;
 }
 
 .pill-gold {
-  background: rgba(184, 134, 47, 0.14);
+  background: rgba(184, 134, 47, 0.12);
   color: var(--color-accent-dark);
 }
 
@@ -273,36 +278,17 @@ h1, h2, h3 {
   color: var(--color-muted);
   font-size: 0.9rem;
   line-height: 1.6;
-  margin: 0;
 }
 
 /* Responsive */
-@media (max-width: 992px) {
-  .step-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
-  .about-header h1 {
-    font-size: 1.9rem;
-  }
-  .step-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .stats-grid {
     grid-template-columns: 1fr;
   }
   .stats-grid > div + div {
     border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid var(--color-border);
     padding-top: 1rem;
     margin-top: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .step-grid {
-    grid-template-columns: 1fr;
   }
 }

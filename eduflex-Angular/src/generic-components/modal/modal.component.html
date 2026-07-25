@@ -1,4 +1,4 @@
-<div class="modal-backdrop-generic" (click)="onBackdropClick()">
+<div class="modal-backdrop-generic">
   <div class="modal-panel-generic" [ngClass]="'modal-' + size" (click)="$event.stopPropagation()">
 
     <div class="modal-header-generic">
@@ -11,18 +11,28 @@
     </fieldset>
 
     <div class="modal-footer-generic">
-      <button *ngIf="showDelete" type="button" class="btn btn-outline-danger" [disabled]="isSaving" (click)="delete.emit()">
+      <button *ngIf="showDelete" type="button" class="btn btn-outline-danger" [disabled]="isSaving" (click)="onDeleteClick()">
         <i class="fas fa-trash me-1"></i>{{ deleteLabel }}
       </button>
-      <button *ngIf="showCancel" type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="cancel.emit()">
+      <button *ngIf="showCancel" type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="onCancelClick()">
         {{ cancelLabel }}
       </button>
-      <button *ngIf="showUpdate" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="update.emit()">
+      <button *ngIf="showUpdate" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="onUpdateClick()">
         <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>{{ isSaving ? savingLabel : updateLabel }}
       </button>
-      <button *ngIf="showSave" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="save.emit()">
+      <button *ngIf="showSave" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="onSaveClick()">
         <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>{{ isSaving ? savingLabel : saveLabel }}
       </button>
+    </div>
+
+    <div class="confirm-overlay-generic" *ngIf="pendingAction">
+      <div class="confirm-box-generic">
+        <p class="confirm-message-generic">{{ pendingMessage }}</p>
+        <div class="confirm-actions-generic">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelPendingAction()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="confirmPendingAction()">OK</button>
+        </div>
+      </div>
     </div>
 
   </div>

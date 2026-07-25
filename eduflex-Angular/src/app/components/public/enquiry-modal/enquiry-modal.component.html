@@ -2,25 +2,25 @@
   <div class="modal-panel" (click)="$event.stopPropagation()">
     <button type="button" class="modal-close" (click)="close()" aria-label="Close">&times;</button>
 
-    <h2>Book a free consultation</h2>
-    <p class="modal-subtitle">Tell us a bit about yourself and we'll get back to you shortly.</p>
+    <h2>{{ 'ENQUIRY.TITLE' | translate }}</h2>
+    <p class="modal-subtitle">{{ 'ENQUIRY.SUBTITLE' | translate }}</p>
 
     <form [formGroup]="enquiryForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="form-group">
-          <label for="firstName">First Name *</label>
+          <label for="firstName">{{ 'ENQUIRY.FIRST_NAME' | translate }}</label>
           <input id="firstName" type="text" formControlName="firstName" [class.invalid]="isFieldInvalid('firstName')">
           <span class="field-error" *ngIf="isFieldInvalid('firstName')">{{ getFieldError('firstName') }}</span>
         </div>
 
         <div class="form-group">
-          <label for="middleName">Middle Name</label>
+          <label for="middleName">{{ 'ENQUIRY.MIDDLE_NAME' | translate }}</label>
           <input id="middleName" type="text" formControlName="middleName" [class.invalid]="isFieldInvalid('middleName')">
           <span class="field-error" *ngIf="isFieldInvalid('middleName')">{{ getFieldError('middleName') }}</span>
         </div>
 
         <div class="form-group">
-          <label for="lastName">Last Name *</label>
+          <label for="lastName">{{ 'ENQUIRY.LAST_NAME' | translate }}</label>
           <input id="lastName" type="text" formControlName="lastName" [class.invalid]="isFieldInvalid('lastName')">
           <span class="field-error" *ngIf="isFieldInvalid('lastName')">{{ getFieldError('lastName') }}</span>
         </div>
@@ -28,20 +28,20 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="email">Email *</label>
+          <label for="email">{{ 'ENQUIRY.EMAIL' | translate }}</label>
           <input id="email" type="email" formControlName="email" [class.invalid]="isFieldInvalid('email')">
           <span class="field-error" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</span>
         </div>
 
         <div class="form-group">
-          <label for="mobile">Mobile *</label>
+          <label for="mobile">{{ 'ENQUIRY.MOBILE' | translate }}</label>
           <input id="mobile" type="tel" formControlName="mobile" [class.invalid]="isFieldInvalid('mobile')">
           <span class="field-error" *ngIf="isFieldInvalid('mobile')">{{ getFieldError('mobile') }}</span>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="enquiry">Enquiry *</label>
+        <label for="enquiry">{{ 'ENQUIRY.ENQUIRY_LABEL' | translate }}</label>
         <textarea id="enquiry" rows="4" formControlName="enquiry" [class.invalid]="isFieldInvalid('enquiry')"></textarea>
         <span class="field-error" *ngIf="isFieldInvalid('enquiry')">{{ getFieldError('enquiry') }}</span>
       </div>
@@ -53,7 +53,7 @@
       <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
       <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Submitting...' : 'Submit Enquiry' }}
+        {{ isSubmitting ? ('ENQUIRY.SUBMITTING' | translate) : ('ENQUIRY.SUBMIT' | translate) }}
       </button>
     </form>
   </div>

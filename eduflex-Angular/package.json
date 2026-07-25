@@ -38,6 +38,8 @@
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.3",
+    "@ngx-translate/core": "^18.0.0",
+    "@ngx-translate/http-loader": "^18.0.0",
     "angular-datatables": "^19.0.0",
     "bootstrap": "^5.3.8",
     "datatables.net": "^2.3.4",

@@ -6,11 +6,12 @@ import { Client, LoginDto, AuthResponseDto } from '@services/public.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private apiClient: Client,
     private router: Router,
     private authHelper: AuthHelperService,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loginForm = this.fb.group({
@@ -89,7 +91,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       next: (response: AuthResponseDto) => {
         this.storeAuthData(response);
         this.handleRememberMe(loginDto.email as string);
-        this.successMessage = 'Login successful! Redirecting...';
+        this.successMessage = this.translate.instant('LOGIN.LOGIN_SUCCESS');
 
         setTimeout(() => {
           if (response.mustChangePassword) {
@@ -157,10 +159,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getErrorMessage(err: any): string {
-    if (err.status === 401) return 'Invalid email or password.';
-    if (err.status === 400) return 'Check your email and password format.';
-    if (err.status === 0) return 'Unable to connect to server.';
-    return err.message || 'Unexpected error. Try again.';
+    if (err.status === 401) return this.translate.instant('LOGIN.ERRORS.UNAUTHORIZED');
+    if (err.status === 400) return this.translate.instant('LOGIN.ERRORS.BAD_REQUEST');
+    if (err.status === 0) return this.translate.instant('LOGIN.ERRORS.NO_CONNECTION');
+    return err.message || this.translate.instant('LOGIN.ERRORS.UNEXPECTED');
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -172,18 +174,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     const control = this.loginForm.get(fieldName);
     if (!control || !control.errors || !control.touched) return '';
 
-    if (control.errors['required']) return 'This field is required';
-    if (control.errors['email']) return 'Please enter a valid email address';
+    if (control.errors['required']) return this.translate.instant('LOGIN.ERRORS.REQUIRED');
+    if (control.errors['email']) return this.translate.instant('LOGIN.ERRORS.EMAIL_INVALID');
     if (control.errors['minlength']) {
-      return `Password must be at least ${control.errors['minlength'].requiredLength} characters`;
+      return this.translate.instant('LOGIN.ERRORS.PASSWORD_MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
     }
 
-    return 'Invalid field';
+    return this.translate.instant('LOGIN.ERRORS.INVALID_FIELD');
   }
 
   onForgotPassword(event: Event): void {
     event.preventDefault();
-    this.errorMessage = 'Password reset functionality coming soon! Please contact support.';
+    this.errorMessage = this.translate.instant('LOGIN.FORGOT_PASSWORD_MSG');
   }
 
   togglePassword(): void {

@@ -1,15 +1,18 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Enums;
+using ShareService.Enums.Roles;
 using ShareService.Models.Auth;
+using ShareService.Models.Setting;
 using ShareService.Services.Interface;
-using System.Security.Cryptography;
-using System.Text;
 using ShareService.Services.Interface.Integration;
 using ShareService.Services.Service.Integration;
-using Microsoft.Extensions.Options;
-using ShareService.Models.Setting;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ShareService.Services
 {
@@ -18,20 +21,22 @@ namespace ShareService.Services
         private readonly IUserDB _userDB;
         private readonly IValidator<UpdateUserProfileModel> _profileValidator;
         private readonly IValidator<ChangePasswordModel> _passwordValidator;
-        private readonly IValidator<CreateUserModel> _createUserValidator;
+        private readonly IValidator<UserModel> _createUserValidator;
         private readonly ILogger<UserService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IAzureEmailService _emailService;
+        private readonly IRoleService _roleService;
         private readonly WebURLSettings _appSettings;
 
         public UserService(
              IUserDB userDB,
              IValidator<UpdateUserProfileModel> profileValidator,
              IValidator<ChangePasswordModel> passwordValidator,
-             IValidator<CreateUserModel> createUserValidator,
+             IValidator<UserModel> createUserValidator,
              ILogger<UserService> logger,
              IConfiguration configuration,
              IAzureEmailService emailService,
+             IRoleService roleService,
              IOptions<WebURLSettings> appSettings)
         {
             _userDB = userDB;
@@ -41,6 +46,7 @@ namespace ShareService.Services
             _logger = logger;
             _configuration = configuration;
             _emailService = emailService;
+            _roleService = roleService;
             _appSettings = appSettings.Value;
         }
 
@@ -125,52 +131,49 @@ namespace ShareService.Services
             return Convert.ToBase64String(hash);
         }
 
-        public async Task<UserModel> CreateUserAsync(CreateUserModel createUserModel)
+        public async Task<bool> CreateUserAsync(UserModel user)
         {
+            var plaintextPassword = user.Password;
             try
             {
-                var validationResult = await _createUserValidator.ValidateAsync(createUserModel);
+                var validationResult = await _createUserValidator.ValidateAsync(user, options => options.IncludeRuleSets("Create"));
                 if (!validationResult.IsValid)
                 {
                     var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
                     throw new ArgumentException($"Validation failed: {errors}");
                 }
 
-                var existingUser = await _userDB.GetUserByEmailAsync(createUserModel.Email);
+                var existingUser = await _userDB.GetUserByEmailAsync(user.Email);
                 if (existingUser != null)
                 {
                     throw new ArgumentException("A user with this email already exists");
                 }
 
-                var user = new UserModel
-                {
-                    Email = createUserModel.Email,
-                    PasswordHash = HashPassword(createUserModel.Password),
-                    FirstName = createUserModel.FirstName,
-                    LastName = createUserModel.LastName,
-                    RoleId = createUserModel.RoleId,
-                    IsActive = true,
-                    MustChangePassword = true
-                };
+                user.Id = string.Empty;
+                user.PasswordHash = HashPassword(plaintextPassword);
+                user.Password = string.Empty;
+                user.IsActive = true;
+                user.MustChangePassword = true;
+                user.LastLogin = null;
 
-                var createdUser = await _userDB.CreateUserAsync(user);
+                var created = await _userDB.CreateUserAsync(user);
 
                 try
                 {
                     var (subject, html, plainText) = EmailTemplates.NewUserWelcome(
-                        createdUser.FirstName,
-                        createdUser.Email,
-                        createUserModel.Password,
+                        user.FirstName,
+                        user.Email,
+                        plaintextPassword,
                         $"{_appSettings.FrontendBaseUrl}/login");
 
-                    await _emailService.SendEmailAsync(createdUser.Email, subject, html, plainText);
+                    await _emailService.SendEmailAsync(user.Email, subject, html, plainText);
                 }
                 catch (Exception emailEx)
                 {
-                    _logger.LogError(emailEx, "User {UserId} was created but welcome email failed to send", createdUser.Id);
+                    _logger.LogError(emailEx, "User {UserId} was created but welcome email failed to send", user.Id);
                 }
 
-                return createdUser;
+                return created;
             }
             catch (ArgumentException)
             {
@@ -178,20 +181,85 @@ namespace ShareService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating user: {Email}", createUserModel.Email);
+                _logger.LogError(ex, "Error creating user: {Email}", user.Email);
                 throw;
             }
         }
 
-        public async Task<List<UserModel>> GetAllUsersAsync()
+        public async Task<bool> UpdateUserAsync(string userId, UserModel updateModel)
         {
             try
             {
-                return await _userDB.GetAllUsersAsync();
+                var validationResult = await _createUserValidator.ValidateAsync(updateModel);
+                if (!validationResult.IsValid)
+                {
+                    var errors = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
+                    throw new ArgumentException($"Validation failed: {errors}");
+                }
+
+                var existingUser = await _userDB.GetUserByIdAsync(updateModel.Id);
+                if (existingUser == null)
+                {
+                    throw new ArgumentException("User not found");
+                }
+
+                await CheckCanModifyUserAsync(existingUser, userId, updateModel.IsActive);
+
+                if (updateModel.RoleId != existingUser.RoleId)
+                {
+                    await CheckNotEscalatingRoleAsync(userId, updateModel.RoleId);
+                }
+
+                existingUser.ApplyEditableFields(updateModel);
+
+                return await _userDB.UpdateUserAsync(existingUser.Id, existingUser);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all users");
+                _logger.LogError(ex, "Error updating user profile for user: {UserId}", updateModel.Id);
+                throw;
+            }
+        }
+
+
+
+        private async Task CheckCanModifyUserAsync(UserModel existingUser, string actingUserId, bool newActiveStatus)
+        {
+            if (existingUser.Id == actingUserId && !newActiveStatus)
+            {
+                throw new ArgumentException("Cannot deactivate your own account");
+            }
+
+            var existingRole = await _roleService.GetByIdAsync(existingUser.RoleId);
+            if (existingUser.Id != actingUserId && existingRole?.Name.Is(SystemRole.Admin) == true)
+            {
+                throw new ArgumentException("Cannot update another admin's details");
+            }
+        }
+
+        private async Task CheckNotEscalatingRoleAsync(string actingUserId, string targetRoleId)
+        {
+            var actingUser = await _userDB.GetUserByIdAsync(actingUserId);
+            var actingRole = actingUser != null ? await _roleService.GetByIdAsync(actingUser.RoleId) : null;
+            var targetRole = await _roleService.GetByIdAsync(targetRoleId);
+
+            if (Enum.TryParse<SystemRole>(actingRole?.Name, out var actingSystemRole) &&
+                Enum.TryParse<SystemRole>(targetRole?.Name, out var targetSystemRole) &&
+                targetSystemRole > actingSystemRole)
+            {
+                throw new ArgumentException("Cannot assign a role higher than your own");
+            }
+        }
+
+        public async Task<PagedResult<UserModel>> GetUsersAsync(UserFilter filter)
+        {
+            try
+            {
+                return await _userDB.GetUsersAsync(filter);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting paged users");
                 throw;
             }
         }

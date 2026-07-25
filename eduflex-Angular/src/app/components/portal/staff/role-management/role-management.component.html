@@ -27,7 +27,10 @@
             <app-data-table
               [columns]="columns"
               [data]="roles"
-              [settings]="{ pageLength: 10, responsive: true }"
+              [pageNumber]="pageNumber"
+              [pageSize]="pageSize"
+              [totalCount]="totalCount"
+              (pageChange)="onPageChange($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>
             <p *ngIf="!isLoading && roles.length === 0" class="text-center text-muted py-4 mb-0">

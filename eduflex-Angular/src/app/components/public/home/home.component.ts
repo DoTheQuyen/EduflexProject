@@ -5,11 +5,12 @@ import { AuthHelperService } from '../../../services/auth-helper.service';
 import { EnquiryModalComponent } from '../enquiry-modal/enquiry-modal.component';
 import { FeedbackCarouselComponent } from '../feedback-carousel/feedback-carousel.component';
 import { CoursePromotionCarouselComponent } from '../course-promotion-carousel/course-promotion-carousel.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, EnquiryModalComponent, FeedbackCarouselComponent, CoursePromotionCarouselComponent],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, EnquiryModalComponent, FeedbackCarouselComponent, CoursePromotionCarouselComponent, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

@@ -1,0 +1,25 @@
+<div class="p-6">
+  <!-- Welcome banner -->
+  <div class="mb-6 rounded-lg px-6 py-8 text-black">
+    <p class="text-sm font-medium text-black/70">{{ today | date: 'EEEE, MMMM d, y' }}</p>
+    <h2 class="mt-1 text-lg font-bold">Welcome back, {{ userInfo?.firstName }}</h2>
+    <p class="mt-1 text-black/80">{{ userInfo?.role }} · Eduflex Staff Portal</p>
+  </div>
+
+  <!-- Quick access -->
+  <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide !text-muted">Quick Access</h2>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <a
+      *ngFor="let card of cards"
+      [routerLink]="card.route"
+      class="flex items-start gap-4 rounded-lg border border-border bg-white p-5 !no-underline shadow-sm transition-shadow hover:shadow-md">
+      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-navy-900/10 text-navy-900">
+        <i class="fas fa-{{card.icon}}"></i>
+      </div>
+      <div>
+        <h3 class="font-semibold !text-ink">{{ card.title }}</h3>
+        <p class="mt-1 text-sm !text-muted">{{ card.description }}</p>
+      </div>
+    </a>
+  </div>
+</div>

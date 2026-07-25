@@ -1,12 +1,12 @@
 <section class="feedback-section" *ngIf="feedbacks.length > 0">
   <div class="container">
     <div class="center-head">
-      <span class="eyebrow">What our students say</span>
-      <h2>Real feedback from students we've guided</h2>
+      <span class="eyebrow">{{ 'FEEDBACK_CAROUSEL.EYEBROW' | translate }}</span>
+      <h2>{{ 'FEEDBACK_CAROUSEL.TITLE' | translate }}</h2>
     </div>
 
     <div class="carousel" (mouseenter)="stopFeedbackAutoplay()" (mouseleave)="restartFeedbackAutoplay()">
-      <button type="button" class="carousel-arrow carousel-arrow-prev" (click)="prevFeedbackSlide(); restartFeedbackAutoplay()" aria-label="Previous feedback">&#8249;</button>
+      <button type="button" class="carousel-arrow carousel-arrow-prev" (click)="prevFeedbackSlide(); restartFeedbackAutoplay()" [attr.aria-label]="'FEEDBACK_CAROUSEL.PREV_ARIA' | translate">&#8249;</button>
 
       <div class="feedback-card">
         <div class="feedback-photo" [style.background-image]="'url(' + feedbacks[currentFeedbackIndex].photoUrl + ')'">
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <button type="button" class="carousel-arrow carousel-arrow-next" (click)="nextFeedbackSlide(); restartFeedbackAutoplay()" aria-label="Next feedback">&#8250;</button>
+      <button type="button" class="carousel-arrow carousel-arrow-next" (click)="nextFeedbackSlide(); restartFeedbackAutoplay()" [attr.aria-label]="'FEEDBACK_CAROUSEL.NEXT_ARIA' | translate">&#8250;</button>
     </div>
 
     <div class="dots">
@@ -31,7 +31,7 @@
         class="dot"
         [class.is-active]="i === currentFeedbackIndex"
         (click)="goToFeedbackSlide(i)"
-        [attr.aria-label]="'Go to feedback ' + (i + 1)">
+        [attr.aria-label]="'FEEDBACK_CAROUSEL.GO_TO_ARIA' | translate: { num: i + 1 }">
       </button>
     </div>
   </div>

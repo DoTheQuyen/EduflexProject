@@ -1,3 +1,6 @@
+using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Enums.Roles;
+
 namespace Eduflex.DTOs.Enquiry
 {
     public class EnquiryDto
@@ -9,7 +12,7 @@ namespace Eduflex.DTOs.Enquiry
         public string Email { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
         public string Enquiry { get; set; } = string.Empty;
-        public string Status { get; set; } = "New";
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string Status { get; set; } = EnquiryEnums.New.ToString();
+        public string? Response { get; set; }
     }
 }

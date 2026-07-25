@@ -1,17 +1,9 @@
 export interface DataTableColumn<T = any> {
-  field: keyof T | string; 
+  field: keyof T | string;
   title: string;
   className?: string;
-  formatter?: (value: any, row?: any) => any; 
+  formatter?: (value: any, row?: any) => any;
   render?: (value: unknown, row: T) => string;
-}
-
-export interface DataTableSettings {
-  pageLength?: number;
-  lengthMenu?: number[];
-  searching?: boolean;
-  ordering?: boolean;
-  responsive?: boolean;
 }
 
 export interface DataTableAction<T> {

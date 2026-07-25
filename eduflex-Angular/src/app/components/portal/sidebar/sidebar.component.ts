@@ -41,27 +41,28 @@ export class SidebarComponent implements OnChanges {
 
     if (this.userInfo.role === 'Student') {
       this.menuItems = [
-        { title: 'Application', icon: 'assignment', route: '/student-portal/application' },
+        { title: 'Application', icon: 'clipboard-list', route: '/student-portal/application' },
         { title: 'My Courses', icon: 'book', route: '/my-courses' },
         { title: 'Profile', icon: 'person', route: '/student-portal/profile' }
       ];
     } else if (this.userInfo.role === 'Staff' || this.userInfo.role === 'Manager') {
       this.menuItems = [
-        { title: 'Dashboard', icon: 'dashboard', route: '/staff-portal/dashboard' },
+        { title: 'Dashboard', icon: 'gauge', route: '/staff-portal/dashboard' },
         { title: 'Courses', icon: 'school', route: '/staff-portal/courses' },
-        { title: 'Students', icon: 'people', route: '/staff-portal/students' },
-        { title: 'Applications', icon: 'assignment', route: '/staff-portal/applications' },
+        { title: 'Students', icon: 'users', route: '/staff-portal/students' },
+        { title: 'Applications', icon: 'clipboard-list', route: '/staff-portal/applications' },
         { title: 'Feedback', icon: 'comment', route: '/staff-portal/feedback' },
         { title: 'Course Promotions', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
         { title: 'Profile', icon: 'person', route: '/staff-portal/profile' }
       ];
     } else if (this.userInfo.role === 'Admin') {
       this.menuItems = [
-        { title: 'Applications', icon: 'assignment', route: '/staff-portal/applications' },
+        { title: 'Dashboard', icon: 'gauge', route: '/staff-portal/dashboard' },
+        { title: 'Applications', icon: 'clipboard-list', route: '/staff-portal/applications' },
         { title: 'Feedback', icon: 'comment', route: '/staff-portal/feedback' },
         { title: 'Course Promotions', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
         { title: 'Roles', icon: 'lock', route: '/staff-portal/roles' },
-        { title: 'Users', icon: 'people', route: '/staff-portal/users' },
+        { title: 'Users', icon: 'users', route: '/staff-portal/users' },
         { title: 'Profile', icon: 'person', route: '/staff-portal/profile' }
       ];
     } else {

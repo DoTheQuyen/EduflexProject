@@ -1,43 +1,51 @@
 using MongoDB.Driver;
+using ShareService.Common;
+using ShareService.DataAccess.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Role;
 
 namespace ShareService.DataAccess
 {
-    public class Role : IRole
+    public class Role : AuditableCollectionBase<RoleModel>, IRole
     {
-        private readonly IMongoCollection<RoleModel> _rolesCollection;
-
-        public Role(IMongoDatabase database)
+        public Role(IMongoDatabase database, ICurrentUserService currentUser)
+            : base(database.GetCollection<RoleModel>("Roles"), currentUser)
         {
-            _rolesCollection = database.GetCollection<RoleModel>("Roles");
         }
 
         public async Task<RoleModel?> GetByIdAsync(string roleId)
         {
-            return await _rolesCollection
+            return await Collection
                 .Find(r => r.Id == roleId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<RoleModel?> GetByNameAsync(string name)
         {
-            return await _rolesCollection
+            return await Collection
                 .Find(r => r.Name == name)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<List<RoleModel>> GetAllAsync()
         {
-            return await _rolesCollection
+            return await Collection
                 .Find(FilterDefinition<RoleModel>.Empty)
                 .ToListAsync();
         }
 
-        public async Task<RoleModel> CreateAsync(RoleModel role)
+        public Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query)
         {
-            await _rolesCollection.InsertOneAsync(role);
-            return role;
+            var filter = BuildSearchFilter(query.SearchTerm, r => r.Name);
+            var sort = Builders<RoleModel>.Sort.Ascending(r => r.Name);
+
+            return GetPagedAsync(filter, sort, query.PageNumber, query.PageSize);
+        }
+
+        public async Task<bool> CreateAsync(RoleModel role)
+        {
+            await InsertOneAsync(role);
+            return true;
         }
     }
 }

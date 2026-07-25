@@ -1,0 +1,425 @@
+{
+  "NAV": {
+    "HOME": "Trang chủ",
+    "ABOUT": "Giới thiệu",
+    "HANDBOOK": "Sổ tay sinh viên",
+    "CONTACT": "Liên hệ",
+    "LOGIN": "Đăng nhập"
+  },
+  "ENQUIRY": {
+    "TITLE": "Đặt lịch tư vấn miễn phí",
+    "SUBTITLE": "Cho chúng tôi biết một chút về bạn, chúng tôi sẽ liên hệ lại sớm.",
+    "FIRST_NAME": "Tên *",
+    "MIDDLE_NAME": "Tên đệm",
+    "LAST_NAME": "Họ *",
+    "EMAIL": "Email *",
+    "MOBILE": "Số điện thoại *",
+    "ENQUIRY_LABEL": "Nội dung *",
+    "SUBMIT": "Gửi yêu cầu",
+    "SUBMITTING": "Đang gửi..."
+  },
+  "HOME": {
+    "HERO": {
+      "EYEBROW": "Tư vấn giáo dục · Úc",
+      "TITLE": "Cánh cửa của bạn đến du học và định cư tại Úc",
+      "SUBTITLE": "Hướng dẫn cá nhân hóa từ chọn khóa học đến kết quả visa — chúng tôi đồng hành cùng bạn từng bước.",
+      "CTA": "Đặt lịch tư vấn miễn phí"
+    },
+    "JOURNEY": {
+      "ENQUIRE_LABEL": "Liên hệ",
+      "ENQUIRE_SUB": "Cho chúng tôi biết mục tiêu và hoàn cảnh của bạn",
+      "MATCH_LABEL": "Chọn khóa học phù hợp",
+      "MATCH_SUB": "Lựa chọn từ hơn 30 trường đối tác",
+      "VISA_LABEL": "Nộp hồ sơ visa",
+      "VISA_SUB": "Diện 500 hoặc 485, được chuẩn bị cùng bạn",
+      "ENROL_LABEL": "Nhập học",
+      "ENROL_SUB": "Xác nhận thư mời và ngày nhập học",
+      "ARRIVE_LABEL": "Đến Úc",
+      "ARRIVE_SUB": "Ổn định cuộc sống với sự hỗ trợ liên tục"
+    },
+    "STATS": {
+      "STUDENTS": "Học sinh đã hỗ trợ",
+      "VISA_RATE": "Tỷ lệ đậu visa",
+      "PARTNERS": "Trường đối tác"
+    },
+    "WHY": {
+      "EYEBROW": "Vì sao chọn Eduflex",
+      "TITLE": "Hướng dẫn xây dựng quanh hành trình của bạn, không phải quy trình của chúng tôi",
+      "FEATURE1_TITLE": "Dịch vụ toàn diện",
+      "FEATURE1_DESC": "Từ chọn khóa học đến hỗ trợ sau khi đến nơi, tất cả trong một nơi.",
+      "FEATURE2_TITLE": "Quy trình minh bạch",
+      "FEATURE2_DESC": "Chúng tôi vạch rõ lộ trình của bạn, không có bất ngờ nào ẩn giấu.",
+      "FEATURE3_TITLE": "Tỷ lệ thành công cao",
+      "FEATURE3_DESC": "Kết quả tốt trong việc đậu visa và xếp lớp học.",
+      "FEATURE4_TITLE": "Hỗ trợ liên tục",
+      "FEATURE4_DESC": "Hành trình của bạn không kết thúc khi nhập học — chúng tôi giúp bạn ổn định cuộc sống."
+    },
+    "STORY": {
+      "EYEBROW": "Câu chuyện của chúng tôi",
+      "TITLE": "Được sáng lập bởi những người từng ở vị trí của bạn",
+      "PARA1": "Được sáng lập bởi những chuyên gia từng ở vị trí của bạn, Eduflex ra đời để lấp đầy khoảng trống — mang đến sự hướng dẫn cá nhân hóa, đáng tin cậy cho du học sinh quốc tế theo đuổi giáo dục tại Úc.",
+      "QUOTE": "Mỗi học sinh đều xứng đáng có sự rõ ràng, tôn trọng, và một lộ trình đến thành công.",
+      "PARA2": "Với hơn 5 năm kinh nghiệm kết hợp, đội ngũ của chúng tôi đã giúp đỡ nhiều học sinh vượt qua các thách thức về visa, lộ trình học tập, và những thay đổi trong cuộc sống."
+    },
+    "MISSION": {
+      "EYEBROW": "Sứ mệnh của chúng tôi",
+      "TITLE": "Quyết định sáng suốt, kết quả thực tế",
+      "DESC": "Trao quyền cho học sinh đưa ra quyết định sáng suốt và đạt được ước mơ học tập tại Úc."
+    },
+    "VISION": {
+      "EYEBROW": "Tầm nhìn của chúng tôi",
+      "TITLE": "Một cái tên đáng tin cậy, trên toàn cầu",
+      "DESC": "Trở thành công ty tư vấn giáo dục & định cư đáng tin cậy nhất cho học sinh trên toàn thế giới."
+    },
+    "SERVICES": {
+      "EYEBROW": "Dịch vụ của chúng tôi",
+      "TITLE": "Những gì chúng tôi giúp bạn",
+      "STUDENT_VISA_TAG": "Diện 500",
+      "STUDENT_VISA_TITLE": "Visa du học",
+      "STUDENT_VISA_DESC": "Tư vấn, nộp hồ sơ, và hỗ trợ gia hạn.",
+      "GRAD_VISA_TAG": "Diện 485",
+      "GRAD_VISA_TITLE": "Visa tốt nghiệp",
+      "GRAD_VISA_DESC": "Tư vấn quyền làm việc sau tốt nghiệp và nộp hồ sơ.",
+      "PLACEMENT_TAG": "Xếp lớp",
+      "PLACEMENT_TITLE": "Xếp lớp đại học & khóa học",
+      "PLACEMENT_DESC": "Kết nối hồ sơ của bạn với những trường tốt nhất trên khắp nước Úc.",
+      "EXPLORE_BTN": "Khám phá tất cả dịch vụ"
+    },
+    "CTA": {
+      "TITLE": "Sẵn sàng bắt đầu?",
+      "DESC": "Đặt lịch tư vấn miễn phí với Eduflex ngay hôm nay và để chúng tôi giúp bạn thiết kế tương lai tại Úc.",
+      "BUTTON": "Đặt lịch tư vấn miễn phí ngay"
+    },
+    "TOAST_SUCCESS": "Yêu cầu của bạn đã được gửi. Nhân viên của chúng tôi sẽ liên hệ với bạn sớm."
+  },
+  "ABOUT": {
+    "HEADER": {
+      "EYEBROW": "Về Eduflex",
+      "TITLE": "Hướng dẫn du học sinh quốc tế thành công tại Úc",
+      "SUBTITLE": "Chúng tôi đã dành hơn 5 năm giúp học sinh biến một quy trình phức tạp thành một lộ trình rõ ràng, tự tin để du học và định cư tại Úc."
+    },
+    "MISSION": {
+      "TITLE": "Sứ mệnh của chúng tôi",
+      "DESC": "Trao quyền cho du học sinh quốc tế với sự hướng dẫn rõ ràng, lời khuyên minh bạch, và hỗ trợ toàn diện trong suốt hành trình học tập tại Úc."
+    },
+    "VISION": {
+      "TITLE": "Tầm nhìn của chúng tôi",
+      "DESC": "Trở thành công ty tư vấn giáo dục đáng tin cậy nhất tại Úc, giúp học sinh đạt được mục tiêu học tập và sự nghiệp với sự tự tin."
+    },
+    "VALUES": {
+      "TITLE": "Giá trị của chúng tôi",
+      "ITEM1_STRONG": "Chính trực & minh bạch",
+      "ITEM1_REST": "không có bước ẩn, không có chi phí bất ngờ.",
+      "ITEM2_STRONG": "Lấy học sinh làm trung tâm",
+      "ITEM2_REST": "lời khuyên được xây dựng quanh mục tiêu của bạn, không phải chỉ tiêu.",
+      "ITEM3_STRONG": "Sự chuyên nghiệp xuất sắc",
+      "ITEM3_REST": "các chuyên viên tư vấn tuân thủ tiêu chuẩn chăm sóc nhất quán.",
+      "ITEM4_STRONG": "Hiểu biết văn hóa",
+      "ITEM4_REST": "sự hướng dẫn được hình thành từ kinh nghiệm sống ở nước ngoài.",
+      "ITEM5_STRONG": "Thành công lâu dài",
+      "ITEM5_REST": "sự hỗ trợ tiếp tục sau khi nhập học."
+    },
+    "APPROACH": {
+      "EYEBROW": "Cách tiếp cận của chúng tôi",
+      "TITLE": "Cách chúng tôi làm việc với mỗi học sinh",
+      "STEP1_TITLE": "Liên hệ",
+      "STEP1_DESC": "Cho chúng tôi biết mục tiêu, hoàn cảnh, và thời gian biểu của bạn.",
+      "STEP2_TITLE": "Chọn khóa học phù hợp",
+      "STEP2_DESC": "Chúng tôi lựa chọn từ hơn 30 trường đối tác.",
+      "STEP3_TITLE": "Nộp hồ sơ visa",
+      "STEP3_DESC": "Diện 500 hoặc 485, được chuẩn bị cùng nhau, từng bước một.",
+      "STEP4_TITLE": "Nhập học",
+      "STEP4_DESC": "Xác nhận thư mời và chốt ngày nhập học.",
+      "STEP5_TITLE": "Đến Úc",
+      "STEP5_DESC": "Ổn định cuộc sống với sự hỗ trợ liên tục, thực tế."
+    },
+    "STORY": {
+      "EYEBROW": "Câu chuyện của chúng tôi",
+      "TITLE": "Hơn 5 năm kinh nghiệm",
+      "PARA1": "Eduflex được sáng lập bởi các chuyên viên tư vấn từng trải qua những thách thức khi du học và sống ở nước ngoài. Với niềm đam mê mạnh mẽ với giáo dục, chúng tôi tập trung giúp du học sinh quốc tế đạt được ước mơ học tập tại Úc với sự tự tin.",
+      "QUOTE": "Giáo dục không chỉ là một tấm bằng — đó là một hành trình thay đổi cuộc sống.",
+      "PARA2": "Đội ngũ của chúng tôi kết hợp hơn 5 năm kinh nghiệm thực tế hướng dẫn học sinh qua quá trình tuyển sinh đại học, thủ tục visa, và định cư tại Úc. Sự hỗ trợ của chúng tôi không dừng lại ở việc nhập học — chúng tôi tiếp tục giúp học sinh tìm chỗ ở, thích nghi với văn hóa Úc, và lên kế hoạch cho sự nghiệp tương lai."
+    },
+    "STATS": {
+      "STUDENTS": "Học sinh đã hỗ trợ",
+      "VISA_RATE": "Tỷ lệ đậu visa",
+      "PARTNERS": "Trường đối tác"
+    },
+    "TEAM": {
+      "EYEBROW": "Đội ngũ của chúng tôi",
+      "TITLE": "Gặp gỡ các chuyên viên tư vấn",
+      "MEMBER1_NAME": "Tuyet Nguyen",
+      "MEMBER1_TITLE": "Chuyên viên Tư vấn Giáo dục Cao cấp",
+      "MEMBER1_TAG": "Hướng dẫn visa & định cư",
+      "MEMBER1_BIO": "Tuyết có hơn 5 năm kinh nghiệm hỗ trợ học sinh và gia đình về visa, nhập cư, và định cư tại Úc. Cô hỗ trợ hành trình của mỗi học sinh một cách toàn diện — không chỉ dừng lại ở giấy tờ.",
+      "MEMBER2_NAME": "Quyen Do",
+      "MEMBER2_TITLE": "Chuyên viên Tư vấn Giáo dục Cao cấp",
+      "MEMBER2_TAG": "Chọn khóa học & xếp lớp",
+      "MEMBER2_BIO": "Với hơn 5 năm kinh nghiệm, Quyên chuyên về chọn khóa học, xếp lớp đại học, và hướng dẫn visa cho học sinh đến Úc. Cô mang đến cách tiếp cận tận tâm, tỉ mỉ cho từng trường hợp."
+    }
+  },
+  "HANDBOOK": {
+    "HEADER": {
+      "EYEBROW": "Sổ tay sinh viên",
+      "TITLE": "Bắt đầu học tập tại Úc",
+      "SUBTITLE": "Tài liệu tham khảo thực tế cho việc đến nơi, nhập học, và ổn định cuộc sống — từ tuần trước khi bạn hạ cánh đến kỳ thi đầu tiên. Hãy lưu trang này lại; bạn sẽ không cần dùng hết ngay trong ngày đầu tiên."
+    },
+    "TOC": {
+      "LABEL": "Mục lục",
+      "ITEM01": "01 · Trước khi đến Úc",
+      "ITEM02": "02 · Hai tuần đầu tiên",
+      "ITEM03": "03 · Nhập học & lịch học",
+      "ITEM04": "04 · Lớp học & hỗ trợ",
+      "ITEM05": "05 · Văn hóa & cuộc sống",
+      "ITEM06": "06 · Tiền bạc & chi phí sinh hoạt",
+      "ITEM07": "07 · Nhà ở",
+      "ITEM08": "08 · Giao thông",
+      "ITEM09": "09 · Quyền làm việc & việc làm",
+      "ITEM10": "10 · Sức khỏe & an toàn",
+      "ITEM11": "11 · Tìm kiếm sự giúp đỡ",
+      "ITEM12": "12 · Tra cứu nhanh"
+    },
+    "CH01": {
+      "EYEBROW": "01 · Trước khi đến Úc",
+      "TITLE": "Sáu tuần trước: những việc cần chốt trước tiên",
+      "CHECK1": "<strong>Giấy Xác nhận Nhập học (CoE)</strong> do trường cấp — mọi thứ khác, kể cả visa của bạn, đều dựa trên giấy này.",
+      "CHECK2": "<strong>Visa du học (diện 500)</strong> đã được cấp, với thư cấp visa được lưu dưới dạng PDF và in ra.",
+      "CHECK3": "<strong>Bảo hiểm Y tế Sinh viên Quốc tế (OSHC)</strong> đã mua cho toàn bộ thời hạn visa — đây là điều kiện bắt buộc của visa, không phải tùy chọn.",
+      "CHECK4": "<strong>Chỗ ở</strong> đã đặt cho ít nhất 2–4 tuần đầu để bạn không phải tìm nhà trong lúc mệt mỏi vì lệch múi giờ.",
+      "CHECK5": "<strong>Vé máy bay</strong> đã đặt để đến trước ngày định hướng vài ngày, không phải đêm trước đó.",
+      "CHECK6": "Bản scan <strong>hộ chiếu, thư cấp visa, CoE, giấy chứng nhận OSHC, và bảng điểm</strong> đã được lưu trên đám mây, tách biệt với hành lý.",
+      "NOTE": "<strong>Các mùa bị đảo ngược.</strong> Tháng 12–2 là mùa hè, tháng 6–8 là mùa đông. Nhập học kỳ 1 (tháng 2) nghĩa là bạn đến vào cuối hè nóng bức; nhập học kỳ 2 (tháng 7) nghĩa là bạn đến vào mùa đông — hãy chuẩn bị hành lý phù hợp.",
+      "LUGGAGE_TITLE": "Hành lý xách tay, không phải hành lý ký gửi",
+      "LUGGAGE1": "Hộ chiếu, thư cấp visa, CoE, và giấy chứng nhận OSHC",
+      "LUGGAGE2": "Bằng chứng chỗ ở cho những đêm đầu tiên",
+      "LUGGAGE3": "Một ít đô la Úc để đi lại và ăn uống khi mới đến",
+      "LUGGAGE4": "Thuốc kê đơn, trong bao bì gốc có ghi tên bạn"
+    },
+    "CH02": {
+      "EYEBROW": "02 · Hai tuần đầu tiên của bạn",
+      "TITLE": "Chuỗi thủ tục hành chính: làm theo đúng thứ tự",
+      "INTRO": "Tài khoản ngân hàng cần địa chỉ, gói điện thoại thường cần thẻ ngân hàng, và công việc có lương cần mã số thuế — mỗi bước sẽ mở khóa bước tiếp theo.",
+      "TH_TASK": "Việc cần làm",
+      "TH_WHY": "Vì sao quan trọng",
+      "TH_NEED": "Bạn cần gì",
+      "ROW1_TASK": "Tham dự buổi định hướng",
+      "ROW1_WHY": "Hoàn tất nhập học, tham quan khuôn viên trường, thẻ sinh viên, dịch vụ hỗ trợ",
+      "ROW1_NEED": "CoE, hộ chiếu",
+      "ROW2_TASK": "Lấy thẻ sinh viên",
+      "ROW2_WHY": "Cần thiết cho thư viện, phòng thí nghiệm, in ấn, ưu đãi giao thông",
+      "ROW2_NEED": "Xác nhận nhập học",
+      "ROW3_TASK": "Mở tài khoản ngân hàng",
+      "ROW3_WHY": "Nhận lương nếu đi làm; trả tiền thuê nhà và hóa đơn không cần tiền mặt",
+      "ROW3_NEED": "Hộ chiếu, visa, thư nhập học, địa chỉ tại Úc",
+      "ROW4_TASK": "Đăng ký Mã số Thuế (TFN)",
+      "ROW4_WHY": "Bắt buộc trước khi bắt đầu bất kỳ công việc có lương nào — miễn phí qua ATO",
+      "ROW4_NEED": "Hộ chiếu, thông tin visa, địa chỉ",
+      "ROW5_TASK": "Thiết lập tài khoản myGov",
+      "ROW5_WHY": "Liên kết Medicare/OSHC, thuế, và Centrelink (nếu đủ điều kiện)",
+      "ROW5_NEED": "Email, số điện thoại di động",
+      "ROW6_TASK": "Kích hoạt OSHC",
+      "ROW6_WHY": "Xác nhận bạn có thể yêu cầu bồi hoàn chi phí khám bệnh ngay từ ngày đầu",
+      "ROW6_NEED": "Giấy chứng nhận OSHC, số hợp đồng",
+      "TIP": "<strong>Một số ngân hàng cho phép mở tài khoản trực tuyến trước khi bạn đến Úc</strong> — CommBank, NAB, và ANZ đều cung cấp dịch vụ này cho du học sinh có CoE, để bạn không phải mang tiền mặt trong hai tuần đầu."
+    },
+    "CH03": {
+      "EYEBROW": "03 · Nhập học & lịch học thuật",
+      "TITLE": "Nắm rõ ngày census (ngày chốt danh sách)",
+      "CARD1_TITLE": "Cấu trúc học kỳ thông thường",
+      "CARD1_ITEM1": "Học kỳ 1: cuối tháng 2 – tháng 6",
+      "CARD1_ITEM2": "Học kỳ 2: tháng 7 – tháng 11",
+      "CARD1_ITEM3": "Kỳ nghỉ giữa năm và cuối năm kéo dài vài tuần",
+      "CARD1_ITEM4": "Một số khóa học chia theo tam cá nguyệt (trimester) — hãy kiểm tra lịch riêng của khóa học bạn",
+      "CARD2_TITLE": "Bên trong mỗi học kỳ",
+      "CARD2_ITEM1": "Tuần định hướng / O-Week trước khi bắt đầu học",
+      "CARD2_ITEM2": "Ngày census, thường vào khoảng 3–4 tuần sau khi bắt đầu",
+      "CARD2_ITEM3": "Kỳ nghỉ giữa học kỳ (khoảng 1 tuần)",
+      "CARD2_ITEM4": "Kỳ thi hoặc đánh giá chính thức vào cuối học kỳ",
+      "WARN": "<strong>Ngày census là ngày quan trọng nhất mỗi học kỳ.</strong> Rút môn trước ngày này sẽ không bị phạt về tài chính hay học thuật. Rút môn sau ngày này, bạn thường vẫn phải trả phí, và có thể bị ghi nhận là trượt môn. Hãy ghi mọi ngày census vào lịch ngay khi mở đăng ký.",
+      "ENROL_TITLE": "Đăng ký môn học mỗi học kỳ",
+      "ENROL1": "Kiểm tra cấu trúc khóa học của bạn — môn bắt buộc và môn tự chọn, điều kiện tiên quyết — trong sổ tay khóa học.",
+      "ENROL2": "Đăng ký qua cổng thông tin sinh viên trước hạn chót.",
+      "ENROL3": "Xác nhận khối lượng học của bạn đáp ứng yêu cầu học toàn thời gian của visa.",
+      "ENROL4": "Kiểm tra thời khóa biểu xem có trùng lịch không trước ngày census."
+    },
+    "CH04": {
+      "EYEBROW": "04 · Lớp học, chấm điểm & hỗ trợ",
+      "TITLE": "Những điều khác biệt so với nhiều hệ thống giáo dục ở nước ngoài",
+      "ITEM1": "<strong>Giờ giảng (lecture) và giờ thảo luận (tutorial) tách biệt nhau</strong> — buổi tutorial hoặc thực hành thường nhỏ, mang tính thảo luận, và thường là nơi điểm danh thực sự được ghi nhận.",
+      "ITEM2": "<strong>Đánh giá diễn ra liên tục</strong>, không chỉ một kỳ thi cuối kỳ — hãy chuẩn bị cho các bài luận, bài kiểm tra ngắn, thuyết trình, và làm việc nhóm xuyên suốt học kỳ.",
+      "ITEM3": "<strong>Liêm chính học thuật được thực thi nghiêm ngặt</strong>, kể cả với văn bản do AI tạo ra. Khi không chắc chắn, hãy trích dẫn nguồn.",
+      "ITEM4": "<strong>Điểm số</strong> thường theo thang High Distinction / Distinction / Credit / Pass / Fail — thang điểm chính xác khác nhau tùy trường.",
+      "ITEM5": "<strong>Gửi email cho giảng viên là điều bình thường</strong> — hầu hết đều có giờ tư vấn và phản hồi trong vòng vài ngày làm việc.",
+      "CARD1_TITLE": "Hỗ trợ học thuật",
+      "CARD1_ITEM1": "Trung tâm kỹ năng học thuật / viết luận",
+      "CARD1_ITEM2": "Cố vấn đồng trang lứa và nhóm học tập",
+      "CARD1_ITEM3": "Tư vấn nghiên cứu tại thư viện",
+      "CARD1_ITEM4": "Dịch vụ hỗ trợ người khuyết tật và tiếp cận",
+      "CARD2_TITLE": "Hỗ trợ cá nhân",
+      "CARD2_ITEM1": "Tư vấn tâm lý miễn phí, bảo mật",
+      "CARD2_ITEM2": "Cố vấn sinh viên quốc tế",
+      "CARD2_ITEM3": "Hội sinh viên / công đoàn sinh viên bảo vệ quyền lợi",
+      "CARD2_ITEM4": "Các hội nhóm văn hóa, tôn giáo, và LGBTQ+"
+    },
+    "CH05": {
+      "EYEBROW": "05 · Văn hóa & cuộc sống hằng ngày",
+      "TITLE": "Hòa nhập vào một đất nước đa văn hóa",
+      "INTRO": "Khoảng một phần ba cư dân Úc sinh ra ở nước ngoài. Bạn sẽ không phải là du học sinh quốc tế duy nhất, và sẽ không quá khó để tìm thấy đồ ăn, cộng đồng tôn giáo, hoặc ngôn ngữ quê nhà.",
+      "QUOTE": "Trước khi người châu Âu đến định cư, vùng đất này được chăm sóc bởi hàng trăm dân tộc Thổ dân và người dân đảo Torres Strait, với mối liên kết trải dài hơn 60.000 năm. Bạn sẽ nghe thấy \"Lời tri ân vùng đất\" (Acknowledgement of Country) tại các buổi định hướng, lễ tốt nghiệp, và sự kiện công cộng — đây là một phần bình thường, thể hiện sự tôn trọng trong đời sống công dân Úc.",
+      "SUB_TITLE": "Những chuẩn mực xã hội nên biết sớm",
+      "ITEM1": "<strong>Sự thẳng thắn được xem là bình thường, không phải bất lịch sự</strong> — tên riêng được dùng ngay từ đầu, kể cả với giảng viên.",
+      "ITEM2": "<strong>Không cần cho tiền tip (tiền boa)</strong> — nhân viên ngành dịch vụ được trả lương tối thiểu theo luật.",
+      "ITEM3": "<strong>Đúng giờ rất quan trọng đối với lớp học</strong>; các kế hoạch xã giao thì linh hoạt hơn.",
+      "ITEM4": "<strong>Xếp hàng được coi trọng</strong> — hãy chờ đến lượt của bạn.",
+      "ITEM5": "<strong>Trò chuyện nơi công cộng thường nhỏ nhẹ, kín đáo</strong>, đặc biệt là trên phương tiện giao thông công cộng."
+    },
+    "CH06": {
+      "EYEBROW": "06 · Tiền bạc & chi phí sinh hoạt",
+      "TITLE": "Lập ngân sách theo tuần",
+      "INTRO": "Chi phí khác nhau đáng kể tùy thành phố — Sydney và Melbourne có chi phí cao nhất, các khuôn viên trường ở vùng ngoại ô rẻ hơn rõ rệt. Mức chi phí hàng tuần ước tính cho một sinh viên ở ghép, tính bằng AUD:",
+      "TH_CAT": "Hạng mục",
+      "TH_RANGE": "Mức chi phí hàng tuần thông thường",
+      "TH_NOTES": "Ghi chú",
+      "ROW1_CAT": "Tiền thuê nhà ở ghép",
+      "ROW1_NOTES": "Cao hơn ở trung tâm Sydney/Melbourne; thấp hơn ở vùng ngoại ô",
+      "ROW2_CAT": "Thực phẩm",
+      "ROW2_NOTES": "Tự nấu ăn tại nhà rẻ hơn nhiều so với ăn ngoài",
+      "ROW3_CAT": "Giao thông công cộng",
+      "ROW3_NOTES": "Vé ưu đãi giúp giảm chi phí này nếu đủ điều kiện",
+      "ROW4_CAT": "Tiện ích (chia sẻ)",
+      "ROW4_NOTES": "Tăng vào mùa hè (máy lạnh) và mùa đông (sưởi ấm)",
+      "ROW5_CAT": "Gói điện thoại",
+      "ROW5_NOTES": "Nhà mạng trả trước thường rẻ nhất",
+      "WARN": "<strong>Không bao giờ chuyển tiền, chia sẻ mật khẩu ngân hàng, hoặc gửi tiền đặt cọc thuê nhà trước khi xem nhà trực tiếp hoặc qua cuộc gọi video.</strong> Các vụ lừa đảo thuê nhà và việc làm thường nhắm vào người mới đến trong những tuần đầu tiên."
+    },
+    "CH07": {
+      "EYEBROW": "07 · Nhà ở",
+      "TITLE": "Ở trong khuôn viên trường so với ở ghép bên ngoài",
+      "CARD1_TITLE": "Trong khuôn viên trường / ký túc xá",
+      "CARD1_ITEM1": "Lựa chọn đơn giản nhất cho học kỳ đầu tiên — không cần hợp đồng thuê, thường đã bao gồm hóa đơn",
+      "CARD1_ITEM2": "Cộng đồng xã hội sẵn có, gần lớp học nhất",
+      "CARD1_ITEM3": "Nên đăng ký sớm; các ký túc xá phổ biến thường kín chỗ trước nhiều tháng",
+      "CARD2_TITLE": "Ở ghép ngoài khuôn viên trường",
+      "CARD2_ITEM1": "Rẻ hơn về lâu dài; được đăng trên realestate.com.au, domain.com.au, flatmates.com.au",
+      "CARD2_ITEM2": "Cần có hợp đồng thuê và tiền đặt cọc (thường là 4 tuần tiền thuê, do cơ quan quản lý tiền đặt cọc của chính phủ giữ)",
+      "CARD2_ITEM3": "Hãy xem nhà trực tiếp hoặc qua cuộc gọi video trực tiếp trước khi trả bất kỳ khoản tiền nào",
+      "TIP": "<strong>Hãy đặt chỗ ở tạm thời cho hai đến bốn tuần đầu tiên</strong> thay vì ký hợp đồng thuê 12 tháng mà chưa từng xem nhà. Điều này cho bạn thời gian để xem nhà ở ghép trực tiếp khi đã biết thời khóa biểu của mình."
+    },
+    "CH08": {
+      "EYEBROW": "08 · Giao thông & di chuyển",
+      "TITLE": "Lấy thẻ giao thông thông minh ngay tuần đầu tiên",
+      "TH_CITY": "Thành phố / bang",
+      "TH_CARD": "Thẻ thông minh",
+      "TH_COVERS": "Áp dụng cho",
+      "ROW1_CITY": "Sydney, NSW",
+      "ROW1_COVERS": "Tàu điện, xe buýt, phà, tàu điện nhẹ",
+      "ROW2_CITY": "Melbourne, VIC",
+      "ROW2_COVERS": "Tàu điện, xe điện (tram), xe buýt",
+      "ROW3_CITY": "Brisbane, QLD",
+      "ROW3_COVERS": "Tàu điện, xe buýt, phà",
+      "ROW4_CITY": "Perth, WA",
+      "ROW4_COVERS": "Tàu điện, xe buýt, phà",
+      "ROW5_CITY": "Adelaide, SA",
+      "ROW5_COVERS": "Tàu điện, xe điện (tram), xe buýt",
+      "NOTE": "<strong>Vé ưu đãi không tự động áp dụng cho du học sinh quốc tế</strong> — điều kiện khác nhau tùy bang và đôi khi tùy loại visa. Hãy hỏi văn phòng sinh viên quốc tế của bạn xem có loại ưu đãi nào áp dụng cho bạn không.",
+      "INTRO": "Ở Úc, xe chạy bên <strong>trái</strong> đường. Bạn thường có thể lái xe bằng bằng lái nước ngoài còn hiệu lực trong một khoảng thời gian giới hạn sau khi đến — thời hạn cụ thể do cơ quan giao thông của bang bạn quy định."
+    },
+    "CH09": {
+      "EYEBROW": "09 · Quyền làm việc & việc làm",
+      "TITLE": "Nắm rõ giới hạn giờ làm việc theo visa của bạn",
+      "WARN": "<strong>Quyền làm việc của visa diện 500 hiện đang giới hạn ở mức 48 giờ mỗi hai tuần trong thời gian khóa học đang diễn ra</strong>, không giới hạn trong các kỳ nghỉ chính thức. Các quy định này thay đổi theo thời gian — hãy xác nhận giới hạn hiện tại với Bộ Nội vụ (Department of Home Affairs) hoặc trường của bạn trước khi bắt đầu bất kỳ công việc nào.",
+      "ITEM1": "Chuẩn bị sẵn <strong>Mã số Thuế (TFN)</strong> — nếu không có, thuế sẽ bị khấu trừ ở mức cao nhất.",
+      "ITEM2": "Xác nhận bạn được trả ít nhất mức lương tối thiểu quốc gia, có phiếu lương đầy đủ.",
+      "ITEM3": "Kiểm tra xem bạn có được đóng <strong>quỹ hưu trí (superannuation)</strong> nếu đủ điều kiện.",
+      "ITEM4": "Cơ quan Thanh tra Công bằng Lao động (Fair Work Ombudsman) điều tra tình trạng trả lương thiếu miễn phí và bảo mật, bất kể tình trạng visa."
+    },
+    "CH10": {
+      "EYEBROW": "10 · Sức khỏe & an toàn",
+      "TITLE": "Bảo hiểm, ánh nắng, và trường hợp khẩn cấp",
+      "ITEM1": "<strong>OSHC</strong> là bảo hiểm chính của bạn trong suốt thời hạn visa và là bắt buộc.",
+      "ITEM2": "Một số quốc tịch có <strong>Hiệp định Chăm sóc Sức khỏe Song phương (Reciprocal Health Care Agreement)</strong> với Úc — hãy kiểm tra xem quốc tịch của bạn có được áp dụng không.",
+      "ITEM3": "Hãy đặt lịch khám bác sĩ đa khoa (GP) cho các vấn đề không khẩn cấp; dành khoa cấp cứu cho các trường hợp khẩn cấp thực sự.",
+      "TIP": "<strong>Úc có mức tia UV thuộc hàng cao nhất thế giới</strong>, kể cả vào những ngày mát mẻ. Hãy mặc áo che nắng, thoa kem chống nắng SPF 30+, đội mũ, tìm bóng râm, và đeo kính râm.",
+      "TH_SITUATION": "Tình huống",
+      "TH_NUMBER": "Số điện thoại",
+      "ROW1_SITUATION": "Cảnh sát / Cứu hỏa / Cấp cứu (đe dọa tính mạng)",
+      "ROW2_SITUATION": "Hỗ trợ cảnh sát (không khẩn cấp)",
+      "ROW3_SITUATION": "Trung tâm Thông tin Ngộ độc",
+      "ROW4_SITUATION": "Lifeline (hỗ trợ khủng hoảng 24/7)",
+      "ROW5_SITUATION": "Beyond Blue (hỗ trợ sức khỏe tâm thần)",
+      "ROW6_SITUATION": "1800RESPECT"
+    },
+    "CH11": {
+      "EYEBROW": "11 · Tìm kiếm sự giúp đỡ",
+      "TITLE": "Hãy sử dụng các dịch vụ hỗ trợ sớm",
+      "ITEM1": "<strong>Cố vấn sinh viên quốc tế</strong> — điều kiện visa, yêu cầu bồi hoàn OSHC, phúc lợi chung.",
+      "ITEM2": "<strong>Hội sinh viên / công đoàn sinh viên</strong> — bảo vệ quyền lợi miễn phí cho các tranh chấp học thuật và thuê nhà.",
+      "ITEM3": "<strong>Dịch vụ tư vấn tâm lý</strong> — bảo mật, thường miễn phí cho một số buổi nhất định.",
+      "ITEM4": "Trang web <strong>Study Australia</strong> và <strong>Bộ Nội vụ (Department of Home Affairs)</strong> là nguồn thông tin chính thức về các thay đổi điều kiện visa."
+    },
+    "CH12": {
+      "EYEBROW": "12 · Tra cứu nhanh",
+      "TITLE": "Tiếng lóng bạn sẽ nghe thấy trong tuần đầu tiên",
+      "TH_TERM": "Từ lóng",
+      "TH_MEANS": "Nghĩa là",
+      "ROW1_MEANS": "Buổi chiều",
+      "ROW2_MEANS": "Trạm xăng / trạm dịch vụ",
+      "ROW3_MEANS": "Không có gì / không sao đâu",
+      "ROW4_MEANS": "Một lời chào hỏi, không phải câu hỏi thật sự",
+      "ROW5_MEANS": "Trường đại học",
+      "ROW6_MEANS": "Chăn (mền) lông vũ",
+      "ROW7_MEANS": "Mang một món ăn đến chia sẻ tại buổi tụ họp"
+    },
+    "FOOTER": "Chỉ mang tính hướng dẫn chung, cập nhật tại thời điểm xuất bản — điều kiện visa, thẻ giao thông, và các loại phí có thể thay đổi theo thời gian. Luôn xác nhận các quy định hiện hành với văn phòng sinh viên quốc tế của trường bạn và Bộ Nội vụ trước khi thực hiện bất kỳ điều gì có tính thời hạn."
+  },
+  "LOGIN": {
+    "TITLE": "Chào mừng đến với Eduflex",
+    "SUBTITLE": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+    "EMAIL_LABEL": "Địa chỉ Email",
+    "EMAIL_PLACEHOLDER": "Nhập địa chỉ email của bạn",
+    "PASSWORD_LABEL": "Mật khẩu",
+    "PASSWORD_PLACEHOLDER": "Nhập mật khẩu của bạn",
+    "REMEMBER_ME": "Ghi nhớ đăng nhập",
+    "FORGOT_PASSWORD": "Quên mật khẩu?",
+    "SIGNING_IN": "Đang đăng nhập...",
+    "SIGN_IN": "Đăng nhập",
+    "DIVIDER": "Hoặc tiếp tục với",
+    "NO_ACCOUNT": "Chưa có tài khoản?",
+    "CONTACT_TO_REGISTER": "Liên hệ với chúng tôi để đăng ký",
+    "LOGIN_SUCCESS": "Đăng nhập thành công! Đang chuyển hướng...",
+    "FORGOT_PASSWORD_MSG": "Tính năng đặt lại mật khẩu sắp ra mắt! Vui lòng liên hệ bộ phận hỗ trợ.",
+    "ERRORS": {
+      "REQUIRED": "Trường này là bắt buộc",
+      "EMAIL_INVALID": "Vui lòng nhập địa chỉ email hợp lệ",
+      "PASSWORD_MIN_LENGTH": "Mật khẩu phải có ít nhất {{length}} ký tự",
+      "INVALID_FIELD": "Trường không hợp lệ",
+      "UNAUTHORIZED": "Email hoặc mật khẩu không đúng.",
+      "BAD_REQUEST": "Vui lòng kiểm tra định dạng email và mật khẩu.",
+      "NO_CONNECTION": "Không thể kết nối đến máy chủ.",
+      "UNEXPECTED": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại."
+    }
+  },
+  "PROMO_CAROUSEL": {
+    "EYEBROW": "Ưu đãi khóa học học kỳ này",
+    "TITLE": "Học bổng từ các trường đại học đối tác",
+    "LOCATION": "Địa điểm",
+    "TUITION": "Học phí",
+    "OPPORTUNITIES": "Cơ hội",
+    "OFFER_ENDS": "Ưu đãi kết thúc",
+    "VISIT_WEBSITE": "Truy cập website trường",
+    "ENQUIRE": "Liên hệ về khóa học này",
+    "PREV_ARIA": "Ưu đãi trước",
+    "NEXT_ARIA": "Ưu đãi tiếp theo",
+    "GO_TO_ARIA": "Đi đến ưu đãi {{num}}"
+  },
+  "FEEDBACK_CAROUSEL": {
+    "EYEBROW": "Học viên nói gì về chúng tôi",
+    "TITLE": "Phản hồi thực tế từ những học viên chúng tôi đã hướng dẫn",
+    "PREV_ARIA": "Phản hồi trước",
+    "NEXT_ARIA": "Phản hồi tiếp theo",
+    "GO_TO_ARIA": "Đi đến phản hồi {{num}}"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© {{year}} Quyen Do. Đã đăng ký bản quyền."
+  }
+}

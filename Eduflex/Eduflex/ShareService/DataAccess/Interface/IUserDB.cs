@@ -1,4 +1,5 @@
-﻿using ShareService.Models.Auth;
+using ShareService.Common;
+using ShareService.Models.Auth;
 using ShareService.Services.Interface;
 
 namespace ShareService.DataAccess.Interface
@@ -9,7 +10,8 @@ namespace ShareService.DataAccess.Interface
         Task<UserModel?> GetUserByEmailAsync(string email);
         Task<UserModel?> UpdateUserProfileAsync(string userId, UpdateUserProfileModel updateDto);
         Task<bool> UpdatePasswordAsync(string userId, string newPasswordHash);
-        Task<UserModel> CreateUserAsync(UserModel user);
-        Task<List<UserModel>> GetAllUsersAsync();
+        Task<bool> CreateUserAsync(UserModel user);
+        Task<bool> UpdateUserAsync(string id, UserModel user);
+        Task<PagedResult<UserModel>> GetUsersAsync(PaginationQuery query, string? roleId, bool? isActive);
     }
 }

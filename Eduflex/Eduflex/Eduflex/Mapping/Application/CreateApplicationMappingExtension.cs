@@ -5,25 +5,11 @@ namespace Eduflex.Mapping.Application
 {
     public static class CreateApplicationMappingExtension
     {
-        public static CreateApplicationDto ToDto(this CreateApplicationModel model)
+        public static ApplicationModel ToModel(this CreateApplicationDto dto)
         {
-            return new CreateApplicationDto
-            {
-                StudentId = model.StudentId,
-                UserId = model.UserId,
-                StudentName = model.StudentName,
-                Description = model.Description,
-                Details = model.Details,
-                ApplicationType = model.ApplicationType
-            };
-        }
-
-        public static CreateApplicationModel ToModel(this CreateApplicationDto dto)
-        {
-            return new CreateApplicationModel
+            return new ApplicationModel
             {
                 StudentId = dto.StudentId,
-                UserId = dto.UserId,
                 StudentName = dto.StudentName,
                 Description = dto.Description,
                 Details = dto.Details,

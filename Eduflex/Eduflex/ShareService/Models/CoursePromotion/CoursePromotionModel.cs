@@ -1,10 +1,11 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Models.Common;
 
 namespace ShareService.Models.CoursePromotion
 {
     [BsonIgnoreExtraElements]
-    public class CoursePromotionModel
+    public class CoursePromotionModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -46,7 +47,20 @@ namespace ShareService.Models.CoursePromotion
         [BsonElement("displayOrder")]
         public int DisplayOrder { get; set; }
 
-        [BsonElement("createdAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public void ApplyEditableFields(CoursePromotionModel updateModel)
+        {
+            CourseName = updateModel.CourseName;
+            UniversityName = updateModel.UniversityName;
+            Semester = updateModel.Semester;
+            ScholarshipLabel = updateModel.ScholarshipLabel;
+            Location = updateModel.Location;
+            Tuition = updateModel.Tuition;
+            Opportunities = updateModel.Opportunities;
+            ExpiryDate = updateModel.ExpiryDate;
+            Note = updateModel.Note;
+            WebsiteUrl = updateModel.WebsiteUrl;
+            IsFeatured = updateModel.IsFeatured;
+            DisplayOrder = updateModel.DisplayOrder;
+        }
     }
 }

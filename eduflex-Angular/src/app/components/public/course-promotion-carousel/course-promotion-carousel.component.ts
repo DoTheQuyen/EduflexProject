@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Client, CoursePromotionDto } from '@services/content.services';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-course-promotion-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './course-promotion-carousel.component.html',
   styleUrls: ['./course-promotion-carousel.component.css']
 })

@@ -1,9 +1,11 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Enums;
+using ShareService.Enums.Permissions;
 using ShareService.Models.Application;
 using ShareService.Services.Interface;
 
@@ -12,14 +14,14 @@ namespace ShareService.Services
     public class ApplicationService : IApplicationService
     {
         private readonly IApplication _applicationDataAccess;
-        private readonly IValidator<CreateApplicationModel> _createApplicationValidator;
+        private readonly IValidator<ApplicationModel> _createApplicationValidator;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IMongoClient _client;
         private readonly IPermissionService _permissionService;
 
         public ApplicationService(
             IApplication applicationDataAccess,
-            IValidator<CreateApplicationModel> createApplicationValidator,
+            IValidator<ApplicationModel> createApplicationValidator,
             ILogger<ApplicationService> logger,
             IMongoClient client,
             IPermissionService permissionService)
@@ -73,7 +75,7 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<List<ApplicationModel>> GetApplicationsByUserId(string userId)
+        public async Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query)
         {
             try
             {
@@ -85,19 +87,18 @@ namespace ShareService.Services
 
                 // Authorization here (future implementation)
 
-             
                 var student = await _applicationDataAccess.GetStudentByUserIdAsync(userId);
                 if (student == null)
                 {
                     _logger.LogWarning("Student not found for user ID: {UserId}", userId);
-                    return new List<ApplicationModel>();
+                    return new PagedResult<ApplicationModel> { PageNumber = query.PageNumber, PageSize = query.PageSize };
                 }
 
                 // Process business rule here
-                var applications = await _applicationDataAccess.GetApplicationsByStudentIdAsync(student.Id);
+                var result = await _applicationDataAccess.GetApplicationsByStudentIdAsync(student.Id, query);
 
                 // Business logic: Return limited information for list view
-                var result = applications.Select(a => new ApplicationModel
+                result.Items = result.Items.Select(a => new ApplicationModel
                 {
                     Id = a.Id,
                     Description = a.Description,
@@ -107,7 +108,7 @@ namespace ShareService.Services
                 }).ToList();
 
                 _logger.LogInformation("Returned {Count} applications for user {UserId} (student: {StudentId})",
-                    result.Count, userId, student.Id);
+                    result.Items.Count, userId, student.Id);
 
                 return result;
             }
@@ -191,10 +192,10 @@ namespace ShareService.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<ApplicationModel> CreateApplication(CreateApplicationModel createDto)
-        {            
+        public async Task<ApplicationModel> CreateApplication(ApplicationModel application)
+        {
             // Use FluentValidation to validate input
-            var validate = await _createApplicationValidator.ValidateAsync(createDto);
+            var validate = await _createApplicationValidator.ValidateAsync(application);
             if (!validate.IsValid)
             {
                 var errors = string.Join("; ", validate.Errors.Select(e => e.ErrorMessage));
@@ -206,24 +207,17 @@ namespace ShareService.Services
             using var session = await _client.StartSessionAsync();
             session.StartTransaction();
             try
-            {               
+            {
 
                 // Authorization here (future implementation)
 
-                // Process business rule here   
+                // Process business rule here
 
-                var application = new ApplicationModel
-                {
-                    StudentId = createDto.StudentId,
-                    StudentName = createDto.StudentName,
-                    Description = createDto.Description,
-                    Details = createDto.Details,
-                    ApplicationType = createDto.ApplicationType,
-                    DateApplied = DateTime.UtcNow,
-                    Status = "Pending" // Default status
-                };
+                application.Id = string.Empty;
+                application.DateApplied = DateTime.UtcNow;
+                application.Status = "Pending"; // Default status
 
-                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application,session);
+                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application, session);
 
                 // Business logic: Return limited information
                 var result = new ApplicationModel
@@ -236,14 +230,14 @@ namespace ShareService.Services
                 };
                 await session.CommitTransactionAsync();
                 _logger.LogInformation("Created new application with ID: {ApplicationId} for student {StudentId}",
-                    result.Id, createDto.StudentId);
+                    result.Id, application.StudentId);
 
                 return result;
             }
             catch (Exception ex)
             {
                 await session.AbortTransactionAsync();
-                _logger.LogError(ex, "Error in CreateApplication for student {StudentId}", createDto.StudentId);
+                _logger.LogError(ex, "Error in CreateApplication for student {StudentId}", application.StudentId);
                 throw new Exception("Error creating application", ex);
             }
         }
@@ -265,7 +259,7 @@ namespace ShareService.Services
             {
                 // Authorization: defense-in-depth safety net behind [RequirePermission] at the controller
                 var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
-                if (!permissions.Contains(PermissionKeys.ApplicationsEdit))
+                if (!permissions.Contains(PermissionKey.ApplicationsEdit.GetDescription()))
                 {
                     throw new UnauthorizedAccessException("You do not have permission to update application status");
                 }

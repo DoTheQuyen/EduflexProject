@@ -35,15 +35,28 @@ namespace Eduflex.Mapping.Auth
             };
         }
 
-        public static CreateUserModel ToModel(this CreateUserDto dto)
+        public static UserModel ToModel(this CreateUserDto dto)
         {
-            return new CreateUserModel
+            return new UserModel
             {
                 Email = dto.Email,
                 Password = dto.Password,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                RoleId = dto.RoleId
+                RoleId = dto.RoleId,
+            };
+        }
+
+        public static UserModel ToModel(this UserDto dto, string id)
+        {
+            return new UserModel
+            {
+                Id = id,
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                RoleId = dto.RoleId,
+                IsActive = dto.IsActive
             };
         }
     }

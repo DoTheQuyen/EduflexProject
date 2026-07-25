@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DataTablesModule } from 'angular-datatables';
 import { Client, FeedbackDto, CreateFeedbackDto } from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
+import { NotificationService } from '@services/notification.service';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
+import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
 @Component({
   selector: 'app-feedback-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTablesModule, DataTableComponent, ModalComponent, NotificationComponent],
+  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, ModalComponent, NotificationComponent],
   templateUrl: './feedback-management.component.html',
   styleUrls: ['./feedback-management.component.css']
 })
@@ -23,6 +24,10 @@ export class FeedbackManagementComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
   photoPreview: string = '';
+
+  pageNumber = 1;
+  pageSize = 10;
+  totalCount = 0;
 
   feedbackForm: FormGroup;
 
@@ -41,7 +46,7 @@ export class FeedbackManagementComponent implements OnInit {
     { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
   ];
 
-  constructor(private fb: FormBuilder, private apiClient: Client) {
+  constructor(private fb: FormBuilder, private apiClient: Client, private notificationService: NotificationService) {
     this.feedbackForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(150)]],
       photoData: ['', [Validators.required]],
@@ -57,15 +62,21 @@ export class FeedbackManagementComponent implements OnInit {
 
   loadFeedbacks(): void {
     this.isLoading = true;
-    this.apiClient.feedbacksAll().subscribe({
-      next: (feedbacks) => {
-        this.feedbacks = feedbacks;
+    this.apiClient.feedbacksGET(this.pageNumber, this.pageSize).subscribe({
+      next: (result) => {
+        this.feedbacks = result.items ?? [];
+        this.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  onPageChange(page: number): void {
+    this.pageNumber = page;
+    this.loadFeedbacks();
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -99,10 +110,12 @@ export class FeedbackManagementComponent implements OnInit {
         this.isSubmitting = false;
         this.closeModal();
         this.loadFeedbacks();
+        this.notificationService.success('Feedback saved successfully.');
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = err.error || 'Something went wrong saving the feedback. Please try again.';
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the feedback. Please try again.');
+        this.notificationService.error(this.errorMessage);
       }
     });
   }
@@ -114,9 +127,12 @@ export class FeedbackManagementComponent implements OnInit {
     }
 
     this.apiClient.feedbacksDELETE(feedback.id).subscribe({
-      next: () => this.loadFeedbacks(),
+      next: () => {
+        this.loadFeedbacks();
+        this.notificationService.success('Feedback deleted successfully.');
+      },
       error: () => {
-        window.alert('Could not delete this feedback. Please try again.');
+        this.notificationService.error('Could not delete this feedback. Please try again.');
       }
     });
   }

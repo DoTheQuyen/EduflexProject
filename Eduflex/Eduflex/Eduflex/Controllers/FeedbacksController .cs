@@ -3,6 +3,7 @@ using Eduflex.Mapping.Feedback;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using ShareService.Common;
 using ShareService.Models.Setting;
 using ShareService.Services.Interface;
 
@@ -10,7 +11,7 @@ namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FeedbacksController : ControllerBase
+    public class FeedbacksController : BaseApiController
     {
         private readonly IFeedbackService _feedbackService;
         private readonly ILogger<FeedbacksController> _logger;
@@ -26,54 +27,50 @@ namespace Eduflex.API.Controllers
         [HttpGet("feedback-latest")]
         [AllowAnonymous]
         [ApiExplorerSettings(GroupName = "public")]
-        public async Task<ActionResult<List<FeedbackDto>>> GetLatestFeedback([FromQuery] int? count = null)
+        public Task<ActionResult<List<FeedbackDto>>> GetLatestFeedback([FromQuery] int? count = null)
         {
-            var effectiveCount = count ?? _feedbackSettings.DefaultLatestCount;
-            var feedbacks = await _feedbackService.GetLatestFeedback(effectiveCount);
-            return Ok(feedbacks.Select(f => f.ToDto()).ToList());
+            return HandleRequestAsync(_logger, "Error in GetLatestFeedback endpoint", async () =>
+            {
+                var effectiveCount = count ?? _feedbackSettings.DefaultLatestCount;
+                var feedbacks = await _feedbackService.GetLatestFeedback(effectiveCount);
+                return feedbacks.Select(f => f.ToDto()).ToList();
+            });
         }
 
         [HttpPost]
         [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<ActionResult<FeedbackDto>> CreateFeedback(CreateFeedbackDto createDto)
+        public Task<ActionResult<bool>> CreateFeedback(CreateFeedbackDto createDto)
         {
-            try
-            {
-                var feedback = await _feedbackService.CreateFeedback(createDto.ToModel());
-                return Ok(feedback.ToDto());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in CreateFeedback endpoint");
-                return StatusCode(500, "An error occurred while saving the feedback");
-            }
+            return HandleCreateAsync(_logger, "Error in CreateFeedback endpoint", () => _feedbackService.CreateFeedback(createDto.ToModel()));
         }
 
         [HttpGet]
         [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<ActionResult<List<FeedbackDto>>> GetAll()
+        public Task<ActionResult<PagedResult<FeedbackDto>>> GetAll([FromQuery] PaginationQuery query)
         {
-            var feedbacks = await _feedbackService.GetAllFeedback();
-            return Ok(feedbacks.Select(f => f.ToDto()).ToList());
+            return HandleRequestAsync(_logger, "Error in GetAll feedback endpoint", async () =>
+            {
+                var result = await _feedbackService.GetFeedback(query);
+                return new PagedResult<FeedbackDto>
+                {
+                    Items = result.Items.Select(f => f.ToDto()).ToList(),
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
+            });
         }
 
         [HttpDelete("{id}")]
         [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
-        public async Task<IActionResult> DeleteFeedback(string id)
+        public Task<IActionResult> DeleteFeedback(string id)
         {
-            var deleted = await _feedbackService.DeleteFeedback(id);
-            if (!deleted)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            return HandleDeleteAsync(_logger, "Error in DeleteFeedback endpoint", () =>
+                _feedbackService.DeleteFeedback(id)
+            );
         }
     }
 }

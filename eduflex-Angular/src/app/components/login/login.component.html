@@ -1,18 +1,18 @@
 <div class="login-container">
   <div class="login-header">
-    <h2>Welcome to Eduflex</h2>
-    <p>Sign in to your account to continue</p>
+    <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
+    <p>{{ 'LOGIN.SUBTITLE' | translate }}</p>
   </div>
 
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <!-- Email Field -->
     <div class="form-group">
-      <label for="email">Email Address</label>
-      <input 
-        type="email" 
-        id="email" 
+      <label for="email">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
+      <input
+        type="email"
+        id="email"
         formControlName="email"
-        placeholder="Enter your email address"
+        [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
         [class.error]="isFieldInvalid('email')">
       
       <div *ngIf="isFieldInvalid('email')" class="error-message">
@@ -22,13 +22,13 @@
 
     <!-- Password Field -->
     <div class="form-group">
-      <label for="password">Password</label>
+      <label for="password">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
       <div class="password-input-container">
-        <input 
-          [type]="showPassword ? 'text' : 'password'" 
-          id="password" 
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="password"
           formControlName="password"
-          placeholder="Enter your password"
+          [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
           [class.error]="isFieldInvalid('password')">
         <button type="button" class="toggle-password" (click)="togglePassword()">
           {{ showPassword ? '🙈' : '👁️' }}
@@ -43,9 +43,9 @@
     <div class="form-options">
       <label class="remember-me">
         <input type="checkbox" formControlName="rememberMe">
-        Remember me
+        {{ 'LOGIN.REMEMBER_ME' | translate }}
       </label>
-      <a href="#" class="forgot-password" (click)="onForgotPassword($event)">Forgot password?</a>
+      <a href="#" class="forgot-password" (click)="onForgotPassword($event)">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
     </div>
 
     <!-- Error Message -->
@@ -64,18 +64,18 @@
       class="login-button" 
       [disabled]="loginForm.invalid || isLoading">
       <span *ngIf="isLoading" class="loading-spinner"></span>
-      {{ isLoading ? 'Signing in...' : 'Sign In' }}
+      {{ isLoading ? ('LOGIN.SIGNING_IN' | translate) : ('LOGIN.SIGN_IN' | translate) }}
     </button>
   </form>
 
-  <div class="login-divider">
-    <span>Or continue with</span>
-  </div>
+  <!-- <div class="login-divider">
+    <span>{{ 'LOGIN.DIVIDER' | translate }}</span>
+  </div> -->
 
- 
 
-  <div class="register-link">
-    Don't have an account? 
-    <a routerLink="/contact">Contact us to register</a>
-  </div>
+
+  <!-- <div class="register-link">
+    {{ 'LOGIN.NO_ACCOUNT' | translate }}
+    <a routerLink="/contact">{{ 'LOGIN.CONTACT_TO_REGISTER' | translate }}</a>
+  </div> -->
 </div>

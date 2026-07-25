@@ -1,28 +1,28 @@
 <!-- Header -->
 <section class="handbook-header">
   <div class="container">
-    <span class="eyebrow">Student Handbook</span>
-    <h1  class="header-sub">Starting your studies in Australia</h1>
-    <p class="header-sub">A practical reference for arriving, enrolling, and settling in — from the week before you land to your first exam period. Bookmark this page; you won't need all of it on day one.</p>
+    <span class="eyebrow">{{ 'HANDBOOK.HEADER.EYEBROW' | translate }}</span>
+    <h1 class="header-sub">{{ 'HANDBOOK.HEADER.TITLE' | translate }}</h1>
+    <p class="header-sub">{{ 'HANDBOOK.HEADER.SUBTITLE' | translate }}</p>
   </div>
 </section>
 
 <div class="handbook-grid container">
   <nav class="handbook-toc" aria-label="Handbook sections">
-    <p class="toc-label">Contents</p>
+    <p class="toc-label">{{ 'HANDBOOK.TOC.LABEL' | translate }}</p>
     <ol>
-      <li><a href="#before-you-arrive" (click)="jumpTo($event, 'before-you-arrive')">01 · Before you arrive</a></li>
-      <li><a href="#first-weeks" (click)="jumpTo($event, 'first-weeks')">02 · First two weeks</a></li>
-      <li><a href="#enrolment" (click)="jumpTo($event, 'enrolment')">03 · Enrolment &amp; calendar</a></li>
-      <li><a href="#academic-life" (click)="jumpTo($event, 'academic-life')">04 · Classes &amp; support</a></li>
-      <li><a href="#culture" (click)="jumpTo($event, 'culture')">05 · Culture &amp; life</a></li>
-      <li><a href="#money" (click)="jumpTo($event, 'money')">06 · Money &amp; cost of living</a></li>
-      <li><a href="#housing" (click)="jumpTo($event, 'housing')">07 · Housing</a></li>
-      <li><a href="#transport" (click)="jumpTo($event, 'transport')">08 · Transport</a></li>
-      <li><a href="#work" (click)="jumpTo($event, 'work')">09 · Work rights &amp; jobs</a></li>
-      <li><a href="#health-safety" (click)="jumpTo($event, 'health-safety')">10 · Health &amp; safety</a></li>
-      <li><a href="#help" (click)="jumpTo($event, 'help')">11 · Getting help</a></li>
-      <li><a href="#reference" (click)="jumpTo($event, 'reference')">12 · Quick reference</a></li>
+      <li><a href="#before-you-arrive" (click)="jumpTo($event, 'before-you-arrive')">{{ 'HANDBOOK.TOC.ITEM01' | translate }}</a></li>
+      <li><a href="#first-weeks" (click)="jumpTo($event, 'first-weeks')">{{ 'HANDBOOK.TOC.ITEM02' | translate }}</a></li>
+      <li><a href="#enrolment" (click)="jumpTo($event, 'enrolment')">{{ 'HANDBOOK.TOC.ITEM03' | translate }}</a></li>
+      <li><a href="#academic-life" (click)="jumpTo($event, 'academic-life')">{{ 'HANDBOOK.TOC.ITEM04' | translate }}</a></li>
+      <li><a href="#culture" (click)="jumpTo($event, 'culture')">{{ 'HANDBOOK.TOC.ITEM05' | translate }}</a></li>
+      <li><a href="#money" (click)="jumpTo($event, 'money')">{{ 'HANDBOOK.TOC.ITEM06' | translate }}</a></li>
+      <li><a href="#housing" (click)="jumpTo($event, 'housing')">{{ 'HANDBOOK.TOC.ITEM07' | translate }}</a></li>
+      <li><a href="#transport" (click)="jumpTo($event, 'transport')">{{ 'HANDBOOK.TOC.ITEM08' | translate }}</a></li>
+      <li><a href="#work" (click)="jumpTo($event, 'work')">{{ 'HANDBOOK.TOC.ITEM09' | translate }}</a></li>
+      <li><a href="#health-safety" (click)="jumpTo($event, 'health-safety')">{{ 'HANDBOOK.TOC.ITEM10' | translate }}</a></li>
+      <li><a href="#help" (click)="jumpTo($event, 'help')">{{ 'HANDBOOK.TOC.ITEM11' | translate }}</a></li>
+      <li><a href="#reference" (click)="jumpTo($event, 'reference')">{{ 'HANDBOOK.TOC.ITEM12' | translate }}</a></li>
     </ol>
   </nav>
 
@@ -33,30 +33,30 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a3 3 0 0 1 3-3h0a3 3 0 0 1 3 3v2"/><path d="M3 13h18"/></svg>
-          <span class="eyebrow">01 · Before you arrive</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH01.EYEBROW' | translate }}</span>
         </div>
-        <h2>Six weeks out: what to lock in first</h2>
+        <h2>{{ 'HANDBOOK.CH01.TITLE' | translate }}</h2>
       </div>
       <ul class="checklist">
-        <li><span class="box"></span><span><strong>Confirmation of Enrolment (CoE)</strong> issued by your institution — everything else, including your visa, is built on this.</span></li>
-        <li><span class="box"></span><span><strong>Student visa (subclass 500)</strong> granted, with your visa grant letter saved as PDF and printed.</span></li>
-        <li><span class="box"></span><span><strong>Overseas Student Health Cover (OSHC)</strong> purchased for your full visa duration — it's a visa condition, not optional.</span></li>
-        <li><span class="box"></span><span><strong>Accommodation</strong> booked for at least your first 2–4 weeks so you're not house-hunting jet-lagged.</span></li>
-        <li><span class="box"></span><span><strong>Flights</strong> booked to arrive a few days before orientation, not the night before.</span></li>
-        <li><span class="box"></span><span>Scans of your <strong>passport, visa grant, CoE, OSHC certificate, and transcripts</strong> saved to cloud storage, separate from your luggage.</span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK1' | translate"></span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK2' | translate"></span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK3' | translate"></span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK4' | translate"></span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK5' | translate"></span></li>
+        <li><span class="box"></span><span [innerHTML]="'HANDBOOK.CH01.CHECK6' | translate"></span></li>
       </ul>
 
       <div class="callout callout-note">
         <span class="callout-mark">☀</span>
-        <p><strong>Seasons are reversed.</strong> December–February is summer, June–August is winter. A Semester 1 start (February) means arriving in late-summer heat; a Semester 2 start (July) means arriving in winter — pack accordingly.</p>
+        <p [innerHTML]="'HANDBOOK.CH01.NOTE' | translate"></p>
       </div>
 
-      <h3>Hand luggage, not checked bags</h3>
+      <h3>{{ 'HANDBOOK.CH01.LUGGAGE_TITLE' | translate }}</h3>
       <ul class="values-list plain">
-        <li>Passport, visa grant letter, CoE, and OSHC certificate</li>
-        <li>Proof of accommodation for your first nights</li>
-        <li>A small amount of Australian dollars for transport and food on arrival</li>
-        <li>Prescription medication, in original packaging with your name on it</li>
+        <li>{{ 'HANDBOOK.CH01.LUGGAGE1' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH01.LUGGAGE2' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH01.LUGGAGE3' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH01.LUGGAGE4' | translate }}</li>
       </ul>
     </section>
 
@@ -65,29 +65,29 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6v2H9z"/><path d="M8.5 12l2 2 4-4"/><path d="M8.5 17h7"/></svg>
-          <span class="eyebrow">02 · Your first two weeks</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH02.EYEBROW' | translate }}</span>
         </div>
-        <h2>The admin chain: do these in order</h2>
+        <h2>{{ 'HANDBOOK.CH02.TITLE' | translate }}</h2>
       </div>
-      <p class="band-intro">A bank account needs an address, a phone plan often needs a bank card, and paid work needs a tax number — each step unlocks the next.</p>
+      <p class="band-intro">{{ 'HANDBOOK.CH02.INTRO' | translate }}</p>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Task</th><th>Why it matters</th><th>What you'll need</th></tr></thead>
+          <thead><tr><th>{{ 'HANDBOOK.CH02.TH_TASK' | translate }}</th><th>{{ 'HANDBOOK.CH02.TH_WHY' | translate }}</th><th>{{ 'HANDBOOK.CH02.TH_NEED' | translate }}</th></tr></thead>
           <tbody>
-            <tr><td class="term">Attend orientation</td><td>Finalises enrolment, campus tour, ID card, support services</td><td>CoE, passport</td></tr>
-            <tr><td class="term">Get your student ID</td><td>Needed for library, labs, printing, transport concessions</td><td>Enrolment confirmation</td></tr>
-            <tr><td class="term">Open a bank account</td><td>Get paid if you work; pay rent and bills without cash</td><td>Passport, visa, enrolment letter, local address</td></tr>
-            <tr><td class="term">Apply for a Tax File Number</td><td>Required before starting any paid job — free via the ATO</td><td>Passport, visa details, address</td></tr>
-            <tr><td class="term">Set up myGov</td><td>Links Medicare/OSHC, tax, and (if eligible) Centrelink</td><td>Email, mobile number</td></tr>
-            <tr><td class="term">Activate OSHC</td><td>Confirms you can claim doctor visits from day one</td><td>OSHC certificate, policy number</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW1_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW1_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW1_NEED' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW2_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW2_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW2_NEED' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW3_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW3_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW3_NEED' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW4_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW4_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW4_NEED' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW5_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW5_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW5_NEED' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH02.ROW6_TASK' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW6_WHY' | translate }}</td><td>{{ 'HANDBOOK.CH02.ROW6_NEED' | translate }}</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="callout callout-tip">
         <span class="callout-mark">✺</span>
-        <p><strong>Some banks let you open an account online before you land</strong> — CommBank, NAB, and ANZ all offer this to international students with a CoE, so you're not carrying cash for two weeks.</p>
+        <p [innerHTML]="'HANDBOOK.CH02.TIP' | translate"></p>
       </div>
     </section>
 
@@ -96,42 +96,42 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16"/><path d="M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>
-          <span class="eyebrow">03 · Enrolment &amp; the academic calendar</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH03.EYEBROW' | translate }}</span>
         </div>
-        <h2>Know your census date</h2>
+        <h2>{{ 'HANDBOOK.CH03.TITLE' | translate }}</h2>
       </div>
       <div class="mission-grid">
         <div class="mission-card">
-          <h3>Typical semester structure</h3>
+          <h3>{{ 'HANDBOOK.CH03.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Semester 1: late February – June</li>
-            <li>Semester 2: July – November</li>
-            <li>A mid-year and end-of-year break of several weeks</li>
-            <li>Some courses run trimesters instead — check your own calendar</li>
+            <li>{{ 'HANDBOOK.CH03.CARD1_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD1_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD1_ITEM3' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD1_ITEM4' | translate }}</li>
           </ul>
         </div>
         <div class="mission-card">
-          <h3>Inside each semester</h3>
+          <h3>{{ 'HANDBOOK.CH03.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Orientation / O-Week before teaching starts</li>
-            <li>A census date, usually ~3–4 weeks in</li>
-            <li>A mid-semester break (~1 week)</li>
-            <li>A formal exam or assessment period at the end</li>
+            <li>{{ 'HANDBOOK.CH03.CARD2_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD2_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD2_ITEM3' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH03.CARD2_ITEM4' | translate }}</li>
           </ul>
         </div>
       </div>
 
       <div class="callout callout-warn">
         <span class="callout-mark">⚠</span>
-        <p><strong>The census date is the most important date each semester.</strong> Withdraw before it and there's no financial or academic penalty. Withdraw after, and you're generally still billed, and it can appear as a fail. Put every census date in your calendar the day enrolment opens.</p>
+        <p [innerHTML]="'HANDBOOK.CH03.WARN' | translate"></p>
       </div>
 
-      <h3>Enrolling in units each semester</h3>
+      <h3>{{ 'HANDBOOK.CH03.ENROL_TITLE' | translate }}</h3>
       <ol class="values-list plain numbered">
-        <li>Check your course structure — core vs elective units, prerequisites — in your course handbook.</li>
-        <li>Enrol via the student portal before the deadline.</li>
-        <li>Confirm your study load meets your visa's full-time requirement.</li>
-        <li>Check your timetable for clashes before census.</li>
+        <li>{{ 'HANDBOOK.CH03.ENROL1' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH03.ENROL2' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH03.ENROL3' | translate }}</li>
+        <li>{{ 'HANDBOOK.CH03.ENROL4' | translate }}</li>
       </ol>
     </section>
 
@@ -140,35 +140,35 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 4 2 9l10 5 10-5-10-5Z"/><path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/><path d="M22 9v6"/></svg>
-          <span class="eyebrow">04 · Classes, grading &amp; support</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH04.EYEBROW' | translate }}</span>
         </div>
-        <h2>What's different from many overseas systems</h2>
+        <h2>{{ 'HANDBOOK.CH04.TITLE' | translate }}</h2>
       </div>
       <ul class="values-list plain">
-        <li><strong>Lectures and tutorials are separate</strong> — the tutorial or lab is small, discussion-based, and usually where attendance is actually tracked.</li>
-        <li><strong>Assessment is continuous</strong>, not one final exam — expect essays, quizzes, presentations, and group work across the semester.</li>
-        <li><strong>Academic integrity is enforced strictly</strong>, including on AI-generated text. When in doubt, cite it.</li>
-        <li><strong>Grades</strong> typically run High Distinction / Distinction / Credit / Pass / Fail — exact bands vary by institution.</li>
-        <li><strong>Emailing academic staff is normal</strong> — most list consultation hours and reply within a few working days.</li>
+        <li [innerHTML]="'HANDBOOK.CH04.ITEM1' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH04.ITEM2' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH04.ITEM3' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH04.ITEM4' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH04.ITEM5' | translate"></li>
       </ul>
 
       <div class="mission-grid">
         <div class="mission-card">
-          <h3>Academic support</h3>
+          <h3>{{ 'HANDBOOK.CH04.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Academic skills / writing centres</li>
-            <li>Peer mentoring and study groups</li>
-            <li>Library research consultations</li>
-            <li>Disability and accessibility services</li>
+            <li>{{ 'HANDBOOK.CH04.CARD1_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD1_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD1_ITEM3' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD1_ITEM4' | translate }}</li>
           </ul>
         </div>
         <div class="mission-card">
-          <h3>Personal support</h3>
+          <h3>{{ 'HANDBOOK.CH04.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Free, confidential counselling</li>
-            <li>International student advisors</li>
-            <li>Student union / guild advocacy</li>
-            <li>Cultural, faith, and LGBTQ+ societies</li>
+            <li>{{ 'HANDBOOK.CH04.CARD2_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD2_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD2_ITEM3' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH04.CARD2_ITEM4' | translate }}</li>
           </ul>
         </div>
       </div>
@@ -179,21 +179,21 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.6 2.3 2.6 15 0 17"/><path d="M12 3.5c-2.6 2.3-2.6 15 0 17"/></svg>
-          <span class="eyebrow">05 · Culture &amp; everyday life</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH05.EYEBROW' | translate }}</span>
         </div>
-        <h2>Settling into a multicultural country</h2>
+        <h2>{{ 'HANDBOOK.CH05.TITLE' | translate }}</h2>
       </div>
-      <p class="band-intro">Roughly a third of Australia's residents were born overseas. You will not be the only international student, and you won't be far from food, faith communities, or language from home.</p>
+      <p class="band-intro">{{ 'HANDBOOK.CH05.INTRO' | translate }}</p>
 
-      <p class="pull-quote">Before European settlement, this land was cared for by hundreds of Aboriginal and Torres Strait Islander nations, whose connection to it spans over 60,000 years. You'll hear an "Acknowledgement of Country" at orientation, graduations, and public events — a normal, respectful part of Australian civic life.</p>
+      <p class="pull-quote">{{ 'HANDBOOK.CH05.QUOTE' | translate }}</p>
 
-      <h3>Social norms worth knowing early</h3>
+      <h3>{{ 'HANDBOOK.CH05.SUB_TITLE' | translate }}</h3>
       <ul class="values-list plain">
-        <li><strong>Directness reads as normal, not rude</strong> — first names are used quickly, including with lecturers.</li>
-        <li><strong>Tipping isn't expected</strong> — hospitality staff earn a legal minimum wage.</li>
-        <li><strong>Punctuality matters for class</strong>; social plans are looser.</li>
-        <li><strong>Queuing is taken seriously</strong> — wait your turn.</li>
-        <li><strong>Public conversation is kept low-key</strong>, especially on transport.</li>
+        <li [innerHTML]="'HANDBOOK.CH05.ITEM1' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH05.ITEM2' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH05.ITEM3' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH05.ITEM4' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH05.ITEM5' | translate"></li>
       </ul>
     </section>
 
@@ -202,28 +202,28 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v10M9.5 9.3c0-1 1-1.8 2.5-1.8s2.5.8 2.5 1.8-1 1.5-2.5 1.8-2.5.8-2.5 1.8 1 1.8 2.5 1.8 2.5-.8 2.5-1.8"/></svg>
-          <span class="eyebrow">06 · Money &amp; cost of living</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH06.EYEBROW' | translate }}</span>
         </div>
-        <h2>Budgeting week to week</h2>
+        <h2>{{ 'HANDBOOK.CH06.TITLE' | translate }}</h2>
       </div>
-      <p class="band-intro">Costs vary sharply by city — Sydney and Melbourne run highest, regional campuses noticeably cheaper. Broad weekly ranges for a student sharing accommodation, in AUD:</p>
+      <p class="band-intro">{{ 'HANDBOOK.CH06.INTRO' | translate }}</p>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Category</th><th>Typical weekly range</th><th>Notes</th></tr></thead>
+          <thead><tr><th>{{ 'HANDBOOK.CH06.TH_CAT' | translate }}</th><th>{{ 'HANDBOOK.CH06.TH_RANGE' | translate }}</th><th>{{ 'HANDBOOK.CH06.TH_NOTES' | translate }}</th></tr></thead>
           <tbody>
-            <tr><td class="term">Shared rent</td><td>$220 – $450</td><td>Higher in inner-city Sydney/Melbourne; lower regionally</td></tr>
-            <tr><td class="term">Groceries</td><td>$70 – $120</td><td>Cooking at home is far cheaper than eating out</td></tr>
-            <tr><td class="term">Public transport</td><td>$25 – $50</td><td>Concession fares reduce this where eligible</td></tr>
-            <tr><td class="term">Utilities (shared)</td><td>$20 – $40</td><td>Spikes in summer (aircon) and winter (heating)</td></tr>
-            <tr><td class="term">Phone plan</td><td>$10 – $30</td><td>Prepaid resellers are usually cheapest</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH06.ROW1_CAT' | translate }}</td><td>$220 – $450</td><td>{{ 'HANDBOOK.CH06.ROW1_NOTES' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH06.ROW2_CAT' | translate }}</td><td>$70 – $120</td><td>{{ 'HANDBOOK.CH06.ROW2_NOTES' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH06.ROW3_CAT' | translate }}</td><td>$25 – $50</td><td>{{ 'HANDBOOK.CH06.ROW3_NOTES' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH06.ROW4_CAT' | translate }}</td><td>$20 – $40</td><td>{{ 'HANDBOOK.CH06.ROW4_NOTES' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH06.ROW5_CAT' | translate }}</td><td>$10 – $30</td><td>{{ 'HANDBOOK.CH06.ROW5_NOTES' | translate }}</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="callout callout-warn">
         <span class="callout-mark">⚠</span>
-        <p><strong>Never wire money, share your banking password, or send a rental deposit before inspecting in person or by video call.</strong> Rental and job scams specifically target new arrivals in their first weeks.</p>
+        <p [innerHTML]="'HANDBOOK.CH06.WARN' | translate"></p>
       </div>
     </section>
 
@@ -232,32 +232,32 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg>
-          <span class="eyebrow">07 · Housing</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH07.EYEBROW' | translate }}</span>
         </div>
-        <h2>On-campus vs share housing</h2>
+        <h2>{{ 'HANDBOOK.CH07.TITLE' | translate }}</h2>
       </div>
       <div class="mission-grid">
         <div class="mission-card">
-          <h3>On-campus / residential colleges</h3>
+          <h3>{{ 'HANDBOOK.CH07.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Simplest option for your first semester — no lease, bills usually included</li>
-            <li>Built-in social community, closest to classes</li>
-            <li>Apply early; popular colleges fill months ahead</li>
+            <li>{{ 'HANDBOOK.CH07.CARD1_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH07.CARD1_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH07.CARD1_ITEM3' | translate }}</li>
           </ul>
         </div>
         <div class="mission-card">
-          <h3>Off-campus share housing</h3>
+          <h3>{{ 'HANDBOOK.CH07.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
-            <li>Cheaper long-term; listed on realestate.com.au, domain.com.au, flatmates.com.au</li>
-            <li>Requires a lease and a bond (typically 4 weeks' rent, held by a government bond authority)</li>
-            <li>Inspect in person or via live video call before paying anything</li>
+            <li>{{ 'HANDBOOK.CH07.CARD2_ITEM1' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH07.CARD2_ITEM2' | translate }}</li>
+            <li>{{ 'HANDBOOK.CH07.CARD2_ITEM3' | translate }}</li>
           </ul>
         </div>
       </div>
 
       <div class="callout callout-tip">
         <span class="callout-mark">✺</span>
-        <p><strong>Book temporary accommodation for your first two to four weeks</strong> rather than signing a 12-month lease sight-unseen. It gives you time to inspect share houses in person once you know your timetable.</p>
+        <p [innerHTML]="'HANDBOOK.CH07.TIP' | translate"></p>
       </div>
     </section>
 
@@ -266,27 +266,27 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 12h16"/><circle cx="8" cy="18.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="16" cy="18.5" r="1.3" fill="currentColor" stroke="none"/><path d="M7 5V3M17 5V3"/></svg>
-          <span class="eyebrow">08 · Transport &amp; getting around</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH08.EYEBROW' | translate }}</span>
         </div>
-        <h2>Get your smart card in week one</h2>
+        <h2>{{ 'HANDBOOK.CH08.TITLE' | translate }}</h2>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>City / state</th><th>Smart card</th><th>Covers</th></tr></thead>
+          <thead><tr><th>{{ 'HANDBOOK.CH08.TH_CITY' | translate }}</th><th>{{ 'HANDBOOK.CH08.TH_CARD' | translate }}</th><th>{{ 'HANDBOOK.CH08.TH_COVERS' | translate }}</th></tr></thead>
           <tbody>
-            <tr><td class="term">Sydney, NSW</td><td>Opal</td><td>Train, bus, ferry, light rail</td></tr>
-            <tr><td class="term">Melbourne, VIC</td><td>myki</td><td>Train, tram, bus</td></tr>
-            <tr><td class="term">Brisbane, QLD</td><td>go card</td><td>Train, bus, ferry</td></tr>
-            <tr><td class="term">Perth, WA</td><td>SmartRider</td><td>Train, bus, ferry</td></tr>
-            <tr><td class="term">Adelaide, SA</td><td>metroCARD</td><td>Train, tram, bus</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH08.ROW1_CITY' | translate }}</td><td>Opal</td><td>{{ 'HANDBOOK.CH08.ROW1_COVERS' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH08.ROW2_CITY' | translate }}</td><td>myki</td><td>{{ 'HANDBOOK.CH08.ROW2_COVERS' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH08.ROW3_CITY' | translate }}</td><td>go card</td><td>{{ 'HANDBOOK.CH08.ROW3_COVERS' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH08.ROW4_CITY' | translate }}</td><td>SmartRider</td><td>{{ 'HANDBOOK.CH08.ROW4_COVERS' | translate }}</td></tr>
+            <tr><td class="term">{{ 'HANDBOOK.CH08.ROW5_CITY' | translate }}</td><td>metroCARD</td><td>{{ 'HANDBOOK.CH08.ROW5_COVERS' | translate }}</td></tr>
           </tbody>
         </table>
       </div>
       <div class="callout callout-note">
         <span class="callout-mark">ⓘ</span>
-        <p><strong>Concession fares aren't automatic for international students</strong> — eligibility differs by state and sometimes visa subclass. Ask your international student office which concession, if any, applies to you.</p>
+        <p [innerHTML]="'HANDBOOK.CH08.NOTE' | translate"></p>
       </div>
-      <p class="band-intro">Australia drives on the <strong>left</strong>. You can generally drive on a valid overseas licence for a limited period after arrival — the exact window is set by your state's road authority.</p>
+      <p class="band-intro" [innerHTML]="'HANDBOOK.CH08.INTRO' | translate"></p>
     </section>
 
     <!-- 09 Work -->
@@ -294,19 +294,19 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M9 8V6.5A1.5 1.5 0 0 1 10.5 5h3A1.5 1.5 0 0 1 15 6.5V8"/><path d="M3 13h18"/></svg>
-          <span class="eyebrow">09 · Work rights &amp; jobs</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH09.EYEBROW' | translate }}</span>
         </div>
-        <h2>Know your visa's work-hour limit</h2>
+        <h2>{{ 'HANDBOOK.CH09.TITLE' | translate }}</h2>
       </div>
       <div class="callout callout-warn">
         <span class="callout-mark">⚠</span>
-        <p><strong>Subclass 500 work rights are currently capped at 48 hours per fortnight while your course is in session</strong>, uncapped during official breaks. These rules change periodically — confirm the current limit with the Department of Home Affairs or your institution before starting any job.</p>
+        <p [innerHTML]="'HANDBOOK.CH09.WARN' | translate"></p>
       </div>
       <ul class="values-list plain">
-        <li>Get your <strong>Tax File Number</strong> ready — without one, tax is withheld at the top rate.</li>
-        <li>Confirm you'll be paid at least the national minimum wage, with payslips.</li>
-        <li>Check you're being paid <strong>superannuation</strong> if eligible.</li>
-        <li>The Fair Work Ombudsman investigates underpayment for free and confidentially, regardless of visa status.</li>
+        <li [innerHTML]="'HANDBOOK.CH09.ITEM1' | translate"></li>
+        <li>{{ 'HANDBOOK.CH09.ITEM2' | translate }}</li>
+        <li [innerHTML]="'HANDBOOK.CH09.ITEM3' | translate"></li>
+        <li>{{ 'HANDBOOK.CH09.ITEM4' | translate }}</li>
       </ul>
     </section>
 
@@ -315,31 +315,31 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.6-9.5 9-9.5 9Z"/></svg>
-          <span class="eyebrow">10 · Health &amp; safety</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH10.EYEBROW' | translate }}</span>
         </div>
-        <h2>Cover, sun, and emergencies</h2>
+        <h2>{{ 'HANDBOOK.CH10.TITLE' | translate }}</h2>
       </div>
       <ul class="values-list plain">
-        <li><strong>OSHC</strong> is your primary cover for the length of your visa and is compulsory.</li>
-        <li>Some nationalities have a <strong>Reciprocal Health Care Agreement</strong> with Australia — check if yours applies.</li>
-        <li>Book a GP for non-urgent issues; save emergency departments for genuine emergencies.</li>
+        <li [innerHTML]="'HANDBOOK.CH10.ITEM1' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH10.ITEM2' | translate"></li>
+        <li>{{ 'HANDBOOK.CH10.ITEM3' | translate }}</li>
       </ul>
 
       <div class="callout callout-tip">
         <span class="callout-mark">✺</span>
-        <p><strong>Australia has some of the world's highest UV levels</strong>, even on mild days. Slip on a shirt, slop on SPF 30+, slap on a hat, seek shade, slide on sunglasses.</p>
+        <p [innerHTML]="'HANDBOOK.CH10.TIP' | translate"></p>
       </div>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Situation</th><th>Number</th></tr></thead>
+          <thead><tr><th>{{ 'HANDBOOK.CH10.TH_SITUATION' | translate }}</th><th>{{ 'HANDBOOK.CH10.TH_NUMBER' | translate }}</th></tr></thead>
           <tbody>
-            <tr><td>Police / Fire / Ambulance (life-threatening)</td><td class="term">000</td></tr>
-            <tr><td>Police assistance (non-urgent)</td><td class="term">131 444</td></tr>
-            <tr><td>Poisons Information Centre</td><td class="term">13 11 26</td></tr>
-            <tr><td>Lifeline (24/7 crisis support)</td><td class="term">13 11 14</td></tr>
-            <tr><td>Beyond Blue (mental health support)</td><td class="term">1300 22 4636</td></tr>
-            <tr><td>1800RESPECT</td><td class="term">1800 737 732</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW1_SITUATION' | translate }}</td><td class="term">000</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW2_SITUATION' | translate }}</td><td class="term">131 444</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW3_SITUATION' | translate }}</td><td class="term">13 11 26</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW4_SITUATION' | translate }}</td><td class="term">13 11 14</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW5_SITUATION' | translate }}</td><td class="term">1300 22 4636</td></tr>
+            <tr><td>{{ 'HANDBOOK.CH10.ROW6_SITUATION' | translate }}</td><td class="term">1800 737 732</td></tr>
           </tbody>
         </table>
       </div>
@@ -350,15 +350,15 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="m6 6 3.5 3.5M18 6l-3.5 3.5M6 18l3.5-3.5M18 18l-3.5-3.5"/></svg>
-          <span class="eyebrow">11 · Getting help</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH11.EYEBROW' | translate }}</span>
         </div>
-        <h2>Use your support services early</h2>
+        <h2>{{ 'HANDBOOK.CH11.TITLE' | translate }}</h2>
       </div>
       <ul class="values-list plain">
-        <li><strong>International student advisors</strong> — visa conditions, OSHC claims, general welfare.</li>
-        <li><strong>Student union / guild</strong> — free advocacy for academic and tenancy disputes.</li>
-        <li><strong>Counselling services</strong> — confidential, usually free for a set number of sessions.</li>
-        <li><strong>Study Australia</strong> and the <strong>Department of Home Affairs</strong> websites are the authoritative sources for visa condition changes.</li>
+        <li [innerHTML]="'HANDBOOK.CH11.ITEM1' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH11.ITEM2' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH11.ITEM3' | translate"></li>
+        <li [innerHTML]="'HANDBOOK.CH11.ITEM4' | translate"></li>
       </ul>
     </section>
 
@@ -367,21 +367,21 @@
       <div class="band-head">
         <div class="band-head-top">
           <svg class="chapter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3.5h12v17l-6-4-6 4Z"/></svg>
-          <span class="eyebrow">12 · Quick reference</span>
+          <span class="eyebrow">{{ 'HANDBOOK.CH12.EYEBROW' | translate }}</span>
         </div>
-        <h2>Slang you'll hear in week one</h2>
+        <h2>{{ 'HANDBOOK.CH12.TITLE' | translate }}</h2>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Term</th><th>Means</th></tr></thead>
+          <thead><tr><th>{{ 'HANDBOOK.CH12.TH_TERM' | translate }}</th><th>{{ 'HANDBOOK.CH12.TH_MEANS' | translate }}</th></tr></thead>
           <tbody>
-            <tr><td class="term">Arvo</td><td>Afternoon</td></tr>
-            <tr><td class="term">Servo</td><td>Petrol / service station</td></tr>
-            <tr><td class="term">No worries</td><td>You're welcome / it's fine</td></tr>
-            <tr><td class="term">How ya going?</td><td>A greeting, not a real question</td></tr>
-            <tr><td class="term">Uni</td><td>University</td></tr>
-            <tr><td class="term">Doona</td><td>Duvet / quilt</td></tr>
-            <tr><td class="term">Bring a plate</td><td>Bring a dish to share at a gathering</td></tr>
+            <tr><td class="term">Arvo</td><td>{{ 'HANDBOOK.CH12.ROW1_MEANS' | translate }}</td></tr>
+            <tr><td class="term">Servo</td><td>{{ 'HANDBOOK.CH12.ROW2_MEANS' | translate }}</td></tr>
+            <tr><td class="term">No worries</td><td>{{ 'HANDBOOK.CH12.ROW3_MEANS' | translate }}</td></tr>
+            <tr><td class="term">How ya going?</td><td>{{ 'HANDBOOK.CH12.ROW4_MEANS' | translate }}</td></tr>
+            <tr><td class="term">Uni</td><td>{{ 'HANDBOOK.CH12.ROW5_MEANS' | translate }}</td></tr>
+            <tr><td class="term">Doona</td><td>{{ 'HANDBOOK.CH12.ROW6_MEANS' | translate }}</td></tr>
+            <tr><td class="term">Bring a plate</td><td>{{ 'HANDBOOK.CH12.ROW7_MEANS' | translate }}</td></tr>
           </tbody>
         </table>
       </div>
@@ -392,6 +392,6 @@
 
 <footer class="handbook-footer">
   <div class="container">
-    <p>General guidance only, current as of publication — visa conditions, transport cards, and fees change over time. Always confirm current rules with your institution's international student office and the Department of Home Affairs before acting on anything time-sensitive.</p>
+    <p>{{ 'HANDBOOK.FOOTER' | translate }}</p>
   </div>
 </footer>

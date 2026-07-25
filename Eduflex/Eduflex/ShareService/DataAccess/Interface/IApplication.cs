@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
+using ShareService.Common;
 using ShareService.Models.Application;
 using ShareService.Models.Student;
 
@@ -8,6 +9,7 @@ namespace ShareService.DataAccess.Interface
     {
         Task<StudentModel?> GetStudentByUserIdAsync(string userId);
         Task<List<ApplicationModel>> GetApplicationsByStudentIdAsync(string studentId);
+        Task<PagedResult<ApplicationModel>> GetApplicationsByStudentIdAsync(string studentId, PaginationQuery query);
         Task<ApplicationModel?> GetApplicationByIdAsync(string id);
         Task<ApplicationModel> CreateApplicationAsync(ApplicationModel application, IClientSessionHandle? session = null);
         Task<bool> UpdateApplicationStatusAsync(string id, string status, IClientSessionHandle? session = null);

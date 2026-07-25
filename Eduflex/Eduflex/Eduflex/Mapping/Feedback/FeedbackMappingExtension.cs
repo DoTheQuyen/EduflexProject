@@ -5,9 +5,9 @@ namespace Eduflex.Mapping.Feedback
 {
     public static class FeedbackMappingExtension
     {
-        public static CreateFeedbackModel ToModel(this CreateFeedbackDto dto)
+        public static FeedbackModel ToModel(this CreateFeedbackDto dto)
         {
-            return new CreateFeedbackModel
+            return new FeedbackModel
             {
                 Name = dto.Name,
                 PhotoData = dto.PhotoData,

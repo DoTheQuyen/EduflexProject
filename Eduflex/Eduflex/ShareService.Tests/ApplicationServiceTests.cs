@@ -17,7 +17,7 @@ namespace ShareService.Tests
     public class ApplicationServiceTests
     {
         private Mock<IApplication> _appRepoMock;
-        private Mock<IValidator<CreateApplicationModel>> _validatorMock;
+        private Mock<IValidator<ApplicationModel>> _validatorMock;
         private Mock<ILogger<ApplicationService>> _loggerMock;
         private Mock<IMongoClient> _clientMock;
         private Mock<IClientSessionHandle> _sessionMock;
@@ -28,7 +28,7 @@ namespace ShareService.Tests
         public void Setup()
         {
             _appRepoMock = new Mock<IApplication>();
-            _validatorMock = new Mock<IValidator<CreateApplicationModel>>();
+            _validatorMock = new Mock<IValidator<ApplicationModel>>();
             _loggerMock = new Mock<ILogger<ApplicationService>>();
             _clientMock = new Mock<IMongoClient>();
             _sessionMock = new Mock<IClientSessionHandle>();
@@ -36,7 +36,7 @@ namespace ShareService.Tests
 
             // Validator always passes
             _validatorMock
-                .Setup(v => v.ValidateAsync(It.IsAny<CreateApplicationModel>(), default))
+                .Setup(v => v.ValidateAsync(It.IsAny<ApplicationModel>(), default))
                 .ReturnsAsync(new ValidationResult());
 
             // Mongo client returns a fake session
@@ -70,7 +70,7 @@ namespace ShareService.Tests
         public async Task CreateApplication_SetsDefaultStatus()
         {
             // Arrange
-            var createDto = new CreateApplicationModel
+            var createDto = new ApplicationModel
             {
                 StudentId = "S1",
                 StudentName = "John",
@@ -91,13 +91,13 @@ namespace ShareService.Tests
         {
             // Arrange: force validator to fail
             _validatorMock
-                .Setup(v => v.ValidateAsync(It.IsAny<CreateApplicationModel>(), default))
+                .Setup(v => v.ValidateAsync(It.IsAny<ApplicationModel>(), default))
                 .ReturnsAsync(new ValidationResult(new[]
                 {
                     new ValidationFailure("StudentId", "StudentId is required")
                 }));
 
-            var createDto = new CreateApplicationModel
+            var createDto = new ApplicationModel
             {
                 StudentId = "",
                 StudentName = "John"
@@ -114,7 +114,7 @@ namespace ShareService.Tests
         public async Task CreateApplication_CommitsTransaction()
         {
             // Arrange
-            var createDto = new CreateApplicationModel
+            var createDto = new ApplicationModel
             {
                 StudentId = "S1",
                 StudentName = "John",
@@ -139,7 +139,7 @@ namespace ShareService.Tests
                     It.IsAny<IClientSessionHandle?>()))
                 .ThrowsAsync(new Exception("DB error"));
 
-            var createDto = new CreateApplicationModel
+            var createDto = new ApplicationModel
             {
                 StudentId = "S1",
                 StudentName = "John",

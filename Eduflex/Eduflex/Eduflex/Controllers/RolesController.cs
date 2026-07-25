@@ -4,6 +4,7 @@ using Eduflex.Mapping.Role;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Enums.Permissions;
 using ShareService.Services.Interface;
 
 namespace Eduflex.API.Controllers
@@ -11,7 +12,7 @@ namespace Eduflex.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [ApiExplorerSettings(GroupName = "app")]
-    public class RolesController : ControllerBase
+    public class RolesController : BaseApiController
     {
         private readonly IRoleService _roleService;
         private readonly IPermissionCatalog _permissionCatalog;
@@ -31,46 +32,43 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet]
-        [RequirePermission(PermissionKeys.RolesView)]
-        public async Task<ActionResult<List<RoleDto>>> GetAll()
+        [RequirePermission(PermissionKey.RolesView)]
+        public Task<ActionResult<PagedResult<RoleDto>>> GetAll([FromQuery] PaginationQuery query)
         {
-            var roles = await _roleService.GetAllRolesAsync();
-            return Ok(roles.Select(r => r.ToDto()).ToList());
+            return HandleRequestAsync(_logger, "Error in GetAll roles endpoint", async () =>
+            {
+                var result = await _roleService.GetRolesAsync(query);
+                return new PagedResult<RoleDto>
+                {
+                    Items = result.Items.Select(r => r.ToDto()).ToList(),
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
+            });
         }
 
         [HttpGet("permissions")]
-        [RequirePermission(PermissionKeys.RolesView)]
-        public async Task<ActionResult<List<PermissionDto>>> GetPermissionCatalog()
+        [RequirePermission(PermissionKey.RolesView)]
+        public Task<ActionResult<List<PermissionDto>>> GetPermissionCatalog()
         {
-            var permissions = await _permissionCatalog.GetAllAsync();
-            var modules = await _moduleCatalog.GetAllAsync();
-            var moduleById = modules.ToDictionary(m => m.Id, m => m);
+            return HandleRequestAsync(_logger, "Error in GetPermissionCatalog endpoint", async () =>
+            {
+                var permissions = await _permissionCatalog.GetAllAsync();
+                var modules = await _moduleCatalog.GetAllAsync();
+                var moduleById = modules.ToDictionary(m => m.Id, m => m);
 
-            var result = permissions
-                .Select(p => p.ToDto(moduleById.TryGetValue(p.ModuleId, out var module) ? module : null))
-                .ToList();
-
-            return Ok(result);
+                return permissions
+                    .Select(p => p.ToDto(moduleById.TryGetValue(p.ModuleId, out var module) ? module : null))
+                    .ToList();
+            });
         }
 
         [HttpPost]
-        [RequirePermission(PermissionKeys.RolesAdd)]
-        public async Task<ActionResult<RoleDto>> CreateRole(CreateRoleDto createDto)
+        [RequirePermission(PermissionKey.RolesAdd)]
+        public Task<ActionResult<bool>> CreateRole(CreateRoleDto createDto)
         {
-            try
-            {
-                var role = await _roleService.CreateRoleAsync(createDto.ToModel());
-                return Ok(role.ToDto());
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in CreateRole endpoint");
-                return StatusCode(500, "An error occurred while creating the role");
-            }
+            return HandleCreateAsync(_logger, "Error in CreateRole endpoint", () => _roleService.CreateRoleAsync(createDto.ToModel()));
         }
     }
 }

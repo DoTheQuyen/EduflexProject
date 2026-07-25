@@ -95,7 +95,7 @@ export class Client {
      * @param body (optional) 
      * @return OK
      */
-    enquiries(body: CreateEnquiryDto | undefined): Observable<EnquiryDto> {
+    enquiries(body: CreateEnquiryDto | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Enquiries";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -118,14 +118,14 @@ export class Client {
                 try {
                     return this.processEnquiries(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<EnquiryDto>;
+                    return _observableThrow(e) as any as Observable<boolean>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<EnquiryDto>;
+                return _observableThrow(response_) as any as Observable<boolean>;
         }));
     }
 
-    protected processEnquiries(response: HttpResponseBase): Observable<EnquiryDto> {
+    protected processEnquiries(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -136,7 +136,8 @@ export class Client {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = EnquiryDto.fromJS(resultData200);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -357,74 +358,6 @@ export interface ICreateEnquiryDto {
     mobile?: string | undefined;
     enquiry?: string | undefined;
     recaptchaToken?: string | undefined;
-}
-
-export class EnquiryDto implements IEnquiryDto {
-    id?: string | undefined;
-    firstName?: string | undefined;
-    middleName?: string | undefined;
-    lastName?: string | undefined;
-    email?: string | undefined;
-    mobile?: string | undefined;
-    enquiry?: string | undefined;
-    status?: string | undefined;
-    createdAt?: Date;
-
-    constructor(data?: IEnquiryDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.mobile = _data["mobile"];
-            this.enquiry = _data["enquiry"];
-            this.status = _data["status"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): EnquiryDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new EnquiryDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["mobile"] = this.mobile;
-        data["enquiry"] = this.enquiry;
-        data["status"] = this.status;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IEnquiryDto {
-    id?: string | undefined;
-    firstName?: string | undefined;
-    middleName?: string | undefined;
-    lastName?: string | undefined;
-    email?: string | undefined;
-    mobile?: string | undefined;
-    enquiry?: string | undefined;
-    status?: string | undefined;
-    createdAt?: Date;
 }
 
 export class FeedbackDto implements IFeedbackDto {

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using ShareService.Enums;
+using ShareService.Enums.Permissions;
 
 namespace Eduflex.Authorization
 {
@@ -6,9 +8,9 @@ namespace Eduflex.Authorization
     {
         public string Permission { get; }
 
-        public RequirePermissionAttribute(string permission)
+        public RequirePermissionAttribute(PermissionKey permission)
         {
-            Permission = permission;
+            Permission = permission.GetDescription();
         }
 
         public IEnumerable<IAuthorizationRequirement> GetRequirements()

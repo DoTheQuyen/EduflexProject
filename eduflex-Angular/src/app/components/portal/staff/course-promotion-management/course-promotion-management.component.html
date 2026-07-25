@@ -29,7 +29,10 @@
               [columns]="columns"
               [data]="promotions"
               [rowActions]="rowActions"
-              [settings]="{ pageLength: 10, responsive: true }"
+              [pageNumber]="pageNumber"
+              [pageSize]="pageSize"
+              [totalCount]="totalCount"
+              (pageChange)="onPageChange($event)"
               (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>

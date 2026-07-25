@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Models.Common;
 
 namespace ShareService.Models.Role
 {
     [BsonIgnoreExtraElements]
-    public class RoleModel
+    public class RoleModel : AuditableEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

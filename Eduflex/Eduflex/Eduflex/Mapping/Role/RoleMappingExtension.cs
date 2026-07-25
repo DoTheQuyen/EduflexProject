@@ -16,9 +16,9 @@ namespace Eduflex.Mapping.Role
             };
         }
 
-        public static CreateRoleModel ToModel(this CreateRoleDto dto)
+        public static RoleModel ToModel(this CreateRoleDto dto)
         {
-            return new CreateRoleModel
+            return new RoleModel
             {
                 Name = dto.Name,
                 Description = dto.Description,

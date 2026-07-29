@@ -1,0 +1,36 @@
+/* Copied from enrolment-detail's communication-tab.component.css */
+.recipient-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: inherit;
+  font-size: 0.83rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: white;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.chip.active {
+  background: var(--color-navy-900);
+  border-color: var(--color-navy-900);
+  color: #fff;
+}
+
+.history-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-accent) 12%, white);
+  color: var(--color-accent-dark, var(--color-accent));
+}

@@ -11,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./course-promotion-carousel.component.css']
 })
 export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
-  @Output() enquire = new EventEmitter<void>();
+  @Output() enquire = new EventEmitter<CoursePromotionDto>();
 
   coursePromotions: CoursePromotionDto[] = [];
   currentPromotionIndex: number = 0;
@@ -75,7 +75,7 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
     }
   }
 
-  onEnquireClick(): void {
-    this.enquire.emit();
-  }
+onEnquireClick(): void {
+  this.enquire.emit(this.coursePromotions[this.currentPromotionIndex]);
+}
 }

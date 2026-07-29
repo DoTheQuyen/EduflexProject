@@ -1,0 +1,10 @@
+namespace Eduflex.DTOs.Enrolment
+{
+    public class EnrolmentAuditEntryDto
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string PerformedByName { get; set; } = string.Empty;
+        public DateTime PerformedAt { get; set; }
+    }
+}

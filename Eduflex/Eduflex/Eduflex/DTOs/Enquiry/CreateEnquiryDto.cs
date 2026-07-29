@@ -8,6 +8,8 @@ namespace Eduflex.DTOs.Enquiry
         public string Email { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
         public string Enquiry { get; set; } = string.Empty;
+        public string? Subject { get; set; }
+        public string? CoursePromotionId { get; set; }
         public string RecaptchaToken { get; set; } = string.Empty;
     }
 }

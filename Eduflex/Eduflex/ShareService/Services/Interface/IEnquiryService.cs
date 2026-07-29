@@ -6,9 +6,9 @@ namespace ShareService.Services.Interface
     public interface IEnquiryService
     {
         Task<bool> CreateEnquiry(EnquiryModel enquiry);
-        Task<PagedResult<EnquiryModel>> GetEnquiries(EnquiryFilter filter);
-        Task<EnquiryModel?> GetEnquiryAsync(string id);
-        Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel updateModel);
-        Task<bool> DeleteEnquiriesAsync(string id);
+        Task<PagedResult<EnquiryModel>> GetEnquiries(EnquiryFilter filter, string userId);
+        Task<EnquiryModel?> GetEnquiryAsync(string id, string userId);
+        Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel updateModel, string userId);
+        Task<bool> DeleteEnquiriesAsync(string id, string userId);
     }
 }

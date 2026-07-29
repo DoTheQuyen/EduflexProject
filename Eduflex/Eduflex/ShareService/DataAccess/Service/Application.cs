@@ -91,5 +91,14 @@ namespace ShareService.DataAccess
 
             return result.ModifiedCount > 0;
         }
+
+        public async Task<StudentModel> CreateStudentAsync(StudentModel student, IClientSessionHandle? session = null)
+        {
+            if (session == null)
+                await _studentsCollection.InsertOneAsync(student);
+            else
+                await _studentsCollection.InsertOneAsync(session, student);
+            return student;
+        }
     }
 }

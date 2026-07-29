@@ -113,8 +113,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private storeAuthData(authResponse: AuthResponseDto): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('authToken', authResponse.token || '');
-      localStorage.setItem('userData', JSON.stringify({
+      sessionStorage.setItem('authToken', authResponse.token || '');
+      sessionStorage.setItem('userData', JSON.stringify({
         id: authResponse.userId,
         email: authResponse.email,
         firstName: authResponse.firstName,

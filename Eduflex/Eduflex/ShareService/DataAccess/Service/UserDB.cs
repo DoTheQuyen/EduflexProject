@@ -32,7 +32,8 @@ namespace ShareService.DataAccess
             var update = Builders<UserModel>.Update
                 .Set(u => u.FirstName, updateDto.FirstName)
                 .Set(u => u.LastName, updateDto.LastName)
-                .Set(u => u.Email, updateDto.Email);
+                .Set(u => u.Email, updateDto.Email)
+                .Set(u => u.Mobile, updateDto.Mobile);
 
             var options = new FindOneAndUpdateOptions<UserModel>
             {
@@ -85,6 +86,77 @@ namespace ShareService.DataAccess
             var sort = Builders<UserModel>.Sort.Descending(u => u.CreatedAt);
 
             return GetPagedAsync(mongoFilter, sort, filter.PageNumber, filter.PageSize);
+        }
+
+        public async Task<UserModel?> GetUserByMobileAsync(string mobile)
+        {
+            return await Collection
+                .Find(u => u.Mobile == mobile)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<UserModel>> GetUsersByIdsAsync(IEnumerable<string> ids)
+        {
+            var idList = ids.ToList();
+            if (idList.Count == 0) return new List<UserModel>();
+
+            return await Collection
+                .Find(Builders<UserModel>.Filter.In(u => u.Id, idList))
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetUserIdsByActiveStatusAsync(bool isActive)
+        {
+            return await Collection
+                .Find(u => u.IsActive == isActive)
+                .Project(u => u.Id)
+                .ToListAsync();
+        }
+
+        public async Task<bool> SetActiveStatusAsync(string userId, bool isActive)
+        {
+            var update = Builders<UserModel>.Update.Set(u => u.IsActive, isActive);
+            var result = await UpdateOneAsync(u => u.Id == userId, update);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> UpdateContactInfoAsync(string userId, string email, string mobile)
+        {
+            var update = Builders<UserModel>.Update
+                .Set(u => u.Email, email)
+                .Set(u => u.Mobile, mobile);
+
+            var result = await UpdateOneAsync(u => u.Id == userId, update);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> SetPasswordResetTokenAsync(string userId, string token, DateTime expiry)
+        {
+            var update = Builders<UserModel>.Update
+                .Set(u => u.ResetToken, token)
+                .Set(u => u.ResetTokenExpiry, expiry);
+
+            var result = await UpdateOneAsync(u => u.Id == userId, update);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<UserModel?> GetUserByResetTokenAsync(string token)
+        {
+            return await Collection
+                .Find(u => u.ResetToken == token)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> CompletePasswordResetAsync(string userId, string newPasswordHash)
+        {
+            var update = Builders<UserModel>.Update
+                .Set(u => u.PasswordHash, newPasswordHash)
+                .Set(u => u.MustChangePassword, false)
+                .Set(u => u.ResetToken, null)
+                .Set(u => u.ResetTokenExpiry, null);
+
+            var result = await UpdateOneAsync(u => u.Id == userId, update);
+            return result.ModifiedCount > 0;
         }
     }
 }

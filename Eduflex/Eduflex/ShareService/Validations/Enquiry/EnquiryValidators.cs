@@ -1,4 +1,5 @@
 using FluentValidation;
+using ShareService.Enums.Roles;
 using ShareService.Models.Enquiry;
 
 namespace ShareService.Validations.Enquiry
@@ -31,8 +32,25 @@ namespace ShareService.Validations.Enquiry
                 .NotEmpty().WithMessage("Enquiry is required")
                 .MaximumLength(2000).WithMessage("Enquiry must not exceed 2000 characters");
 
-            RuleFor(x => x.RecaptchaToken)
-                .NotEmpty().WithMessage("Please verify that you are not a robot");
+            RuleSet("Create", () =>
+            {
+                RuleFor(x => x.RecaptchaToken)
+                    .NotEmpty().WithMessage("Please verify that you are not a robot");
+            });
+
+            RuleSet("Update", () =>
+            {
+                RuleFor(x => x.Status)
+                    .NotEqual(EnquiryEnums.New.ToString())
+                    .WithMessage("Status must be changed when responding to customer");
+
+                RuleFor(x => x.Response)
+                    .NotEmpty().WithMessage("A response message is required when responding to customer")
+                    .When(x => x.Status != EnquiryEnums.New.ToString());
+
+                RuleFor(x => x.Response)
+                    .MaximumLength(2000).WithMessage("Response must not exceed 2000 characters");
+            });
         }
     }
 }

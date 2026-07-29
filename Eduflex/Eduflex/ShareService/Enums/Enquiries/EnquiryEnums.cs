@@ -1,19 +1,21 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace ShareService.Enums.Roles
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum EnquiryEnums
     {
-        [Description("New enquiry")]
+        [Description("New")]
         New = 1,
 
-        [Description("More information request enquiry")]
+        [Description("Information request")]
         MIR = 2,
 
-        [Description("Responded enquiry")]
+        [Description("Responded")]
         Responded = 3,
 
-        [Description("Converted to application")]
+        [Description("Converted application")]
         Converted = 4,
 
     }

@@ -1,4 +1,4 @@
 .field-error {
-  color: #dc3545;
+  color: var(--color-error);
   font-size: 0.875rem;
 }

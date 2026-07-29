@@ -15,6 +15,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 export class HomepageComponent implements OnInit, OnDestroy {
   userInfo: any;
   isSidebarCollapsed = false;
+  showLogoutConfirm = false;
   currentBreadcrumb = '';
   portalRootLabel = 'Staff Portal';
   portalRootLink = '/staff-portal';
@@ -30,7 +31,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!this.authHelper.isLoggedIn()) {
       this.authHelper.logout();
-      this.router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/'], { replaceUrl: true });
       return;
     }
 
@@ -62,8 +63,13 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
-  logout(): void {
-    this.authHelper.logout();
-    this.router.navigate(['/login'], { replaceUrl: true });
-  }
+ onLogoutClick(): void {
+  this.showLogoutConfirm = true;
+}
+
+logout(): void {
+  this.showLogoutConfirm = false;
+  this.authHelper.logout();
+  this.router.navigate(['/'], { replaceUrl: true });
+}
 }

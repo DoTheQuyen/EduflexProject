@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, FeedbackDto, CreateFeedbackDto, FeedbackFilterDto } from '@services/api.services';
+import { Client, FeedbackDto, CreateFeedbackDto, FeedbackFilterDto, SettingsDto } from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
+import { SettingsService } from '@services/settings.service';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
@@ -28,6 +29,12 @@ export class FeedbackManagementComponent implements OnInit {
 
   pager = new TablePagerState();
 
+  settings: SettingsDto | null = null;
+
+  get photoAccept(): string {
+    return this.settings?.imageUpload?.allowedExtensions?.join(',') || 'image/*';
+  }
+
   feedbackForm: FormGroup;
 
   columns: DataTableColumn<FeedbackDto>[] = [
@@ -45,7 +52,12 @@ export class FeedbackManagementComponent implements OnInit {
     { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
   ];
 
-  constructor(private fb: FormBuilder, private apiClient: Client, private notificationService: NotificationService) {
+  constructor(
+    private fb: FormBuilder,
+    private apiClient: Client,
+    private notificationService: NotificationService,
+    private settingsService: SettingsService
+  ) {
     this.feedbackForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(150)]],
       photoData: ['', [Validators.required]],
@@ -57,6 +69,10 @@ export class FeedbackManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadFeedbacks();
+    this.settingsService.getSettings().subscribe({
+      next: (settings: SettingsDto) => { this.settings = settings; },
+      error: () => {}
+    });
   }
 
   loadFeedbacks(): void {

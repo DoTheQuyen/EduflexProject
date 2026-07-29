@@ -8,7 +8,7 @@ namespace ShareService.Services.Interface
         Task<RoleModel?> GetByIdAsync(string roleId);
         Task<List<string>> GetPermissionsAsync(string roleId);
         Task<List<RoleModel>> GetAllRolesAsync();
-        Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query);
-        Task<bool> CreateRoleAsync(RoleModel role);
+        Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query, string userId);
+        Task<bool> CreateRoleAsync(RoleModel role, string userId);
     }
 }

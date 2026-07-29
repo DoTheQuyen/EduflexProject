@@ -7,6 +7,18 @@ namespace Eduflex.API.Controllers
     {
         protected string? GetActingUserId() => User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+        // Every action on a [Authorize]-protected controller needs the caller's id as a
+        // non-nullable string to hand to a service. AuthController always puts
+        // ClaimTypes.NameIdentifier on every token it issues, so in practice this can't
+        // actually be missing once [Authorize] has passed — but GetActingUserId() is
+        // still typed string? (the compiler has no way to know that), so something has
+        // to narrow it. This does that once, here, instead of every action repeating
+        // the same three-line null-check-and-throw. Throwing (401) rather than using the
+        // null-forgiving operator (!) means a future auth change that broke the
+        // guarantee would fail loudly at the boundary, not crash somewhere downstream.
+        protected string GetRequiredUserId() =>
+            GetActingUserId() ?? throw new UnauthorizedAccessException("User not authenticated");
+
         protected async Task<ActionResult<bool>> HandleCreateAsync<T>(ILogger logger, string errorContext, Func<Task<T>> action)
         {
             try
@@ -17,6 +29,14 @@ namespace Eduflex.API.Controllers
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {

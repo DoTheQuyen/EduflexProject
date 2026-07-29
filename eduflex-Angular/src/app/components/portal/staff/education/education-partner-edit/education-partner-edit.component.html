@@ -1,0 +1,352 @@
+<div class="partner-edit-page">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <a routerLink="/staff-portal/education-partners" class="text-decoration-none text-muted small d-block mb-1">
+          <i class="fas fa-arrow-left me-1"></i>Back to Education Partners
+        </a>
+        <h2 class="mb-0">{{ partnerId ? 'Edit Education Partner' : 'Add Education Partner' }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading">
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="activeTab === 'info'" (click)="switchTab('info')">
+            Education Partner
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="activeTab === 'course'"
+            [class.disabled]="!isCourseTabEnabled" [disabled]="!isCourseTabEnabled"
+            [title]="!isCourseTabEnabled ? 'Save the education partner info first' : ''"
+            (click)="switchTab('course')">
+            Courses
+          </button>
+        </li>
+      </ul>
+
+      <!-- Info tab -->
+      <div *ngIf="activeTab === 'info'" class="card border shadow-sm">
+        <div class="card-body">
+          <form [formGroup]="partnerForm" (ngSubmit)="onSubmitPartner()">
+            <h6 class="form-section-title">Basic information</h6>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <ng-container *ngIf="mode === 'edit'; else viewLogo">
+                  <app-file-uploader
+                    variant="avatar"
+                    label="Logo *"
+                    uploadCategory="image"
+                    [previewUrl]="logoPreviewUrl"
+                    (fileSelected)="onLogoSelected($event)"
+                    (invalidFile)="errorMessage = $event">
+                  </app-file-uploader>
+                  <p class="text-muted small mt-1 mb-0" *ngIf="isUploadingLogo">Uploading logo...</p>
+                  <span class="field-error" *ngIf="logoMissing && partnerForm.get('logoUrl')?.touched">Logo is required</span>
+                </ng-container>
+                <ng-template #viewLogo>
+                  <label class="form-label d-block">Logo</label>
+                  <img *ngIf="logoPreviewUrl" [src]="logoPreviewUrl" alt="Logo" class="view-logo-preview">
+                  <p class="text-muted mb-0" *ngIf="!logoPreviewUrl">No logo</p>
+                </ng-template>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Name *</label>
+                <input type="text" class="form-control" formControlName="name">
+                <span class="field-error" *ngIf="isFieldInvalid('name')">Name is required</span>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Trademark *</label>
+                <input type="text" class="form-control" formControlName="trademark">
+                <span class="field-error" *ngIf="isFieldInvalid('trademark')">Trademark is required</span>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Partner type *</label>
+                <select class="form-select" formControlName="partnerType">
+                  <option *ngFor="let type of partnerTypes" [value]="type">{{ type }}</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Country *</label>
+                <input type="text" class="form-control" placeholder="Australia" formControlName="country">
+                <span class="field-error" *ngIf="isFieldInvalid('country')">Country is required</span>
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Location *</label>
+                <input type="text" class="form-control" placeholder="Sydney, NSW" formControlName="location">
+                <span class="field-error" *ngIf="isFieldInvalid('location')">Location is required</span>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Contact email</label>
+                <input type="email" class="form-control" placeholder="admissions@partner.edu" formControlName="email">
+                <span class="field-error" *ngIf="isFieldInvalid('email')">Enter a valid email address</span>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Contact phone</label>
+                <input type="text" class="form-control" placeholder="+61 3 9000 0000" formControlName="phoneNumber">
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Short description *</label>
+                <textarea rows="3" class="form-control" formControlName="description"></textarea>
+                <span class="field-error" *ngIf="isFieldInvalid('description')">Description is required (max 300 characters)</span>
+              </div>
+            </div>
+
+            <h6 class="form-section-title mt-4">Business terms</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Managed under partner</label>
+                <select class="form-select" formControlName="businessPartnerId" (change)="onBusinessPartnerChange()" *ngIf="mode === 'edit'">
+                  <option [ngValue]="null">None (direct contract with Eduflex)</option>
+                  <option *ngFor="let bp of businessPartners" [ngValue]="bp.id">{{ bp.name }}</option>
+                </select>
+                <div *ngIf="mode === 'view'">
+                  <a *ngIf="businessPartnerName" class="badge-pill badge-pill-accent-soft" [routerLink]="['/staff-portal/business-partners', partnerForm.value.businessPartnerId, 'edit']">
+                    {{ businessPartnerName }}
+                  </a>
+                  <span *ngIf="!businessPartnerName" class="badge-pill badge-pill-navy-soft">Direct contract</span>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">Commission base rate (%) *</label>
+                <input type="number" min="0" max="100" step="0.1" class="form-control" formControlName="commissionBaseRate">
+                <span class="field-error" *ngIf="isFieldInvalid('commissionBaseRate')">Enter a rate between 0 and 100</span>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">ABN</label>
+                <input type="text" class="form-control" placeholder="11 digits" formControlName="abn">
+                <span class="field-error" *ngIf="isFieldInvalid('abn')">ABN must be 11 digits</span>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">ACN</label>
+                <input type="text" class="form-control" placeholder="9 digits" formControlName="acn">
+                <span class="field-error" *ngIf="isFieldInvalid('acn')">ACN must be 9 digits</span>
+              </div>
+            </div>
+
+            <h6 class="form-section-title mt-4">Intakes</h6>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label class="form-label">Intakes *</label>
+                <div class="d-flex gap-2 mb-2" *ngIf="mode === 'edit'">
+                  <input #intakeInput type="text" class="form-control" placeholder="e.g. February 2026"
+                    (keyup.enter)="$event.preventDefault(); addIntake(intakeInput)">
+                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addIntake(intakeInput)">Add intake</button>
+                </div>
+                <div class="intake-chips">
+                  <span class="intake-chip" *ngFor="let control of intakesArray.controls; let i = index">
+                    {{ control.value }}
+                    <button type="button" *ngIf="mode === 'edit'" (click)="removeIntake(i)" aria-label="Remove intake">&times;</button>
+                  </span>
+                </div>
+                <p class="text-muted small mb-0" *ngIf="intakesArray.length === 0">No intakes added yet.</p>
+              </div>
+            </div>
+
+            <p class="text-danger mt-3 mb-0" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+            <div class="text-end mt-4 d-flex justify-content-end gap-2">
+              <ng-container *ngIf="mode === 'view'">
+                <button type="button" class="btn btn-primary" *ngIf="permissions.edit" (click)="enterEditMode()">
+                  <i class="fas fa-pen me-1"></i>Edit
+                </button>
+              </ng-container>
+              <ng-container *ngIf="mode === 'edit'">
+                <button type="button" class="btn btn-outline-secondary" *ngIf="partnerId" [disabled]="isSaving" (click)="cancelEdit()">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="isSaving || isUploadingLogo">
+                  <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
+                  {{ isSaving ? 'Saving...' : (partnerId ? 'Update Partner' : 'Save Partner') }}
+                </button>
+              </ng-container>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Course tab -->
+      <div *ngIf="activeTab === 'course'">
+        <div class="mb-3" *ngIf="!isCourseFormOpen">
+          <button type="button" class="btn btn-primary" (click)="openAddCourseForm()">
+            <i class="fas fa-plus me-1"></i>Add Course
+          </button>
+        </div>
+
+        <div class="card border shadow-sm mb-3" *ngIf="isCourseFormOpen">
+          <div class="card-body">
+            <h6 class="form-section-title mb-3">{{ editingCourseId ? 'Update Course' : 'Add Course' }}</h6>
+            <form [formGroup]="courseForm" (ngSubmit)="onSubmitCourse()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Course name *</label>
+                  <input type="text" class="form-control" formControlName="courseName">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('courseName')">Course name is required</span>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Tuition fee (per annum) *</label>
+                  <input type="number" min="1" class="form-control" formControlName="tuitionFee">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('tuitionFee')">Tuition fee is required</span>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Total course tuition *</label>
+                  <input type="number" min="1" class="form-control" formControlName="totalTuitionFee">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('totalTuitionFee')">Total course tuition is required</span>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Currency *</label>
+                  <select class="form-select" formControlName="tuitionCurrency">
+                    <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Course duration (months)</label>
+                  <input type="number" min="1" class="form-control" formControlName="courseDurationMonths">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('courseDurationMonths')">Must be greater than 0</span>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Commission base rate (%) *</label>
+                  <input type="number" min="0" max="100" step="0.1" class="form-control" formControlName="commissionBaseRate">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('commissionBaseRate')">Enter a rate between 0 and 100</span>
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label d-block">Intakes *</label>
+                  <div class="d-flex gap-2 mb-2">
+                    <input #courseIntakeInput type="text" class="form-control" placeholder="e.g. February 2026"
+                      (keyup.enter)="$event.preventDefault(); addCourseIntake(courseIntakeInput)">
+                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseIntake(courseIntakeInput)">Add</button>
+                  </div>
+                  <div class="intake-chips">
+                    <span class="intake-chip" *ngFor="let intake of courseForm.value.intakes; let i = index">
+                      {{ intake }}
+                      <button type="button" (click)="removeCourseIntake(i)" aria-label="Remove intake">&times;</button>
+                    </span>
+                  </div>
+                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.intakes ?? []).length === 0">
+                    No intakes added yet.
+                  </p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Study modes</label>
+                  <div class="d-flex gap-2 mb-2">
+                    <input #studyModeInput type="text" class="form-control" placeholder="e.g. Full-time"
+                      (keyup.enter)="$event.preventDefault(); addCourseStudyMode(studyModeInput)">
+                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseStudyMode(studyModeInput)">Add</button>
+                  </div>
+                  <div class="intake-chips">
+                    <span class="intake-chip" *ngFor="let mode of courseForm.value.studyModes; let i = index">
+                      {{ mode }}
+                      <button type="button" (click)="removeCourseStudyMode(i)" aria-label="Remove study mode">&times;</button>
+                    </span>
+                  </div>
+                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.studyModes ?? []).length === 0">No study modes added yet.</p>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Campuses</label>
+                  <div class="d-flex gap-2 mb-2">
+                    <input #campusInput type="text" class="form-control" placeholder="e.g. Sydney CBD"
+                      (keyup.enter)="$event.preventDefault(); addCourseCampus(campusInput)">
+                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseCampus(campusInput)">Add</button>
+                  </div>
+                  <div class="intake-chips">
+                    <span class="intake-chip" *ngFor="let campus of courseForm.value.campuses; let i = index">
+                      {{ campus }}
+                      <button type="button" (click)="removeCourseCampus(i)" aria-label="Remove campus">&times;</button>
+                    </span>
+                  </div>
+                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.campuses ?? []).length === 0">No campuses added yet.</p>
+                </div>
+              </div>
+
+              <p class="text-danger mt-3 mb-0" *ngIf="courseErrorMessage">{{ courseErrorMessage }}</p>
+
+              <div class="text-end mt-3 d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-outline-secondary" [disabled]="isSavingCourse" (click)="closeCourseForm()">
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="isSavingCourse">
+                  <span *ngIf="isSavingCourse" class="spinner-border spinner-border-sm me-1"></span>
+                  {{ isSavingCourse ? 'Saving...' : (editingCourseId ? 'Update Course' : 'Add Course') }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card border shadow-sm">
+          <div class="card-body p-0">
+            <table class="table table-hover mb-0" *ngIf="courses.length > 0">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Intakes</th>
+                  <th>Study Modes</th>
+                  <th>Campuses</th>
+                  <th class="text-end">Tuition (p.a.)</th>
+                  <th class="text-end">Total Tuition</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let course of courses">
+                  <td class="fw-medium">{{ course.courseName }}</td>
+                  <td class="text-muted">{{ (course.intakes ?? []).join(', ') }}</td>
+                  <td class="text-muted">{{ (course.studyModes ?? []).join(', ') }}</td>
+                  <td class="text-muted">{{ (course.campuses ?? []).join(', ') }}</td>
+                  <td class="text-end">
+                    <span class="tuition-currency">{{ course.tuitionCurrency }}</span>
+                    <span class="tuition-amount">{{ course.tuitionFee | number }}</span>
+                  </td>
+                  <td class="text-end">
+                    <span class="tuition-currency">{{ course.tuitionCurrency }}</span>
+                    <span class="tuition-amount">{{ course.totalTuitionFee | number }}</span>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-primary me-1" (click)="editCourse(course)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="empty-state" *ngIf="courses.length === 0">
+              <i class="fas fa-book-open"></i>
+              <p class="mb-0">No courses added yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

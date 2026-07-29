@@ -90,7 +90,7 @@ namespace Eduflex.API.Controllers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
-
+            var expiryHours = int.TryParse(_configuration["JWT:ExpiryHours"], out var hours) ? hours : 12;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -99,7 +99,8 @@ namespace Eduflex.API.Controllers
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, roleName)
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+
+                Expires = DateTime.UtcNow.AddHours(expiryHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

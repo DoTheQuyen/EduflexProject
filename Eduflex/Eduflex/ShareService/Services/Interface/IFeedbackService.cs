@@ -7,7 +7,7 @@ namespace ShareService.Services.Interface
     {
         Task<bool> CreateFeedback(FeedbackModel feedback);
         Task<List<FeedbackModel>> GetLatestFeedback(int count);
-        Task<PagedResult<FeedbackModel>> GetFeedback(PaginationQuery query);
-        Task<bool> DeleteFeedback(string id);
+        Task<PagedResult<FeedbackModel>> GetFeedback(PaginationQuery query, string userId);
+        Task<bool> DeleteFeedback(string id, string userId);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace ShareService.Enums.Roles
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum SystemRole
     {
         [Description("Standard authenticated user")]

@@ -1,6 +1,7 @@
 using Eduflex.Authorization;
 using Eduflex.DTOs.Role;
 using Eduflex.Mapping.Role;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
@@ -11,6 +12,7 @@ namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     [ApiExplorerSettings(GroupName = "app")]
     public class RolesController : BaseApiController
     {
@@ -32,12 +34,13 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost("search-roles")]
-        [RequirePermission(PermissionKey.RolesView)]
         public Task<ActionResult<PagedResult<RoleDto>>> SearchRoles([FromBody] RoleFilterDto filterDto)
         {
             return HandleRequestAsync(_logger, "Error in Search roles endpoint", async () =>
             {
-                var result = await _roleService.GetRolesAsync(filterDto.ToFilter());
+                var userId = GetRequiredUserId();
+
+                var result = await _roleService.GetRolesAsync(filterDto.ToFilter(), userId);
                 return new PagedResult<RoleDto>
                 {
                     Items = result.Items.Select(r => r.ToDto()).ToList(),
@@ -65,10 +68,15 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost]
-        [RequirePermission(PermissionKey.RolesAdd)]
         public Task<ActionResult<bool>> CreateRole(CreateRoleDto createDto)
         {
-            return HandleCreateAsync(_logger, "Error in CreateRole endpoint", () => _roleService.CreateRoleAsync(createDto.ToModel()));
+            return HandleCreateAsync(_logger, "Error in CreateRole endpoint", () =>
+            {
+                var userId = GetRequiredUserId();
+
+                return _roleService.CreateRoleAsync(createDto.ToModel(), userId);
+            });
         }
+
     }
 }

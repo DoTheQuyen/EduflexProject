@@ -1,0 +1,69 @@
+<div class="enrolment-detail-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && enrolment">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">{{ enrolment.firstName }} {{ enrolment.lastName }}</h3>
+          <span class="badge bg-secondary me-2">{{ enrolment.status }}</span>
+          <span class="badge bg-light text-dark border" *ngIf="enrolment.enquiryId">Converted from enquiry</span>
+        </div>
+        <div class="text-end">
+          <div class="text-muted small mb-1">
+            Owned by <strong>{{ enrolment.ownerName }}</strong>
+            <button *ngIf="permissions.reassign" type="button" class="btn btn-sm btn-outline-secondary ms-2" (click)="openReassignModal()">Reassign</button>
+          </div>
+          <button *ngIf="financialRecordId" type="button" class="btn btn-sm btn-primary" (click)="goToFinancialRecord()">
+            <i class="fas fa-file-invoice-dollar me-1"></i>View Financial Record
+          </button>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'visa'" (click)="switchTab('visa')">VISA Process</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'documents'" (click)="switchTab('documents')">Documents</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'communication'" (click)="switchTab('communication')">Communication</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'audit'" (click)="switchTab('audit')">Audit Trail</button></li>
+      </ul>
+
+      <!-- All four tabs stay instantiated ([hidden] rather than *ngIf) so switching tabs
+           doesn't destroy in-progress edits — e.g. a half-drafted email in Communication
+           shouldn't disappear just because staff glanced at Documents. -->
+      <app-visa-process-tab [hidden]="activeTab !== 'visa'"
+        [enrolment]="enrolment" [partners]="partners" [isOwner]="isOwner" [permissions]="permissions"
+        (changed)="loadEnrolment()">
+      </app-visa-process-tab>
+
+      <app-documents-tab [hidden]="activeTab !== 'documents'"
+        [enrolment]="enrolment" [isOwner]="isOwner" [permissions]="permissions"
+        (changed)="loadEnrolment()">
+      </app-documents-tab>
+
+      <app-communication-tab [hidden]="activeTab !== 'communication'"
+        [enrolment]="enrolment" [partners]="partners" [isOwner]="isOwner" [permissions]="permissions"
+        (changed)="loadEnrolment()">
+      </app-communication-tab>
+
+      <app-audit-tab [hidden]="activeTab !== 'audit'" [enrolment]="enrolment"></app-audit-tab>
+    </div>
+  </div>
+
+  <app-modal *ngIf="showReassignModal" title="Reassign enrolment" size="sm"
+             saveLabel="Reassign" [isSaving]="isReassigning" [saveDisabled]="!selectedNewOwnerId"
+             (closeModal)="showReassignModal = false" (cancel)="showReassignModal = false" (save)="confirmReassign()">
+    <label class="form-label">New owner</label>
+    <select class="form-select" [(ngModel)]="selectedNewOwnerId" [ngModelOptions]="{standalone: true}">
+      <option value="">Select a staff member...</option>
+      <option *ngFor="let u of staffOptions" [value]="u.id">{{ u.firstName }} {{ u.lastName }} ({{ u.roleName }})</option>
+    </select>
+  </app-modal>
+</div>

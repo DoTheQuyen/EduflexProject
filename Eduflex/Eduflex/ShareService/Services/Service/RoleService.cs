@@ -2,6 +2,8 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Enums;
+using ShareService.Enums.Permissions;
 using ShareService.Models.Role;
 using ShareService.Services.Interface;
 
@@ -12,20 +14,35 @@ namespace ShareService.Services
         private readonly IRole _role;
         private readonly IPermissionCatalog _permissionCatalog;
         private readonly IValidator<RoleModel> _createRoleValidator;
+        private readonly IPermissionService _permissionService;
         private readonly ILogger<RoleService> _logger;
 
         public RoleService(
             IRole role,
             IPermissionCatalog permissionCatalog,
             IValidator<RoleModel> createRoleValidator,
+            IPermissionService permissionService,
             ILogger<RoleService> logger)
         {
             _role = role;
             _permissionCatalog = permissionCatalog;
             _createRoleValidator = createRoleValidator;
+            _permissionService = permissionService;
             _logger = logger;
         }
 
+        private async Task RequirePermissionAsync(string userId, PermissionKey key, string action)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(key.GetDescription()))
+            {
+                throw new UnauthorizedAccessException($"You do not have permission to {action}");
+            }
+        }
+
+        // Auth: none — deliberately open at this layer. Purely internal plumbing, called
+        // by UserService/PermissionService/EnrolmentService to resolve role names/ids;
+        // never exposed directly as a controller action of its own.
         public async Task<RoleModel?> GetByIdAsync(string roleId)
         {
             try
@@ -39,6 +56,10 @@ namespace ShareService.Services
             }
         }
 
+        // Auth: none — internal plumbing only (not used by PermissionService itself
+        // anymore, that resolves permissions via DataAccess directly to avoid a circular
+        // dependency; this method remains for any other caller that needs a role's
+        // resolved permission keys, e.g. a future "what can this role do" admin view).
         public async Task<List<string>> GetPermissionsAsync(string roleId)
         {
             var role = await GetByIdAsync(roleId);
@@ -51,6 +72,8 @@ namespace ShareService.Services
             return permissions.Select(p => p.Key).ToList();
         }
 
+        // Auth: none — internal plumbing (e.g. UsersController's role-name lookup for
+        // the search-users listing), not exposed as its own controller action.
         public async Task<List<RoleModel>> GetAllRolesAsync()
         {
             try
@@ -64,10 +87,13 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query)
+        // Auth: requires RolesView permission (staff-only).
+        public async Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query, string userId)
         {
             try
             {
+                await RequirePermissionAsync(userId, PermissionKey.RolesView, "view roles");
+
                 return await _role.GetRolesAsync(query);
             }
             catch (Exception ex)
@@ -77,10 +103,13 @@ namespace ShareService.Services
             }
         }
 
-        public async Task<bool> CreateRoleAsync(RoleModel role)
+        // Auth: requires RolesAdd permission (staff-only).
+        public async Task<bool> CreateRoleAsync(RoleModel role, string userId)
         {
             try
             {
+                await RequirePermissionAsync(userId, PermissionKey.RolesAdd, "create roles");
+
                 var validate = await _createRoleValidator.ValidateAsync(role);
                 if (!validate.IsValid)
                 {

@@ -1,0 +1,52 @@
+<div class="enrolment-detail-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Enrolment
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && record">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">Financial Record<ng-container *ngIf="enrolment"> — {{ enrolment.firstName }} {{ enrolment.lastName }}</ng-container></h3>
+          <span class="badge-pill" [class.badge-pill-success-soft]="enrolment?.status === 'VisaSuccess'" [class.badge-pill-error-soft]="enrolment?.status === 'VisaFail'">
+            {{ enrolment?.status }}
+          </span>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'summary'" (click)="switchTab('summary')">Enrolment Summary</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'finance'" (click)="switchTab('finance')">Finance</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'invoice'" (click)="switchTab('invoice')">Invoice</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'communication'" (click)="switchTab('communication')">Communication</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'audit'" (click)="switchTab('audit')">Audit Trail</button></li>
+      </ul>
+
+      <!-- All five tabs stay instantiated ([hidden] rather than *ngIf), matching the
+           Enrolment detail page's pattern, so switching tabs never destroys in-progress
+           edits (e.g. a half-written invoice draft). -->
+      <app-summary-tab [hidden]="activeTab !== 'summary'" [enrolment]="enrolment"></app-summary-tab>
+
+      <app-finance-tab [hidden]="activeTab !== 'finance'"
+        [record]="record" [permissions]="permissions" (changed)="loadRecord()">
+      </app-finance-tab>
+
+      <app-invoice-tab [hidden]="activeTab !== 'invoice'"
+        [record]="record" [enrolment]="enrolment" [permissions]="permissions"
+        (changed)="loadRecord()" (goToCommunicationWithInvoice)="switchTab('communication')">
+      </app-invoice-tab>
+
+      <app-financial-communication-tab [hidden]="activeTab !== 'communication'"
+        [record]="record" [permissions]="permissions" (changed)="loadRecord()">
+      </app-financial-communication-tab>
+
+      <app-financial-audit-tab [hidden]="activeTab !== 'audit'" [record]="record"></app-financial-audit-tab>
+    </div>
+  </div>
+</div>

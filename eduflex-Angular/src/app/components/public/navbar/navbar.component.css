@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, var(--color-navy-900) 0%, #074dc7 65%, #163a73 100%);
+  background: linear-gradient(135deg, var(--color-navy-900) 0%, var(--color-navy-700) 100%);
   color: #fff;
   padding: 0.2rem 2rem; /* Increased padding to match home container */
   position: sticky;
@@ -67,7 +67,7 @@
 
 .nav-menu a.active,
 .nav-menu a:hover {
-  color: #ffca28; /* gold highlight */
+  color: var(--color-accent-light);
 }
 
 .nav-menu a.active::after {
@@ -77,7 +77,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: #ffca28;
+  background: var(--color-accent-light);
 }
 
 .lang-switch {
@@ -104,8 +104,8 @@
 }
 
 .lang-switch button.active {
-  background: #ffca28;
-  color: #1e3c72;
+  background: var(--color-accent);
+  color: #fff;
 }
 
 /* Auth Section - Moved to right */
@@ -117,7 +117,7 @@
 
 .welcome-text {
   font-size: 0.9rem;
-  color: #ffca28;
+  color: var(--color-accent-light);
   font-weight: 500;
 }
 
@@ -130,8 +130,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #ffca28;
-  color: #1e3c72;
+  background: var(--color-accent);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +150,7 @@
   top: 46px;
   right: 0;
   background: #fff;
-  color: #333;
+  color: var(--color-ink);
   min-width: 200px;
   border-radius: 6px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Enhanced shadow */
@@ -160,7 +160,7 @@
 
 .user-dropdown .user-info {
   padding: 0.5rem 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border);
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -168,13 +168,13 @@
 .user-dropdown .dropdown-links a {
   display: block;
   padding: 0.5rem 0;
-  color: #333;
+  color: var(--color-ink);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .user-dropdown .dropdown-links a:hover {
-  color: #1e3c72;
+  color: var(--color-navy-900);
 }
 
 .logout-button {
@@ -182,7 +182,7 @@
   width: 100%;
   margin-top: 0.5rem;
   padding: 0.6rem;
-  background: #e53935;
+  background: var(--color-error);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -192,12 +192,12 @@
 }
 
 .logout-button:hover {
-  background: #c62828;
+  background: var(--color-error-dark);
 }
 
 /* Login Button - matches the site's accent (gold) buttons, e.g. "Đặt lịch tư vấn miễn phí" */
 .login-button {
-  background: #B8862F;
+  background: var(--color-accent);
   color: #fff;
   padding: 0.2rem 0.8rem;
   border-radius: 6px;
@@ -210,7 +210,7 @@
 }
 
 .login-button:hover {
-  background: #9c7128;
+  background: var(--color-accent-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
@@ -241,7 +241,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
     flex-direction: column;
     align-items: flex-start;
     padding: 1rem;

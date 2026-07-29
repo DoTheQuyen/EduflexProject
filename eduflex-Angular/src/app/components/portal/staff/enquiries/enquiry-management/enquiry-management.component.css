@@ -1,0 +1,30 @@
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid var(--color-border);
+  gap: 0.25rem;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--color-navy-900);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--color-navy-900);
+  border-bottom-color: var(--color-accent);
+  background: transparent;
+}

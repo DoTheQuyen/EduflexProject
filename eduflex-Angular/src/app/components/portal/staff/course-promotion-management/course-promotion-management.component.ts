@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Client, CoursePromotionDto, CoursePromotionFilterDto, CreateCoursePromotionDto } from '@services/api.services';
-import { AuthHelperService } from '@services/auth-helper.service';
+import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
-import { PermissionKeys } from '../../../../shared/constants/permission-keys';
 import { NotificationService } from '@services/notification.service';
 
 @Component({
@@ -29,9 +28,7 @@ export class CoursePromotionManagementComponent implements OnInit {
   pager = new TablePagerState();
   isFeaturedFilter = 'all';
 
-  canAdd = false;
-  canEdit = false;
-  canDelete = false;
+  permissions!: ModulePermissions;
 
   promotionForm: FormGroup;
 
@@ -73,13 +70,11 @@ export class CoursePromotionManagementComponent implements OnInit {
       displayOrder: [0, [Validators.required, Validators.min(0)]]
     });
 
-    this.canAdd = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsAdd);
-    this.canEdit = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsEdit);
-    this.canDelete = this.authHelper.hasPermission(PermissionKeys.CoursePromotionsDelete);
+    this.permissions = this.authHelper.hasCoursePromotionsPermission();
 
     this.rowActions = [
-      ...(this.canEdit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
-      ...(this.canDelete ? [{ action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }] : [])
+      ...(this.permissions.edit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
+      ...(this.permissions.delete ? [{ action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }] : [])
     ];
   }
 
@@ -88,6 +83,11 @@ export class CoursePromotionManagementComponent implements OnInit {
   }
 
   loadPromotions(): void {
+    if (!this.permissions.view) {
+      this.notificationService.error('You do not have permission to view course promotions.');
+      return;
+    }
+
     this.isLoading = true;
     const isFeatured = this.isFeaturedFilter === 'all' ? undefined : this.isFeaturedFilter === 'true';
     const filter = new CoursePromotionFilterDto({
@@ -161,6 +161,12 @@ export class CoursePromotionManagementComponent implements OnInit {
   }
 
   onSubmit(): void {
+    const requiredPermission = this.editingId ? this.permissions.edit : this.permissions.add;
+    if (!requiredPermission) {
+      this.notificationService.error(this.editingId ? 'You do not have permission to edit course promotions.' : 'You do not have permission to add course promotions.');
+      return;
+    }
+
     this.promotionForm.markAllAsTouched();
     this.errorMessage = '';
 
@@ -195,6 +201,11 @@ export class CoursePromotionManagementComponent implements OnInit {
   }
 
   onDelete(promotion: CoursePromotionDto): void {
+    if (!this.permissions.delete) {
+      this.notificationService.error('You do not have permission to delete course promotions.');
+      return;
+    }
+
     const confirmed = window.confirm(`Delete the promotion for ${promotion.courseName} (${promotion.universityName})?`);
     if (!confirmed || !promotion.id) {
       return;

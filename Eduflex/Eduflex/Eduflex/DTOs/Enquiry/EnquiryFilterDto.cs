@@ -7,6 +7,6 @@ namespace Eduflex.DTOs.Enquiry
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string? SearchTerm { get; set; }
-        public EnquiryEnums? Status { get; set; }
+        public List<EnquiryEnums>? Statuses { get; set; }
     }
 }

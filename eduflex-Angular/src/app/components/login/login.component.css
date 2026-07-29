@@ -5,7 +5,7 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e1e5e9;
+  border: 1px solid var(--color-border);
   font-family: 'Arial', sans-serif;
 }
 
@@ -15,14 +15,14 @@
 }
 
 .login-header h2 {
-  color: #2c3e50;
+  color: var(--color-ink);
   font-size: 2.2rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .login-header p {
-  color: #7f8c8d;
+  color: var(--color-muted);
   font-size: 1rem;
   margin-bottom: 0;
 }
@@ -40,7 +40,7 @@
 }
 
 .form-group label {
-  color: #2c3e50;
+  color: var(--color-ink);
   font-weight: 500;
   font-size: 0.95rem;
   margin-bottom: 0.25rem;
@@ -50,22 +50,22 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0.875rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
-  background-color: #fafbfc;
+  background-color: var(--color-surface);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: var(--color-navy-700);
   background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-navy-700) 15%, transparent);
 }
 
 .form-group input::placeholder {
-  color: #bdc3c7;
+  color: var(--color-muted);
 }
 
 .password-input-container {
@@ -84,7 +84,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #7f8c8d;
+  color: var(--color-muted);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
@@ -92,11 +92,11 @@
 }
 
 .toggle-password:hover {
-  color: #3498db;
+  color: var(--color-navy-700);
 }
 
 .login-button {
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  background: var(--color-accent);
   color: white;
   padding: 1rem 2rem;
   border: none;
@@ -109,9 +109,9 @@
 }
 
 .login-button:hover {
-  background: linear-gradient(135deg, #2980b9 0%, #2573a7 100%);
+  background: var(--color-accent-dark);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+  box-shadow: 0 5px 15px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .login-button:active {
@@ -119,7 +119,7 @@
 }
 
 .login-button:disabled {
-  background: #bdc3c7;
+  background: var(--color-muted);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -137,30 +137,30 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #5d6d7e;
+  color: var(--color-muted);
 }
 
 .remember-me input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #3498db;
+  accent-color: var(--color-navy-700);
 }
 
 .forgot-password {
-  color: #3498db;
+  color: var(--color-navy-700);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .forgot-password:hover {
-  color: #2980b9;
+  color: var(--color-navy-900);
   text-decoration: underline;
 }
 
 .error-message {
-  background-color: #fee;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background-color: color-mix(in srgb, var(--color-error) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--color-error) 35%, white);
+  color: var(--color-error-dark);
   padding: 0.875rem 1rem;
   border-radius: 8px;
   margin: 1rem 0;
@@ -176,9 +176,9 @@
 }
 
 .success-message {
-  background-color: #eff8ff;
-  border: 1px solid #b8daff;
-  color: #004085;
+  background-color: color-mix(in srgb, var(--color-success) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--color-success) 35%, white);
+  color: var(--color-success-dark);
   padding: 0.875rem 1rem;
   border-radius: 8px;
   margin: 1rem 0;
@@ -212,7 +212,7 @@
   display: flex;
   align-items: center;
   margin: 1.5rem 0;
-  color: #7f8c8d;
+  color: var(--color-muted);
   font-size: 0.9rem;
 }
 
@@ -221,7 +221,7 @@
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #e1e5e9;
+  background-color: var(--color-border);
 }
 
 .login-divider span {
@@ -237,7 +237,7 @@
 .social-button {
   flex: 1;
   padding: 0.75rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   background: white;
   cursor: pointer;
@@ -251,7 +251,7 @@
 
 .social-button.google {
   color: #db4437;
-  border-color: #e1e5e9;
+  border-color: var(--color-border);
 }
 
 .social-button.google:hover {
@@ -261,7 +261,7 @@
 
 .social-button.microsoft {
   color: #0078d4;
-  border-color: #e1e5e9;
+  border-color: var(--color-border);
 }
 
 .social-button.microsoft:hover {
@@ -273,12 +273,12 @@
   text-align: center;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e1e5e9;
-  color: #5d6d7e;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
 }
 
 .register-link a {
-  color: #3498db;
+  color: var(--color-navy-700);
   text-decoration: none;
   font-weight: 500;
   margin-left: 0.25rem;
@@ -286,7 +286,7 @@
 }
 
 .register-link a:hover {
-  color: #2980b9;
+  color: var(--color-navy-900);
   text-decoration: underline;
 }
 
@@ -325,12 +325,12 @@
 
 /* Accessibility Improvements */
 .form-group input:focus-visible {
-  outline: 2px solid #3498db;
+  outline: 2px solid var(--color-navy-700);
   outline-offset: 2px;
 }
 
 button:focus-visible {
-  outline: 2px solid #3498db;
+  outline: 2px solid var(--color-navy-700);
   outline-offset: 2px;
 }
 
@@ -361,8 +361,8 @@ button:focus-visible {
 
   /* Add this to your existing CSS */
 input.error {
-  border-color: #e74c3c !important;
-  background-color: #fee !important;
+  border-color: var(--color-error) !important;
+  background-color: color-mix(in srgb, var(--color-error) 12%, white) !important;
 }
 
 .form-group {
@@ -370,9 +370,9 @@ input.error {
 }
 
 .error-message {
-  background-color: #fee;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background-color: color-mix(in srgb, var(--color-error) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--color-error) 35%, white);
+  color: var(--color-error-dark);
   padding: 0.5rem;
   border-radius: 4px;
   margin-top: 0.5rem;
@@ -380,9 +380,9 @@ input.error {
 }
 
 .success-message {
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
+  background-color: color-mix(in srgb, var(--color-success) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--color-success) 35%, white);
+  color: var(--color-success-dark);
   padding: 0.5rem;
   border-radius: 4px;
   margin-top: 0.5rem;

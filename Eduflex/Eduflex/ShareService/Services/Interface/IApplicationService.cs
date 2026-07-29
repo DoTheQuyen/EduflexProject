@@ -13,7 +13,7 @@ namespace ShareService.Services.Interface
         Task<List<ApplicationModel>> GetApplicationsByStudentId(string studentId);
         Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query);
         Task<ApplicationDetailModel?> GetApplicationById(string id, string userId);
-        Task<ApplicationModel> CreateApplication(ApplicationModel application);
+        Task<ApplicationModel> CreateApplication(ApplicationModel application, string userId);
         Task<bool> UpdateApplicationStatus(string id, string status, string userId);
     }
 }

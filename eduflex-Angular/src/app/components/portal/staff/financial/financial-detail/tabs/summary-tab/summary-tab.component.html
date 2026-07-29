@@ -1,0 +1,66 @@
+<div class="card border shadow-sm" *ngIf="enrolment">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <strong>Enrolment summary</strong>
+    <a class="btn btn-sm btn-outline-primary" [routerLink]="['/staff-portal/enrolments', enrolment.id]">
+      <i class="fas fa-arrow-up-right-from-square me-1"></i>Open enrolment
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="field-panel h-100">
+          <div class="field-panel__title">Student</div>
+          <dl class="report-list">
+            <dt>Name</dt><dd>{{ enrolment.firstName }} {{ enrolment.middleName }} {{ enrolment.lastName }}</dd>
+            <dt>Email</dt><dd>{{ enrolment.email }}</dd>
+            <dt>Mobile</dt><dd>{{ enrolment.mobile }}</dd>
+            <dt>Nationality</dt><dd>{{ enrolment.nationality || '—' }}</dd>
+            <dt>Passport / ID no.</dt><dd>{{ enrolment.passportNumber || '—' }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="field-panel h-100">
+          <div class="field-panel__title">Course &amp; university</div>
+          <dl class="report-list">
+            <dt>University</dt><dd>{{ partner?.name || '—' }}</dd>
+            <dt>Course</dt><dd>{{ course?.courseName || '—' }}</dd>
+            <dt>Intake</dt><dd>{{ enrolment.intake || '—' }}</dd>
+            <dt>Study mode</dt><dd>{{ enrolment.studyMode || '—' }}</dd>
+            <dt>Campus</dt><dd>{{ enrolment.campus || '—' }}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-6">
+        <div class="field-panel h-100">
+          <div class="field-panel__title">Study dates</div>
+          <dl class="report-list">
+            <dt>Commencing date</dt><dd>{{ formatDate(enrolment.commencementDate) }}</dd>
+            <dt>Actual commencement</dt><dd>{{ formatDate(enrolment.actualCommencementDate) }}</dd>
+            <dt>Expected completion</dt><dd>{{ formatDate(enrolment.expectedCompletionDate) }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="field-panel h-100">
+          <div class="field-panel__title">VISA</div>
+          <dl class="report-list">
+            <dt>Outcome</dt><dd>{{ enrolment.status === 'VisaSuccess' ? 'Granted' : (enrolment.status === 'VisaFail' ? 'Refused' : '—') }}</dd>
+            <dt>Grant letter</dt>
+            <dd>
+              <a *ngIf="visaDocument" [href]="visaDocument.url" target="_blank" rel="noopener">
+                <i class="fas fa-file-arrow-down me-1"></i>{{ visaDocument.fileName }}
+              </a>
+              <span *ngIf="!visaDocument" class="text-muted">Not uploaded</span>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

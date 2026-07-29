@@ -55,17 +55,13 @@ builder.Services.Configure<MongoDBSettings>(
 builder.Services.Configure<RecaptchaSettings>(
     builder.Configuration.GetSection("Recaptcha"));
 
-//Configure Feedback Settings (used by FeedbacksController)
-builder.Services.Configure<FeedbackSettings>(
-    builder.Configuration.GetSection("FeedbackSettings"));
-
-//Configure Course Promotion Settings (used by CoursePromotionsController)
-builder.Services.Configure<CoursePromotionSettings>(
-    builder.Configuration.GetSection("CoursePromotionSettings"));
-
 //Configure Azure Blob Storage Settings (used by FilesController)
 builder.Services.Configure<AzureBlobSettings>(
     builder.Configuration.GetSection("AzureBlobStorage"));
+
+//Configure Document Link Settings (expiring SAS link lifetime for emailed document attachments)
+builder.Services.Configure<DocumentLinkSettings>(
+    builder.Configuration.GetSection("DocumentLinkSettings"));
 
 //Configure Email Settings (used by EmailService for Azure Communication Services)
 builder.Services.Configure<AzureEmailSettings>(

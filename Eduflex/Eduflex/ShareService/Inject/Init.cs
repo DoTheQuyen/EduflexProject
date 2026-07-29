@@ -5,10 +5,15 @@ using ShareService.DataAccess;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Application;
 using ShareService.Models.Auth;
+using ShareService.Models.BusinessPartner;
+using ShareService.Models.Course;
 using ShareService.Models.CoursePromotion;
+using ShareService.Models.EducationPartner;
 using ShareService.Models.Enquiry;
+using ShareService.Models.Enrolment;
 using ShareService.Models.Feedback;
 using ShareService.Models.Role;
+using ShareService.Models.Student;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using ShareService.Services.Interface.Integration;
@@ -16,10 +21,15 @@ using ShareService.Services.Service;
 using ShareService.Services.Service.Integration;
 using ShareService.Validations.Application;
 using ShareService.Validations.Auth;
+using ShareService.Validations.BusinessPartner;
+using ShareService.Validations.Course;
 using ShareService.Validations.CoursePromotion;
+using ShareService.Validations.EducationPartner;
 using ShareService.Validations.Enquiry;
+using ShareService.Validations.Enrolment;
 using ShareService.Validations.Feedback;
 using ShareService.Validations.Role;
+using ShareService.Validations.Student;
 
 namespace ShareService.Inject
 {
@@ -37,9 +47,17 @@ namespace ShareService.Inject
             services.AddScoped<IModuleCatalog, ModuleCatalog>();
             services.AddScoped<IApplication, Application>();
             services.AddScoped<IUserDB, UserDB>();
+            services.AddScoped<IStudentDB, StudentDB>();
             services.AddScoped<IEnquiry, Enquiry>();
             services.AddScoped<IFeedback, Feedback>();
             services.AddScoped<ICoursePromotion, CoursePromotion>();
+            services.AddScoped<IEducationPartner, EducationPartner>();
+            services.AddScoped<IBusinessPartner, BusinessPartner>();
+            services.AddScoped<ICourse, Course>();
+            services.AddScoped<IEnrolment, Enrolment>();
+            services.AddScoped<IEmailTemplate, EmailTemplate>();
+            services.AddScoped<ISettings, Settings>();
+            services.AddScoped<IFinancialRecord, FinancialRecord>();
 
             #endregion
 
@@ -48,6 +66,7 @@ namespace ShareService.Inject
             #region Services
             services.AddScoped<MongoDBService>();
             services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
@@ -55,8 +74,14 @@ namespace ShareService.Inject
             services.AddScoped<IEnquiryService, EnquiryService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<ICoursePromotionService, CoursePromotionService>();
-                      
-            
+            services.AddScoped<IEducationPartnerService, EducationPartnerService>();
+            services.AddScoped<IBusinessPartnerService, BusinessPartnerService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IEnrolmentService, EnrolmentService>();
+            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+            services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IFinancialRecordService, FinancialRecordService>();
+
             #endregion
 
 
@@ -69,8 +94,14 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<EnquiryModel>, EnquiryModelValidator>();
             services.AddScoped<IValidator<FeedbackModel>, FeedbackModelValidator>();
             services.AddScoped<IValidator<CoursePromotionModel>, CoursePromotionModelValidator>();
+            services.AddScoped<IValidator<EducationPartnerModel>, EducationPartnerModelValidator>();
+            services.AddScoped<IValidator<BusinessPartnerModel>, BusinessPartnerModelValidator>();
+            services.AddScoped<IValidator<CourseModel>, CourseModelValidator>();
             services.AddScoped<IValidator<RoleModel>, RoleModelValidator>();
             services.AddScoped<IValidator<UserModel>, CreateUserModelValidator>();
+            services.AddScoped<IValidator<StudentModel>, StudentModelValidator>();
+            services.AddScoped<IValidator<EnrolmentModel>, EnrolmentModelValidator>();
+            services.AddScoped<IValidator<EmailTemplateModel>, EmailTemplateModelValidator>();
 
             #endregion
 
@@ -79,6 +110,7 @@ namespace ShareService.Inject
             services.AddScoped<IAzureBlobDocStorageService, AzureBlobDocStorageService>();
             services.AddHttpClient<IRecaptchaService, RecaptchaService>();
             services.AddScoped<IAzureEmailService, AzureEmailService>();
+            services.AddScoped<IInvoicePdfService, InvoicePdfService>();
 
             #endregion
 

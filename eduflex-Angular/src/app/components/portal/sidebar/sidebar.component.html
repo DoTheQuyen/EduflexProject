@@ -1,13 +1,13 @@
 <nav
-  class="fixed inset-y-0 left-0 z-[1000] flex h-screen flex-col overflow-y-auto bg-navy-700 font-sans text-white transition-[width] duration-300 ease-in-out"
+  class="sidebar-nav-3d fixed inset-y-0 left-0 z-[1000] flex h-screen flex-col overflow-y-auto font-sans text-white transition-[width] duration-300 ease-in-out"
   [class.w-64]="!isCollapsed"
   [class.w-16]="isCollapsed">
 
   <!-- Brand -->
   <div
-    class="flex items-center gap-3 border-b border-navy-900/40 px-3 py-2"
+    class="flex items-center gap-3 border-b border-white/10 px-3 py-2"
     [class.justify-center]="isCollapsed">
-        <img src="assets/logo/eduflex-logo-mark.png" alt="Eduflex logo" class="h-[60px] w-auto shrink-0 logo" />
+        <img src="assets/logo/browserLogo.png" alt="Eduflex logo" class="h-[60px] w-auto shrink-0 logo" />
     <span *ngIf="!isCollapsed" class="text-[25px] font-semibold tracking-wide text-white">Eduflex</span>
   </div>
 
@@ -15,36 +15,76 @@
   <div class="flex items-center gap-2 px-3 py-2" [class.justify-center]="isCollapsed">
     <button
       type="button"
-      class="d-btn d-btn-ghost d-btn-sm text-white/70 hover:bg-navy-900/50 hover:text-white"
+      class="d-btn d-btn-ghost d-btn-sm text-white/90 hover:bg-white/10 hover:text-white"
       (click)="onToggleClick()"
       aria-label="Toggle sidebar">
       <i class="fas text-sm" [class.fa-angles-left]="!isCollapsed" [class.fa-angles-right]="isCollapsed"></i>
     </button>
     <span
       *ngIf="!isCollapsed"
-      class="text-[18px] font-semibold uppercase tracking-widest text-white/90">
+      class="text-[15px] font-medium uppercase tracking-wide text-white/90">
       {{ userInfo?.role === 'Student' ? 'Student Portal' : 'Staff Portal' }}
     </span>
   </div>
 
   <!-- Menu -->
-    <ul class="flex w-full flex-1 flex-col gap-1 p-1">
+  <ul class="flex w-full flex-1 flex-col gap-1 p-1">
     <li *ngFor="let item of menuItems">
+
+      <!-- Leaf item -->
       <a
+        *ngIf="!item.children"
         [routerLink]="item.route"
         routerLinkActive
         #rla="routerLinkActive"
         [routerLinkActiveOptions]="{ exact: false }"
-        class="flex items-center gap-2 rounded-lg border-solid border-l-4 p-1 py-1 text-md !no-underline transition-colors"
+        class="flex items-center gap-2 rounded-lg border-0 border-l-2 border-solid p-1 py-1 text-md no-underline! transition-colors"
         [ngClass]="rla.isActive
-          ? 'border-accent bg-navy-900/50 font-semibold !text-white'
-          : 'border-transparent font-medium !text-white/80 hover:bg-navy-900/40 hover:!text-white'"
+          ? 'border-success bg-success/15 font-medium text-white!'
+          : 'border-transparent font-normal text-white/90! hover:bg-white/10 hover:text-white!'"
         [class.justify-center]="isCollapsed">
         <i
           class="fas fa-{{item.icon}} w-4 text-center text-[13px]"
-          [ngClass]="rla.isActive ? 'text-accent' : 'text-white/90'"></i>
+          [ngClass]="rla.isActive ? 'text-success' : 'text-white/90'"></i>
         <span *ngIf="!isCollapsed">{{ item.title }}</span>
       </a>
+
+      <!-- Group header -->
+      <button
+        *ngIf="item.children"
+        type="button"
+        class="flex w-full appearance-none items-center gap-2 rounded-lg border-0 border-l-2 border-solid border-transparent bg-transparent p-1 py-1 text-md font-normal text-white/90! transition-colors hover:bg-white/10 hover:text-white! focus:outline-none"
+        [class.justify-center]="isCollapsed"
+        (click)="onGroupHeaderClick(item)">
+        <i class="fas fa-{{item.icon}} w-4 text-center text-[13px] text-white/90"></i>
+        <span *ngIf="!isCollapsed" class="flex-1 text-left">{{ item.title }}</span>
+        <i
+          *ngIf="!isCollapsed"
+          class="fas text-[11px] text-white/50"
+          [class.fa-chevron-down]="item.expanded"
+          [class.fa-chevron-right]="!item.expanded"></i>
+      </button>
+
+      <!-- Group children -->
+      <ul *ngIf="item.children && item.expanded && !isCollapsed" class="flex list-none flex-col gap-1 py-1" [class.pl-2]="!isCollapsed">
+        <li *ngFor="let child of item.children">
+          <a
+            [routerLink]="child.route"
+            routerLinkActive
+            #crla="routerLinkActive"
+            [routerLinkActiveOptions]="{ exact: false }"
+            class="flex items-center gap-2 rounded-lg border-0 border-l-2 border-solid p-1 py-1 text-md no-underline! transition-colors"
+            [ngClass]="crla.isActive
+              ? 'border-success bg-success/15 font-medium text-white!'
+              : 'border-transparent font-normal text-white/90! hover:bg-white/10 hover:text-white!'"
+            [class.justify-center]="isCollapsed">
+            <i
+              class="fas fa-{{child.icon}} w-4 text-center text-[13px]"
+              [ngClass]="crla.isActive ? 'text-success' : 'text-white/90'"></i>
+            <span *ngIf="!isCollapsed">{{ child.title }}</span>
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
 </nav>

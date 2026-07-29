@@ -2,26 +2,25 @@ using Eduflex.DTOs.Feedback;
 using Eduflex.Mapping.Feedback;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using ShareService.Common;
-using ShareService.Models.Setting;
 using ShareService.Services.Interface;
 
 namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class FeedbacksController : BaseApiController
     {
         private readonly IFeedbackService _feedbackService;
         private readonly ILogger<FeedbacksController> _logger;
-        private readonly FeedbackSettings _feedbackSettings;
+        private readonly ISettingsService _settingsService;
 
-        public FeedbacksController(IFeedbackService feedbackService, ILogger<FeedbacksController> logger, IOptions<FeedbackSettings> feedbackSettings)
+        public FeedbacksController(IFeedbackService feedbackService, ILogger<FeedbacksController> logger, ISettingsService settingsService)
         {
             _feedbackService = feedbackService;
             _logger = logger;
-            _feedbackSettings = feedbackSettings.Value;
+            _settingsService = settingsService;
         }
 
         [HttpGet("feedback-latest")]
@@ -31,14 +30,14 @@ namespace Eduflex.API.Controllers
         {
             return HandleRequestAsync(_logger, "Error in GetLatestFeedback endpoint", async () =>
             {
-                var effectiveCount = count ?? _feedbackSettings.DefaultLatestCount;
+                var settings = await _settingsService.GetSettingsAsync();
+                var effectiveCount = count ?? settings.FeedbackDefaultLatestCount;
                 var feedbacks = await _feedbackService.GetLatestFeedback(effectiveCount);
                 return feedbacks.Select(f => f.ToDto()).ToList();
             });
         }
 
         [HttpPost]
-        [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<bool>> CreateFeedback(CreateFeedbackDto createDto)
         {
@@ -46,13 +45,14 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost("search-feedbacks")]
-        [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<PagedResult<FeedbackDto>>> SearchFeedbacks([FromBody] FeedbackFilterDto filterDto)
         {
             return HandleRequestAsync(_logger, "Error in Search feedback endpoint", async () =>
             {
-                var result = await _feedbackService.GetFeedback(filterDto.ToFilter());
+                var userId = GetRequiredUserId();
+
+                var result = await _feedbackService.GetFeedback(filterDto.ToFilter(), userId);
                 return new PagedResult<FeedbackDto>
                 {
                     Items = result.Items.Select(f => f.ToDto()).ToList(),
@@ -64,13 +64,15 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<IActionResult> DeleteFeedback(string id)
         {
             return HandleDeleteAsync(_logger, "Error in DeleteFeedback endpoint", () =>
-                _feedbackService.DeleteFeedback(id)
-            );
+            {
+                var userId = GetRequiredUserId();
+
+                return _feedbackService.DeleteFeedback(id, userId);
+            });
         }
     }
 }

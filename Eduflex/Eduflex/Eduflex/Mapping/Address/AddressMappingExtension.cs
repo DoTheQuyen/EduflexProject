@@ -10,7 +10,9 @@ namespace Eduflex.Mapping.Address
             return new AddressDto
             {
                 Street = model.Street,
+                Suburb = model.Suburb,
                 City = model.City,
+                State = model.State,
                 Country = model.Country,
                 PostalCode = model.PostalCode
             };
@@ -21,7 +23,9 @@ namespace Eduflex.Mapping.Address
             return new AddressModel
             {
                 Street = dto.Street,
+                Suburb = dto.Suburb,
                 City = dto.City,
+                State = dto.State,
                 Country = dto.Country,
                 PostalCode = dto.PostalCode
             };

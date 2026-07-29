@@ -307,6 +307,8 @@ export class CreateEnquiryDto implements ICreateEnquiryDto {
     email?: string | undefined;
     mobile?: string | undefined;
     enquiry?: string | undefined;
+    subject?: string | undefined;
+    coursePromotionId?: string | undefined;
     recaptchaToken?: string | undefined;
 
     constructor(data?: ICreateEnquiryDto) {
@@ -326,6 +328,8 @@ export class CreateEnquiryDto implements ICreateEnquiryDto {
             this.email = _data["email"];
             this.mobile = _data["mobile"];
             this.enquiry = _data["enquiry"];
+            this.subject = _data["subject"];
+            this.coursePromotionId = _data["coursePromotionId"];
             this.recaptchaToken = _data["recaptchaToken"];
         }
     }
@@ -345,6 +349,8 @@ export class CreateEnquiryDto implements ICreateEnquiryDto {
         data["email"] = this.email;
         data["mobile"] = this.mobile;
         data["enquiry"] = this.enquiry;
+        data["subject"] = this.subject;
+        data["coursePromotionId"] = this.coursePromotionId;
         data["recaptchaToken"] = this.recaptchaToken;
         return data;
     }
@@ -357,6 +363,8 @@ export interface ICreateEnquiryDto {
     email?: string | undefined;
     mobile?: string | undefined;
     enquiry?: string | undefined;
+    subject?: string | undefined;
+    coursePromotionId?: string | undefined;
     recaptchaToken?: string | undefined;
 }
 

@@ -1,0 +1,568 @@
+<div class="visa-process-wrap">
+  <div class="steps">
+
+    <!-- STEP 1: Student Info -->
+    <div class="step" [attr.data-state]="getStep('StudentInfo')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'StudentInfo'" (click)="toggleStepPanel('StudentInfo')">
+        <span class="step-badge">&#10003;</span>
+        <span class="step-heading">
+          <span class="step-name">1. Student Info</span>
+          <span class="step-desc">{{ stepDescriptions.StudentInfo }}</span>
+        </span>
+        <span class="pill pill-complete">Complete</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'StudentInfo'" [formGroup]="studentForm">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="field-panel h-100">
+              <div class="field-panel__title">Student details</div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">First name</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.firstName }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="firstName">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Middle name</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.middleName || '—' }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="middleName">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Last name</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.lastName }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="lastName">
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Date of birth</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.dateOfBirth ? (enrolment.dateOfBirth | date:'dd/MM/yyyy') : '—' }}</div>
+                  <input *ngIf="editingStudent" type="date" class="form-control" formControlName="dateOfBirth">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Gender</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.gender || '—' }}</div>
+                  <select *ngIf="editingStudent" class="form-select" formControlName="gender">
+                    <option value="">Select...</option>
+                    <option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Nationality</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.nationality || '—' }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="nationality">
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Email</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.email }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="email">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Mobile</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.mobile }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="mobile">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Passport / ID no.</label>
+                  <div *ngIf="!editingStudent" class="form-control-plaintext">{{ enrolment.passportNumber || '—' }}</div>
+                  <input *ngIf="editingStudent" class="form-control" formControlName="passportNumber">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="field-panel h-100">
+              <div class="field-panel__title">Emergency contact</div>
+              <div class="row g-3">
+                <ng-container *ngIf="!editingStudent">
+                  <div class="col-md-6"><label class="form-label">Name</label><div class="form-control-plaintext">{{ enrolment.emergencyContact?.name || '—' }}</div></div>
+                  <div class="col-md-6"><label class="form-label">Relationship</label><div class="form-control-plaintext">{{ enrolment.emergencyContact?.relationship || '—' }}</div></div>
+                  <div class="col-md-6"><label class="form-label">Phone</label><div class="form-control-plaintext">{{ enrolment.emergencyContact?.phone || '—' }}</div></div>
+                  <div class="col-md-6"><label class="form-label">Email</label><div class="form-control-plaintext">{{ enrolment.emergencyContact?.email || '—' }}</div></div>
+                </ng-container>
+                <ng-container *ngIf="editingStudent">
+                  <div class="col-md-6"><label class="form-label">Name</label><input class="form-control" formControlName="emergencyName"></div>
+                  <div class="col-md-6"><label class="form-label">Relationship</label><input class="form-control" formControlName="emergencyRelationship"></div>
+                  <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" formControlName="emergencyPhone"></div>
+                  <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" formControlName="emergencyEmail"></div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-6">
+            <div class="field-panel h-100">
+              <div class="field-panel__title">Hometown address</div>
+              <div class="row g-3">
+                <ng-container *ngIf="!editingStudent">
+                  <div class="col-md-6"><label class="form-label">Street</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.street || '—' }}</div></div>
+                  <div class="col-md-6"><label class="form-label">Suburb</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.suburb || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">City</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.city || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">State</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.state || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">Postcode</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.postalCode || '—' }}</div></div>
+                  <div class="col-12"><label class="form-label">Country</label><div class="form-control-plaintext">{{ enrolment.hometownAddress?.country || '—' }}</div></div>
+                </ng-container>
+                <ng-container *ngIf="editingStudent">
+                  <div class="col-md-6"><label class="form-label">Street</label><input class="form-control" formControlName="hometownStreet"></div>
+                  <div class="col-md-6"><label class="form-label">Suburb</label><input class="form-control" formControlName="hometownSuburb"></div>
+                  <div class="col-md-4"><label class="form-label">City</label><input class="form-control" formControlName="hometownCity"></div>
+                  <div class="col-md-4"><label class="form-label">State</label><input class="form-control" formControlName="hometownState"></div>
+                  <div class="col-md-4"><label class="form-label">Postcode</label><input class="form-control" formControlName="hometownPostcode"></div>
+                  <div class="col-12"><label class="form-label">Country</label><input class="form-control" formControlName="hometownCountry"></div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="field-panel h-100">
+              <div class="field-panel__title">Current address</div>
+              <div class="row g-3">
+                <ng-container *ngIf="!editingStudent">
+                  <div class="col-md-6"><label class="form-label">Street</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.street || '—' }}</div></div>
+                  <div class="col-md-6"><label class="form-label">Suburb</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.suburb || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">City</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.city || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">State</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.state || '—' }}</div></div>
+                  <div class="col-md-4"><label class="form-label">Postcode</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.postalCode || '—' }}</div></div>
+                  <div class="col-12"><label class="form-label">Country</label><div class="form-control-plaintext">{{ enrolment.currentAddress?.country || '—' }}</div></div>
+                </ng-container>
+                <ng-container *ngIf="editingStudent">
+                  <div class="col-md-6"><label class="form-label">Street</label><input class="form-control" formControlName="currentStreet"></div>
+                  <div class="col-md-6"><label class="form-label">Suburb</label><input class="form-control" formControlName="currentSuburb"></div>
+                  <div class="col-md-4"><label class="form-label">City</label><input class="form-control" formControlName="currentCity"></div>
+                  <div class="col-md-4"><label class="form-label">State</label><input class="form-control" formControlName="currentState"></div>
+                  <div class="col-md-4"><label class="form-label">Postcode</label><input class="form-control" formControlName="currentPostcode"></div>
+                  <div class="col-12"><label class="form-label">Country</label><input class="form-control" formControlName="currentCountry"></div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <span class="hint">Editing re-opens this step for review — it stays marked Complete.</span>
+          <div class="btns">
+            <button *ngIf="editingStudent" type="button" class="btn btn-outline-secondary btn-sm px-3" (click)="toggleEditStudent()">Cancel</button>
+            <button type="button" class="btn btn-sm px-4" [class.btn-outline-primary]="!editingStudent" [class.btn-primary]="editingStudent"
+                    (click)="editingStudent ? save('student') : toggleEditStudent()" [disabled]="isSaving">
+              {{ editingStudent ? (isSaving ? 'Saving...' : 'Save') : 'Edit details' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Enrolment Form -->
+    <div class="step" [attr.data-state]="getStep('EnrolmentForm')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'EnrolmentForm'" (click)="toggleStepPanel('EnrolmentForm')">
+        <span class="step-badge">&#10003;</span>
+        <span class="step-heading">
+          <span class="step-name">2. Enrolment Form</span>
+          <span class="step-desc">{{ stepDescriptions.EnrolmentForm }}</span>
+        </span>
+        <span class="pill pill-complete">Complete</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'EnrolmentForm'" [formGroup]="enrolmentForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">University</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ partnerName }}</div>
+            <select *ngIf="editingEnrolment" class="form-select" formControlName="educationPartnerId" (change)="onPartnerChange()">
+              <option value="">Select...</option>
+              <option *ngFor="let p of partners" [value]="p.id">{{ p.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Course</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ courseName }}</div>
+            <select *ngIf="editingEnrolment" class="form-select" formControlName="courseId">
+              <option value="">Select...</option>
+              <option *ngFor="let c of courses" [value]="c.id">{{ c.courseName }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Intake</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.intake || '—' }}</div>
+            <input *ngIf="editingEnrolment" class="form-control" formControlName="intake">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Study mode</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.studyMode || '—' }}</div>
+            <select *ngIf="editingEnrolment" class="form-select" formControlName="studyMode">
+              <option value="">Select...</option><option>Full-time</option><option>Part-time</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Campus</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.campus || '—' }}</div>
+            <input *ngIf="editingEnrolment" class="form-control" formControlName="campus">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Commencement date</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.commencementDate ? (enrolment.commencementDate | date:'dd/MM/yyyy') : '—' }}</div>
+            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="commencementDate">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Expected completion</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.expectedCompletionDate ? (enrolment.expectedCompletionDate | date:'dd/MM/yyyy') : '—' }}</div>
+            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="expectedCompletionDate">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Actual commencement date</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.actualCommencementDate ? (enrolment.actualCommencementDate | date:'dd/MM/yyyy') : '—' }}</div>
+            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="actualCommencementDate">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tuition fee</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.tuitionFee != null ? (enrolment.tuitionFee | number) : '—' }}</div>
+            <input *ngIf="editingEnrolment" type="number" min="0" class="form-control" formControlName="tuitionFee" placeholder="Loaded from course, editable">
+          </div>
+
+          <!-- <div class="col-md-6">
+            <label class="form-label">Funding source</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.fundingSource || '—' }}</div>
+            <input *ngIf="editingEnrolment" class="form-control" formControlName="fundingSource">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Visa status</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.visaStatus || '—' }}</div>
+            <input *ngIf="editingEnrolment" class="form-control" formControlName="visaStatus">
+          </div> -->
+
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <div *ngIf="!editingEnrolment" class="form-control-plaintext" style="white-space: pre-wrap;">{{ enrolment.notes || '—' }}</div>
+            <textarea *ngIf="editingEnrolment" class="form-control" rows="3" formControlName="notes"></textarea>
+          </div>
+        </div>
+
+        <div class="subhead">GS statement</div>
+        <div class="doc-section">
+          <div class="doc-section-head">
+            <span class="label">GS Statement</span>
+            <span class="meta">{{ stepEvidenceDocuments('EnrolmentForm').length }} file(s)</span>
+          </div>
+          <div class="doc-section-body">
+            <div class="doc-empty" *ngIf="stepEvidenceDocuments('EnrolmentForm').length === 0">No GS statement uploaded yet.</div>
+            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('EnrolmentForm')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <app-file-uploader *ngIf="isOwner && permissions.edit" label="Add GS statement" uploadCategory="enrolment"
+              (fileSelected)="onStepEvidenceSelected('EnrolmentForm', $event)">
+            </app-file-uploader>
+            <p *ngIf="isUploadingStepEvidence['EnrolmentForm']" class="text-muted small mb-0">Uploading…</p>
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <span class="hint">Editing re-opens this step for review — it stays marked Complete.</span>
+          <div class="btns">
+            <button *ngIf="editingEnrolment" type="button" class="btn btn-outline-secondary btn-sm px-3" (click)="toggleEditEnrolment()">Cancel</button>
+            <button type="button" class="btn btn-sm px-4" [class.btn-outline-primary]="!editingEnrolment" [class.btn-primary]="editingEnrolment"
+                    (click)="editingEnrolment ? save('enrolment') : toggleEditEnrolment()" [disabled]="isSaving">
+              {{ editingEnrolment ? (isSaving ? 'Saving...' : 'Save') : 'Edit details' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Apply Offer -->
+    <div class="step" [attr.data-state]="getStep('ApplyOffer')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'ApplyOffer'" [disabled]="getStep('ApplyOffer')?.status === 'Locked'" (click)="toggleStepPanel('ApplyOffer')">
+        <span class="step-badge">
+          <ng-container [ngSwitch]="getStep('ApplyOffer')?.status">
+            <span *ngSwitchCase="'Complete'">&#10003;</span>
+            <svg *ngSwitchCase="'Locked'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            <span *ngSwitchDefault>3</span>
+          </ng-container>
+        </span>
+        <span class="step-heading">
+          <span class="step-name">3. Apply Offer</span>
+          <span class="step-desc">{{ stepDescriptions.ApplyOffer }}</span>
+        </span>
+        <span class="pill" [class.pill-complete]="getStep('ApplyOffer')?.status === 'Complete'" [class.pill-draft]="getStep('ApplyOffer')?.status === 'Draft'">{{ getStep('ApplyOffer')?.status }}</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'ApplyOffer' && getStep('ApplyOffer')?.status !== 'Locked'">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Offer applied date</label>
+            <div *ngIf="getStep('ApplyOffer')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('ApplyOffer','offerAppliedDate') || '—' }}</div>
+            <input *ngIf="getStep('ApplyOffer')?.status !== 'Complete'" type="date" class="form-control"
+              [ngModel]="fieldValue('ApplyOffer','offerAppliedDate')" (ngModelChange)="setFieldValue('ApplyOffer','offerAppliedDate',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Application reference</label>
+            <div *ngIf="getStep('ApplyOffer')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('ApplyOffer','applicationReference') || '—' }}</div>
+            <input *ngIf="getStep('ApplyOffer')?.status !== 'Complete'" class="form-control" placeholder="e.g. APP-2026-0417"
+              [ngModel]="fieldValue('ApplyOffer','applicationReference')" (ngModelChange)="setFieldValue('ApplyOffer','applicationReference',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <div *ngIf="getStep('ApplyOffer')?.status === 'Complete'" class="form-control-plaintext" style="white-space: pre-wrap;">{{ fieldValue('ApplyOffer','notes') || '—' }}</div>
+            <textarea *ngIf="getStep('ApplyOffer')?.status !== 'Complete'" class="form-control" rows="2"
+              [ngModel]="fieldValue('ApplyOffer','notes')" (ngModelChange)="setFieldValue('ApplyOffer','notes',$event)" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+
+        <div class="subhead">University offer letter</div>
+        <div class="doc-section">
+          <div class="doc-section-head">
+            <span class="label">Uni Offer</span>
+            <span class="meta">{{ stepEvidenceDocuments('ApplyOffer').length }} / 1 uploaded</span>
+          </div>
+          <div class="doc-section-body">
+            <div class="doc-empty" *ngIf="stepEvidenceDocuments('ApplyOffer').length === 0">No document uploaded yet — required to mark this step complete.</div>
+            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('ApplyOffer')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <app-file-uploader *ngIf="getStep('ApplyOffer')?.status !== 'Complete' && isOwner && permissions.edit" label="Add offer letter" uploadCategory="enrolment"
+              (fileSelected)="onStepEvidenceSelected('ApplyOffer', $event)">
+            </app-file-uploader>
+            <p *ngIf="isUploadingStepEvidence['ApplyOffer']" class="text-muted small mb-0">Uploading…</p>
+          </div>
+        </div>
+
+        <div class="step-actions" *ngIf="getStep('ApplyOffer')?.status !== 'Complete'">
+          <span class="hint">Upload the offer letter to enable Mark Complete.</span>
+          <div class="btns">
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('ApplyOffer')">Save Draft</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('ApplyOffer') || isCompletingStep" (click)="completeStep('ApplyOffer')">Mark Complete &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: CoE Completion -->
+    <div class="step" [attr.data-state]="getStep('CoeCompletion')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'CoeCompletion'" [disabled]="getStep('CoeCompletion')?.status === 'Locked'" (click)="toggleStepPanel('CoeCompletion')">
+        <span class="step-badge">
+          <ng-container [ngSwitch]="getStep('CoeCompletion')?.status">
+            <span *ngSwitchCase="'Complete'">&#10003;</span>
+            <svg *ngSwitchCase="'Locked'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            <span *ngSwitchDefault>4</span>
+          </ng-container>
+        </span>
+        <span class="step-heading">
+          <span class="step-name">4. CoE Completion</span>
+          <span class="step-desc">{{ stepDescriptions.CoeCompletion }}</span>
+        </span>
+        <span class="pill" [class.pill-complete]="getStep('CoeCompletion')?.status === 'Complete'" [class.pill-draft]="getStep('CoeCompletion')?.status === 'Draft'">{{ getStep('CoeCompletion')?.status }}</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'CoeCompletion' && getStep('CoeCompletion')?.status !== 'Locked'">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">CoE number</label>
+            <div *ngIf="getStep('CoeCompletion')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('CoeCompletion','coeNumber') || '—' }}</div>
+            <input *ngIf="getStep('CoeCompletion')?.status !== 'Complete'" class="form-control" placeholder="e.g. COE/2026/88213"
+              [ngModel]="fieldValue('CoeCompletion','coeNumber')" (ngModelChange)="setFieldValue('CoeCompletion','coeNumber',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">CoE issue date</label>
+            <div *ngIf="getStep('CoeCompletion')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('CoeCompletion','coeIssueDate') || '—' }}</div>
+            <input *ngIf="getStep('CoeCompletion')?.status !== 'Complete'" type="date" class="form-control"
+              [ngModel]="fieldValue('CoeCompletion','coeIssueDate')" (ngModelChange)="setFieldValue('CoeCompletion','coeIssueDate',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <div class="subhead">Confirmation of Enrolment (CoE)</div>
+        <div class="doc-section">
+          <div class="doc-section-head">
+            <span class="label">CoE</span>
+            <span class="meta">{{ stepEvidenceDocuments('CoeCompletion').length }} / 1 uploaded</span>
+          </div>
+          <div class="doc-section-body">
+            <div class="doc-empty" *ngIf="stepEvidenceDocuments('CoeCompletion').length === 0">No document uploaded yet — required to mark this step complete.</div>
+            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('CoeCompletion')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <app-file-uploader *ngIf="getStep('CoeCompletion')?.status !== 'Complete' && isOwner && permissions.edit" label="Add CoE" uploadCategory="enrolment"
+              (fileSelected)="onStepEvidenceSelected('CoeCompletion', $event)">
+            </app-file-uploader>
+            <p *ngIf="isUploadingStepEvidence['CoeCompletion']" class="text-muted small mb-0">Uploading…</p>
+          </div>
+        </div>
+
+        <div class="step-actions" *ngIf="getStep('CoeCompletion')?.status !== 'Complete'">
+          <span class="hint">Upload the CoE to enable Mark Complete.</span>
+          <div class="btns">
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('CoeCompletion')">Save Draft</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('CoeCompletion') || isCompletingStep" (click)="completeStep('CoeCompletion')">Mark Complete &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: VISA Application -->
+    <div class="step" [attr.data-state]="getStep('VisaApplication')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'VisaApplication'" [disabled]="getStep('VisaApplication')?.status === 'Locked'" (click)="toggleStepPanel('VisaApplication')">
+        <span class="step-badge">
+          <ng-container [ngSwitch]="getStep('VisaApplication')?.status">
+            <span *ngSwitchCase="'Complete'">&#10003;</span>
+            <svg *ngSwitchCase="'Locked'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            <span *ngSwitchDefault>5</span>
+          </ng-container>
+        </span>
+        <span class="step-heading">
+          <span class="step-name">5. VISA Application</span>
+          <span class="step-desc">{{ stepDescriptions.VisaApplication }}</span>
+        </span>
+        <span class="pill" [class.pill-complete]="getStep('VisaApplication')?.status === 'Complete'" [class.pill-draft]="getStep('VisaApplication')?.status === 'Draft'">{{ getStep('VisaApplication')?.status }}</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'VisaApplication' && getStep('VisaApplication')?.status !== 'Locked'">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Application lodged date</label>
+            <div *ngIf="getStep('VisaApplication')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('VisaApplication','applicationLodgedDate') || '—' }}</div>
+            <input *ngIf="getStep('VisaApplication')?.status !== 'Complete'" type="date" class="form-control"
+              [ngModel]="fieldValue('VisaApplication','applicationLodgedDate')" (ngModelChange)="setFieldValue('VisaApplication','applicationLodgedDate',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">VISA application ID</label>
+            <div *ngIf="getStep('VisaApplication')?.status === 'Complete'" class="form-control-plaintext">{{ fieldValue('VisaApplication','visaApplicationId') || '—' }}</div>
+            <input *ngIf="getStep('VisaApplication')?.status !== 'Complete'" class="form-control" placeholder="e.g. VA-9284-2026"
+              [ngModel]="fieldValue('VisaApplication','visaApplicationId')" (ngModelChange)="setFieldValue('VisaApplication','visaApplicationId',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <div class="subhead">VISA application draft</div>
+        <div class="doc-section">
+          <div class="doc-section-head">
+            <span class="label">VISA Draft</span>
+            <span class="meta">{{ stepEvidenceDocuments('VisaApplication').length }} / 1 uploaded</span>
+          </div>
+          <div class="doc-section-body">
+            <div class="doc-empty" *ngIf="stepEvidenceDocuments('VisaApplication').length === 0">No document uploaded yet — required to mark this step complete.</div>
+            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('VisaApplication')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <app-file-uploader *ngIf="getStep('VisaApplication')?.status !== 'Complete' && isOwner && permissions.edit" label="Add VISA draft" uploadCategory="enrolment"
+              (fileSelected)="onStepEvidenceSelected('VisaApplication', $event)">
+            </app-file-uploader>
+            <p *ngIf="isUploadingStepEvidence['VisaApplication']" class="text-muted small mb-0">Uploading…</p>
+          </div>
+        </div>
+
+        <div class="step-actions" *ngIf="getStep('VisaApplication')?.status !== 'Complete'">
+          <span class="hint">Upload the VISA draft to enable Mark Complete.</span>
+          <div class="btns">
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('VisaApplication')">Save Draft</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('VisaApplication') || isCompletingStep" (click)="completeStep('VisaApplication')">Mark Complete &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6: VISA Outcome -->
+    <div class="step" [attr.data-state]="getStep('VisaOutcome')?.status">
+      <button type="button" class="step-header" [class.is-open]="openStepKey === 'VisaOutcome'" [disabled]="getStep('VisaOutcome')?.status === 'Locked'" (click)="toggleStepPanel('VisaOutcome')">
+        <span class="step-badge">
+          <ng-container [ngSwitch]="getStep('VisaOutcome')?.status">
+            <span *ngSwitchCase="'Complete'">&#10003;</span>
+            <svg *ngSwitchCase="'Locked'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            <span *ngSwitchDefault>6</span>
+          </ng-container>
+        </span>
+        <span class="step-heading">
+          <span class="step-name">6. VISA Outcome</span>
+          <span class="step-desc">{{ stepDescriptions.VisaOutcome }}</span>
+        </span>
+        <span class="pill" [class.pill-complete]="getStep('VisaOutcome')?.status === 'Complete'" [class.pill-draft]="getStep('VisaOutcome')?.status === 'Draft'">{{ getStep('VisaOutcome')?.status }}</span>
+        <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div class="step-body" *ngIf="openStepKey === 'VisaOutcome' && getStep('VisaOutcome')?.status !== 'Locked'">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Outcome</label>
+            <div *ngIf="getStep('VisaOutcome')?.status === 'Complete' && !editingVisaOutcome" class="form-control-plaintext">{{ fieldValue('VisaOutcome','outcome') || '—' }}</div>
+            <select *ngIf="getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome" class="form-select"
+              [ngModel]="fieldValue('VisaOutcome','outcome')" (ngModelChange)="setFieldValue('VisaOutcome','outcome',$event)" [ngModelOptions]="{standalone: true}">
+              <option value="">Select…</option><option>Granted</option><option>Refused</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">VISA grant number</label>
+            <div *ngIf="getStep('VisaOutcome')?.status === 'Complete' && !editingVisaOutcome" class="form-control-plaintext">{{ fieldValue('VisaOutcome','visaGrantNumber') || '—' }}</div>
+            <input *ngIf="getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome" class="form-control" placeholder="e.g. GR-77213"
+              [ngModel]="fieldValue('VisaOutcome','visaGrantNumber')" (ngModelChange)="setFieldValue('VisaOutcome','visaGrantNumber',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">VISA expiry date</label>
+            <div *ngIf="getStep('VisaOutcome')?.status === 'Complete' && !editingVisaOutcome" class="form-control-plaintext">{{ fieldValue('VisaOutcome','visaExpiryDate') || '—' }}</div>
+            <input *ngIf="getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome" type="date" class="form-control"
+              [ngModel]="fieldValue('VisaOutcome','visaExpiryDate')" (ngModelChange)="setFieldValue('VisaOutcome','visaExpiryDate',$event)" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <div class="subhead">VISA grant letter</div>
+        <div class="doc-section">
+          <div class="doc-section-head">
+            <span class="label">VISA Granted</span>
+            <span class="meta">{{ stepEvidenceDocuments('VisaOutcome').length }} / 1 uploaded</span>
+          </div>
+          <div class="doc-section-body">
+            <div class="doc-empty" *ngIf="stepEvidenceDocuments('VisaOutcome').length === 0">No document uploaded yet — required to mark this step complete.</div>
+            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('VisaOutcome')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <app-file-uploader *ngIf="(getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome) && isOwner && permissions.edit" label="Add grant letter" uploadCategory="enrolment"
+              (fileSelected)="onStepEvidenceSelected('VisaOutcome', $event)">
+            </app-file-uploader>
+            <p *ngIf="isUploadingStepEvidence['VisaOutcome']" class="text-muted small mb-0">Uploading…</p>
+          </div>
+        </div>
+
+        <div class="final-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          <span>Marking this step Complete moves the enrolment status to <strong>VISA success</strong> or <strong>VISA fail</strong> depending on the outcome selected above, closes the VISA Process, and — if granted — automatically creates the enrolment's Financial record. An outcome must be selected before this step can be completed.</span>
+        </div>
+
+        <div class="step-actions" *ngIf="getStep('VisaOutcome')?.status === 'Complete' && !editingVisaOutcome">
+          <span class="hint">Need to correct the outcome or details?</span>
+          <div class="btns">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleEditVisaOutcome()">Edit outcome</button>
+          </div>
+        </div>
+
+        <div class="step-actions" *ngIf="getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome">
+          <span class="hint">Select an outcome (and upload the grant letter) to enable Mark Complete.</span>
+          <div class="btns">
+            <button *ngIf="editingVisaOutcome" type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleEditVisaOutcome()">Cancel</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('VisaOutcome')">Save Draft</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('VisaOutcome') || isCompletingStep" (click)="completeStep('VisaOutcome')">
+              {{ editingVisaOutcome ? 'Update outcome' : 'Mark Complete →' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

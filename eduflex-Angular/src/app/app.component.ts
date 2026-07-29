@@ -16,9 +16,7 @@ import { LanguageService } from './services/language.service';
 export class AppComponent {
   title = 'Eduflex';
 
-  constructor(private router: Router, private languageService: LanguageService) {
-    this.languageService.init();
-  }
+ constructor(private router: Router) {}
 
   isPortalRoute(): boolean {
     return this.router.url.startsWith('/student-portal') || 

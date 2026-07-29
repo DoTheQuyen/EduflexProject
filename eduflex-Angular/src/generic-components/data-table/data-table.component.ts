@@ -90,6 +90,7 @@ export class DataTableComponent<T> implements OnDestroy {
     switch (value) {
       case 'Approved': return 'bg-success';
       case 'Rejected': return 'bg-danger';
+      case 'Studying': return 'bg-primary';
       case 'Under Review': return 'bg-warning text-dark';
       case 'Documents Required': return 'bg-info text-dark';
       default: return 'bg-secondary';

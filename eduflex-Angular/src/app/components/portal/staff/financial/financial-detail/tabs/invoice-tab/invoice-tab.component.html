@@ -1,0 +1,100 @@
+<div class="invoice-grid">
+  <div class="invoice-form-col">
+    <div class="card border shadow-sm h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>{{ editingInvoiceId ? 'Edit invoice draft' : 'New invoice' }}</strong>
+        <button *ngIf="editingInvoiceId" type="button" class="btn btn-sm btn-outline-secondary" (click)="startNewDraft()">+ New</button>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Invoice No *</label>
+          <input class="form-control" [(ngModel)]="invoiceNo" [ngModelOptions]="{standalone: true}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Invoice to</label>
+          <div class="form-control-plaintext">{{ invoiceToOption?.name || '—' }}</div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <label class="form-label small">Period start</label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="periodStart" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="col-6">
+            <label class="form-label small">Period end</label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="periodEnd" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Commission claim for this period</label>
+          <input type="number" step="0.01" class="form-control" [(ngModel)]="periodTotal" [ngModelOptions]="{standalone: true}">
+          <p class="text-muted small mt-1 mb-0">Prefilled from the record's expected commission (plus adjustments) minus already-generated invoices — editable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="invoice-editor-col">
+    <div class="card border shadow-sm h-100">
+      <div class="card-header bg-white"><strong>Invoice document</strong></div>
+      <div class="card-body">
+        <quill-editor [(ngModel)]="htmlContent" [ngModelOptions]="{standalone: true}" [styles]="{height: '420px'}"></quill-editor>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="invoice-actions">
+  <button type="button" class="btn btn-outline-secondary" [disabled]="isSaving || isGenerating" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-outline-primary" [disabled]="isSaving || isGenerating" (click)="saveDraft()">
+    {{ isSaving ? 'Saving...' : 'Save Draft' }}
+  </button>
+  <button type="button" class="btn btn-primary" [disabled]="isSaving || isGenerating" (click)="generatePdf()">
+    {{ isGenerating ? 'Generating...' : 'Generate PDF' }}
+  </button>
+</div>
+
+<div class="invoice-bottom">
+  <div class="invoice-history-col">
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white"><strong>Invoice history</strong></div>
+      <div class="card-body p-0">
+        <div class="history-row" *ngFor="let inv of record.invoices">
+          <button type="button" class="history-row-header" (click)="toggleHistoryRow(inv.id)">
+            <span class="hist-invoiceno">{{ inv.invoiceNo }}</span>
+            <span class="hist-to">{{ inv.invoiceToName }}</span>
+            <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Draft'" [class.badge-pill-success-soft]="inv.status === 'Generated'">{{ inv.status }}</span>
+            <span class="hist-amount">{{ inv.periodTotal | number:'1.2-2' }}</span>
+            <button *ngIf="inv.status === 'Draft' && permissions.edit" type="button" class="btn btn-sm btn-outline-primary" (click)="editInvoice(inv); $event.stopPropagation()">Edit</button>
+          </button>
+          <div class="history-row-body" *ngIf="expandedHistoryId === inv.id">
+            <p class="mb-1"><strong>Period:</strong> {{ inv.periodStart | date:'dd/MM/yyyy' }} – {{ inv.periodEnd | date:'dd/MM/yyyy' }}</p>
+            <p class="mb-1"><strong>Created by:</strong> {{ inv.createdByName }} on {{ inv.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            <p class="mb-0" *ngIf="inv.generatedAt"><strong>Generated:</strong> {{ inv.generatedAt | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+        </div>
+        <p *ngIf="record.invoices.length === 0" class="text-muted text-center py-4 mb-0">No invoices yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="invoice-links-col">
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white"><strong>Generated PDFs</strong></div>
+      <div class="card-body p-0">
+        <button type="button" class="pdf-link-row" *ngFor="let inv of generatedInvoices" (click)="openDownloadLink(inv.id)">
+          <i class="fas fa-file-pdf me-2"></i>{{ inv.invoiceNo }}
+        </button>
+        <p *ngIf="generatedInvoices.length === 0" class="text-muted text-center py-4 mb-0">None yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal *ngIf="showSendPrompt" title="Invoice generated" size="sm"
+           saveLabel="Yes, go to Communication" cancelLabel="No, stay here"
+           (closeModal)="dismissSendPrompt()" (cancel)="dismissSendPrompt()" (save)="confirmSendPrompt()">
+  Send this invoice by email now?
+</app-modal>

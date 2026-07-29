@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Security.Claims;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using ShareService.Models.Application;
-using ShareService.Enums.Permissions;
 using ShareService.Common;
 using Eduflex.DTOs.Application;
 using Eduflex.Mapping.Application;
-using Eduflex.Authorization;
 using Eduflex.API.Controllers;
 
 [ApiController]
@@ -32,9 +29,7 @@ public class ApplicationsController : BaseApiController
     {
         return HandleRequestAsync(_logger, "Error in GetApplications endpoint", async () =>
         {
-            var userId = GetUserIdFromToken();
-            if (string.IsNullOrEmpty(userId))
-                throw new UnauthorizedAccessException("User ID not found in token");
+            var userId = GetRequiredUserId();
 
             var result = await _applicationService.GetApplicationsByUserId(userId, query);
             return new PagedResult<ApplicationDto>
@@ -48,103 +43,42 @@ public class ApplicationsController : BaseApiController
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ApplicationDetailDto>> GetApplication(string id)
+    public Task<ActionResult<ApplicationDetailDto>> GetApplication(string id)
     {
-        try
+        return HandleRequestAsync(_logger, $"Error in GetApplication endpoint for ID: {id}", async () =>
         {
-            var userId = GetUserIdFromToken();
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User ID not found in token");
-            }
+            var userId = GetRequiredUserId();
 
-            var application = await _applicationService.GetApplicationById(id, userId);
-            if (application == null)
-            {
-                return NotFound("Application not found");
-            }
+            var application = await _applicationService.GetApplicationById(id, userId)
+                ?? throw new KeyNotFoundException("Application not found");
 
-            return Ok(application);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid("Access denied to this application");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in GetApplication endpoint for ID: {ApplicationId}", id);
-            return StatusCode(500, "An error occurred while retrieving application details");
-        }
+            return application.ToDto();
+        });
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApplicationModel>> CreateApplication(CreateApplicationDto createDto)
+    public Task<ActionResult<ApplicationModel>> CreateApplication(CreateApplicationDto createDto)
     {
-        try
+        return HandleRequestAsync(_logger, "Error in CreateApplication endpoint", async () =>
         {
-            var userId = GetUserIdFromToken();
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User ID not found in token");
-            }
+            var userId = GetRequiredUserId();
 
             // Set userId from token, not from request body
             createDto.UserId = userId;
 
-            var application = await _applicationService.CreateApplication(createDto.ToModel());
-            return CreatedAtAction(nameof(GetApplication), new { id = application.Id }, application);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in CreateApplication endpoint");
-            return StatusCode(500, "An error occurred while creating application");
-        }
+            return await _applicationService.CreateApplication(createDto.ToModel(), userId);
+        });
     }
 
     [HttpPut("{id}/status")]
-    [RequirePermission(PermissionKey.ApplicationsEdit)]
-    public async Task<ActionResult> UpdateApplicationStatus(string id, [FromBody] string status)
+    public Task<ActionResult<bool>> UpdateApplicationStatus(string id, [FromBody] string status)
     {
-        try
+        return HandleUpdateAsync(_logger, $"Error in UpdateApplicationStatus endpoint for ID: {id}", async () =>
         {
-            var userId = GetUserIdFromToken();
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("User ID not found in token");
-            }
+            var userId = GetRequiredUserId();
 
-            var result = await _applicationService.UpdateApplicationStatus(id, status, userId);
-            if (!result)
-            {
-                return NotFound("Application not found");
-            }
-
-            return Ok("Application status updated successfully");
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid("You do not have permission to update application status");
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in UpdateApplicationStatus endpoint for ID: {ApplicationId}", id);
-            return StatusCode(500, "An error occurred while updating application status");
-        }
-    }
-
-    private string GetUserIdFromToken()
-    {
-        return User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-            ?? User.FindFirst("sub")?.Value
-            ?? string.Empty;
+            return await _applicationService.UpdateApplicationStatus(id, status, userId);
+        });
     }
 
 }

@@ -29,9 +29,7 @@ namespace Eduflex.API.Controllers
         {
             return HandleRequestAsync(_logger, "Error getting user profile", async () =>
             {
-                var userId = GetActingUserId();
-                if (string.IsNullOrEmpty(userId))
-                    throw new UnauthorizedAccessException("User not authenticated");
+                var userId = GetRequiredUserId();
 
                 var user = await _userService.GetUserByIdAsync(userId)
                     ?? throw new KeyNotFoundException("User not found");
@@ -45,9 +43,7 @@ namespace Eduflex.API.Controllers
         {
             return HandleRequestAsync(_logger, "Error updating user profile", async () =>
             {
-                var userId = GetActingUserId();
-                if (string.IsNullOrEmpty(userId))
-                    throw new UnauthorizedAccessException("User not authenticated");
+                var userId = GetRequiredUserId();
 
                 var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto.ToModel())
                     ?? throw new KeyNotFoundException("User not found");
@@ -87,6 +83,25 @@ namespace Eduflex.API.Controllers
                 _logger.LogError(ex, "Error changing password for user: {UserId}", User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 return StatusCode(500, "An error occurred while changing password");
             }
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public Task<ActionResult<bool>> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            return HandleCreateAsync(_logger, "Error in ForgotPassword endpoint", async () =>
+            {
+                await _userService.RequestPasswordResetAsync(forgotPasswordDto.Email);
+                return true;
+            });
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public Task<ActionResult<bool>> ResetPassword(ResetPasswordRequestDto resetPasswordDto)
+        {
+            return HandleUpdateAsync(_logger, "Error in ResetPassword endpoint", () =>
+                _userService.ResetPasswordAsync(resetPasswordDto.Token, resetPasswordDto.NewPassword));
         }
     }
 }

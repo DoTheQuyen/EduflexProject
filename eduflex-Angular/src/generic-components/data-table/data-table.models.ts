@@ -16,4 +16,5 @@ export interface DataTableRowAction<T = any> {
   label: string;
   icon?: string;
   cssClass?: string;
+  isVisible?: (row: T) => boolean;
 }

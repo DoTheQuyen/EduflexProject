@@ -43,7 +43,7 @@ namespace DBMigration.Migrations
             var permissionIds = new List<ObjectId>();
             foreach (var action in Actions)
             {
-                var key = $"applications.{action.ToLowerInvariant()}";
+                var key = $"Applications{action}";
                 var permission = await permissionsCollection.Find(Builders<BsonDocument>.Filter.Eq("key", key)).FirstOrDefaultAsync();
                 if (permission == null)
                 {

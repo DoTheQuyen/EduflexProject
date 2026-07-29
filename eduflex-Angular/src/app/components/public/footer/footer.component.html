@@ -1,9 +1,50 @@
 <footer class="footer">
-  <div class="footer-container">
-  
-    <!-- Copyright -->
-    <div class="footer-copy">
-      <p>{{ 'FOOTER.COPYRIGHT' | translate: { year: currentYear } }}</p>
+  <div class="footer-top">
+    <div class="footer-container footer-grid">
+
+      <!-- Brand -->
+      <div class="footer-col footer-brand">
+        <div class="footer-brand-head">
+          <img src="assets/logo/eduflex-logo-mark.png" alt="Eduflex logo" class="logo" />
+          <h3>Eduflex</h3>
+        </div>
+        <p class="footer-tagline">{{ 'FOOTER.TAGLINE' | translate }}</p>
+        <div class="footer-social">
+          <a
+            *ngFor="let link of socialLinks"
+            [href]="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="link.label"
+          >
+            <i [class]="link.icon"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col footer-nav">
+        <h4>{{ 'FOOTER.QUICK_LINKS' | translate }}</h4>
+        <a routerLink="/">{{ 'NAV.HOME' | translate }}</a>
+        <a routerLink="/about">{{ 'NAV.ABOUT' | translate }}</a>
+        <a routerLink="/student-handbook">{{ 'NAV.HANDBOOK' | translate }}</a>
+        <a routerLink="/contact">{{ 'NAV.CONTACT' | translate }}</a>
+      </div>
+
+      <!-- Contact -->
+      <div class="footer-col footer-info">
+        <h4>{{ 'FOOTER.CONTACT_US' | translate }}</h4>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:info@eduflex.net.au">info@eduflex.net.au</a></p>
+        <!-- <p><i class="fas fa-phone"></i> <a href="tel:+61212345678">+61 2 1234 5678</a></p> -->
+        <p><i class="fas fa-location-dot"></i> {{ 'FOOTER.ADDRESS' | translate }}</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <p class="footer-copy">{{ 'FOOTER.COPYRIGHT' | translate: { year: currentYear } }}</p>
     </div>
   </div>
 </footer>

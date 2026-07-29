@@ -46,5 +46,8 @@ namespace ShareService.Models.Student
         [BsonElement("applications")]
         public List<ApplicationModel> Applications { get; set; } = new List<ApplicationModel>();
 
+        [BsonElement("auditTrail")]
+        public List<StudentAuditEntryModel> AuditTrail { get; set; } = new();
+
     }
 }

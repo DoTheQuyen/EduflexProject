@@ -29,12 +29,22 @@
         <span class="text-sm font-medium !text-muted">Welcome, {{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
         <button
           type="button"
-          class="d-btn d-btn-outline d-btn-sm border-error text-error hover:bg-error hover:text-white px-2"
-          (click)="logout()">
+          class="d-btn d-btn-outline d-btn-sm border-error text-error hover:bg-error hover:text-white px-2 logout"
+          (click)="onLogoutClick()">
           <i class="fas fa-sign-out-alt"></i> Logout
         </button>
       </div>
     </header>
+
+<div class="logout-confirm-overlay" *ngIf="showLogoutConfirm">
+  <div class="logout-confirm-box">
+    <p class="logout-confirm-message">Are you sure you want to log out?</p>
+    <div class="logout-confirm-actions">
+      <button type="button" class="d-btn d-btn-outline d-btn-sm px-2" (click)="showLogoutConfirm = false">Cancel</button>
+      <button type="button" class="d-btn d-btn-sm logout-confirm-ok px-4" (click)="logout()">OK</button>
+    </div>
+  </div>
+</div>
 
     <!-- Dynamic Content Area -->
     <main class="min-h-[calc(100vh-4rem)] bg-white p-2">

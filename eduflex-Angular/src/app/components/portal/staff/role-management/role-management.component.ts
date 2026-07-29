@@ -9,6 +9,7 @@ import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
+import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 
 interface ModuleGroup {
   moduleName: string;
@@ -34,6 +35,8 @@ export class RoleManagementComponent implements OnInit {
 
   pager = new TablePagerState();
 
+  permissions!: ModulePermissions;
+
   roleForm: FormGroup;
 
   columns: DataTableColumn<RoleDto>[] = [
@@ -42,11 +45,13 @@ export class RoleManagementComponent implements OnInit {
     { field: 'permissionIds', title: 'Permissions', formatter: (value) => (value?.length ?? 0) + ' permission(s)' }
   ];
 
-  constructor(private fb: FormBuilder, private apiClient: Client, private notificationService: NotificationService) {
+  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService, private notificationService: NotificationService) {
     this.roleForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(200)]]
     });
+
+    this.permissions = this.authHelper.hasRolesPermission();
   }
 
   ngOnInit(): void {
@@ -55,6 +60,11 @@ export class RoleManagementComponent implements OnInit {
   }
 
   loadRoles(): void {
+    if (!this.permissions.view) {
+      this.notificationService.error('You do not have permission to view roles.');
+      return;
+    }
+
     this.isLoading = true;
     const filter = new RoleFilterDto({
       pageNumber: this.pager.pageNumber,
@@ -132,6 +142,11 @@ export class RoleManagementComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (!this.permissions.add) {
+      this.notificationService.error('You do not have permission to add roles.');
+      return;
+    }
+
     this.roleForm.markAllAsTouched();
     this.errorMessage = '';
 

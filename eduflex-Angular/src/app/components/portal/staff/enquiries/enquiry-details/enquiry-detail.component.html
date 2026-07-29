@@ -1,0 +1,91 @@
+<div class="enquiry-detail-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back
+    </button>
+    <h3 class="mb-3">Enquiry Detail</h3>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && enquiry" class="row g-4">
+      <div class="col-lg-6">
+        <div class="card border shadow-sm h-100">
+          <div class="card-header bg-white"><strong>Respond</strong></div>
+          <div class="card-body">
+            <form [formGroup]="responseForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="status" class="form-label">Status *</label>
+                <select id="status" class="form-select" formControlName="status">
+                  <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+                </select>
+                <span class="field-error text-danger" *ngIf="isFieldInvalid('status')">{{ getFieldError('status')
+                  }}</span>
+                <p class="text-muted small mt-1" *ngIf="responseForm.value.status === 'Converted'">
+                  Selecting Converted and submitting will take you to the New Enrolment form to create the student's account and enrolment record.
+                </p>
+              </div>
+
+              <div class="mb-3">
+                <label for="response" class="form-label">Response message</label>
+                <textarea id="response" class="form-control" rows="20" maxlength="2000"
+                  formControlName="response"></textarea>
+                <p class="text-muted small mt-1" *ngIf="responseAlreadySet">
+                  This enquiry has already been responded to — the response message can no longer be changed.
+                </p>
+                <div class="d-flex justify-content-between" *ngIf="!responseAlreadySet">
+                  <span class="field-error text-danger" *ngIf="isFieldInvalid('response')">{{ getFieldError('response')
+                    }}</span>
+                  <span class="text-muted small ms-auto">{{ responseCharsLeft }} characters left</span>
+                </div>
+              </div>
+
+              <p class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+              <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || !permissions.edit">
+                {{ isSubmitting ? 'Saving...' : (responseForm.value.status === 'Converted' ? 'Continue to New Enrolment' : 'Response') }}
+              </button>
+
+              <div class="mt-4 pt-3 border-top text-muted small" *ngIf="enquiry?.updatedBy">
+                Last updated by {{ enquiry?.updatedBy }} at {{ formatDate(enquiry?.updatedAt) }}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card border shadow-sm h-100">
+          <div class="card-header bg-white"><strong>Customer Details</strong> <span
+              class="text-muted">(read-only)</span></div>
+          <div class="card-body">
+            <dl class="row mb-0">
+              <dt class="col-sm-2">Name</dt>
+              <dd class="col-sm-10">{{ enquiry.firstName }} {{ enquiry.middleName }} {{ enquiry.lastName }}</dd>
+
+              <dt class="col-sm-2">Email</dt>
+              <dd class="col-sm-10">{{ enquiry.email }}</dd>
+
+              <dt class="col-sm-2">Mobile</dt>
+              <dd class="col-sm-10">{{ enquiry.mobile }}</dd>
+
+              <dt class="col-sm-2">Subject</dt>
+              <dd class="col-sm-10">
+                {{ enquiry.subject }}
+                <a *ngIf="enquiry.coursePromotionId" routerLink="/staff-portal/course-promotions" class="ms-2 small">(view course promotions)</a>
+              </dd>
+
+              <dt class="col-sm-2">Received</dt>
+              <dd class="col-sm-10">{{ formatDate(enquiry.createdAt) }}</dd>
+
+              <dt class="col-sm-2">Message</dt>
+              <dd class="col-sm-10" style="white-space: pre-wrap;">{{ enquiry.enquiry }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

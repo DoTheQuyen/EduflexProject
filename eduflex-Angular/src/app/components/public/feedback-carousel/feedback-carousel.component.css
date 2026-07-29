@@ -99,7 +99,7 @@
 
 .feedback-course {
   font-size: 0.8rem;
-  color: #C7CEDA;
+  color: var(--color-muted-on-dark);
   margin: 0.15rem 0 0;
 }
 

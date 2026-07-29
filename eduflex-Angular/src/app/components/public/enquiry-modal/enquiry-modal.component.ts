@@ -1,10 +1,11 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, CreateEnquiryDto } from '@services/content.services';
+import { Client, CreateEnquiryDto, CoursePromotionDto } from '@services/content.services';
 import { environment } from '../../../environments/environment';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 import { TranslatePipe } from '@ngx-translate/core';
+
 
 declare const grecaptcha: any;
 
@@ -16,6 +17,7 @@ declare const grecaptcha: any;
   styleUrls: ['./enquiry-modal.component.css']
 })
 export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
+  @Input() coursePromotion?: CoursePromotionDto;
   @Output() closed = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<void>();
   @ViewChild('recaptchaContainer') recaptchaContainer!: ElementRef<HTMLDivElement>;
@@ -107,9 +109,14 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
 
     this.isSubmitting = true;
 
-    const { firstName, middleName, lastName, email, mobile, enquiry } = this.enquiryForm.value;
+   const { firstName, middleName, lastName, email, mobile, enquiry } = this.enquiryForm.value;
+    const subject = this.coursePromotion
+      ? `Course: ${this.coursePromotion.courseName} (${this.coursePromotion.universityName})`
+      : undefined;
+
     const payload = new CreateEnquiryDto({
-      firstName, middleName, lastName, email, mobile, enquiry,
+      firstName, middleName, lastName, email, mobile, enquiry, subject,
+      coursePromotionId: this.coursePromotion?.id,
       recaptchaToken: this.recaptchaToken
     });
 

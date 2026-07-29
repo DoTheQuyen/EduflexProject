@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Client, UserSummaryDto, CreateUserDto, UserDto, RoleDto, UserFilterDto, RoleFilterDto } from '@services/api.services';
-import { AuthHelperService } from '@services/auth-helper.service';
+import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
-import { PermissionKeys } from '../../../../shared/constants/permission-keys';
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
@@ -33,9 +32,7 @@ export class UserManagementComponent implements OnInit {
   roleFilter = '';
   activeFilter = 'all';
 
-  canView = false;
-  canAdd = false;
-  canEdit = false;
+  permissions!: ModulePermissions;
 
   userForm: FormGroup;
 
@@ -60,11 +57,10 @@ export class UserManagementComponent implements OnInit {
       isActive: [true]
     });
 
-this.canAdd = this.authHelper.hasPermission(PermissionKeys.UsersAdd);
-this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
+    this.permissions = this.authHelper.hasUsersPermission();
 
     this.rowActions = [
-      ...(this.canEdit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : [])
+      ...(this.permissions.edit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : [])
     ];
   }
 
@@ -74,6 +70,11 @@ this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
   }
 
   loadUsers(): void {
+    if (!this.permissions.view) {
+      this.notificationService.error('You do not have permission to view users.');
+      return;
+    }
+
     this.isLoading = true;
     const isActive = this.activeFilter === 'all' ? undefined : this.activeFilter === 'true';
     const filter = new UserFilterDto({
@@ -163,6 +164,12 @@ this.canEdit = this.authHelper.hasPermission(PermissionKeys.UsersEdit);
   }
 
   onSubmit(): void {
+    const requiredPermission = this.editingId ? this.permissions.edit : this.permissions.add;
+    if (!requiredPermission) {
+      this.notificationService.error(this.editingId ? 'You do not have permission to edit users.' : 'You do not have permission to add users.');
+      return;
+    }
+
     this.userForm.markAllAsTouched();
     this.errorMessage = '';
 

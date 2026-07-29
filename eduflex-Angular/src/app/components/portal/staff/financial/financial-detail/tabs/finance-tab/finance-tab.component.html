@@ -1,0 +1,95 @@
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card border shadow-sm mb-4">
+      <div class="card-header bg-white"><strong>Invoice to</strong></div>
+      <div class="card-body">
+        <p class="mb-1"><span class="badge-pill badge-pill-accent-soft">{{ businessPartnerName ? 'Business Partner' : 'Education Partner (direct contract)' }}</span></p>
+        <h5 class="mb-0">{{ invoiceToLabel }}</h5>
+      </div>
+    </div>
+
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white"><strong>Commission calculation</strong></div>
+      <div class="card-body">
+        <div class="commission-formula">
+          <div class="formula-row">
+            <span class="formula-label">Course commission rate</span>
+            <span class="formula-value">{{ record.courseCommissionRate }}%</span>
+          </div>
+          <div class="formula-op">&times;</div>
+          <div class="formula-row" *ngIf="businessPartnerName">
+            <span class="formula-label">Business partner commission rate</span>
+            <span class="formula-value">{{ record.businessPartnerCommissionRate }}%</span>
+          </div>
+          <div class="formula-op" *ngIf="businessPartnerName">&times;</div>
+          <div class="formula-row">
+            <span class="formula-label">Total tuition</span>
+            <span class="formula-value">{{ record.totalTuition | number:'1.2-2' }}</span>
+          </div>
+          <div class="formula-total">
+            <span>Expected commission</span>
+            <span>{{ record.expectedCommission | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+          <strong>Extra commission adjustments</strong>
+          <button *ngIf="permissions.edit" type="button" class="btn btn-sm btn-outline-primary" (click)="toggleAdjustmentForm()">
+            {{ showAdjustmentForm ? 'Cancel' : '+ Add adjustment' }}
+          </button>
+        </div>
+        <p class="text-muted small mb-2">For cases such as a student failing and re-studying — additive, human-entered, not formula-derived.</p>
+
+        <div class="adjustment-form" *ngIf="showAdjustmentForm">
+          <div class="row g-2">
+            <div class="col-md-7">
+              <input class="form-control form-control-sm" placeholder="Reason (e.g. Repeated Semester 2 after fail)" [(ngModel)]="adjustmentReason" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-3">
+              <input type="number" step="0.01" class="form-control form-control-sm" placeholder="Amount" [(ngModel)]="adjustmentAmount" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-sm btn-primary w-100" [disabled]="isSavingAdjustment" (click)="addAdjustment()">
+                {{ isSavingAdjustment ? 'Saving...' : 'Add' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-sm mb-0" *ngIf="record.extraCommissionAdjustments.length > 0">
+          <tbody>
+            <tr *ngFor="let a of record.extraCommissionAdjustments">
+              <td>{{ a.reason }}</td>
+              <td class="text-muted small">{{ a.addedByName }} &middot; {{ formatDate(a.addedAt) }}</td>
+              <td class="text-end" [class.text-danger]="a.amount < 0">{{ a.amount | number:'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="record.extraCommissionAdjustments.length === 0" class="text-muted small mb-0">No adjustments yet.</p>
+
+        <div class="formula-total mt-3" *ngIf="record.extraCommissionAdjustments.length > 0">
+          <span>Total commission (incl. adjustments)</span>
+          <span>{{ totalCommission | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white"><strong>Invoice request calendar</strong></div>
+      <div class="card-body">
+        <p class="text-muted small">One month after this enrolment's actual commencement date.</p>
+        <div class="plan-entry" *ngFor="let p of record.invoicePlan">
+          <span>{{ formatDate(p.plannedRequestDate) }}</span>
+          <span class="badge-pill" [class.badge-pill-navy-soft]="p.status === 'Planned'" [class.badge-pill-success-soft]="p.status === 'Invoiced'" [class.badge-pill-error-soft]="p.status === 'Skipped'">
+            {{ p.status }}
+          </span>
+        </div>
+        <p *ngIf="record.invoicePlan.length === 0" class="text-muted text-center py-3 mb-0">
+          No planned invoice date yet — set the enrolment's actual commencement date first.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

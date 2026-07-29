@@ -1,15 +1,15 @@
-using Eduflex.Authorization;
 using Eduflex.DTOs.Auth;
 using Eduflex.Mapping.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Common;
-using ShareService.Enums.Permissions;
 using ShareService.Services.Interface;
 
 namespace Eduflex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     [ApiExplorerSettings(GroupName = "app")]
     public class UsersController : BaseApiController
     {
@@ -25,12 +25,13 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost("search-users")]
-        [RequirePermission(PermissionKey.UsersView)]
         public Task<ActionResult<PagedResult<UserSummaryDto>>> SearchUsers([FromBody] UserFilterDto filterDto)
         {
             return HandleRequestAsync(_logger, "Error in Search users endpoint", async () =>
             {
-                var result = await _userService.GetUsersAsync(filterDto.ToFilter());
+                var actingUserId = GetRequiredUserId();
+
+                var result = await _userService.GetUsersAsync(filterDto.ToFilter(), actingUserId);
                 var roles = await _roleService.GetAllRolesAsync();
                 var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
 
@@ -40,6 +41,7 @@ namespace Eduflex.API.Controllers
                     Email = u.Email,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
+                    Mobile = u.Mobile,
                     RoleId = u.RoleId,
                     RoleName = roleNameById.TryGetValue(u.RoleId ?? string.Empty, out var name) ? name : "Unknown",
                     IsActive = u.IsActive,
@@ -57,21 +59,22 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpPost]
-        [RequirePermission(PermissionKey.UsersAdd)]
         public Task<ActionResult<bool>> CreateUser(CreateUserDto createDto)
         {
-            return HandleCreateAsync(_logger, "Error in CreateUser endpoint", () => _userService.CreateUserAsync(createDto.ToModel()));
+            return HandleCreateAsync(_logger, "Error in CreateUser endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+
+                return _userService.CreateUserAsync(createDto.ToModel(), actingUserId);
+            });
         }
 
         [HttpPut("{id}")]
-        [RequirePermission(PermissionKey.UsersEdit)]
         public Task<ActionResult<bool>> UpdateUser(string id, UserDto updateDto)
         {
             return HandleUpdateAsync(_logger, $"Error updating user: {id}", async () =>
             {
-                var actingUserId = GetActingUserId();
-                if (string.IsNullOrEmpty(actingUserId))
-                    throw new UnauthorizedAccessException("User not authenticated");
+                var actingUserId = GetRequiredUserId();
 
                 return await _userService.UpdateUserAsync(actingUserId, updateDto.ToModel(id));
             });

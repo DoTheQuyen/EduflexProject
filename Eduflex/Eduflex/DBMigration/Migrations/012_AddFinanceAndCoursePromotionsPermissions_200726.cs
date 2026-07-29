@@ -95,11 +95,10 @@ namespace DBMigration.Migrations
             var moduleId = module["_id"].AsObjectId;
 
             var permissionIds = new Dictionary<string, ObjectId>();
-            var keyPrefix = moduleName.ToLowerInvariant();
 
             foreach (var action in Actions)
             {
-                var key = $"{keyPrefix}.{action.ToLowerInvariant()}";
+                var key = $"{moduleName}{action}";
                 var permission = await permissionsCollection.Find(Builders<BsonDocument>.Filter.Eq("key", key)).FirstOrDefaultAsync();
                 if (permission == null)
                 {
@@ -138,8 +137,8 @@ namespace DBMigration.Migrations
             var financeAndCoursePromoPermissions = await permissionsCollection.Find(
                 Builders<BsonDocument>.Filter.In("key", new[]
                 {
-                    "finance.view", "finance.add", "finance.edit", "finance.delete",
-                    "coursepromotions.view", "coursepromotions.add", "coursepromotions.edit", "coursepromotions.delete"
+                    "FinanceView", "FinanceAdd", "FinanceEdit", "FinanceDelete",
+                    "CoursePromotionsView", "CoursePromotionsAdd", "CoursePromotionsEdit", "CoursePromotionsDelete"
                 })).ToListAsync();
 
             var idsToRemove = financeAndCoursePromoPermissions.Select(p => p["_id"].AsObjectId.ToString()).ToList();

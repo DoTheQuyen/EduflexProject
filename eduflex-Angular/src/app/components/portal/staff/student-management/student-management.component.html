@@ -1,0 +1,144 @@
+<div class="feedback-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h3 class="mb-2">Manage Students</h3>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a class="btn btn-primary btn-md" routerLink="/staff-portal/students/new" *ngIf="permissions.add">
+          <i class="fas fa-plus me-2"></i>Add Student
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading students...</p>
+        </div>
+
+        <div *ngIf="!isLoading" class="card border shadow-sm">
+          <div class="card-body p-0">
+            <app-data-table
+              [columns]="columns"
+              [data]="students"
+              [rowActions]="rowActions"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search name, email, mobile or passport no..."
+              (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)"
+              (actionClick)="onTableAction($event)"
+              tableClass="table table-bordered table-hover mb-0">
+              <select tableFilters class="form-select" style="max-width: 150px;" (change)="onActiveFilterChange($event)">
+                <option value="all">All statuses</option>
+                <option value="true">Active only</option>
+                <option value="false">Inactive only</option>
+              </select>
+            </app-data-table>
+            <p *ngIf="!isLoading && students.length === 0" class="text-center text-muted py-4 mb-0">
+              No students yet. Click "Add Student" to create one.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Student Modal -->
+<app-modal *ngIf="isModalOpen" title="Edit Student" [isSaving]="isSubmitting"
+  saveLabel="Save Changes"
+  (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
+  <form [formGroup]="studentForm">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">Email *</label>
+        <input id="email" type="email" class="form-control" formControlName="email">
+        <span class="field-error" *ngIf="isFieldInvalid('email')">A valid email is required</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="mobile" class="form-label">Mobile *</label>
+        <input id="mobile" type="text" class="form-control" formControlName="mobile">
+        <span class="field-error" *ngIf="isFieldInvalid('mobile')">Mobile is required</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="firstName" class="form-label">First Name *</label>
+        <input id="firstName" type="text" class="form-control" formControlName="firstName">
+        <span class="field-error" *ngIf="isFieldInvalid('firstName')">First name is required</span>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="lastName" class="form-label">Last Name *</label>
+        <input id="lastName" type="text" class="form-control" formControlName="lastName">
+        <span class="field-error" *ngIf="isFieldInvalid('lastName')">Last name is required</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="nationality" class="form-label">Nationality *</label>
+        <input id="nationality" type="text" class="form-control" formControlName="nationality">
+        <span class="field-error" *ngIf="isFieldInvalid('nationality')">Nationality is required</span>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="passportNumber" class="form-label">Passport Number *</label>
+        <input id="passportNumber" type="text" class="form-control" formControlName="passportNumber">
+        <span class="field-error" *ngIf="isFieldInvalid('passportNumber')">Passport number is required</span>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="dateOfBirth" class="form-label">Date of Birth *</label>
+        <input id="dateOfBirth" type="date" class="form-control" formControlName="dateOfBirth">
+        <span class="field-error" *ngIf="isFieldInvalid('dateOfBirth')">Date of birth is required</span>
+      </div>
+    </div>
+
+    <hr>
+    <h6 class="mb-3">Address</h6>
+    <div class="row">
+      <div class="col-md-8 mb-3">
+        <label for="street" class="form-label">Street *</label>
+        <input id="street" type="text" class="form-control" formControlName="street">
+        <span class="field-error" *ngIf="isFieldInvalid('street')">Street is required</span>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="suburb" class="form-label">Suburb</label>
+        <input id="suburb" type="text" class="form-control" formControlName="suburb">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="city" class="form-label">City *</label>
+        <input id="city" type="text" class="form-control" formControlName="city">
+        <span class="field-error" *ngIf="isFieldInvalid('city')">City is required</span>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="state" class="form-label">State</label>
+        <input id="state" type="text" class="form-control" formControlName="state">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="postalCode" class="form-label">Postal Code *</label>
+        <input id="postalCode" type="text" class="form-control" formControlName="postalCode">
+        <span class="field-error" *ngIf="isFieldInvalid('postalCode')">Postal code is required</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="country" class="form-label">Country *</label>
+        <input id="country" type="text" class="form-control" formControlName="country">
+        <span class="field-error" *ngIf="isFieldInvalid('country')">Country is required</span>
+      </div>
+    </div>
+
+    <app-notification type="error" [message]="errorMessage"></app-notification>
+  </form>
+</app-modal>

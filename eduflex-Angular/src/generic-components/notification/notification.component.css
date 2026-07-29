@@ -9,22 +9,22 @@
   position: relative;
 }
 .app-notification-success {
-  background-color: #EAF6F1;
+  background-color: color-mix(in srgb, var(--color-success) 12%, white);
   border: 1px solid var(--color-success);
   color: var(--color-success-dark);
 }
 .app-notification-error {
-  background-color: #FBEEED;
+  background-color: color-mix(in srgb, var(--color-error) 12%, white);
   border: 1px solid var(--color-error);
   color: var(--color-error-dark);
 }
 .app-notification-warning {
-  background-color: #FDF3E2;
+  background-color: color-mix(in srgb, var(--color-accent) 12%, white);
   border: 1px solid var(--color-accent);
   color: var(--color-accent-dark);
 }
 .app-notification-info {
-  background-color: #EAF0F5;
+  background-color: color-mix(in srgb, var(--color-navy-700) 10%, white);
   border: 1px solid var(--color-navy-700);
   color: var(--color-navy-900);
 }

@@ -1,5 +1,4 @@
 ﻿using Eduflex.DTOs.Auth;
-using ShareService.Common;
 using ShareService.Models.Auth;
 
 namespace Eduflex.Mapping.Auth
@@ -26,6 +25,7 @@ namespace Eduflex.Mapping.Auth
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                Mobile = model.Mobile,
                 CreatedAt = model.CreatedAt,
                 RoleId = model.RoleId,
                 IsActive = model.IsActive,
@@ -41,6 +41,7 @@ namespace Eduflex.Mapping.Auth
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Mobile = dto.Mobile,
                 CreatedAt = dto.CreatedAt,
                 RoleId = dto.RoleId,
                 IsActive = dto.IsActive,
@@ -56,6 +57,7 @@ namespace Eduflex.Mapping.Auth
                 Password = dto.Password,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Mobile = dto.Mobile,
                 RoleId = dto.RoleId,
             };
         }
@@ -68,6 +70,7 @@ namespace Eduflex.Mapping.Auth
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Mobile = dto.Mobile,
                 RoleId = dto.RoleId,
                 IsActive = dto.IsActive
             };

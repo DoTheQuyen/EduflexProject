@@ -20,6 +20,10 @@ namespace ShareService.Validations.Auth
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Invalid email format")
                 .MaximumLength(100).WithMessage("Email cannot exceed 100 characters");
+
+            RuleFor(x => x.Mobile)
+                .NotEmpty().WithMessage("Mobile is required")
+                .MaximumLength(20).WithMessage("Mobile cannot exceed 20 characters");
         }
     }
 }

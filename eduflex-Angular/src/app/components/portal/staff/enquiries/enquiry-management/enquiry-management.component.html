@@ -1,0 +1,59 @@
+<div class="enquiry-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <h3 class="mb-2">Manage Enquiries</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'New'" (click)="switchTab('New')">New</button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'MIR'" (click)="switchTab('MIR')">More Info Requested</button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'Responded'" (click)="switchTab('Responded')">Responded</button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'Converted'" (click)="switchTab('Converted')">Converted</button>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading enquiries...</p>
+        </div>
+
+        <div *ngIf="!isLoading" class="card border shadow-sm">
+          <div class="card-body p-0">
+            <app-data-table
+              [columns]="currentColumns"
+              [data]="enquiries"
+              [rowActions]="rowActions"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search name or email..."
+              (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)"
+              (actionClick)="onTableAction($event)"
+              tableClass="table table-bordered table-hover mb-0">
+            </app-data-table>
+            <p *ngIf="!isLoading && enquiries.length === 0" class="text-center text-muted py-4 mb-0">
+              No enquiries in this tab.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,4 @@
 using Eduflex.DTOs.Course;
-using ShareService.Common;
 using ShareService.Models.CoursePromotion;
 
 namespace Eduflex.Mapping.Course

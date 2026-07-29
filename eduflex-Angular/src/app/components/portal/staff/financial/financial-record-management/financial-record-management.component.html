@@ -1,0 +1,38 @@
+<div class="finance-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="mb-2">Finance</h3>
+        <p class="text-muted mb-0">Financial records are created automatically once an enrolment's VISA succeeds.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading financial records...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="card border shadow-sm">
+      <div class="card-body p-0">
+        <app-data-table
+          [columns]="columns"
+          [data]="records"
+          [rowActions]="rowActions"
+          [pageNumber]="pager.pageNumber"
+          [pageSize]="pager.pageSize"
+          [totalCount]="pager.totalCount"
+          (pageChange)="onPageChange($event)"
+          (actionClick)="onTableAction($event)"
+          tableClass="table table-bordered table-hover mb-0">
+        </app-data-table>
+        <p *ngIf="!isLoading && records.length === 0" class="text-center text-muted py-4 mb-0">
+          No financial records yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,324 @@
+/* ===== VISA Process — step-gated accordion ===== */
+/* Capped width (rather than the old full-bleed container-fluid grid) so field rows
+   don't stretch edge-to-edge on wide screens. Currently disabled — full-scale layout
+   with side-by-side field-panel groups is the chosen design instead. */
+/* .visa-process-wrap {
+  max-width: 900px;
+} */
+
+.field-panel {
+  height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.field-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-navy-700);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.step {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.step:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.step[data-state="Locked"] {
+  opacity: 0.65;
+}
+
+/* Mirrors the education-partner accordion's panel-header treatment: tinted background,
+   left accent bar, chevron that rotates open. */
+.step-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.15rem;
+  background: var(--color-surface);
+  border: none;
+  border-left: 4px solid var(--color-border);
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.step-header:hover {
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--color-surface));
+}
+
+.step[data-state="Locked"] .step-header {
+  cursor: not-allowed;
+}
+
+.step[data-state="Locked"] .step-header:hover {
+  background: var(--color-surface);
+}
+
+.step-header.is-open {
+  background: color-mix(in srgb, var(--color-accent) 10%, white);
+  border-left-color: var(--color-accent);
+}
+
+.step[data-state="Complete"] .step-header {
+  border-left-color: var(--color-success, #1F7A5C);
+}
+
+.step-badge {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: var(--color-border);
+  color: var(--color-muted);
+}
+
+.step[data-state="Complete"] .step-badge {
+  background: var(--color-success, #1F7A5C);
+  color: #fff;
+}
+
+.step[data-state="Draft"] .step-badge {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.step-heading {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.step-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.step-desc {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 0.1rem;
+}
+
+.pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  background: white;
+}
+
+.pill-complete {
+  border-color: var(--color-success, #1F7A5C);
+  color: var(--color-success, #1F7A5C);
+}
+
+.pill-draft {
+  border-color: var(--color-accent-dark, var(--color-accent));
+  color: var(--color-accent-dark, var(--color-accent));
+}
+
+.step-chevron {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  transition: transform 0.15s ease;
+}
+
+.step-header.is-open .step-chevron {
+  transform: rotate(180deg);
+}
+
+.step-body {
+  padding: 1.25rem 1.35rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.step-body .form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-bottom: 0.35rem;
+}
+
+.step-body .form-control-plaintext {
+  color: var(--color-ink);
+  font-weight: 500;
+  padding-top: 0;
+}
+
+.subhead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-navy-700);
+  margin: 1.25rem 0 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.subhead::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.step-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.step-actions .hint {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.step-actions .btns {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.final-note {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--color-accent) 8%, white);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
+  border-radius: var(--radius);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.83rem;
+  color: var(--color-ink);
+  margin-top: 1.1rem;
+}
+
+.final-note svg {
+  flex-shrink: 0;
+  color: var(--color-accent-dark, var(--color-accent));
+  margin-top: 0.1rem;
+}
+
+/* ===== Evidence upload zone (also duplicated in documents-tab.component.css — small,
+   self-contained rule set kept local to each tab component rather than shared). ===== */
+.doc-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-top: 0.25rem;
+}
+
+.doc-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.95rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.doc-section-head .label {
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.doc-section-head .meta {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.doc-section-body {
+  padding: 0.85rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.doc-empty {
+  font-size: 0.83rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.doc-file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.doc-file-row svg {
+  flex-shrink: 0;
+  color: var(--color-accent-dark, var(--color-accent));
+}
+
+.doc-file-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-file-name {
+  font-weight: 600;
+  font-size: 0.86rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-file-sub {
+  font-size: 0.74rem;
+  color: var(--color-muted);
+}

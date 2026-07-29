@@ -1,0 +1,52 @@
+<div class="documents-wrap">
+  <p class="text-muted small mb-3">Every evidence file uploaded through the VISA Process, grouped by step, plus anything uploaded manually below.</p>
+
+  <div class="doc-groups">
+    <div class="doc-section" *ngFor="let category of documentStepCategories">
+      <div class="doc-section-head">
+        <span class="label">{{ documentCategoryLabels[category] }}</span>
+        <span class="meta">{{ documentsByCategory(category).length }} file(s)</span>
+      </div>
+      <div class="doc-section-body">
+        <div class="doc-empty" *ngIf="documentsByCategory(category).length === 0">No document uploaded yet.</div>
+        <div class="doc-file-row" *ngFor="let doc of documentsByCategory(category)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+          <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-section other-docs">
+    <div class="doc-section-head">
+      <span class="label">Other documents</span>
+      <span class="meta">{{ otherDocuments.length }} file(s)</span>
+    </div>
+    <div class="doc-section-body">
+      <app-file-uploader
+        *ngIf="isOwner && permissions.edit"
+        label="Upload a document"
+        uploadCategory="enrolment"
+        (fileSelected)="onFileSelected($event)">
+      </app-file-uploader>
+      <p *ngIf="isUploading" class="text-muted small mb-0">Uploading…</p>
+
+      <div class="doc-empty" *ngIf="otherDocuments.length === 0">No other documents yet.</div>
+      <div class="doc-file-row" *ngFor="let doc of otherDocuments">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <ng-container *ngIf="renamingDocumentId !== doc.id">
+          <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }}<span *ngIf="doc.isFromStudent"> (student)</span> &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+          <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+          <button *ngIf="isOwner && permissions.edit" type="button" class="btn btn-outline-secondary btn-sm" (click)="startRename(doc)">Rename</button>
+          <button *ngIf="isOwner && permissions.edit" type="button" class="btn btn-outline-danger btn-sm" (click)="deleteDocument(doc)">Delete</button>
+        </ng-container>
+        <div *ngIf="renamingDocumentId === doc.id" class="input-group input-group-sm doc-file-meta">
+          <input class="form-control" [(ngModel)]="renameValue" [ngModelOptions]="{standalone: true}">
+          <button class="btn btn-outline-primary" (click)="confirmRename(doc)">Save</button>
+          <button class="btn btn-outline-secondary" (click)="cancelRename()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

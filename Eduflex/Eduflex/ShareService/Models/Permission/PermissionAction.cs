@@ -5,6 +5,7 @@ namespace ShareService.Models.Permission
         View,
         Add,
         Edit,
-        Delete
+        Delete,
+        Reassign
     }
 }

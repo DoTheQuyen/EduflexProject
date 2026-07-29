@@ -13,6 +13,7 @@ namespace Eduflex.Mapping.Auth
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                Mobile = model.Mobile,
             };
         }
 
@@ -23,6 +24,7 @@ namespace Eduflex.Mapping.Auth
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Mobile = dto.Mobile,
             };
         }
     }

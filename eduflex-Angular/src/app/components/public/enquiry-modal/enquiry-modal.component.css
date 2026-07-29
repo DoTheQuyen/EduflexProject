@@ -29,7 +29,7 @@
   border: none;
   font-size: 1.75rem;
   line-height: 1;
-  color: #888;
+  color: var(--color-muted);
   cursor: pointer;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .modal-subtitle {
-  color: #555;
+  color: var(--color-muted);
   margin-bottom: 1.5rem;
 }
 
@@ -70,7 +70,7 @@
 .form-group input,
 .form-group textarea {
   padding: 0.65rem 0.75rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
@@ -120,7 +120,7 @@
 }
 
 .btn-primary:disabled {
-  background: #D8C39E;
+  background: color-mix(in srgb, var(--color-accent) 55%, white);
   cursor: not-allowed;
 }
 

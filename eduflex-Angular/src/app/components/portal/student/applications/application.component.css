@@ -23,7 +23,7 @@
 /* Pagination styling */
 .pagination .page-link {
   color: var(--color-navy-900);
-  border-color: #dee2e6;
+  border-color: var(--color-border);
 }
 
 .pagination .page-item.active .page-link {
@@ -34,14 +34,14 @@
 
 .pagination .page-link:hover {
   color: var(--color-navy-900);
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+  background-color: var(--color-border);
+  border-color: var(--color-border);
 }
 
 .pagination .page-item.disabled .page-link {
-  color: #6c757d;
-  background-color: #f8f9fa;
-  border-color: #dee2e6;
+  color: var(--color-muted);
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
 }
 
 /* Responsive adjustments */
@@ -56,7 +56,7 @@
   }
 
   .table-responsive {
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--color-border);
   }
 
   .card-header .input-group {

@@ -240,6 +240,14 @@
             "type": "string",
             "nullable": true
           },
+          "subject": {
+            "type": "string",
+            "nullable": true
+          },
+          "coursePromotionId": {
+            "type": "string",
+            "nullable": true
+          },
           "recaptchaToken": {
             "type": "string",
             "nullable": true

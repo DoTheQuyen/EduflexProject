@@ -13,6 +13,7 @@ namespace ShareService.DataAccess.Interface
         Task<ApplicationModel?> GetApplicationByIdAsync(string id);
         Task<ApplicationModel> CreateApplicationAsync(ApplicationModel application, IClientSessionHandle? session = null);
         Task<bool> UpdateApplicationStatusAsync(string id, string status, IClientSessionHandle? session = null);
+        Task<StudentModel> CreateStudentAsync(StudentModel student, IClientSessionHandle? session = null);
 
     }
 }

@@ -2,6 +2,8 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Enums;
+using ShareService.Enums.Permissions;
 using ShareService.Models.CoursePromotion;
 using ShareService.Services.Interface;
 
@@ -11,20 +13,30 @@ namespace ShareService.Services
     {
         private readonly ICoursePromotion _coursePromotionDataAccess;
         private readonly IValidator<CoursePromotionModel> _createCoursePromotionValidator;
+        private readonly IPermissionService _permissionService;
         private readonly ILogger<CoursePromotionService> _logger;
 
         public CoursePromotionService(
             ICoursePromotion coursePromotionDataAccess,
             IValidator<CoursePromotionModel> createCoursePromotionValidator,
+            IPermissionService permissionService,
             ILogger<CoursePromotionService> logger)
         {
             _coursePromotionDataAccess = coursePromotionDataAccess;
             _createCoursePromotionValidator = createCoursePromotionValidator;
+            _permissionService = permissionService;
             _logger = logger;
         }
 
-        public async Task<bool> CreateCoursePromotion(CoursePromotionModel promotion)
+        // Auth: requires CoursePromotionsAdd permission (staff-only).
+        public async Task<bool> CreateCoursePromotion(CoursePromotionModel promotion, string userId)
         {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.CoursePromotionsAdd.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to create course promotions");
+            }
+
             var validate = await _createCoursePromotionValidator.ValidateAsync(promotion);
             if (!validate.IsValid)
             {
@@ -41,18 +53,33 @@ namespace ShareService.Services
             return created;
         }
 
+        // Auth: none — deliberately public/anonymous, feeds the marketing site carousel.
         public async Task<List<CoursePromotionModel>> GetFeaturedActiveCoursePromotions(int count)
         {
             return await _coursePromotionDataAccess.GetFeaturedActiveCoursePromotionsAsync(count);
         }
 
-        public async Task<PagedResult<CoursePromotionModel>> GetCoursePromotions(CoursePromotionFilter filter)
+        // Auth: requires CoursePromotionsView permission (staff-only).
+        public async Task<PagedResult<CoursePromotionModel>> GetCoursePromotions(CoursePromotionFilter filter, string userId)
         {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.CoursePromotionsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view course promotions");
+            }
+
             return await _coursePromotionDataAccess.GetCoursePromotionsAsync(filter);
         }
 
-        public async Task<bool> UpdateCoursePromotion(string id, CoursePromotionModel promotion)
+        // Auth: requires CoursePromotionsEdit permission (staff-only).
+        public async Task<bool> UpdateCoursePromotion(string id, CoursePromotionModel promotion, string userId)
         {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.CoursePromotionsEdit.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to update course promotions");
+            }
+
             var validate = await _createCoursePromotionValidator.ValidateAsync(promotion);
             if (!validate.IsValid)
             {
@@ -77,8 +104,15 @@ namespace ShareService.Services
             return updated;
         }
 
-        public async Task<bool> DeleteCoursePromotion(string id)
+        // Auth: requires CoursePromotionsDelete permission (staff-only).
+        public async Task<bool> DeleteCoursePromotion(string id, string userId)
         {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.CoursePromotionsDelete.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to delete course promotions");
+            }
+
             var deleted = await _coursePromotionDataAccess.DeleteCoursePromotionAsync(id);
             if (deleted)
             {

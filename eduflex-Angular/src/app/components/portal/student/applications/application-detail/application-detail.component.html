@@ -1,0 +1,280 @@
+<div class="application-detail container-fluid py-4">
+
+  <p class="mb-2">
+    <a routerLink="/student-portal/application" class="text-decoration-none">My Applications</a>
+    <span class="!text-muted"> / </span>
+    <span class="!text-muted">{{ mode === 'new' ? 'New Application' : (university || 'Application') }}</span>
+  </p>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+      <div>
+        <h2 class="mb-1">{{ mode === 'new' ? 'New Application' : (university || 'Application') }}</h2>
+        <p class="!text-muted mb-0" *ngIf="mode !== 'new'">{{ course }}</p>
+      </div>
+      <span class="badge" [ngClass]="{
+        'bg-secondary': status === 'Pending',
+        'bg-success': status === 'Approved',
+        'bg-danger': status === 'Rejected',
+        'bg-primary': status === 'Studying'
+      }">{{ status }}</span>
+    </div>
+
+    <div class="alert alert-info" *ngIf="mode === 'view'">
+      <i class="fas fa-eye me-2"></i>
+      This application has been <strong>{{ status }}</strong> and is read-only.
+    </div>
+
+    <div class="row g-4">
+      <!-- Student panel -->
+      <div class="col-lg-3">
+        <div class="card shadow-sm">
+          <div class="card-header">Applicant Details</div>
+          <div class="card-body">
+            <p class="!text-muted small mb-3">Prefilled from your account</p>
+            <div class="mb-3">
+              <label class="d-block small fw-semibold !text-muted">Full Name</label>
+              <div>{{ userInfo?.firstName }} {{ userInfo?.lastName }}</div>
+            </div>
+            <div class="mb-3">
+              <label class="d-block small fw-semibold !text-muted">Email</label>
+              <div>{{ userInfo?.email }}</div>
+            </div>
+            <div class="mb-0" *ngIf="dateApplied">
+              <label class="d-block small fw-semibold !text-muted">Applied</label>
+              <div>{{ formatDate(dateApplied) }}</div>
+            </div>
+
+            <div class="alert alert-light border small mt-3 mb-0">
+              These come from your account. Update them under <strong>Profile</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-lg-9">
+        <div class="card shadow-sm mb-3">
+          <div class="card-header">Program Selection</div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">University <span class="text-danger">*</span></label>
+                <select class="form-select" [(ngModel)]="university" [disabled]="isLocked">
+                  <option value="">Select a university…</option>
+                  <option *ngFor="let p of partners" [value]="p.name">{{ p.name }}</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Course / Program <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="course" [disabled]="isLocked"
+                  list="course-options" placeholder="Pick a listed course or type your own">
+                <datalist id="course-options">
+                  <option *ngFor="let c of availableCourses" [value]="c"></option>
+                </datalist>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Study mode</label>
+                <input type="text" class="form-control" [(ngModel)]="studyMode" [disabled]="isLocked"
+                  list="study-mode-options" placeholder="e.g. Full-time">
+                <datalist id="study-mode-options">
+                  <option *ngFor="let m of availableStudyModes" [value]="m"></option>
+                </datalist>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Campus</label>
+                <input type="text" class="form-control" [(ngModel)]="campus" [disabled]="isLocked"
+                  list="campus-options" placeholder="e.g. Sydney CBD">
+                <datalist id="campus-options">
+                  <option *ngFor="let c of availableCampuses" [value]="c"></option>
+                </datalist>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Description <span class="text-danger">*</span></label>
+                <textarea class="form-control" rows="3" [(ngModel)]="description" [disabled]="isLocked"
+                  placeholder="Briefly describe the program, intake, and your reasons for applying…"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header">Address &amp; Emergency Contact</div>
+          <div class="card-body">
+            <p class="!text-muted small mb-3">These reflect your situation for this application specifically, so they're saved on the application rather than your account.</p>
+
+            <div class="section-divider small fw-semibold text-uppercase !text-muted mb-2">Hometown Address</div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Street</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownStreet" [disabled]="isLocked">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Suburb</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownSuburb" [disabled]="isLocked">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownCity" [disabled]="isLocked">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownState" [disabled]="isLocked">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Postcode</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownPostcode" [disabled]="isLocked">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" [(ngModel)]="hometownCountry" [disabled]="isLocked">
+              </div>
+            </div>
+
+            <div class="section-divider small fw-semibold text-uppercase !text-muted mb-2">Current Address</div>
+            <div class="form-check mb-2">
+              <input type="checkbox" class="form-check-input" id="sameAsHometown" [(ngModel)]="sameAsHometown" [disabled]="isLocked" (change)="toggleSameAsHometown()">
+              <label class="form-check-label small" for="sameAsHometown">Same as hometown address</label>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Street</label>
+                <input type="text" class="form-control" [(ngModel)]="currentStreet" [disabled]="isLocked || sameAsHometown">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Suburb</label>
+                <input type="text" class="form-control" [(ngModel)]="currentSuburb" [disabled]="isLocked || sameAsHometown">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" [(ngModel)]="currentCity" [disabled]="isLocked || sameAsHometown">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input type="text" class="form-control" [(ngModel)]="currentState" [disabled]="isLocked || sameAsHometown">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Postcode</label>
+                <input type="text" class="form-control" [(ngModel)]="currentPostcode" [disabled]="isLocked || sameAsHometown">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" [(ngModel)]="currentCountry" [disabled]="isLocked || sameAsHometown">
+              </div>
+            </div>
+
+            <div class="section-divider small fw-semibold text-uppercase !text-muted mb-2">Emergency Contact</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="emergencyName" [disabled]="isLocked">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Relationship</label>
+                <input type="text" class="form-control" [(ngModel)]="emergencyRelationship" [disabled]="isLocked">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="text" class="form-control" [(ngModel)]="emergencyPhone" [disabled]="isLocked">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" [(ngModel)]="emergencyEmail" [disabled]="isLocked">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <span>Required Documents</span>
+            <span class="small !text-muted">{{ requiredDocsDoneCount }} / {{ requiredKeys.length }} required uploaded</span>
+          </div>
+          <div class="card-body">
+            <div class="alert alert-warning small">
+              <i class="fas fa-triangle-exclamation me-1"></i>
+              Document upload isn't wired to the backend yet — files stay only on this screen and are lost when you leave.
+            </div>
+
+            <div class="doc-section mb-3" *ngFor="let def of docDefs">
+              <div class="doc-section-head">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fas {{ def.icon }} !text-muted"></i>
+                  <div>
+                    <strong>{{ def.label }}</strong>
+                    <span class="text-danger" *ngIf="def.stage === 'initial'"> *</span>
+                    <div class="small !text-muted">Max {{ maxFilesFor(def) }} file{{ maxFilesFor(def) > 1 ? 's' : '' }},
+                      up to {{ uploadLimitFor(def).maxSizeMB }}MB each ({{ uploadLimitFor(def).allowedExtensions?.join(', ') }}) &middot;
+                      <span class="badge" [ngClass]="def.stage === 'initial' ? 'bg-info text-dark' : 'bg-light text-dark border'">{{ docStatusTag(def) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <span class="small !text-muted">{{ docs[def.key].length }}/{{ maxFilesFor(def) }}</span>
+              </div>
+
+              <div class="doc-section-body">
+                <div class="empty-doc small !text-muted fst-italic" *ngIf="docs[def.key].length === 0">No document uploaded yet.</div>
+
+                <div class="doc-file-row" *ngFor="let f of docs[def.key]; let i = index">
+                  <i class="fas fa-file-lines"></i>
+                  <div class="doc-file-meta">
+                    <div class="doc-file-name">{{ f.name }}</div>
+                    <div class="doc-file-note small !text-muted" *ngIf="f.note">{{ f.note }}</div>
+                  </div>
+                  <span class="doc-type-tag">{{ f.type }}</span>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="!isLocked" (click)="removeDocument(def.key, i)">&times;</button>
+                </div>
+
+                <ng-container *ngIf="!isLocked && docs[def.key].length < maxFilesFor(def)">
+                  <button type="button" class="btn btn-sm btn-outline-primary align-self-start" (click)="toggleAddForm(def.key)">
+                    + Add Document
+                  </button>
+
+                  <div class="doc-add-form" *ngIf="addFormOpenFor === def.key">
+                    <input type="file" class="form-control form-control-sm" [attr.accept]="uploadLimitFor(def).allowedExtensions?.join(',')" (change)="onDraftFileChange(def.key, $event)">
+                    <div class="row g-2 mt-2">
+                      <div class="col-md-6">
+                        <select class="form-select form-select-sm" [(ngModel)]="draftType[def.key]" [disabled]="def.fixedType">
+                          <option *ngFor="let opt of def.options" [value]="opt">{{ opt }}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control form-control-sm" placeholder="Note (optional)" [(ngModel)]="draftNote[def.key]">
+                      </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-2">
+                      <button type="button" class="btn btn-sm btn-primary" (click)="attachDocument(def.key)">Attach</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFormOpenFor = null">Cancel</button>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Sticky action bar -->
+  <div class="detail-footer-bar" *ngIf="!isLoading && !isLocked">
+    <div class="small !text-muted">
+      <span *ngIf="mode === 'new' && !canSubmit">Complete the program details and all required documents to enable Submit.</span>
+      <span *ngIf="mode === 'new' && canSubmit">Ready to submit to the admissions team.</span>
+      <span *ngIf="mode === 'edit'">Editing an existing application isn't supported by the backend yet.</span>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelUpdate()">{{ mode === 'new' ? 'Discard' : 'Cancel Update' }}</button>
+      <button type="button" class="btn btn-outline-danger" *ngIf="mode === 'edit'" (click)="withdraw()">Withdraw Application</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="saveDraft()">Save Draft</button>
+      <button type="button" class="btn btn-primary" [disabled]="mode === 'edit' || !canSubmit" (click)="submit()">
+        {{ isSaving ? 'Submitting…' : 'Submit Application' }}
+      </button>
+    </div>
+  </div>
+</div>

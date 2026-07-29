@@ -1,0 +1,46 @@
+<div class="partner-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="mb-2">Business Partners</h3>
+        <p class="text-muted mb-0">Manage the companies Eduflex pays commission through when they place students with education partners.</p>
+      </div>
+      <div class="col-auto" *ngIf="permissions.add">
+        <button type="button" class="btn btn-primary" (click)="createNew()">
+          <i class="fas fa-plus me-1"></i>Add Business Partner
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading business partners...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="card border shadow-sm">
+      <div class="card-body p-0">
+        <app-data-table
+          [columns]="columns"
+          [data]="partners"
+          [rowActions]="rowActions"
+          [pageNumber]="pager.pageNumber"
+          [pageSize]="pager.pageSize"
+          [totalCount]="pager.totalCount"
+          [showSearch]="true"
+          searchPlaceholder="Search name or email..."
+          (searchChange)="onSearchChange($event)"
+          (pageChange)="onPageChange($event)"
+          (actionClick)="onTableAction($event)"
+          tableClass="table table-bordered table-hover mb-0">
+        </app-data-table>
+        <p *ngIf="!isLoading && partners.length === 0" class="text-center text-muted py-4 mb-0">
+          No business partners found.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

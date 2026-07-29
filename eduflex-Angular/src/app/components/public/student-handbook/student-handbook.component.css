@@ -38,7 +38,7 @@ h1, h2, h3 {
 }
 
 .handbook-header .eyebrow {
-  color: #D9B876;
+  color: var(--color-accent-light);
 }
 
 .handbook-header h1 {

@@ -61,7 +61,7 @@
       </div>
       <div class="flex-grow-1">
         <label for="photoFile" class="form-label">Photo *</label>
-        <input id="photoFile" type="file" accept="image/*" class="form-control" (change)="onPhotoSelected($event)">
+        <input id="photoFile" type="file" [attr.accept]="photoAccept" class="form-control" (change)="onPhotoSelected($event)">
         <span class="field-error" *ngIf="isFieldInvalid('photoData')">Photo is required</span>
         <div class="form-text">Resized automatically to 300×300px JPEG before saving.</div>
       </div>

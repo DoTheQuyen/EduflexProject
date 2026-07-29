@@ -4,6 +4,9 @@
 
     <h2>{{ 'ENQUIRY.TITLE' | translate }}</h2>
     <p class="modal-subtitle">{{ 'ENQUIRY.SUBTITLE' | translate }}</p>
+    <p class="modal-subtitle" *ngIf="coursePromotion">
+      Enquiring about: <strong>{{ coursePromotion.courseName }}</strong> — {{ coursePromotion.universityName }}
+    </p>
 
     <form [formGroup]="enquiryForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
@@ -15,7 +18,8 @@
 
         <div class="form-group">
           <label for="middleName">{{ 'ENQUIRY.MIDDLE_NAME' | translate }}</label>
-          <input id="middleName" type="text" formControlName="middleName" [class.invalid]="isFieldInvalid('middleName')">
+          <input id="middleName" type="text" formControlName="middleName"
+            [class.invalid]="isFieldInvalid('middleName')">
           <span class="field-error" *ngIf="isFieldInvalid('middleName')">{{ getFieldError('middleName') }}</span>
         </div>
 
@@ -42,7 +46,8 @@
 
       <div class="form-group">
         <label for="enquiry">{{ 'ENQUIRY.ENQUIRY_LABEL' | translate }}</label>
-        <textarea id="enquiry" rows="4" formControlName="enquiry" [class.invalid]="isFieldInvalid('enquiry')"></textarea>
+        <textarea id="enquiry" rows="4" formControlName="enquiry"
+          [class.invalid]="isFieldInvalid('enquiry')"></textarea>
         <span class="field-error" *ngIf="isFieldInvalid('enquiry')">{{ getFieldError('enquiry') }}</span>
       </div>
 

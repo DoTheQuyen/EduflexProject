@@ -6,6 +6,7 @@ import { EnquiryModalComponent } from '../enquiry-modal/enquiry-modal.component'
 import { FeedbackCarouselComponent } from '../feedback-carousel/feedback-carousel.component';
 import { CoursePromotionCarouselComponent } from '../course-promotion-carousel/course-promotion-carousel.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CoursePromotionDto } from '@services/content.services';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   userInfo: any;
 
   private enquirySuccessTimeout: any;
+  selectedCoursePromotion: CoursePromotionDto | undefined;
 
   constructor(
     private authHelper: AuthHelperService,
@@ -56,13 +58,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isEnquiryModalOpen = true;
   }
 
-  closeEnquiryModal(): void {
-    this.isEnquiryModalOpen = false;
-  }
+ closeEnquiryModal(): void {
+  this.isEnquiryModalOpen = false;
+  this.selectedCoursePromotion = undefined;
+}
 
-  onCourseEnquire(): void {
-    this.openEnquiryModal();
-  }
+onCourseEnquire(promotion?: CoursePromotionDto): void {
+  this.selectedCoursePromotion = promotion;
+  this.openEnquiryModal();
+}
 
   onEnquirySubmitted(): void {
     this.isEnquiryModalOpen = false;

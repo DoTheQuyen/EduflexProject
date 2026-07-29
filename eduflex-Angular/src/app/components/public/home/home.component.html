@@ -102,7 +102,7 @@
 </section>
 
 <!-- Course Promotions -->
-<app-course-promotion-carousel (enquire)="onCourseEnquire()"></app-course-promotion-carousel>
+<app-course-promotion-carousel (enquire)="onCourseEnquire($event)"></app-course-promotion-carousel>
 
 <!-- Student Feedback / Testimonials -->
 <app-feedback-carousel></app-feedback-carousel>
@@ -150,6 +150,7 @@
 
 <app-enquiry-modal
   *ngIf="isEnquiryModalOpen"
+  [coursePromotion]="selectedCoursePromotion"
   (closed)="closeEnquiryModal()"
   (submitted)="onEnquirySubmitted()">
 </app-enquiry-modal>

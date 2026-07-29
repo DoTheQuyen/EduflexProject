@@ -29,6 +29,7 @@ namespace ShareService.Tests
         private UserService _service;
         private Mock<IAzureEmailService> _emailService;
         private Mock<IRoleService> _roleServiceMock;
+        private Mock<IPermissionService> _permissionServiceMock;
         private Mock<IOptions<WebURLSettings>> _appSettings;
 
         [SetUp]
@@ -42,6 +43,7 @@ namespace ShareService.Tests
             _configMock = new Mock<IConfiguration>();
             _emailService = new Mock<IAzureEmailService>();
             _roleServiceMock = new Mock<IRoleService>();
+            _permissionServiceMock = new Mock<IPermissionService>();
             _appSettings = new Mock<IOptions<WebURLSettings>>();
 
             // Default validators: valid
@@ -73,6 +75,7 @@ namespace ShareService.Tests
                 _configMock.Object,
                 _emailService.Object,
                 _roleServiceMock.Object,
+                _permissionServiceMock.Object,
                 _appSettings.Object
             );
         }

@@ -1,0 +1,228 @@
+<div class="partner-portal">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="mb-1">Education Partners</h2>
+        <p class="text-muted mb-0">Manage university and college partners, their intakes, and the courses they offer.</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a class="btn btn-primary btn-lg" *ngIf="permissions.add" routerLink="/staff-portal/education-partners/new">
+          <i class="fas fa-plus me-2"></i>Add Partner
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'uni'" (click)="switchTab('uni')">
+          Education Partner
+        </button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'search'" (click)="switchTab('search')">
+          Course Search
+        </button>
+      </li>
+    </ul>
+
+    <!-- Uni tab -->
+    <div *ngIf="activeTab === 'uni'">
+      <div *ngIf="isLoadingDirectory" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading education partners...</p>
+      </div>
+
+      <div *ngIf="!isLoadingDirectory && countryGroups.length === 0" class="empty-state">
+        <i class="fas fa-building-columns"></i>
+        <p class="mb-1 fw-semibold">No education partners yet</p>
+        <p class="text-muted small mb-0">Click "Add Partner" to create your first one.</p>
+      </div>
+
+      <div *ngIf="!isLoadingDirectory" class="country-accordion">
+        <div class="country-panel" *ngFor="let group of countryGroups">
+          <button type="button" class="country-panel-header" [class.is-open]="isCountryExpanded(group.country)" (click)="toggleCountry(group.country)">
+            <i class="fas chevron-icon" [ngClass]="isCountryExpanded(group.country) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+            <i class="fas fa-globe country-icon"></i>
+            <span class="country-name">{{ group.country }}</span>
+            <span class="country-count-badge badge-pill badge-pill-accent">{{ group.universities.length + group.colleges.length }}</span>
+          </button>
+
+          <div class="country-panel-body" *ngIf="isCountryExpanded(group.country)">
+
+            <div class="partner-section" *ngIf="group.universities.length > 0">
+              <h6 class="partner-section-title"><i class="fas fa-graduation-cap me-1"></i>Universities</h6>
+              <div class="partner-panel" *ngFor="let partner of group.universities">
+                <ng-container *ngTemplateOutlet="partnerPanel; context: { partner: partner }"></ng-container>
+              </div>
+            </div>
+
+            <div class="partner-section" *ngIf="group.colleges.length > 0">
+              <h6 class="partner-section-title"><i class="fas fa-school me-1"></i>Colleges/Education Organizations</h6>
+              <div class="partner-panel" *ngFor="let partner of group.colleges">
+                <ng-container *ngTemplateOutlet="partnerPanel; context: { partner: partner }"></ng-container>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Search tab -->
+    <div *ngIf="activeTab === 'search'">
+      <div class="search-panel card border shadow-sm mb-3">
+        <div class="card-body">
+          <h6 class="search-panel-title"><i class="fas fa-sliders me-2"></i>Search filters</h6>
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Course name</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.courseName" (keyup.enter)="onSearchSubmit()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">University</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.uniName" (keyup.enter)="onSearchSubmit()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Country</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.country" (keyup.enter)="onSearchSubmit()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Intake</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.intake" (keyup.enter)="onSearchSubmit()">
+            </div>
+          </div>
+          <div class="text-end mt-3">
+            <button type="button" class="btn btn-primary" [disabled]="isSearching" (click)="onSearchSubmit()">
+              <i class="fas fa-search me-1"></i>Search
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isSearching" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div class="card border shadow-sm" *ngIf="!isSearching">
+        <div class="card-body p-0">
+          <app-data-table
+            [columns]="searchColumns"
+            [data]="searchResults"
+            [rowActions]="[]"
+            [pageNumber]="searchPager.pageNumber"
+            [pageSize]="searchPager.pageSize"
+            [totalCount]="searchPager.totalCount"
+            (pageChange)="onSearchPageChange($event)"
+            tableClass="table table-bordered table-hover mb-0">
+          </app-data-table>
+          <div class="empty-state" *ngIf="hasSearched && searchResults.length === 0">
+            <i class="fas fa-magnifying-glass"></i>
+            <p class="mb-0">No courses match your search.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Partner panel template: reused for both Uni and College/Education Organizations sections -->
+<ng-template #partnerPanel let-partner="partner">
+  <div class="partner-panel-header" role="button" tabindex="0" [class.is-open]="isPartnerExpanded(partner.id)" (click)="togglePartner(partner.id)">
+    <i class="fas chevron-icon" [ngClass]="isPartnerExpanded(partner.id) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+    <img *ngIf="partner.logoUrl" [src]="partner.logoUrl" [alt]="partner.name" class="partner-panel-logo">
+    <div *ngIf="!partner.logoUrl" class="partner-panel-logo partner-logo-placeholder"><i class="fas fa-building"></i></div>
+    <span class="partner-panel-name">{{ partner.name }}</span>
+    <span class="partner-panel-trademark">{{ partner.trademark }}</span>
+    <span class="course-count-badge badge-pill badge-pill-accent" *ngIf="partner.courses?.length">{{ partner.courses?.length }} Courses</span>
+    <div class="partner-panel-actions ms-auto" (click)="$event.stopPropagation()">
+      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']" title="View">
+        <i class="fas fa-eye"></i>
+      </a>
+      <button type="button" class="btn btn-sm btn-outline-danger" *ngIf="permissions.delete"
+        (click)="onDeletePartner(partner)" title="Delete">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="partner-panel-body" *ngIf="isPartnerExpanded(partner.id)">
+    <div class="partner-info-col">
+      <div class="partner-info-header">
+        <img *ngIf="partner.logoUrl" [src]="partner.logoUrl" [alt]="partner.name" class="partner-info-logo">
+        <div *ngIf="!partner.logoUrl" class="partner-info-logo partner-logo-placeholder"><i class="fas fa-building"></i></div>
+        <div>
+          <h5 class="mb-0">{{ partner.name }}</h5>
+          <span class="partner-info-trademark">{{ partner.trademark }}</span>
+        </div>
+      </div>
+
+      <span class="partner-type-badge badge-pill badge-pill-navy-soft">{{ partner.partnerType }}</span>
+      <a *ngIf="partner.businessPartnerName" class="badge-pill badge-pill-accent-soft managed-under-badge"
+        [routerLink]="['/staff-portal/business-partners', partner.businessPartnerId, 'edit']" (click)="$event.stopPropagation()">
+        Managed under {{ partner.businessPartnerName }}
+      </a>
+      <span *ngIf="!partner.businessPartnerName" class="badge-pill badge-pill-navy-soft managed-under-badge">Direct contract</span>
+
+      <ul class="partner-meta-list">
+        <li><i class="fas fa-location-dot"></i>{{ partner.location }}, {{ partner.country }}</li>
+        <li *ngIf="partner.email"><i class="fas fa-envelope"></i>{{ partner.email }}</li>
+        <li *ngIf="partner.phoneNumber"><i class="fas fa-phone"></i>{{ partner.phoneNumber }}</li>
+      </ul>
+
+      <div class="partner-info-intakes">
+        <span class="partner-info-label">Intakes</span>
+        <div class="intake-badges">
+          <span class="intake-badge badge-pill badge-pill-accent-soft" *ngFor="let intake of partner.intakes">{{ intake }}</span>
+        </div>
+      </div>
+
+      <p class="partner-info-description">{{ partner.description }}</p>
+    </div>
+
+    <div class="partner-courses-col">
+      <div class="partner-courses-header">
+        <span class="fw-semibold">Courses</span>
+        <a *ngIf="permissions.add" class="btn btn-sm btn-primary"
+          [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']" [queryParams]="{ tab: 'course' }">
+          <i class="fas fa-plus me-1"></i>Add Course
+        </a>
+      </div>
+
+      <table class="table table-sm table-hover partner-courses-table mb-0" *ngIf="partner.courses?.length">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Intakes</th>
+            <th class="text-end">Tuition (p.a.)</th>
+            <th class="text-end">Total Tuition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of partner.courses">
+            <td class="fw-medium">{{ course.courseName }}</td>
+            <td class="text-muted">{{ (course.intakes ?? []).join(', ') }}</td>
+            <td class="text-end">
+              <span class="tuition-currency">{{ course.tuitionCurrency }}</span>
+              <span class="tuition-amount">{{ course.tuitionFee | number }}</span>
+            </td>
+            <td class="text-end">
+              <span class="tuition-currency">{{ course.tuitionCurrency }}</span>
+              <span class="tuition-amount">{{ course.totalTuitionFee | number }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state empty-state-sm" *ngIf="!partner.courses?.length">
+        <i class="fas fa-book-open"></i>
+        <p class="mb-0">No courses added yet.</p>
+      </div>
+    </div>
+  </div>
+</ng-template>

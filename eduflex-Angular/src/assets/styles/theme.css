@@ -83,6 +83,41 @@
   color: #fff;
 }
 
+/* Rounded pill badges — shared color treatments so component stylesheets
+   consume a token/class instead of redefining color-mix()/hex values. */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-pill-accent {
+  background: var(--color-accent);
+  color: white;
+}
+.badge-pill-accent-soft {
+  background: color-mix(in srgb, var(--color-accent) 12%, white);
+  color: var(--color-accent-dark);
+}
+.badge-pill-navy-soft {
+  background: color-mix(in srgb, var(--color-navy-900) 8%, white);
+  color: var(--color-navy-900);
+}
+.badge-pill-success-soft {
+  background: color-mix(in srgb, var(--color-success) 12%, white);
+  color: var(--color-success-dark);
+}
+.badge-pill-error-soft {
+  background: color-mix(in srgb, var(--color-error) 12%, white);
+  color: var(--color-error-dark);
+}
+.badge-pill {
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+}
+
 /* === Forms === */
 .form-control:focus,
 .form-select:focus {

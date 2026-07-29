@@ -1,5 +1,4 @@
 using Eduflex.DTOs.Enquiry;
-using ShareService.Common;
 using ShareService.Models.Enquiry;
 
 namespace Eduflex.Mapping.Enquiry
@@ -13,7 +12,7 @@ namespace Eduflex.Mapping.Enquiry
                 PageNumber = dto.PageNumber,
                 PageSize = dto.PageSize,
                 SearchTerm = dto.SearchTerm,
-                Status = dto.Status
+                Statuses = dto.Statuses
             };
         }
 
@@ -27,12 +26,17 @@ namespace Eduflex.Mapping.Enquiry
                 Email = dto.Email,
                 Mobile = dto.Mobile,
                 Enquiry = dto.Enquiry,
+                Subject = string.IsNullOrWhiteSpace(dto.Subject) ? "General Enquiry" : dto.Subject,
+                CoursePromotionId = dto.CoursePromotionId,
                 RecaptchaToken = dto.RecaptchaToken
             };
         }
 
-        public static EnquiryDto ToDto(this EnquiryModel model)
+        public static EnquiryDto ToDto(this EnquiryModel model, IDictionary<string, string>? userNames = null)
         {
+            string? Resolve(string? userId) =>
+                userId != null && userNames != null && userNames.TryGetValue(userId, out var name) ? name : userId;
+
             return new EnquiryDto
             {
                 Id = model.Id,
@@ -42,8 +46,13 @@ namespace Eduflex.Mapping.Enquiry
                 Email = model.Email,
                 Mobile = model.Mobile,
                 Enquiry = model.Enquiry,
+                Subject = model.Subject,
+                CoursePromotionId = model.CoursePromotionId,
                 Status = model.Status,
                 Response = model.Response,
+                CreatedAt = model.CreatedAt,
+                UpdatedBy = Resolve(model.UpdatedBy),
+                UpdatedAt = model.UpdatedAt,
             };
         }
 
@@ -58,8 +67,11 @@ namespace Eduflex.Mapping.Enquiry
                 Email = model.Email,
                 Mobile = model.Mobile,
                 Enquiry = model.Enquiry,
+                Subject = model.Subject,
+                CoursePromotionId = model.CoursePromotionId,
                 Status = model.Status,
                 Response = model.Response,
+                CreatedAt = model.CreatedAt,
             };
         }
     }

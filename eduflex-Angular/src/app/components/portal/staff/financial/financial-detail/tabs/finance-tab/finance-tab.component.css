@@ -1,0 +1,60 @@
+.commission-formula {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+}
+
+.formula-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 0.3rem 0;
+}
+
+.formula-label {
+  color: var(--color-muted);
+}
+
+.formula-value {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.formula-op {
+  text-align: center;
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.formula-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-border);
+  font-weight: 700;
+  color: var(--color-navy-900);
+  font-size: 1rem;
+}
+
+.adjustment-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.plan-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--color-border);
+  font-size: 0.88rem;
+}
+
+.plan-entry:last-child {
+  border-bottom: none;
+}

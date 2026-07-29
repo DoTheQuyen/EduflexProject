@@ -1,0 +1,40 @@
+.audit-timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.audit-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.audit-item {
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.audit-item::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0.15rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-navy-700);
+}
+
+.audit-when {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.audit-desc {
+  font-size: 0.9rem;
+}

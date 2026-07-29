@@ -46,7 +46,7 @@ h1, h2, h3 {
 }
 
 .hero-eyebrow {
-  color: #D9B876;
+  color: var(--color-accent-light);
 }
 
 .hero h1 {
@@ -58,7 +58,7 @@ h1, h2, h3 {
 
 .hero-sub {
   font-size: 1.1rem;
-  color: #C7CEDA;
+  color: var(--color-muted-on-dark);
   max-width: 46ch;
   margin: 0 0 2rem;
 }
@@ -387,7 +387,7 @@ h1, h2, h3 {
 }
 
 .cta-panel p {
-  color: #C7CEDA;
+  color: var(--color-muted-on-dark);
   font-size: 0.95rem;
   margin-top: 0.5rem;
 }

@@ -1,33 +1,75 @@
-/* Make table responsive */
 .table-responsive {
   overflow-x: auto;
 }
 
-/* Base table styling */
-table.dataTable {
-  width: 100% !important;
-  border-collapse: collapse !important;
+/* Toolbar (search + filters row) */
+.data-table-toolbar .input-group {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.data-table-toolbar .input-group-text {
+  border: 1px solid var(--color-border);
+  border-right: none;
+  background: #fff;
+}
+
+.data-table-toolbar .form-control {
+  border-left: none;
+}
+
+.data-table-toolbar .form-control:focus {
+  box-shadow: none;
+  border-color: var(--color-accent);
+}
+
+.data-table-toolbar .input-group:focus-within {
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.15);
+}
+
+/* Table */
+.table-responsive table {
   font-size: 0.9rem;
+  margin-bottom: 0;
 }
 
-/* Header */
-table.dataTable thead th {
-  background-color: #f8f9fa; /* light gray */
+.table-responsive thead th {
+  background-color: var(--color-navy-900);
+  color: #fff;
   font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
-  padding: 0.75rem;
-  text-align: left;
+  border-bottom: none;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
 }
 
-/* Cells */
-table.dataTable tbody td {
-  padding: 0.5rem 0.75rem;
+.table-responsive thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.table-responsive thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.table-responsive tbody td {
+  padding: 0.65rem 1rem;
   vertical-align: middle;
 }
 
-/* Hover row */
-table.dataTable tbody tr:hover {
-  background-color: #f1f3f5;
+.table-responsive tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.015);
+}
+
+.table-responsive tbody tr:hover {
+  background-color: rgba(12, 78, 131, 0.05);
+}
+
+/* Row action buttons */
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Alignment helpers */
@@ -41,40 +83,20 @@ table.dataTable tbody tr:hover {
   text-align: left !important;
 }
 
-/* Pagination buttons (DataTables UI) */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  padding: 0.25rem 0.75rem;
-  margin: 0 2px;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  color: #0d6efd; /* bootstrap blue */
+/* Pager */
+.data-table-pager {
+  padding-top: 0.75rem;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background: #0d6efd;
-  color: #fff !important;
-  border-color: #0d6efd;
+.data-table-pager .page-link {
+  color: var(--color-navy-900);
+  border-color: var(--color-border);
 }
 
-/* Active page button */
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background: #0d6efd !important;
-  color: #fff !important;
-  border-color: #0d6efd !important;
+.data-table-pager .page-item.disabled .page-link {
+  color: var(--color-muted);
 }
 
-/* Search box */
-.dataTables_wrapper .dataTables_filter input {
-  margin-left: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-
-/* Length dropdown */
-.dataTables_wrapper .dataTables_length select {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ced4da;
+.data-table-pager .page-link:hover {
+  background-color: rgba(12, 78, 131, 0.08);
 }

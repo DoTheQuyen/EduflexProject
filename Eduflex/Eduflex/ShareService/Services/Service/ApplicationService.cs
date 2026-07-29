@@ -1,7 +1,5 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
@@ -16,20 +14,17 @@ namespace ShareService.Services
         private readonly IApplication _applicationDataAccess;
         private readonly IValidator<ApplicationModel> _createApplicationValidator;
         private readonly ILogger<ApplicationService> _logger;
-        private readonly IMongoClient _client;
         private readonly IPermissionService _permissionService;
 
         public ApplicationService(
             IApplication applicationDataAccess,
             IValidator<ApplicationModel> createApplicationValidator,
             ILogger<ApplicationService> logger,
-            IMongoClient client,
             IPermissionService permissionService)
         {
             _applicationDataAccess = applicationDataAccess;
             _createApplicationValidator = createApplicationValidator;
             _logger = logger;
-            _client = client;
             _permissionService = permissionService;
         }
 
@@ -40,6 +35,9 @@ namespace ShareService.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
+        // Auth: none — and unlike the other methods here, that's not a deliberate "open"
+        // decision, it's because nothing in the codebase currently calls this method at
+        // all (dead code). Add a permission check before wiring up a real caller.
         public async Task<List<ApplicationModel>> GetApplicationsByStudentId(string studentId)
         {
             try
@@ -75,6 +73,9 @@ namespace ShareService.Services
             }
         }
 
+        // Auth: requires ApplicationsView permission. Results are further scoped to the
+        // caller's own student record — this is a "list my applications" endpoint, not a
+        // staff-wide search (see the known gap noted in GetApplicationsByStudentId below).
         public async Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query)
         {
             try
@@ -85,7 +86,11 @@ namespace ShareService.Services
                     throw new ArgumentException("User ID cannot be empty");
                 }
 
-                // Authorization here (future implementation)
+                var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+                if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to view applications");
+                }
 
                 var student = await _applicationDataAccess.GetStudentByUserIdAsync(userId);
                 if (student == null)
@@ -112,6 +117,14 @@ namespace ShareService.Services
 
                 return result;
             }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in GetApplicationsByUserId for user {UserId}", userId);
@@ -125,6 +138,9 @@ namespace ShareService.Services
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
+        // Auth: requires ApplicationsView permission, AND ownership — the caller must be
+        // the student the application belongs to. Both checks are needed: permission
+        // alone can't tell you whose application this is.
         public async Task<ApplicationDetailModel?> GetApplicationById(string id, string userId)
         {
             try
@@ -133,6 +149,12 @@ namespace ShareService.Services
                 if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(userId))
                 {
                     throw new ArgumentException("Application ID and User ID cannot be empty");
+                }
+
+                var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+                if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to view applications");
                 }
 
                 // Get student by userId for authorization
@@ -168,7 +190,12 @@ namespace ShareService.Services
                     DateApplied = application.DateApplied,
                     Status = application.Status,
                     Details = application.Details,
-                    ApplicationType = application.ApplicationType
+                    ApplicationType = application.ApplicationType,
+                    StudyMode = application.StudyMode,
+                    Campus = application.Campus,
+                    HometownAddress = application.HometownAddress,
+                    CurrentAddress = application.CurrentAddress,
+                    EmergencyContact = application.EmergencyContact
                 };
 
                 _logger.LogInformation("Retrieved application details for ID: {ApplicationId} by user {UserId}", id, userId);
@@ -192,7 +219,8 @@ namespace ShareService.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<ApplicationModel> CreateApplication(ApplicationModel application)
+        // Auth: requires ApplicationsAdd permission (granted to Student, Staff, Manager, Admin).
+        public async Task<ApplicationModel> CreateApplication(ApplicationModel application, string userId)
         {
             // Use FluentValidation to validate input
             var validate = await _createApplicationValidator.ValidateAsync(application);
@@ -203,13 +231,13 @@ namespace ShareService.Services
                 throw new ArgumentException($"Validation failed: {errors}");
             }
 
-            //practice transaction session
-            using var session = await _client.StartSessionAsync();
-            session.StartTransaction();
             try
             {
-
-                // Authorization here (future implementation)
+                var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+                if (!permissions.Contains(PermissionKey.ApplicationsAdd.GetDescription()))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to create applications");
+                }
 
                 // Process business rule here
 
@@ -217,7 +245,7 @@ namespace ShareService.Services
                 application.DateApplied = DateTime.UtcNow;
                 application.Status = "Pending"; // Default status
 
-                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application, session);
+                var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application);
 
                 // Business logic: Return limited information
                 var result = new ApplicationModel
@@ -228,15 +256,17 @@ namespace ShareService.Services
                     Status = createdApplication.Status,
                     ApplicationType = createdApplication.ApplicationType
                 };
-                await session.CommitTransactionAsync();
                 _logger.LogInformation("Created new application with ID: {ApplicationId} for student {StudentId}",
                     result.Id, application.StudentId);
 
                 return result;
             }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-                await session.AbortTransactionAsync();
                 _logger.LogError(ex, "Error in CreateApplication for student {StudentId}", application.StudentId);
                 throw new Exception("Error creating application", ex);
             }
@@ -250,14 +280,11 @@ namespace ShareService.Services
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
+        // Auth: requires ApplicationsEdit permission (staff-only — Student is never granted this).
         public async Task<bool> UpdateApplicationStatus(string id, string status, string userId)
         {
-            //practice transaction session
-            using var session = await _client.StartSessionAsync();
-            session.StartTransaction();
             try
             {
-                // Authorization: defense-in-depth safety net behind [RequirePermission] at the controller
                 var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
                 if (!permissions.Contains(PermissionKey.ApplicationsEdit.GetDescription()))
                 {
@@ -268,12 +295,11 @@ namespace ShareService.Services
 
                 if (!isAValidStatus(status))
                 {
-                    throw new ArgumentException("Status must be one of: Pending, Approved, Rejected");
+                    throw new ArgumentException("Status must be one of: Pending, Approved, Rejected, Studying");
                 }
 
                 var result = await _applicationDataAccess.UpdateApplicationStatusAsync(id, status);
 
-                await session.CommitTransactionAsync();
                 _logger.LogInformation("Status update for application {ApplicationId}: {Status} - Success: {Success}",
                     id, status, result);
 
@@ -281,17 +307,14 @@ namespace ShareService.Services
             }
             catch (UnauthorizedAccessException)
             {
-                await session.AbortTransactionAsync();
                 throw;
             }
             catch (ArgumentException)
             {
-                await session.AbortTransactionAsync();
                 throw;
             }
             catch (Exception ex)
             {
-                await session.AbortTransactionAsync();
                 _logger.LogError(ex, "Error in UpdateApplicationStatus for application {ApplicationId}", id);
                 throw new Exception("Error updating application status", ex);
             }
@@ -299,7 +322,10 @@ namespace ShareService.Services
 
         private bool isAValidStatus(string status)
         {
-            return status == "Pending" || status == "Approved" || status == "Rejected";
+            // "Studying" is set by EnrolmentService once staff enrol an accepted
+            // application, not chosen directly through this status endpoint's normal
+            // staff workflow, but it's still a legitimate value to accept/store here.
+            return status == "Pending" || status == "Approved" || status == "Rejected" || status == "Studying";
         }
 
     }

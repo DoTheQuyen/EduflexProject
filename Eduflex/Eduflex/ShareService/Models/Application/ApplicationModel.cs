@@ -1,6 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Models.Address;
 using ShareService.Models.Common;
+using ShareService.Models.Enrolment;
 
 namespace ShareService.Models.Application
 {
@@ -28,10 +30,28 @@ namespace ShareService.Models.Application
         [BsonElement("applicationType")]
         public string ApplicationType { get; set; }
 
+        [BsonElement("studyMode")]
+        public string? StudyMode { get; set; }
+
+        [BsonElement("campus")]
+        public string? Campus { get; set; }
+
         [BsonElement("dateApplied")]
         public DateTime DateApplied { get; set; }
 
         [BsonElement("status")]
         public string Status { get; set; } = "Pending";
+
+        // These reflect the student's situation for THIS application specifically —
+        // deliberately not on StudentModel, since address/emergency contact can
+        // legitimately differ between separate applications for the same student.
+        [BsonElement("hometownAddress")]
+        public AddressModel? HometownAddress { get; set; }
+
+        [BsonElement("currentAddress")]
+        public AddressModel? CurrentAddress { get; set; }
+
+        [BsonElement("emergencyContact")]
+        public EmergencyContactModel? EmergencyContact { get; set; }
     }
 }

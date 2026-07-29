@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit {
           lastName: updatedProfile.lastName,
           email: updatedProfile.email
         };
-        localStorage.setItem('userData', JSON.stringify(updatedUser));
+        sessionStorage.setItem('userData', JSON.stringify(updatedUser));
         
         this.userInfo = updatedProfile;
         this.isEditing = false;

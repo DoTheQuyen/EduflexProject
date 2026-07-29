@@ -40,9 +40,10 @@ namespace ShareService.DataAccess
                 BuildSearchFilter(filter.SearchTerm, e => e.FirstName, e => e.LastName, e => e.Email, e => e.Mobile)
             };
 
-            if (filter.Status.HasValue)
+            if (filter.Statuses != null && filter.Statuses.Count > 0)
             {
-                filters.Add(Builders<EnquiryModel>.Filter.Eq(e => e.Status, filter.Status.Value.ToString()));
+                var statusStrings = filter.Statuses.Select(s => s.ToString()).ToList();
+                filters.Add(Builders<EnquiryModel>.Filter.In(e => e.Status, statusStrings));
             }
 
             var mongoFilter = Builders<EnquiryModel>.Filter.And(filters);

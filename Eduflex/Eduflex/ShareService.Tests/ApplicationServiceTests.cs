@@ -1,12 +1,14 @@
-﻿using Moq;
+using Moq;
 using NUnit.Framework;
 using ShareService.DataAccess.Interface;
 using ShareService.Services;
 using ShareService.Services.Interface;
+using ShareService.Enums;
+using ShareService.Enums.Permissions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using ShareService.Models.Application;
@@ -16,11 +18,11 @@ namespace ShareService.Tests
     [TestFixture]
     public class ApplicationServiceTests
     {
+        private const string UserId = "user-1";
+
         private Mock<IApplication> _appRepoMock;
         private Mock<IValidator<ApplicationModel>> _validatorMock;
         private Mock<ILogger<ApplicationService>> _loggerMock;
-        private Mock<IMongoClient> _clientMock;
-        private Mock<IClientSessionHandle> _sessionMock;
         private Mock<IPermissionService> _permissionServiceMock;
         private ApplicationService _service;
 
@@ -30,8 +32,6 @@ namespace ShareService.Tests
             _appRepoMock = new Mock<IApplication>();
             _validatorMock = new Mock<IValidator<ApplicationModel>>();
             _loggerMock = new Mock<ILogger<ApplicationService>>();
-            _clientMock = new Mock<IMongoClient>();
-            _sessionMock = new Mock<IClientSessionHandle>();
             _permissionServiceMock = new Mock<IPermissionService>();
 
             // Validator always passes
@@ -39,19 +39,15 @@ namespace ShareService.Tests
                 .Setup(v => v.ValidateAsync(It.IsAny<ApplicationModel>(), default))
                 .ReturnsAsync(new ValidationResult());
 
-            // Mongo client returns a fake session
-            _clientMock
-                .Setup(c => c.StartSessionAsync(
-                    It.IsAny<ClientSessionOptions>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(_sessionMock.Object);
+            // Caller has the ApplicationsAdd permission by default
+            _permissionServiceMock
+                .Setup(p => p.GetPermissionsForUserAsync(UserId))
+                .ReturnsAsync(new List<string> { PermissionKey.ApplicationsAdd.GetDescription() });
 
             // Default mock for CreateApplicationAsync returns the same app
             _appRepoMock
-                .Setup(r => r.CreateApplicationAsync(
-                    It.IsAny<ApplicationModel>(),
-                    It.IsAny<IClientSessionHandle?>()))
-                .ReturnsAsync((ApplicationModel app, IClientSessionHandle? _) =>
+                .Setup(r => r.CreateApplicationAsync(It.IsAny<ApplicationModel>(), null))
+                .ReturnsAsync((ApplicationModel app, MongoDB.Driver.IClientSessionHandle? _) =>
                 {
                     app.Id = "mock-id"; // simulate DB-generated Id
                     return app;
@@ -61,7 +57,6 @@ namespace ShareService.Tests
                 _appRepoMock.Object,
                 _validatorMock.Object,
                 _loggerMock.Object,
-                _clientMock.Object,
                 _permissionServiceMock.Object
             );
         }
@@ -78,7 +73,7 @@ namespace ShareService.Tests
             };
 
             // Act
-            var result = await _service.CreateApplication(createDto);
+            var result = await _service.CreateApplication(createDto, UserId);
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -105,38 +100,37 @@ namespace ShareService.Tests
 
             // Act + Assert
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
-                await _service.CreateApplication(createDto));
+                await _service.CreateApplication(createDto, UserId));
 
             Assert.That(ex!.Message, Does.Contain("Validation failed"));
         }
 
         [Test]
-        public async Task CreateApplication_CommitsTransaction()
+        public void CreateApplication_Throws_WhenCallerLacksPermission()
         {
-            // Arrange
+            // Arrange: caller has no permissions at all
+            _permissionServiceMock
+                .Setup(p => p.GetPermissionsForUserAsync(UserId))
+                .ReturnsAsync(new List<string>());
+
             var createDto = new ApplicationModel
             {
                 StudentId = "S1",
                 StudentName = "John",
-                Description = "Transaction test"
+                Description = "Test"
             };
 
-            // Act
-            var result = await _service.CreateApplication(createDto);
-
-            // Assert
-            _sessionMock.Verify(s => s.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Once);
-            Assert.That(result, Is.Not.Null);
+            // Act + Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
+                await _service.CreateApplication(createDto, UserId));
         }
 
         [Test]
-        public void CreateApplication_AbortsTransaction_OnException()
+        public void CreateApplication_PropagatesException_OnRepoFailure()
         {
             // Arrange: repo throws exception
             _appRepoMock
-                .Setup(r => r.CreateApplicationAsync(
-                    It.IsAny<ApplicationModel>(),
-                    It.IsAny<IClientSessionHandle?>()))
+                .Setup(r => r.CreateApplicationAsync(It.IsAny<ApplicationModel>(), null))
                 .ThrowsAsync(new Exception("DB error"));
 
             var createDto = new ApplicationModel
@@ -147,8 +141,7 @@ namespace ShareService.Tests
             };
 
             // Act + Assert
-            Assert.ThrowsAsync<Exception>(async () => await _service.CreateApplication(createDto));
-            _sessionMock.Verify(s => s.AbortTransactionAsync(It.IsAny<CancellationToken>()), Times.Once);
+            Assert.ThrowsAsync<Exception>(async () => await _service.CreateApplication(createDto, UserId));
         }
     }
 }

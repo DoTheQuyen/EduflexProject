@@ -25,6 +25,10 @@ namespace ShareService.Models.Auth
         [BsonElement("lastName")]
         public string LastName { get; set; }
 
+        [BsonElement("mobile")]
+        [BsonRequired]
+        public string Mobile { get; set; }
+
         [BsonElement("roleId")]
         public string RoleId { get; set; }
 
@@ -37,6 +41,12 @@ namespace ShareService.Models.Auth
         [BsonElement("lastLogin")]
         public DateTime? LastLogin { get; set; }
 
+        [BsonElement("resetToken")]
+        public string? ResetToken { get; set; }
+
+        [BsonElement("resetTokenExpiry")]
+        public DateTime? ResetTokenExpiry { get; set; }
+
         /// <summary>
         /// Plaintext password supplied on create, hashed into PasswordHash by the service layer, never persisted.
         /// </summary>
@@ -48,6 +58,7 @@ namespace ShareService.Models.Auth
             Email = updateModel.Email;
             FirstName = updateModel.FirstName;
             LastName = updateModel.LastName;
+            Mobile = updateModel.Mobile;
             RoleId = updateModel.RoleId;
             IsActive = updateModel.IsActive;
         }

@@ -17,7 +17,7 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{ 'NAV.HOME' | translate }}</a>
       <a routerLink="/about" routerLinkActive="active">{{ 'NAV.ABOUT' | translate }}</a>
       <a routerLink="/student-handbook" routerLinkActive="active">{{ 'NAV.HANDBOOK' | translate }}</a>
-      <a routerLink="/contact" routerLinkActive="active">{{ 'NAV.CONTACT' | translate }}</a>
+      <!-- <a routerLink="/contact" routerLinkActive="active">{{ 'NAV.CONTACT' | translate }}</a> -->
     </div>
       <div class="lang-switch">
         <button type="button" [class.active]="languageService.currentLang === 'en'" (click)="setLang('en')">EN</button>

@@ -419,7 +419,11 @@
     "NEXT_ARIA": "Next feedback",
     "GO_TO_ARIA": "Go to feedback {{num}}"
   },
-  "FOOTER": {
+    "FOOTER": {
+    "TAGLINE": "Personalised guidance from course selection to visa outcomes — helping students study and migrate to Australia with confidence.",
+    "QUICK_LINKS": "Quick Links",
+    "CONTACT_US": "Contact Us",
+    "ADDRESS": "23 Beale Street, Southport QLD 4215, Australia",
     "COPYRIGHT": "© {{year}} Quyen Do. All rights reserved."
   }
 }

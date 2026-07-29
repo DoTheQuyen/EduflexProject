@@ -7042,3 +7042,380 @@ Eduflex.Authorization.MustChangePasswordRequirement
 2026-07-29 07:23:00.358 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 11.816ms
 2026-07-29 07:23:00.362 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
 2026-07-29 07:23:00.366 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 49.4468ms
+2026-07-29 11:08:58.186 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-29 11:08:59.311 +07:00 [INF] Now listening on: https://localhost:5083
+2026-07-29 11:08:59.369 +07:00 [INF] Now listening on: http://localhost:5084
+2026-07-29 11:08:59.632 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-29 11:08:59.636 +07:00 [INF] Hosting environment: Development
+2026-07-29 11:08:59.639 +07:00 [INF] Content root path: D:\Self training\EduflexProject\Eduflex\Eduflex\Eduflex
+2026-07-29 11:09:01.303 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-29 11:09:01.303 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2026-07-29 11:09:01.971 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 683.2359ms
+2026-07-29 11:09:02.195 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 930.477ms
+2026-07-29 11:09:02.272 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2026-07-29 11:09:02.611 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 339.6034ms
+2026-07-29 11:09:43.419 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2026-07-29 11:09:43.556 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:43.565 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 147.2504ms
+2026-07-29 11:09:43.569 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 51
+2026-07-29 11:09:43.584 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:43.798 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-29 11:09:43.885 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Auth.AuthResponseDto]] Login(Eduflex.DTOs.Auth.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2026-07-29 11:09:45.352 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2026-07-29 11:09:45.661 +07:00 [INF] Last login updated for user: 6a65bf12c651d2df053a0385
+2026-07-29 11:09:45.951 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Auth.AuthResponseDto'.
+2026-07-29 11:09:45.985 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 2089.5181ms
+2026-07-29 11:09:45.989 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-29 11:09:45.997 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 2428.3155ms
+2026-07-29 11:09:49.596 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/search-financial-records - null null
+2026-07-29 11:09:49.604 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:49.606 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/search-financial-records - 204 null null 10.6631ms
+2026-07-29 11:09:49.609 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/FinancialRecords/search-financial-records - application/json 30
+2026-07-29 11:09:49.617 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:49.871 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex)'
+2026-07-29 11:09:49.913 +07:00 [INF] Route matched with {action = "Search", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]]] Search(Eduflex.DTOs.Financial.FinancialRecordFilterDto) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:09:50.395 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Financial.FinancialRecordDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:09:50.441 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex) in 521.1289ms
+2026-07-29 11:09:50.446 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex)'
+2026-07-29 11:09:50.448 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/FinancialRecords/search-financial-records - 200 null application/json; charset=utf-8 839.2223ms
+2026-07-29 11:09:52.417 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - null null
+2026-07-29 11:09:52.560 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:52.561 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - 204 null null 143.8063ms
+2026-07-29 11:09:52.564 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - null null
+2026-07-29 11:09:52.572 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:52.699 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex)'
+2026-07-29 11:09:52.715 +07:00 [INF] Route matched with {action = "GetById", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]] GetById(System.String) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:09:52.734 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Financial.FinancialRecordDto'.
+2026-07-29 11:09:52.736 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex) in 18.4322ms
+2026-07-29 11:09:52.737 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex)'
+2026-07-29 11:09:52.882 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - 200 null application/json; charset=utf-8 317.2144ms
+2026-07-29 11:09:52.982 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:09:53.018 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.021 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 204 null null 39.2942ms
+2026-07-29 11:09:53.026 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:09:53.034 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.055 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:09:53.059 +07:00 [INF] Route matched with {action = "Get", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]] Get(System.String) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:09:53.111 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Enrolment.EnrolmentDto'.
+2026-07-29 11:09:53.122 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex) in 60.6974ms
+2026-07-29 11:09:53.123 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:09:53.127 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 100.1466ms
+2026-07-29 11:09:53.238 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.241 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.305 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.361 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.431 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.473 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:09:53.485 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.487 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 249.332ms
+2026-07-29 11:09:53.521 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.523 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.525 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 284.5524ms
+2026-07-29 11:09:53.544 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 187.6193ms
+2026-07-29 11:09:53.547 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.551 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.554 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.560 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 255.5264ms
+2026-07-29 11:09:53.561 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - 204 null null 88.2256ms
+2026-07-29 11:09:53.563 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:09:53.567 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:53.573 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.584 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:09:53.584 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:09:53.589 +07:00 [INF] Route matched with {action = "GetAll", controller = "EmailTemplates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EmailTemplateDto]]] GetAll() on controller Eduflex.API.Controllers.EmailTemplatesController (Eduflex).
+2026-07-29 11:09:53.623 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EmailTemplateDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:09:53.628 +07:00 [INF] Executed action Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex) in 34.5745ms
+2026-07-29 11:09:53.631 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:09:53.632 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EmailTemplates - 200 null application/json; charset=utf-8 69.1781ms
+2026-07-29 11:09:53.682 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:09:53.699 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 110.8004ms
+2026-07-29 11:09:53.702 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:53.704 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 182.7913ms
+2026-07-29 11:09:53.705 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.715 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.720 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:53.724 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:09:53.734 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:09:53.738 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 9.5795ms
+2026-07-29 11:09:53.740 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:53.744 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 39.277ms
+2026-07-29 11:09:53.920 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:53.941 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:53.960 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:54.061 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:09:54.243 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:09:54.248 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 18.1325ms
+2026-07-29 11:09:54.257 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:54.262 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 342.4411ms
+2026-07-29 11:09:54.266 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:09:54.434 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:54.437 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:54.438 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:09:54.443 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:09:54.445 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 6.2443ms
+2026-07-29 11:09:54.447 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:09:54.448 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 181.6024ms
+2026-07-29 11:09:58.233 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/BusinessPartners/search-business-partners - null null
+2026-07-29 11:09:58.282 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:58.285 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/BusinessPartners/search-business-partners - 204 null null 61.7917ms
+2026-07-29 11:09:58.287 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/BusinessPartners/search-business-partners - application/json 30
+2026-07-29 11:09:58.484 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:09:58.499 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.BusinessPartnersController.SearchBusinessPartners (Eduflex)'
+2026-07-29 11:09:58.526 +07:00 [INF] Route matched with {action = "SearchBusinessPartners", controller = "BusinessPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.BusinessPartner.BusinessPartnerDto]]] SearchBusinessPartners(Eduflex.DTOs.BusinessPartner.BusinessPartnerFilterDto) on controller Eduflex.API.Controllers.BusinessPartnersController (Eduflex).
+2026-07-29 11:09:58.595 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.BusinessPartner.BusinessPartnerDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:09:58.614 +07:00 [INF] Executed action Eduflex.API.Controllers.BusinessPartnersController.SearchBusinessPartners (Eduflex) in 82.5121ms
+2026-07-29 11:09:58.619 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.BusinessPartnersController.SearchBusinessPartners (Eduflex)'
+2026-07-29 11:09:58.622 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/BusinessPartners/search-business-partners - 200 null application/json; charset=utf-8 335.5929ms
+2026-07-29 11:10:00.885 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/search-enrolments - null null
+2026-07-29 11:10:00.921 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/enrolment-statuses - null null
+2026-07-29 11:10:01.125 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:01.128 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:01.129 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/search-enrolments - 204 null null 244.146ms
+2026-07-29 11:10:01.131 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/enrolment-statuses - 204 null null 210.9755ms
+2026-07-29 11:10:01.161 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Enrolments/search-enrolments - application/json 46
+2026-07-29 11:10:01.184 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/enrolment-statuses - null null
+2026-07-29 11:10:01.254 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:01.256 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:01.263 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex)'
+2026-07-29 11:10:01.270 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex)'
+2026-07-29 11:10:01.272 +07:00 [INF] Route matched with {action = "SearchEnrolments", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]]] SearchEnrolments(Eduflex.DTOs.Enrolment.EnrolmentFilterDto) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:01.273 +07:00 [INF] Route matched with {action = "GetEnrolmentStatuses", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EnrolmentStatusDto]]] GetEnrolmentStatuses() on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:01.282 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EnrolmentStatusDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:01.284 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex) in 6.2165ms
+2026-07-29 11:10:01.285 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex)'
+2026-07-29 11:10:01.286 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/enrolment-statuses - 200 null application/json; charset=utf-8 101.5671ms
+2026-07-29 11:10:01.301 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Enrolment.EnrolmentDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:01.317 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex) in 40.8451ms
+2026-07-29 11:10:01.318 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex)'
+2026-07-29 11:10:01.319 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Enrolments/search-enrolments - 200 null application/json; charset=utf-8 157.406ms
+2026-07-29 11:10:03.201 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners - null null
+2026-07-29 11:10:03.230 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:04.573 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:04.578 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:04.581 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 204 null null 1351.8725ms
+2026-07-29 11:10:04.583 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:04.585 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners - 204 null null 1384.4681ms
+2026-07-29 11:10:04.588 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners - null null
+2026-07-29 11:10:04.649 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:04.684 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:04.686 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:04.950 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex)'
+2026-07-29 11:10:04.950 +07:00 [INF] Route matched with {action = "Get", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]] Get(System.String) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:04.969 +07:00 [INF] Route matched with {action = "GetEducationPartnersDirectory", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.EducationPartner.EducationPartnerDirectoryDto]]] GetEducationPartnersDirectory() on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:04.983 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Enrolment.EnrolmentDto'.
+2026-07-29 11:10:05.136 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex) in 173.6179ms
+2026-07-29 11:10:05.146 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:05.148 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 564.364ms
+2026-07-29 11:10:05.161 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.EducationPartner.EducationPartnerDirectoryDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:05.164 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:05.184 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:05.205 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:05.230 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Settings - null null
+2026-07-29 11:10:05.648 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.649 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - 204 null null 485.1966ms
+2026-07-29 11:10:05.649 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex) in 518.3092ms
+2026-07-29 11:10:05.652 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:05.661 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.665 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.674 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.679 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex)'
+2026-07-29 11:10:05.684 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners - 200 null application/json; charset=utf-8 1095.9414ms
+2026-07-29 11:10:05.688 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Settings - 204 null null 457.875ms
+2026-07-29 11:10:05.690 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - 204 null null 506.2048ms
+2026-07-29 11:10:05.694 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Settings - null null
+2026-07-29 11:10:05.696 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - 204 null null 490.7469ms
+2026-07-29 11:10:05.698 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:05.705 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:05.742 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.747 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.799 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.809 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:05.820 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex)'
+2026-07-29 11:10:05.823 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex)'
+2026-07-29 11:10:05.830 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-29 11:10:05.840 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:05.861 +07:00 [INF] Route matched with {action = "GetCoursesByPartner", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.EducationPartner.CourseDto]]] GetCoursesByPartner(System.String) on controller Eduflex.API.Controllers.CoursesController (Eduflex).
+2026-07-29 11:10:05.862 +07:00 [INF] Route matched with {action = "GetSettings", controller = "Settings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Settings.SettingsDto]] GetSettings() on controller Eduflex.API.Controllers.SettingsController (Eduflex).
+2026-07-29 11:10:05.863 +07:00 [INF] Route matched with {action = "GetAll", controller = "EmailTemplates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EmailTemplateDto]]] GetAll() on controller Eduflex.API.Controllers.EmailTemplatesController (Eduflex).
+2026-07-29 11:10:05.865 +07:00 [INF] Route matched with {action = "GetByEnrolmentId", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]] GetByEnrolmentId(System.String) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:10:05.872 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.EducationPartner.CourseDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:05.928 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EmailTemplateDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:05.968 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex) in 102.3633ms
+2026-07-29 11:10:05.969 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Settings.SettingsDto'.
+2026-07-29 11:10:05.970 +07:00 [INF] Executed action Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex) in 89.7906ms
+2026-07-29 11:10:05.972 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex)'
+2026-07-29 11:10:05.977 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:05.979 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 280.956ms
+2026-07-29 11:10:05.981 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EmailTemplates - 200 null application/json; charset=utf-8 275.6599ms
+2026-07-29 11:10:05.989 +07:00 [INF] Executed action Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex) in 119.1845ms
+2026-07-29 11:10:05.998 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-29 11:10:06.001 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Settings - 200 null application/json; charset=utf-8 306.1763ms
+2026-07-29 11:10:06.003 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Financial.FinancialRecordDto'.
+2026-07-29 11:10:06.008 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex) in 113.4623ms
+2026-07-29 11:10:06.010 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex)'
+2026-07-29 11:10:06.012 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 360.2469ms
+2026-07-29 11:10:14.452 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/search-financial-records - null null
+2026-07-29 11:10:14.459 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:14.462 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/search-financial-records - 204 null null 9.9771ms
+2026-07-29 11:10:14.464 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/FinancialRecords/search-financial-records - application/json 30
+2026-07-29 11:10:14.476 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:14.483 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex)'
+2026-07-29 11:10:14.485 +07:00 [INF] Route matched with {action = "Search", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]]] Search(Eduflex.DTOs.Financial.FinancialRecordFilterDto) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:10:14.495 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Financial.FinancialRecordDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:14.498 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex) in 10.0929ms
+2026-07-29 11:10:14.501 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.Search (Eduflex)'
+2026-07-29 11:10:14.503 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/FinancialRecords/search-financial-records - 200 null application/json; charset=utf-8 39.9943ms
+2026-07-29 11:10:16.046 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - null null
+2026-07-29 11:10:16.050 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.051 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - 204 null null 5.1872ms
+2026-07-29 11:10:16.053 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - null null
+2026-07-29 11:10:16.059 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.065 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex)'
+2026-07-29 11:10:16.067 +07:00 [INF] Route matched with {action = "GetById", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]] GetById(System.String) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:10:16.077 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Financial.FinancialRecordDto'.
+2026-07-29 11:10:16.080 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex) in 9.4801ms
+2026-07-29 11:10:16.083 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetById (Eduflex)'
+2026-07-29 11:10:16.086 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/FinancialRecords/6a6944b66f5ba3fac3430aa9 - 200 null application/json; charset=utf-8 32.914ms
+2026-07-29 11:10:16.252 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:16.261 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.265 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 204 null null 13.4851ms
+2026-07-29 11:10:16.269 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:16.283 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.292 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:16.299 +07:00 [INF] Route matched with {action = "Get", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]] Get(System.String) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:16.316 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Enrolment.EnrolmentDto'.
+2026-07-29 11:10:16.320 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex) in 14.3403ms
+2026-07-29 11:10:16.323 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:16.327 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 58.8914ms
+2026-07-29 11:10:16.474 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.475 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.476 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.477 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.478 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:16.479 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.482 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.486 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.489 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.494 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.496 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 22.2762ms
+2026-07-29 11:10:16.499 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.505 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 30.3848ms
+2026-07-29 11:10:16.507 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 30.9698ms
+2026-07-29 11:10:16.508 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 204 null null 31.2223ms
+2026-07-29 11:10:16.509 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - 204 null null 31.381ms
+2026-07-29 11:10:16.511 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:16.518 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.540 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.544 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.547 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:16.551 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:16.553 +07:00 [INF] Route matched with {action = "GetAll", controller = "EmailTemplates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EmailTemplateDto]]] GetAll() on controller Eduflex.API.Controllers.EmailTemplatesController (Eduflex).
+2026-07-29 11:10:16.555 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:10:16.558 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 7.1747ms
+2026-07-29 11:10:16.559 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EmailTemplateDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:16.564 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.567 +07:00 [INF] Executed action Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex) in 11.3554ms
+2026-07-29 11:10:16.569 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 69.8651ms
+2026-07-29 11:10:16.571 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:16.580 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EmailTemplates - 200 null application/json; charset=utf-8 68.913ms
+2026-07-29 11:10:16.686 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.690 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.697 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.699 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:16.707 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:10:16.711 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 8.3617ms
+2026-07-29 11:10:16.714 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.715 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 29.2022ms
+2026-07-29 11:10:16.858 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:16.862 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:16.866 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.868 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:16.876 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:10:16.878 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 6.851ms
+2026-07-29 11:10:16.880 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:16.882 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 23.2946ms
+2026-07-29 11:10:17.046 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:17.051 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:17.059 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:17.062 +07:00 [INF] Route matched with {action = "GetEducationPartnerById", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.EducationPartner.EducationPartnerDto]] GetEducationPartnerById(System.String) on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:17.069 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.EducationPartner.EducationPartnerDto'.
+2026-07-29 11:10:17.071 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex) in 6.6062ms
+2026-07-29 11:10:17.072 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnerById (Eduflex)'
+2026-07-29 11:10:17.073 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 27.915ms
+2026-07-29 11:10:28.584 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/enrolment-statuses - null null
+2026-07-29 11:10:28.584 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/search-enrolments - null null
+2026-07-29 11:10:28.590 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:28.597 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:28.598 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/enrolment-statuses - 204 null null 14.0402ms
+2026-07-29 11:10:28.599 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/search-enrolments - 204 null null 14.5384ms
+2026-07-29 11:10:28.599 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/enrolment-statuses - null null
+2026-07-29 11:10:28.600 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Enrolments/search-enrolments - application/json 46
+2026-07-29 11:10:28.612 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:28.615 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:28.619 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex)'
+2026-07-29 11:10:28.620 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex)'
+2026-07-29 11:10:28.620 +07:00 [INF] Route matched with {action = "SearchEnrolments", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]]] SearchEnrolments(Eduflex.DTOs.Enrolment.EnrolmentFilterDto) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:28.621 +07:00 [INF] Route matched with {action = "GetEnrolmentStatuses", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EnrolmentStatusDto]]] GetEnrolmentStatuses() on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:28.638 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EnrolmentStatusDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:28.639 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Enrolment.EnrolmentDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:28.641 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex) in 4.2002ms
+2026-07-29 11:10:28.649 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex) in 19.884ms
+2026-07-29 11:10:28.651 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.GetEnrolmentStatuses (Eduflex)'
+2026-07-29 11:10:28.661 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.SearchEnrolments (Eduflex)'
+2026-07-29 11:10:28.751 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Enrolments/search-enrolments - 200 null application/json; charset=utf-8 150.9519ms
+2026-07-29 11:10:28.752 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/enrolment-statuses - 200 null application/json; charset=utf-8 152.3595ms
+2026-07-29 11:10:29.885 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:29.885 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners - null null
+2026-07-29 11:10:29.894 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:29.898 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:29.899 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EducationPartners - 204 null null 14.2349ms
+2026-07-29 11:10:29.901 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EducationPartners - null null
+2026-07-29 11:10:29.901 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 204 null null 16.3989ms
+2026-07-29 11:10:29.903 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:29.910 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:29.918 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:29.922 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex)'
+2026-07-29 11:10:29.922 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:29.924 +07:00 [INF] Route matched with {action = "GetEducationPartnersDirectory", controller = "EducationPartners"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.EducationPartner.EducationPartnerDirectoryDto]]] GetEducationPartnersDirectory() on controller Eduflex.API.Controllers.EducationPartnersController (Eduflex).
+2026-07-29 11:10:29.925 +07:00 [INF] Route matched with {action = "Get", controller = "Enrolments"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Enrolment.EnrolmentDto]] Get(System.String) on controller Eduflex.API.Controllers.EnrolmentsController (Eduflex).
+2026-07-29 11:10:29.937 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.EducationPartner.EducationPartnerDirectoryDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:29.938 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Enrolment.EnrolmentDto'.
+2026-07-29 11:10:29.939 +07:00 [INF] Executed action Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex) in 8.9525ms
+2026-07-29 11:10:29.941 +07:00 [INF] Executed action Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex) in 8.4419ms
+2026-07-29 11:10:29.943 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EducationPartnersController.GetEducationPartnersDirectory (Eduflex)'
+2026-07-29 11:10:29.947 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EnrolmentsController.Get (Eduflex)'
+2026-07-29 11:10:29.948 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EducationPartners - 200 null application/json; charset=utf-8 47.1021ms
+2026-07-29 11:10:29.949 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Enrolments/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 46.1013ms
+2026-07-29 11:10:30.105 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:30.186 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:30.188 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:30.270 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.389 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.393 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.393 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - 204 null null 288.5035ms
+2026-07-29 11:10:30.395 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - null null
+2026-07-29 11:10:30.395 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - 204 null null 209.6079ms
+2026-07-29 11:10:30.397 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - null null
+2026-07-29 11:10:30.400 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.403 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/EmailTemplates - 204 null null 215.1788ms
+2026-07-29 11:10:30.405 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/EmailTemplates - null null
+2026-07-29 11:10:30.413 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.422 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex)'
+2026-07-29 11:10:30.550 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex)'
+2026-07-29 11:10:30.552 +07:00 [INF] CORS policy execution successful.
+2026-07-29 11:10:30.552 +07:00 [INF] Route matched with {action = "GetByEnrolmentId", controller = "FinancialRecords"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Financial.FinancialRecordDto]] GetByEnrolmentId(System.String) on controller Eduflex.API.Controllers.FinancialRecordsController (Eduflex).
+2026-07-29 11:10:30.552 +07:00 [INF] Route matched with {action = "GetCoursesByPartner", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.EducationPartner.CourseDto]]] GetCoursesByPartner(System.String) on controller Eduflex.API.Controllers.CoursesController (Eduflex).
+2026-07-29 11:10:30.555 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.EducationPartner.CourseDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:30.561 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Financial.FinancialRecordDto'.
+2026-07-29 11:10:30.564 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:30.566 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex) in 12.5506ms
+2026-07-29 11:10:30.567 +07:00 [INF] Executed action Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex) in 11.7205ms
+2026-07-29 11:10:30.569 +07:00 [INF] Route matched with {action = "GetAll", controller = "EmailTemplates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Enrolment.EmailTemplateDto]]] GetAll() on controller Eduflex.API.Controllers.EmailTemplatesController (Eduflex).
+2026-07-29 11:10:30.581 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FinancialRecordsController.GetByEnrolmentId (Eduflex)'
+2026-07-29 11:10:30.582 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Enrolment.EmailTemplateDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-29 11:10:30.582 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursesController.GetCoursesByPartner (Eduflex)'
+2026-07-29 11:10:30.583 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/FinancialRecords/by-enrolment/6a68076f931dfb7f910b80a0 - 200 null application/json; charset=utf-8 187.9746ms
+2026-07-29 11:10:30.584 +07:00 [INF] Executed action Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex) in 4.8002ms
+2026-07-29 11:10:30.585 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.EmailTemplatesController.GetAll (Eduflex)'
+2026-07-29 11:10:30.589 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/EmailTemplates - 200 null application/json; charset=utf-8 184.3966ms
+2026-07-29 11:10:30.729 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Courses/by-partner/6a669c78d551eaf96090ce05 - 200 null application/json; charset=utf-8 331.7484ms

@@ -63,7 +63,7 @@ export class FeedbackManagementComponent implements OnInit {
       photoData: ['', [Validators.required]],
       photoContentType: ['image/jpeg'],
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
-      comment: ['', [Validators.required, Validators.maxLength(1000)]]
+      comment: ['', [Validators.required, Validators.maxLength(2000)]]
     });
   }
 

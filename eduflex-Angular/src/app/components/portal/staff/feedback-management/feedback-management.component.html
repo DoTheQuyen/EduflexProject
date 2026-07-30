@@ -79,10 +79,13 @@
       <span class="field-error" *ngIf="isFieldInvalid('courseName')">Course name is required</span>
     </div>
 
-    <div class="mb-3">
+       <div class="mb-3">
       <label for="comment" class="form-label">Comment *</label>
       <textarea id="comment" rows="3" class="form-control" formControlName="comment"></textarea>
-      <span class="field-error" *ngIf="isFieldInvalid('comment')">Comment is required</span>
+      <div class="form-text">{{ feedbackForm.get('comment')?.value?.length || 0 }} / 2000 characters</div>
+      <span class="field-error" *ngIf="isFieldInvalid('comment')">
+        {{ feedbackForm.get('comment')?.hasError('required') ? 'Comment is required' : 'Comment must not exceed 1000 characters' }}
+      </span>
     </div>
 
     <app-notification type="error" [message]="errorMessage"></app-notification>

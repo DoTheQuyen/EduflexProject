@@ -6,7 +6,8 @@
     "exclude": ["/assets/*", "/*.{css,scss,js,png,gif,jpg,jpeg,svg,ico,json,woff,woff2,ttf}"]
   },
   "globalHeaders": {
-    "Cache-Control": "no-cache, must-revalidate"
+    "Cache-Control": "no-cache, must-revalidate",
+     "Referrer-Policy": "strict-origin-when-cross-origin"
   },
   "routes": [
     {

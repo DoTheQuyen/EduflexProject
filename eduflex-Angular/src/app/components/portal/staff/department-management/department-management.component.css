@@ -1,0 +1,12 @@
+.field-error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+}
+
+.member-checklist {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+}

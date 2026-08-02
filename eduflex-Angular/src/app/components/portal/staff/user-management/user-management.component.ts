@@ -41,6 +41,7 @@ export class UserManagementComponent implements OnInit {
     { field: 'firstName', title: 'First Name' },
     { field: 'lastName', title: 'Last Name' },
     { field: 'roleName', title: 'Role' },
+    { field: 'departments', title: 'Departments', render: (_value, row) => this.renderDepartmentBadges(row) },
     { field: 'isActive', title: 'Active', formatter: (value) => value ? 'Yes' : 'No' },
     { field: 'actions', title: 'Actions', className: 'text-center' }
   ];
@@ -52,7 +53,9 @@ export class UserManagementComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      middleName: ['', [Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      mobile: ['', [Validators.required, Validators.maxLength(20)]],
       roleId: ['', [Validators.required]],
       isActive: [true]
     });
@@ -130,6 +133,34 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
+  // TODO(department-migration): drop the `as any` once `nswag run` has been re-run
+  // against the updated backend — UserSummaryDto doesn't declare `departments` yet
+  // because api.services.ts hasn't been regenerated, even though the server already
+  // sends it (see UsersController.SearchUsers / DepartmentMappingExtension.ToBadges).
+  renderDepartmentBadges(row: UserSummaryDto): string {
+    const departments = (row as any).departments as { id: string; name: string; isHead: boolean }[] | undefined;
+    if (!departments || departments.length === 0) {
+      return '<span class="text-muted small">&mdash;</span>';
+    }
+
+    return departments
+      .map(d => {
+        const cssClass = d.isHead ? 'badge-pill-accent' : 'badge-pill-navy-soft';
+        const label = this.escapeHtml(d.name) + (d.isHead ? ' (Head)' : '');
+        return `<span class="badge-pill ${cssClass} me-1 mb-1">${label}</span>`;
+      })
+      .join('');
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   isFieldInvalid(fieldName: string): boolean {
     const control = this.userForm.get(fieldName);
     return control ? control.invalid && control.touched : false;
@@ -149,7 +180,11 @@ export class UserManagementComponent implements OnInit {
     this.userForm.reset({
       email: user.email,
       firstName: user.firstName,
+      // TODO(department-migration): drop the `as any` once `nswag run` has regenerated
+      // api.services.ts with MiddleName on UserSummaryDto.
+      middleName: (user as any).middleName,
       lastName: user.lastName,
+      mobile: user.mobile,
       roleId: user.roleId,
       isActive: user.isActive
     });

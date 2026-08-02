@@ -1,26 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Client, EducationPartnerDto, CourseDto } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
+import { DynamicFormTemplateService } from '@services/dynamic-form-template.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { FileUploaderComponent } from '@generic/file-uploader/file-uploader.component';
+import { ModalComponent } from '@generic/modal/modal.component';
+import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
+import { DynamicFormTemplate } from '@app/models/dynamic-form';
 import {
   Enrolment, EnrolmentDocument,
-  VisaStepKey, VisaProcessStep, VISA_STEP_ORDER, VISA_STEP_EVIDENCE_CATEGORY
+  VisaStepKey, VisaProcessStep, VISA_STEP_ORDER, VISA_STEP_EVIDENCE_CATEGORY, VISA_STEP_LABELS
 } from '../../../../../../../models/enrolment';
-
-const STEP_LABELS: Record<VisaStepKey, string> = {
-  StudentInfo: 'Student Info',
-  EnrolmentForm: 'Enrolment Form',
-  ApplyOffer: 'Apply Offer',
-  CoeCompletion: 'CoE Completion',
-  VisaApplication: 'VISA Application',
-  VisaOutcome: 'VISA Outcome'
-};
 
 const STEP_DESCRIPTIONS: Record<VisaStepKey, string> = {
   StudentInfo: 'Personal details captured at enquiry conversion',
@@ -34,11 +29,11 @@ const STEP_DESCRIPTIONS: Record<VisaStepKey, string> = {
 @Component({
   selector: 'app-visa-process-tab',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, FileUploaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, FileUploaderComponent, ModalComponent, FormPrintPreviewComponent],
   templateUrl: './visa-process-tab.component.html',
   styleUrls: ['./visa-process-tab.component.css']
 })
-export class VisaProcessTabComponent implements OnChanges {
+export class VisaProcessTabComponent implements OnInit, OnChanges {
   @Input({ required: true }) enrolment!: Enrolment;
   @Input() partners: EducationPartnerDto[] = [];
   @Input() isOwner = false;
@@ -46,7 +41,7 @@ export class VisaProcessTabComponent implements OnChanges {
   @Output() changed = new EventEmitter<void>();
 
   readonly stepOrder = VISA_STEP_ORDER;
-  readonly stepLabels = STEP_LABELS;
+  readonly stepLabels = VISA_STEP_LABELS;
   readonly stepDescriptions = STEP_DESCRIPTIONS;
   readonly stepEvidenceCategory = VISA_STEP_EVIDENCE_CATEGORY;
 
@@ -71,10 +66,16 @@ export class VisaProcessTabComponent implements OnChanges {
   private hasInitializedOpenStep = false;
   private lastCourseLookupPartnerId: string | undefined;
 
+  // ----- Dynamic Forms — bound-step marker + preview/request popup -----
+  activeTemplates: DynamicFormTemplate[] = [];
+  formPopupStepKey: VisaStepKey | null = null;
+  isRequestingBoundForm = false;
+
   constructor(
     private fb: FormBuilder,
     private apiClient: Client,
     private enrolmentService: EnrolmentService,
+    private dynamicFormTemplateService: DynamicFormTemplateService,
     private notificationService: NotificationService
   ) {
     this.studentForm = this.fb.group({
@@ -90,6 +91,54 @@ export class VisaProcessTabComponent implements OnChanges {
       educationPartnerId: [''], courseId: [''], intake: [''], studyMode: [''], campus: [''],
       commencementDate: [''], actualCommencementDate: [''], expectedCompletionDate: [''], fundingSource: [''], visaStatus: [''],
       status: [''], notes: [''], tuitionFee: [null as number | null]
+    });
+  }
+
+  ngOnInit(): void {
+    this.dynamicFormTemplateService.getAll().subscribe({
+      next: (templates) => { this.activeTemplates = templates.filter(t => t.status === 'Active'); },
+      error: () => {}
+    });
+  }
+
+  // ----- Dynamic Forms — bound-step marker + preview/request popup -----
+
+  boundTemplateFor(stepKey: VisaStepKey): DynamicFormTemplate | undefined {
+    return this.activeTemplates.find(t => t.boundStepKey === stepKey);
+  }
+
+  isAlreadyRequested(templateId: string): boolean {
+    return this.enrolment.formResponses.some(r => r.formTemplateId === templateId && r.status !== 'Withdrawn');
+  }
+
+  openFormPopup(stepKey: VisaStepKey): void {
+    this.formPopupStepKey = stepKey;
+  }
+
+  closeFormPopup(): void {
+    this.formPopupStepKey = null;
+  }
+
+  get formPopupTemplate(): DynamicFormTemplate | undefined {
+    return this.formPopupStepKey ? this.boundTemplateFor(this.formPopupStepKey) : undefined;
+  }
+
+  requestBoundForm(): void {
+    const template = this.formPopupTemplate;
+    if (!template || !this.canEdit()) return;
+
+    this.isRequestingBoundForm = true;
+    this.enrolmentService.requestForm(this.enrolment.id, template.id).subscribe({
+      next: () => {
+        this.isRequestingBoundForm = false;
+        this.notificationService.success('Form requested — an email has been sent to the student.');
+        this.closeFormPopup();
+        this.changed.emit();
+      },
+      error: (err) => {
+        this.isRequestingBoundForm = false;
+        this.notificationService.error(extractHttpErrorMessage(err, 'Could not request this form.'));
+      }
     });
   }
 

@@ -69,6 +69,12 @@
       <span class="field-error" *ngIf="isFieldInvalid('email')">A valid email is required</span>
     </div>
 
+    <div class="mb-3">
+      <label for="mobile" class="form-label">Mobile *</label>
+      <input id="mobile" type="tel" class="form-control" formControlName="mobile">
+      <span class="field-error" *ngIf="isFieldInvalid('mobile')">Mobile is required</span>
+    </div>
+
     <div class="mb-3" *ngIf="!editingId">
       <label for="password" class="form-label">Temporary Password *</label>
       <input id="password" type="password" class="form-control" formControlName="password">
@@ -80,6 +86,11 @@
       <label for="firstName" class="form-label">First Name *</label>
       <input id="firstName" type="text" class="form-control" formControlName="firstName">
       <span class="field-error" *ngIf="isFieldInvalid('firstName')">First name is required</span>
+    </div>
+
+    <div class="mb-3">
+      <label for="middleName" class="form-label">Middle Name</label>
+      <input id="middleName" type="text" class="form-control" formControlName="middleName">
     </div>
 
     <div class="mb-3">

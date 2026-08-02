@@ -1,0 +1,63 @@
+<div class="print-paper" [class.compact]="compact">
+  <div class="paper-head">
+    <h3>{{ formName }}</h3>
+    <p *ngIf="description" class="desc">{{ description }}</p>
+  </div>
+
+  <div class="paper-meta" *ngIf="studentName || studentEmail || studentPhone">
+    <span *ngIf="studentName">Student: <strong>{{ studentName }}</strong></span>
+    <span *ngIf="studentEmail">Email: <strong>{{ studentEmail }}</strong></span>
+    <span *ngIf="studentPhone">Phone: <strong>{{ studentPhone }}</strong></span>
+  </div>
+
+  <div class="pq" *ngFor="let q of sortedQuestions; let i = index">
+    <div class="pq-label">
+      {{ i + 1 }}. {{ q.questionText }}
+      <span class="req-star" *ngIf="q.isRequired">*</span>
+    </div>
+    <p *ngIf="q.helpText" class="pq-help">{{ q.helpText }}</p>
+
+    <!-- Yes/No -->
+    <ng-container *ngIf="q.answerType === 'YesNo'">
+      <div class="fill-yn">
+        <span [class.checked]="mode === 'filled' && isYes(q.id)"><span class="fill-box"></span>Yes</span>
+        <span [class.checked]="mode === 'filled' && isNo(q.id)"><span class="fill-box"></span>No</span>
+      </div>
+    </ng-container>
+
+    <!-- Single select -->
+    <ng-container *ngIf="q.answerType === 'SingleSelect'">
+      <div class="fill-options" [class.horizontal]="q.optionsHorizontal">
+        <div class="fill-opt" *ngFor="let opt of q.options" [class.checked]="mode === 'filled' && selectedSet(q.id).has(opt)">
+          <span class="fill-box round"></span>{{ opt }}
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Multi select -->
+    <ng-container *ngIf="q.answerType === 'MultiSelect'">
+      <div class="fill-options" [class.horizontal]="q.optionsHorizontal">
+        <div class="fill-opt" *ngFor="let opt of q.options" [class.checked]="mode === 'filled' && selectedSet(q.id).has(opt)">
+          <span class="fill-box"></span>{{ opt }}
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Rich text -->
+    <ng-container *ngIf="q.answerType === 'RichText'">
+      <div class="fill-rich" *ngIf="mode === 'blank' || !hasAnswer(q)">
+        <span *ngIf="mode === 'filled'" class="empty-note">No answer provided</span>
+      </div>
+      <div class="answer-text" *ngIf="mode === 'filled' && hasAnswer(q)">{{ textAnswer(q.id) }}</div>
+    </ng-container>
+  </div>
+
+  <div class="paper-sign" *ngIf="mode === 'blank'">
+    <div>Student signature<div class="sigline"></div></div>
+    <div>Date<div class="sigline"></div></div>
+  </div>
+
+  <div class="paper-foot" *ngIf="mode === 'filled' && submittedAt">
+    Submitted {{ submittedAt | date: 'dd MMM yyyy HH:mm' }}
+  </div>
+</div>

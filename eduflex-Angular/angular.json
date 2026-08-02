@@ -29,6 +29,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/quill/dist/quill.snow.css",
               "src/styles.css",
               "src/assets/styles/theme.css"
             ],

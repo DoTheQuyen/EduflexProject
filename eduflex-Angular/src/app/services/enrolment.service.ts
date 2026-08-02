@@ -13,6 +13,7 @@ import {
   RecipientType,
   VisaStepKey
 } from '../models/enrolment';
+import { EnrolmentFormResponse, FormAnswer, FormResponseStatus, MyEnrolmentForms } from '../models/dynamic-form';
 
 /**
  * Hand-written against the new EnrolmentsController REST routes directly, rather than the
@@ -87,5 +88,53 @@ export class EnrolmentService {
 
   completeVisaStep(id: string, stepKey: VisaStepKey, fields: Record<string, string>): Observable<boolean> {
     return this.http.post<boolean>(`${this.baseUrl}/${id}/visa-steps/${stepKey}/complete`, { fields });
+  }
+
+  // ----- Dynamic Forms — staff -----
+
+  requestForm(id: string, formTemplateId: string): Observable<EnrolmentFormResponse> {
+    return this.http.post<EnrolmentFormResponse>(`${this.baseUrl}/${id}/forms/request`, { formTemplateId });
+  }
+
+  withdrawFormRequest(id: string, responseId: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/withdraw`, {});
+  }
+
+  archiveFormResponse(id: string, responseId: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/archive`, {});
+  }
+
+  setFormResponseStatus(id: string, responseId: string, status: FormResponseStatus): Observable<boolean> {
+    return this.http.put<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/status`, { status });
+  }
+
+  reopenFormForEdit(id: string, responseId: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/reopen`, {});
+  }
+
+  staffEditFormResponse(id: string, responseId: string, answers: FormAnswer[]): Observable<boolean> {
+    return this.http.put<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/answers`, { answers });
+  }
+
+  // Backend streams the PDF bytes directly (with its own Content-Disposition filename)
+  // rather than a blob storage URL — see EnrolmentsController.ExportForm. Fetched as a
+  // Blob so the caller can trigger a download with an explicit filename via a local
+  // blob: object URL, which is honored reliably regardless of the origin server's headers.
+  exportForm(id: string, responseId: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${id}/forms/${responseId}/export`, { responseType: 'blob' });
+  }
+
+  // ----- Dynamic Forms — student -----
+
+  getMyForms(applicationId: string): Observable<MyEnrolmentForms> {
+    return this.http.get<MyEnrolmentForms>(`${this.baseUrl}/by-application/${applicationId}/forms`);
+  }
+
+  saveFormDraft(id: string, responseId: string, answers: FormAnswer[]): Observable<boolean> {
+    return this.http.put<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/draft`, { answers });
+  }
+
+  submitForm(id: string, responseId: string, answers: FormAnswer[]): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/forms/${responseId}/submit`, { answers });
   }
 }

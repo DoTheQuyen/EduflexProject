@@ -42,7 +42,7 @@ export class CommunicationTabComponent implements OnInit {
 
   ngOnInit(): void {
     this.emailTemplateService.getAll().subscribe({
-      next: (templates) => { this.templates = templates; },
+      next: (templates) => { this.templates = templates.filter(t => t.isActive); },
       error: () => {}
     });
   }

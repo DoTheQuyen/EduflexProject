@@ -1,3 +1,6 @@
+import type { EnrolmentFormResponse } from './dynamic-form';
+import { templateStatusBadgeClass } from './dynamic-form';
+
 export interface Address {
   street?: string;
   suburb?: string;
@@ -76,6 +79,17 @@ export const VISA_STEP_ORDER: VisaStepKey[] = [
   'StudentInfo', 'EnrolmentForm', 'ApplyOffer', 'CoeCompletion', 'VisaApplication', 'VisaOutcome'
 ];
 
+// Shared with the Dynamic Forms module (bound-step picker/labels), not just the
+// VISA Process tab — kept here alongside VISA_STEP_ORDER as the one source of truth.
+export const VISA_STEP_LABELS: Record<VisaStepKey, string> = {
+  StudentInfo: 'Student Info',
+  EnrolmentForm: 'Enrolment Form',
+  ApplyOffer: 'Apply Offer',
+  CoeCompletion: 'CoE Completion',
+  VisaApplication: 'VISA Application',
+  VisaOutcome: 'VISA Outcome'
+};
+
 // EnrolmentForm's 'GS' entry is here only so its upload zone renders — that step is
 // already Complete by the time it's shown (auto-completed at creation), so unlike the
 // other four it's never actually *required* to unlock anything.
@@ -136,6 +150,7 @@ export interface Enrolment {
 
   documents: EnrolmentDocument[];
   communications: EnrolmentCommunication[];
+  formResponses: EnrolmentFormResponse[];
   auditTrail: EnrolmentAuditEntry[];
   visaProcessSteps: VisaProcessStep[];
 
@@ -199,4 +214,11 @@ export interface EmailTemplate {
   subject: string;
   body: string;
   isSystemDefault: boolean;
+  isActive: boolean;
+}
+
+// Reuses the DynamicForms module's badge styling (identical Active/Inactive shape)
+// rather than duplicating the color-class mapping — see templateStatusBadgeClass.
+export function emailTemplateStatusBadgeClass(template: EmailTemplate): string {
+  return templateStatusBadgeClass(template.isActive ? 'Active' : 'Inactive');
 }

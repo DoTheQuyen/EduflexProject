@@ -12,15 +12,16 @@ import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { Enrolment } from '../../../../../models/enrolment';
 import { VisaProcessTabComponent } from './tabs/visa-process-tab/visa-process-tab.component';
 import { DocumentsTabComponent } from './tabs/documents-tab/documents-tab.component';
+import { FormsTabComponent } from './tabs/forms-tab/forms-tab.component';
 import { CommunicationTabComponent } from './tabs/communication-tab/communication-tab.component';
 import { AuditTabComponent } from './tabs/audit-tab/audit-tab.component';
 
-type EnrolmentTab = 'visa' | 'documents' | 'communication' | 'audit';
+type EnrolmentTab = 'visa' | 'documents' | 'forms' | 'communication' | 'audit';
 
 @Component({
   selector: 'app-enrolment-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent, VisaProcessTabComponent, DocumentsTabComponent, CommunicationTabComponent, AuditTabComponent],
+  imports: [CommonModule, FormsModule, ModalComponent, VisaProcessTabComponent, DocumentsTabComponent, FormsTabComponent, CommunicationTabComponent, AuditTabComponent],
   templateUrl: './enrolment-detail.component.html',
   styleUrls: ['./enrolment-detail.component.css']
 })

@@ -5,7 +5,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AddressDto, Client, CourseDto, CreateApplicationDto, EducationPartnerDto, EmergencyContactDto, SettingsDto, UploadLimitDto } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
+import { EnrolmentService } from '@services/enrolment.service';
+import { ModalComponent } from '@generic/modal/modal.component';
+import { FormAnswerEditorComponent } from '@generic/form-answer-editor/form-answer-editor.component';
+import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
+import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
+import { EnrolmentFormResponse, FormAnswer, formResponseStatusBadgeClass } from '@app/models/dynamic-form';
 
 interface DocFile {
   name: string;
@@ -55,7 +61,7 @@ const FALLBACK_UPLOAD_LIMIT: UploadLimitDto = new UploadLimitDto({
 @Component({
   selector: 'app-application-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ModalComponent, FormAnswerEditorComponent, FormPrintPreviewComponent],
   templateUrl: './application-detail.component.html',
   styleUrls: ['./application-detail.component.css']
 })
@@ -133,12 +139,23 @@ export class ApplicationDetailComponent implements OnInit {
 
   settings: SettingsDto | null = null;
 
+  // ----- Dynamic Forms (student-only — staff manage forms via the Enrolment's
+  // own Forms tab, not from here) -----
+  myEnrolmentId: string | null = null;
+  myForms: EnrolmentFormResponse[] = [];
+  selectedFormId: string | null = null;
+  fillAnswers: FormAnswer[] = [];
+  isSavingDraft = false;
+  isSubmitting = false;
+  showFinalizeConfirm = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private appService: Client,
     private authHelper: AuthHelperService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private enrolmentService: EnrolmentService
   ) {}
 
   ngOnInit(): void {
@@ -197,6 +214,10 @@ export class ApplicationDetailComponent implements OnInit {
 
         this.mode = LOCKED_STATUSES.includes(this.status) ? 'view' : 'edit';
         this.isLoading = false;
+
+        if (!this.isStaffPortal) {
+          this.loadMyForms(id);
+        }
       },
       error: () => {
         this.notification.error('Could not load this application.');
@@ -385,5 +406,80 @@ export class ApplicationDetailComponent implements OnInit {
 
   formatDate(value: any): string {
     return formatDateTime(value, 'dd MMM yyyy');
+  }
+
+  // ===================== Dynamic Forms (student) =====================
+
+  loadMyForms(applicationId: string): void {
+    this.enrolmentService.getMyForms(applicationId).subscribe({
+      next: (result) => {
+        this.myEnrolmentId = result.enrolmentId;
+        this.myForms = result.forms;
+      },
+      // A 404 here just means no Enrolment is linked to this application yet
+      // (e.g. still Pending) — not every application has one.
+      error: () => { this.myEnrolmentId = null; this.myForms = []; }
+    });
+  }
+
+  formStatusBadgeClass(form: EnrolmentFormResponse): string {
+    return formResponseStatusBadgeClass(form.status);
+  }
+
+  isFormLocked(form: EnrolmentFormResponse): boolean {
+    return form.status === 'Responded';
+  }
+
+  get selectedForm(): EnrolmentFormResponse | undefined {
+    return this.myForms.find(f => f.id === this.selectedFormId);
+  }
+
+  openForm(form: EnrolmentFormResponse): void {
+    this.selectedFormId = form.id;
+    this.fillAnswers = form.answers.map(a => ({ ...a, selectedOptions: [...a.selectedOptions] }));
+  }
+
+  closeForm(): void {
+    this.selectedFormId = null;
+    this.fillAnswers = [];
+    this.showFinalizeConfirm = false;
+  }
+
+  saveFormDraft(form: EnrolmentFormResponse): void {
+    if (!this.myEnrolmentId) return;
+    this.isSavingDraft = true;
+    this.enrolmentService.saveFormDraft(this.myEnrolmentId, form.id, this.fillAnswers).subscribe({
+      next: () => {
+        this.isSavingDraft = false;
+        this.notification.success('Draft saved.');
+        if (this.appId) this.loadMyForms(this.appId);
+      },
+      error: (err) => {
+        this.isSavingDraft = false;
+        this.notification.error(extractHttpErrorMessage(err, 'Could not save your draft.'));
+      }
+    });
+  }
+
+  openFinalizeConfirm(): void {
+    this.showFinalizeConfirm = true;
+  }
+
+  confirmSubmitForm(form: EnrolmentFormResponse): void {
+    if (!this.myEnrolmentId) return;
+    this.isSubmitting = true;
+    this.enrolmentService.submitForm(this.myEnrolmentId, form.id, this.fillAnswers).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.showFinalizeConfirm = false;
+        this.notification.success('Form submitted.');
+        this.closeForm();
+        if (this.appId) this.loadMyForms(this.appId);
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        this.notification.error(extractHttpErrorMessage(err, 'Could not submit this form — check every required question is answered.'));
+      }
+    });
   }
 }

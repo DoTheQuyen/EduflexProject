@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { AuthHelperService } from '../../../services/auth-helper.service';
+import { RealtimeNotificationService } from '../../../services/realtime-notification.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { NotificationBellComponent } from '../share-component/notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent, NotificationBellComponent],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
@@ -24,6 +26,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   constructor(
     private authHelper: AuthHelperService,
+    private notificationService: RealtimeNotificationService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -45,6 +48,8 @@ export class HomepageComponent implements OnInit, OnDestroy {
       this.portalRootLink = '/staff-portal';
     }
 
+    this.notificationService.connect();
+
     this.updateBreadcrumb();
     this.routerSub = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
@@ -53,6 +58,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routerSub?.unsubscribe();
+    this.notificationService.disconnect();
   }
 
   private updateBreadcrumb(): void {
@@ -63,13 +69,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
- onLogoutClick(): void {
-  this.showLogoutConfirm = true;
-}
+  onLogoutClick(): void {
+    this.showLogoutConfirm = true;
+  }
 
-logout(): void {
-  this.showLogoutConfirm = false;
-  this.authHelper.logout();
-  this.router.navigate(['/'], { replaceUrl: true });
-}
+  logout(): void {
+    this.showLogoutConfirm = false;
+    this.notificationService.disconnect();
+    this.authHelper.logout();
+    this.router.navigate(['/'], { replaceUrl: true });
+  }
 }

@@ -35,11 +35,35 @@
 }
 
 .step {
+  position: relative;
   background: white;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: hidden;
   transition: box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+/* Dynamic Forms bound-step marker — sits outside .step-header (a <button>) since a
+   button can't nest another button; positioned to read as part of the header row. */
+.form-marker {
+  position: absolute;
+  top: 0.7rem;
+  right: 3.25rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--color-accent) 16%, white);
+  color: var(--color-accent-dark);
+  z-index: 1;
+}
+
+.form-marker:hover {
+  background: var(--color-accent);
+  color: white;
 }
 
 .step:hover {

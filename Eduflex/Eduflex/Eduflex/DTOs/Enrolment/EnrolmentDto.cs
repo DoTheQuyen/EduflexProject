@@ -1,4 +1,5 @@
 using Eduflex.DTOs.Address;
+using Eduflex.DTOs.DynamicForm;
 using ShareService.Enums.Roles;
 
 namespace Eduflex.DTOs.Enrolment
@@ -40,6 +41,7 @@ namespace Eduflex.DTOs.Enrolment
 
         public List<EnrolmentDocumentDto> Documents { get; set; } = new();
         public List<EnrolmentCommunicationDto> Communications { get; set; } = new();
+        public List<EnrolmentFormResponseDto> FormResponses { get; set; } = new();
         public List<EnrolmentAuditEntryDto> AuditTrail { get; set; } = new();
         public List<VisaProcessStepDto> VisaProcessSteps { get; set; } = new();
 

@@ -25,11 +25,7 @@ namespace ShareService.Models.Enrolment
         [BsonElement("isSystemDefault")]
         public bool IsSystemDefault { get; set; }
 
-        public void ApplyEditableFields(EmailTemplateModel updateModel)
-        {
-            Name = updateModel.Name;
-            Subject = updateModel.Subject;
-            Body = updateModel.Body;
-        }
+        [BsonElement("isActive")]
+        public bool IsActive { get; set; } = true;
     }
 }

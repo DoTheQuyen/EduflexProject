@@ -4,8 +4,10 @@ using Microsoft.Extensions.Options;
 using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
+using ShareService.Enums.DynamicForms;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
+using ShareService.Mapping;
 using ShareService.Models.Application;
 using ShareService.Models.Auth;
 using ShareService.Models.Enquiry;
@@ -31,9 +33,14 @@ namespace ShareService.Services
         private readonly IEducationPartner _educationPartnerDataAccess;
         private readonly ICourse _courseDataAccess;
         private readonly IFinancialRecordService _financialRecordService;
+        private readonly INotificationPublisher _notificationPublisher;
+        private readonly IDynamicFormTemplate _dynamicFormTemplateDataAccess;
+        private readonly IEmailTemplate _emailTemplateDataAccess;
+        private readonly IInvoicePdfService _pdfService;
         private readonly IValidator<EnrolmentModel> _validator;
         private readonly ILogger<EnrolmentService> _logger;
         private readonly int _documentLinkExpiryDays;
+        private readonly string _frontendBaseUrl;
 
         public EnrolmentService(
             IEnrolment enrolmentDataAccess,
@@ -48,8 +55,13 @@ namespace ShareService.Services
             IEducationPartner educationPartnerDataAccess,
             ICourse courseDataAccess,
             IFinancialRecordService financialRecordService,
+            INotificationPublisher notificationPublisher,
+            IDynamicFormTemplate dynamicFormTemplateDataAccess,
+            IEmailTemplate emailTemplateDataAccess,
+            IInvoicePdfService pdfService,
             IValidator<EnrolmentModel> validator,
             IOptions<DocumentLinkSettings> documentLinkSettings,
+            IOptions<WebURLSettings> webUrlSettings,
             ILogger<EnrolmentService> logger)
         {
             _enrolmentDataAccess = enrolmentDataAccess;
@@ -64,8 +76,13 @@ namespace ShareService.Services
             _educationPartnerDataAccess = educationPartnerDataAccess;
             _courseDataAccess = courseDataAccess;
             _financialRecordService = financialRecordService;
+            _notificationPublisher = notificationPublisher;
+            _dynamicFormTemplateDataAccess = dynamicFormTemplateDataAccess;
+            _emailTemplateDataAccess = emailTemplateDataAccess;
+            _pdfService = pdfService;
             _validator = validator;
             _documentLinkExpiryDays = documentLinkSettings.Value.ExpiryDays;
+            _frontendBaseUrl = webUrlSettings.Value.FrontendBaseUrl;
             _logger = logger;
         }
 
@@ -142,90 +159,11 @@ namespace ShareService.Services
 
             var actingUserName = await ResolveUserNameAsync(actingUserId);
 
-            string studentUserId;
-            string studentApplicationId;
-            string linkAuditDescription;
+            var (studentUserId, studentApplicationId, linkAuditDescription) = !string.IsNullOrWhiteSpace(existingStudentId)
+                ? await LinkToExistingStudentAsync(existingStudentId!, input, actingUserId)
+                : await CreateNewStudentAsync(input, actingUserId);
 
-            if (!string.IsNullOrWhiteSpace(existingStudentId))
-            {
-                // Step 1 of the New Enrolment wizard already resolved (found via search, or
-                // just created) a Students collection record — link to that existing login
-                // rather than creating a second one for the same person.
-                var existingStudent = await _studentService.GetStudentAsync(existingStudentId, actingUserId)
-                    ?? throw new KeyNotFoundException("Selected student not found");
-
-                studentUserId = existingStudent.Student.UserId;
-
-                var linkedApplication = new ApplicationModel
-                {
-                    StudentId = existingStudentId,
-                    StudentName = $"{input.FirstName} {input.LastName}".Trim(),
-                    StudentEmail = input.Email,
-                    Description = "Course enrolment application",
-                    Details = "Created by staff — attach your documents here.",
-                    ApplicationType = "Enrolment",
-                    DateApplied = DateTime.UtcNow,
-                    Status = "Pending"
-                };
-                await _applicationDataAccess.CreateApplicationAsync(linkedApplication);
-
-                studentApplicationId = linkedApplication.Id;
-                linkAuditDescription = $"Linked to existing student account for {input.Email}";
-            }
-            else
-            {
-                var roles = await _roleService.GetAllRolesAsync();
-                var studentRole = roles.FirstOrDefault(r => r.Name == SystemRole.Student.ToString())
-                    ?? throw new InvalidOperationException("The Student role is not configured — seed the Roles collection first.");
-
-                // 1. Create the student's login account. UserService already hashes the password,
-                //    forces a change on first login and emails the temp credentials — see UserService.CreateUserAsync.
-                var newUser = new UserModel
-                {
-                    Email = input.Email,
-                    Password = GenerateTempPassword(),
-                    FirstName = input.FirstName,
-                    LastName = input.LastName,
-                    Mobile = input.Mobile,
-                    RoleId = studentRole.Id
-                };
-                await _userService.CreateUserAsync(newUser, actingUserId);
-
-                // 2. Create the Student profile + a starter Application record so the student can log in
-                //    and immediately see something to attach documents to (existing Applications/Students infra).
-                var student = new StudentModel
-                {
-                    UserId = newUser.Id,
-                    Email = input.Email,
-                    FirstName = input.FirstName,
-                    LastName = input.LastName,
-                    Nationality = input.Nationality ?? string.Empty,
-                    PassportNumber = input.PassportNumber ?? string.Empty,
-                    DateOfBirth = input.DateOfBirth ?? DateTime.UtcNow,
-                    PhoneNumber = input.Mobile,
-                    Address = input.CurrentAddress ?? input.HometownAddress
-                };
-                await _applicationDataAccess.CreateStudentAsync(student);
-
-                var newApplication = new ApplicationModel
-                {
-                    StudentId = student.Id,
-                    StudentName = $"{input.FirstName} {input.LastName}".Trim(),
-                    StudentEmail = input.Email,
-                    Description = "Course enrolment application",
-                    Details = "Created by staff — attach your documents here.",
-                    ApplicationType = "Enrolment",
-                    DateApplied = DateTime.UtcNow,
-                    Status = "Pending"
-                };
-                await _applicationDataAccess.CreateApplicationAsync(newApplication);
-
-                studentUserId = newUser.Id;
-                studentApplicationId = newApplication.Id;
-                linkAuditDescription = $"Created student user account for {input.Email}";
-            }
-
-            // 3. Create the staff-facing enrolment record that links everything together.
+            // Create the staff-facing enrolment record that links everything together.
             input.Id = string.Empty;
             input.OwnerUserId = actingUserId;
             input.StudentUserId = studentUserId;
@@ -254,20 +192,69 @@ namespace ShareService.Services
 
             await _enrolmentDataAccess.CreateEnrolmentAsync(input);
 
-            // 4. If converted from an enquiry, flip its status so the link shows up on both sides.
+            await _notificationPublisher.PublishToRoleAsync(
+                module: "Enrolment",
+                entityId: input.Id,
+                summary: $"New enrolment created for {input.FirstName} {input.LastName}",
+                role: SystemRole.Staff);
+
+            // If converted from an enquiry, flip its status so the link shows up on both sides.
             if (sourceEnquiry != null)
             {
-                sourceEnquiry.Status = EnquiryEnums.Converted.ToString();
-                if (string.IsNullOrWhiteSpace(sourceEnquiry.Response))
-                {
-                    sourceEnquiry.Response = $"Converted to enrolment #{input.Id}.";
-                }
-                await _enquiryService.UpdateEnquiriesAsync(sourceEnquiry.Id, sourceEnquiry, actingUserId);
+                await MarkSourceEnquiryConvertedAsync(sourceEnquiry, input.Id, actingUserId);
             }
 
             _logger.LogInformation("Created enrolment {EnrolmentId} for {Email} (enquiry: {EnquiryId})", input.Id, input.Email, enquiryId ?? "none");
 
             return input;
+        }
+
+        // Step 1 of the New Enrolment wizard already resolved (found via search, or just
+        // created) a Students collection record — link to that existing login rather than
+        // creating a second one for the same person.
+        private async Task<(string StudentUserId, string StudentApplicationId, string LinkAuditDescription)> LinkToExistingStudentAsync(
+            string existingStudentId, EnrolmentModel input, string actingUserId)
+        {
+            var existingStudent = await _studentService.GetStudentAsync(existingStudentId, actingUserId)
+                ?? throw new KeyNotFoundException("Selected student not found");
+
+            var linkedApplication = input.ToEnrolmentApplicationModel(existingStudentId);
+            await _applicationDataAccess.CreateApplicationAsync(linkedApplication);
+
+            return (existingStudent.Student.UserId, linkedApplication.Id, $"Linked to existing student account for {input.Email}");
+        }
+
+        private async Task<(string StudentUserId, string StudentApplicationId, string LinkAuditDescription)> CreateNewStudentAsync(
+            EnrolmentModel input, string actingUserId)
+        {
+            var roles = await _roleService.GetAllRolesAsync();
+            var studentRole = roles.FirstOrDefault(r => r.Name == SystemRole.Student.ToString())
+                ?? throw new InvalidOperationException("The Student role is not configured — seed the Roles collection first.");
+
+            // 1. Create the student's login account. UserService already hashes the password,
+            //    forces a change on first login and emails the temp credentials — see UserService.CreateUserAsync.
+            var newUser = input.ToNewUserModel(studentRole.Id, GenerateTempPassword());
+            await _userService.CreateUserAsync(newUser, actingUserId);
+
+            // 2. Create the Student profile + a starter Application record so the student can log in
+            //    and immediately see something to attach documents to (existing Applications/Students infra).
+            var student = input.ToStudentModel(newUser.Id);
+            await _applicationDataAccess.CreateStudentAsync(student);
+
+            var newApplication = input.ToEnrolmentApplicationModel(student.Id);
+            await _applicationDataAccess.CreateApplicationAsync(newApplication);
+
+            return (newUser.Id, newApplication.Id, $"Created student user account for {input.Email}");
+        }
+
+        private async Task MarkSourceEnquiryConvertedAsync(EnquiryModel sourceEnquiry, string enrolmentId, string actingUserId)
+        {
+            sourceEnquiry.Status = EnquiryEnums.Converted.ToString();
+            if (string.IsNullOrWhiteSpace(sourceEnquiry.Response))
+            {
+                sourceEnquiry.Response = $"Converted to enrolment #{enrolmentId}.";
+            }
+            await _enquiryService.UpdateEnquiriesAsync(sourceEnquiry.Id, sourceEnquiry, actingUserId);
         }
 
         // Auth: requires EnrolmentsView permission (staff-only).
@@ -327,6 +314,15 @@ namespace ShareService.Services
 
             var saved = await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
 
+            if (saved)
+            {
+                await _notificationPublisher.PublishToRoleAsync(
+                    module: "Enrolment",
+                    entityId: id,
+                    summary: $"Enrolment updated for {existing.FirstName} {existing.LastName}",
+                    role: SystemRole.Staff);
+            }
+
             // A student may only start a new application while their current one is
             // Pending/Approved — once staff actually enrol them (this transition),
             // the source application is done being "active" and should reflect that.
@@ -354,6 +350,16 @@ namespace ShareService.Services
             var newOwner = await _userService.GetUserByIdAsync(newOwnerUserId)
                 ?? throw new ArgumentException("The selected staff member was not found");
 
+            // Server-side enforcement, independent of what the UI happens to offer — a
+            // direct API call reassigning to a student must be rejected the same as a
+            // UI-driven one (the frontend already filters students out of the picker, but
+            // that alone isn't enforcement).
+            var newOwnerRole = await _roleService.GetByIdAsync(newOwner.RoleId);
+            if (newOwnerRole?.Name.Is(SystemRole.Student) == true)
+            {
+                throw new ArgumentException("Cannot reassign an enrolment to a student.");
+            }
+
             var previousOwnerName = await ResolveUserNameAsync(existing.OwnerUserId);
             var newOwnerName = $"{newOwner.FirstName} {newOwner.LastName}".Trim();
             var actingUserName = await ResolveUserNameAsync(actingUserId);
@@ -362,7 +368,16 @@ namespace ShareService.Services
             existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create(
                 $"Reassigned owner from {previousOwnerName} to {newOwnerName}", actingUserId, actingUserName));
 
-            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+            var reassigned = await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+
+            if (reassigned)
+            {
+                var summary = $"Enrolment reassigned from {previousOwnerName} to {newOwnerName}";
+                await _notificationPublisher.PublishToRoleAsync("Enrolment", id, summary, SystemRole.Manager);
+                await _notificationPublisher.PublishToRoleAsync("Enrolment", id, summary, SystemRole.Admin);
+            }
+
+            return reassigned;
         }
 
         // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
@@ -578,8 +593,401 @@ namespace ShareService.Services
                 }
             }
 
+            var completed = await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+
+            if (completed)
+            {
+                await _notificationPublisher.PublishToRoleAsync(
+                    module: "Enrolment",
+                    entityId: id,
+                    summary: $"Enrolment status changed to {existing.Status}",
+                    role: SystemRole.Staff);
+            }
+
+            return completed;
+        }
+
+        // ===================== Dynamic Forms =====================
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        public async Task<EnrolmentFormResponseModel> RequestFormAsync(string id, string formTemplateId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var template = await _dynamicFormTemplateDataAccess.GetByIdAsync(formTemplateId)
+                ?? throw new KeyNotFoundException("Form template not found");
+
+            if (!template.Status.Is(TemplateStatus.Active))
+            {
+                throw new ArgumentException("This form is inactive and cannot be requested.");
+            }
+
+            // A template can only have one "live" request on an enrolment at a time —
+            // a withdrawn request must be archived (ArchiveFormResponseAsync) before the
+            // same form can be requested again.
+            if (existing.FormResponses.Any(r => r.FormTemplateId == formTemplateId && !r.Status.Is(ResponseStatus.Archived)))
+            {
+                throw new ArgumentException("This form has already been requested on this enrolment. Withdraw and archive the existing request before requesting it again.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var response = template.CreateFromTemplate(actingUserId, actingUserName);
+
+            existing.FormResponses.Add(response);
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Requested form \"{template.Name}\" from the student", actingUserId, actingUserName));
+
+            await SendFormEmailAsync(existing, response, "dynamic-form-request", actingUserName);
+            await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+
+            return response;
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        public async Task<bool> WithdrawFormRequestAsync(string id, string responseId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+
+            if (response.Status.Is(ResponseStatus.Withdrawn) || response.Status.Is(ResponseStatus.Responded))
+            {
+                throw new ArgumentException("Only a requested or in-progress form can be withdrawn.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            response.Status = ResponseStatus.Withdrawn.ToString();
+            response.WithdrawnAt = DateTime.UtcNow;
+            response.WithdrawnByUserId = actingUserId;
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Withdrew request for form \"{response.FormName}\"", actingUserId, actingUserName));
+            await SendFormEmailAsync(existing, response, "dynamic-form-withdrawn", actingUserName);
+
             return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
         }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Only a withdrawn request can be archived. Archiving is what frees up its
+        // template for a fresh request — see the duplicate-request check in RequestFormAsync.
+        public async Task<bool> ArchiveFormResponseAsync(string id, string responseId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+
+            if (!response.Status.Is(ResponseStatus.Withdrawn))
+            {
+                throw new ArgumentException("Only a withdrawn request can be archived.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            response.Status = ResponseStatus.Archived.ToString();
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Archived withdrawn form \"{response.FormName}\"", actingUserId, actingUserName));
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Manual override so staff can directly set a response's status when it's ended up
+        // somewhere the normal guarded transitions (Withdraw/Reopen/Archive) can't fix.
+        // No email — this is an administrative correction, not a workflow event the
+        // student needs to hear about.
+        public async Task<bool> SetFormResponseStatusAsync(string id, string responseId, string newStatus, string actingUserId)
+        {
+            if (!Enum.TryParse<ResponseStatus>(newStatus, out _))
+            {
+                throw new ArgumentException("Not a recognised form status.");
+            }
+
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var previousStatus = response.Status;
+            response.Status = newStatus;
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Staff changed form \"{response.FormName}\" status from {previousStatus} to {newStatus}", actingUserId, actingUserName));
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Reverses a finalized response back to Requesting (not Draft) and re-sends the
+        // request email, so the student actually gets told to go finish it again — a
+        // silent reopen gives them no way to know it needs attention.
+        public async Task<bool> ReopenFormForEditAsync(string id, string responseId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+
+            if (!response.Status.Is(ResponseStatus.Responded))
+            {
+                throw new ArgumentException("Only a finalized (Responded) form can be reopened for edit.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            response.Status = ResponseStatus.Requesting.ToString();
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Reopened form \"{response.FormName}\" for the student to edit", actingUserId, actingUserName));
+            await SendFormEmailAsync(existing, response, "dynamic-form-request", actingUserName);
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Staff editing a finalized response's answers directly — re-renders and re-saves
+        // the PDF snapshot too, since the finalized content just changed (docs/08 §2.4).
+        public async Task<bool> StaffEditFormResponseAsync(string id, string responseId, List<FormAnswerModel> answers, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+
+            ValidateAnswerLengths(response, answers);
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            response.Answers = answers;
+            response.StaffEditedAt = DateTime.UtcNow;
+            response.StaffEditedByUserId = actingUserId;
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Edited student's answers on form \"{response.FormName}\"", actingUserId, actingUserName));
+
+            await SaveResponseAsDocumentAsync(existing, response, actingUserId, actingUserName);
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // On-demand render, returned as bytes rather than a blob storage URL — a blob's
+        // Content-Disposition filename hint isn't reliably honored by browsers for
+        // inline-viewed PDFs (Chrome in particular falls back to the blob's own storage
+        // path, which carries the collision-avoidance GUID prefix). Streaming bytes back
+        // through our own controller sidesteps that entirely: the caller controls the
+        // filename outright. Deliberately does NOT touch Documents/ExportedDocumentId —
+        // that's the automatic save-on-submit path, see SubmitFormAsync/
+        // SaveResponseAsDocumentAsync. A manual re-export shouldn't create a redundant
+        // Documents entry every time staff just want a copy.
+        public async Task<(byte[] Content, string FileName)> ExportFormAsync(string id, string responseId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var response = FindFormResponse(existing, responseId);
+            var studentName = $"{existing.FirstName} {existing.LastName}".Trim();
+
+            var pdfBytes = await _pdfService.RenderToPdfAsync(response.RenderToHtml(studentName, existing.Email, existing.Mobile));
+            var fileName = $"{response.FormName}-{studentName}-{DateTime.UtcNow:dd MMM yyyy h.mmtt}.pdf";
+            return (pdfBytes, fileName);
+        }
+
+        // Student-facing read — no permission key, gated purely by StudentUserId
+        // ownership. Used by the Applications module, which only knows its own
+        // applicationId, not the linked Enrolment's id.
+        public async Task<EnrolmentModel?> GetEnrolmentForStudentByApplicationIdAsync(string applicationId, string studentUserId)
+        {
+            var enrolment = await _enrolmentDataAccess.GetEnrolmentByStudentApplicationIdAsync(applicationId);
+            return enrolment != null && enrolment.StudentUserId == studentUserId ? enrolment : null;
+        }
+
+        // Student-facing — no permission key, gated purely by StudentUserId ownership.
+        // Draft saves are the one silent transition: no email, no audit entry, since
+        // it's just the student's in-progress save while gathering information.
+        public async Task<bool> SaveFormDraftAsync(string id, string responseId, List<FormAnswerModel> answers, string studentUserId)
+        {
+            var existing = await GetOwnedEnrolmentForStudentAsync(id, studentUserId);
+            var response = FindEditableStudentResponse(existing, responseId);
+
+            ValidateAnswerLengths(response, answers);
+
+            response.Answers = answers;
+            response.Status = ResponseStatus.Draft.ToString();
+            response.LastSavedAt = DateTime.UtcNow;
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Student-facing — no permission key, gated purely by StudentUserId ownership.
+        // Validates every required question is answered, flips status to Responded,
+        // and auto-saves the finalized PDF into Documents in the same call — this is
+        // not an optional step, see docs/08 §2.4.
+        public async Task<bool> SubmitFormAsync(string id, string responseId, List<FormAnswerModel> answers, string studentUserId)
+        {
+            var existing = await GetOwnedEnrolmentForStudentAsync(id, studentUserId);
+            var response = FindEditableStudentResponse(existing, responseId);
+
+            ValidateRequiredAnswers(response, answers);
+            ValidateAnswerLengths(response, answers);
+
+            response.Answers = answers;
+            response.Status = ResponseStatus.Responded.ToString();
+            response.SubmittedAt = DateTime.UtcNow;
+
+            var studentName = $"{existing.FirstName} {existing.LastName}".Trim();
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Student submitted form \"{response.FormName}\"", studentUserId, studentName));
+
+            await SaveResponseAsDocumentAsync(existing, response, studentUserId, studentName);
+
+            var saved = await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+
+            if (saved)
+            {
+                await _notificationPublisher.PublishToRoleAsync(
+                    module: "Enrolment",
+                    entityId: id,
+                    summary: $"{studentName} submitted \"{response.FormName}\"",
+                    role: SystemRole.Staff);
+            }
+
+            return saved;
+        }
+
+        private static void ValidateRequiredAnswers(EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
+        {
+            var missing = response.QuestionsSnapshot
+                .Where(q => q.IsRequired)
+                .Where(q =>
+                {
+                    var answer = answers.FirstOrDefault(a => a.QuestionId == q.Id);
+                    if (answer == null) return true;
+
+                    var isSelectType = q.AnswerType == AnswerType.SingleSelect.ToString() || q.AnswerType == AnswerType.MultiSelect.ToString();
+                    return isSelectType ? answer.SelectedOptions.Count == 0 : string.IsNullOrWhiteSpace(answer.TextValue);
+                })
+                .Select(q => q.QuestionText)
+                .ToList();
+
+            if (missing.Count > 0)
+            {
+                throw new ArgumentException($"Please answer the following required question(s): {string.Join("; ", missing)}");
+            }
+        }
+
+        // Applied to every write path (draft save, submit, staff edit) — the client-side
+        // textarea maxlength is a UX nicety, this is the actual enforcement.
+        private static void ValidateAnswerLengths(EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
+        {
+            var overLimit = new List<string>();
+            foreach (var question in response.QuestionsSnapshot.Where(q => q.AnswerType == AnswerType.RichText.ToString()))
+            {
+                var answer = answers.FirstOrDefault(a => a.QuestionId == question.Id);
+                var limit = question.MaxLength ?? DynamicFormLimits.RichTextAnswerMaxLength;
+                if (answer?.TextValue != null && answer.TextValue.Length > limit)
+                {
+                    overLimit.Add($"{question.QuestionText} (max {limit} characters)");
+                }
+            }
+
+            if (overLimit.Count > 0)
+            {
+                throw new ArgumentException($"The following answer(s) exceed their character limit: {string.Join("; ", overLimit)}");
+            }
+        }
+
+        // Renders the finalized response to PDF and appends it as a new Documents entry
+        // (append-only, matching the existing convention) — ExportedDocumentId always
+        // points at the latest one. Never overwrites/removes earlier snapshots, so
+        // there's always a record of what the student saw and signed at each finalize.
+        private async Task SaveResponseAsDocumentAsync(EnrolmentModel enrolment, EnrolmentFormResponseModel response, string actingUserId, string actingUserName)
+        {
+            var studentName = $"{enrolment.FirstName} {enrolment.LastName}".Trim();
+            var pdfBytes = await _pdfService.RenderToPdfAsync(response.RenderToHtml(studentName, enrolment.Email, enrolment.Mobile));
+
+            var fileName = $"{response.FormName}-{studentName}-{DateTime.UtcNow:dd MMM yyyy h.mmtt}.pdf";
+            using var stream = new MemoryStream(pdfBytes);
+            var url = await _blobStorageService.UploadAsync(stream, fileName, "application/pdf");
+
+            var document = new EnrolmentDocumentModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                FileName = fileName,
+                Category = "DynamicForm",
+                Url = url,
+                ContentType = "application/pdf",
+                SizeBytes = pdfBytes.LongLength,
+                UploadedByUserId = actingUserId,
+                UploadedByName = actingUserName,
+                IsFromStudent = false,
+                UploadedAt = DateTime.UtcNow
+            };
+
+            enrolment.Documents.Add(document);
+            response.ExportedDocumentId = document.Id;
+        }
+
+        private async Task SendFormEmailAsync(EnrolmentModel enrolment, EnrolmentFormResponseModel response, string templateKey, string actingUserName)
+        {
+            var template = await _emailTemplateDataAccess.GetByKeyAsync(templateKey);
+            if (template == null)
+            {
+                _logger.LogWarning("Dynamic Forms: email template \"{TemplateKey}\" not found — skipping notification.", templateKey);
+                return;
+            }
+
+            var portalLink = $"{_frontendBaseUrl}/student-portal/application/{enrolment.StudentApplicationId}";
+            var tokens = new Dictionary<string, string>
+            {
+                ["{{studentFirstName}}"] = enrolment.FirstName,
+                ["{{formName}}"] = response.FormName,
+                ["{{staffName}}"] = actingUserName,
+                ["{{portalLink}}"] = portalLink
+            };
+
+            var subject = InterpolateTokens(template.Subject, tokens);
+            var body = InterpolateTokens(template.Body, tokens);
+            var htmlBody = body.Replace("\n", "<br/>");
+
+            await _emailService.SendEmailAsync(enrolment.Email, subject, htmlBody, body);
+
+            enrolment.Communications.Add(new EnrolmentCommunicationModel
+            {
+                TemplateKey = templateKey,
+                ToEmail = enrolment.Email,
+                RecipientType = "Student",
+                Subject = subject,
+                Body = body,
+                SentByUserId = null,
+                SentByName = $"{actingUserName} (via Dynamic Forms)",
+                SentAt = DateTime.UtcNow
+            });
+        }
+
+        private static string InterpolateTokens(string template, Dictionary<string, string> tokens)
+        {
+            var result = template;
+            foreach (var (token, value) in tokens)
+            {
+                result = result.Replace(token, value);
+            }
+            return result;
+        }
+
+        private static EnrolmentFormResponseModel FindFormResponse(EnrolmentModel enrolment, string responseId)
+        {
+            return enrolment.FormResponses.FirstOrDefault(r => r.Id == responseId)
+                ?? throw new KeyNotFoundException("Form response not found");
+        }
+
+        private static EnrolmentFormResponseModel FindEditableStudentResponse(EnrolmentModel enrolment, string responseId)
+        {
+            var response = FindFormResponse(enrolment, responseId);
+            if (response.Status.Is(ResponseStatus.Withdrawn))
+            {
+                throw new ArgumentException("This form request was withdrawn and can no longer be edited.");
+            }
+            if (response.Status.Is(ResponseStatus.Responded))
+            {
+                throw new ArgumentException("This form has already been submitted — ask staff to reopen it before making changes.");
+            }
+            return response;
+        }
+
+        private async Task<EnrolmentModel> GetOwnedEnrolmentForStudentAsync(string id, string studentUserId)
+        {
+            var existing = await _enrolmentDataAccess.GetEnrolmentAsync(id)
+                ?? throw new KeyNotFoundException("Enrolment not found");
+
+            if (existing.StudentUserId != studentUserId)
+            {
+                throw new UnauthorizedAccessException("This enrolment does not belong to you.");
+            }
+
+            return existing;
+        }
+
+        // ===================== end Dynamic Forms =====================
 
         private static VisaProcessStepModel FindStep(EnrolmentModel enrolment, string stepKey)
         {

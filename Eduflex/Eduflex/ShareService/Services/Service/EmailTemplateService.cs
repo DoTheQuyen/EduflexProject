@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
+using ShareService.Mapping;
 using ShareService.Models.Enrolment;
 using ShareService.Services.Interface;
 
@@ -27,27 +28,33 @@ namespace ShareService.Services
             _logger = logger;
         }
 
-        private async Task RequirePermissionAsync(string userId, PermissionKey key, string action)
+        private async Task RequireManagePermissionAsync(string userId, string action)
         {
             var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
-            if (!permissions.Contains(key.GetDescription()))
+            if (!permissions.Contains(PermissionKey.EmailTemplatesEdit.GetDescription()))
             {
                 throw new UnauthorizedAccessException($"You do not have permission to {action}");
             }
         }
 
-        // Auth: requires EnrolmentsView permission (staff-only — email templates reuse
-        // Enrolments' permission keys rather than having their own module).
-        public async Task<List<EmailTemplateModel>> GetAllAsync(string userId)
+        // No permission check — any authenticated staff member composing an enrolment/finance
+        // email needs this list to populate their template picker, same reasoning as
+        // IDynamicFormTemplateService.GetAllAsync. The gated GetById/Create/Update/SetStatus
+        // below are the admin management screen.
+        public async Task<List<EmailTemplateModel>> GetAllAsync()
         {
-            await RequirePermissionAsync(userId, PermissionKey.EnrolmentsView, "view email templates");
             return await _emailTemplateDataAccess.GetAllAsync();
         }
 
-        // Auth: requires EnrolmentsEdit permission (staff-only).
+        public async Task<EmailTemplateModel?> GetByIdAsync(string id, string userId)
+        {
+            await RequireManagePermissionAsync(userId, "view this template's details");
+            return await _emailTemplateDataAccess.GetByIdAsync(id);
+        }
+
         public async Task<EmailTemplateModel> CreateAsync(EmailTemplateModel template, string userId)
         {
-            await RequirePermissionAsync(userId, PermissionKey.EnrolmentsEdit, "create email templates");
+            await RequireManagePermissionAsync(userId, "create email templates");
 
             var validation = await _validator.ValidateAsync(template);
             if (!validation.IsValid)
@@ -64,14 +71,14 @@ namespace ShareService.Services
 
             template.Id = string.Empty;
             template.IsSystemDefault = false;
+            template.IsActive = true;
             await _emailTemplateDataAccess.CreateAsync(template);
             return template;
         }
 
-        // Auth: requires EnrolmentsEdit permission (staff-only).
         public async Task<bool> UpdateAsync(string id, EmailTemplateModel template, string userId)
         {
-            await RequirePermissionAsync(userId, PermissionKey.EnrolmentsEdit, "update email templates");
+            await RequireManagePermissionAsync(userId, "update email templates");
 
             var existing = await _emailTemplateDataAccess.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("Template not found");
@@ -92,20 +99,17 @@ namespace ShareService.Services
             return await _emailTemplateDataAccess.ReplaceAsync(id, existing);
         }
 
-        // Auth: requires EnrolmentsEdit permission (staff-only).
-        public async Task<bool> DeleteAsync(string id, string userId)
+        // Deactivate/reactivate only — templates are never hard-deleted, matching Dynamic
+        // Forms' template management (see DynamicFormTemplateService.SetStatusAsync).
+        public async Task<bool> SetStatusAsync(string id, bool isActive, string userId)
         {
-            await RequirePermissionAsync(userId, PermissionKey.EnrolmentsEdit, "delete email templates");
+            await RequireManagePermissionAsync(userId, isActive ? "activate email templates" : "deactivate email templates");
 
             var existing = await _emailTemplateDataAccess.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("Template not found");
 
-            if (existing.IsSystemDefault)
-            {
-                throw new ArgumentException("Built-in templates cannot be deleted.");
-            }
-
-            return await _emailTemplateDataAccess.DeleteAsync(id);
+            existing.IsActive = isActive;
+            return await _emailTemplateDataAccess.ReplaceAsync(id, existing);
         }
     }
 }

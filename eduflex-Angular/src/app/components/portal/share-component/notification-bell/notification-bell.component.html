@@ -1,0 +1,29 @@
+<div class="notif-bell">
+  <button type="button" class="notif-bell__button" [class.notif-bell__button--open]="isOpen" (click)="toggleOpen()"
+    aria-label="Notifications">
+    <i class="fas fa-bell"></i>
+    <span *ngIf="(unreadCount$ | async) as count" class="notif-badge" [class.notif-badge--hidden]="count === 0">
+      {{ count > 9 ? '9+' : count }}
+    </span>
+  </button>
+
+  <div class="notif-panel" *ngIf="isOpen">
+    <div class="notif-panel__header">Notifications</div>
+    <ul class="notif-list">
+      <li *ngFor="let n of (notifications$ | async)" class="notif-item">
+        <div class="notif-item__content">
+          <span class="notif-item__module">{{ n.module }}</span>
+          <p class="notif-item__summary">{{ n.summary }}</p>
+        </div>
+        <button type="button" class="notif-item__remove" (click)="remove(n.id, $event)"
+          aria-label="Remove notification">
+          <i class="fas fa-times"></i>
+        </button>
+      </li>
+      <li *ngIf="(notifications$ | async)?.length === 0" class="notif-empty">
+        <i class="fas fa-bell-slash"></i>
+        <span>No notifications yet</span>
+      </li>
+    </ul>
+  </div>
+</div>

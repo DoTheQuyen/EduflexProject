@@ -14,7 +14,8 @@ namespace Eduflex.Mapping.Enrolment
                 Name = model.Name,
                 Subject = model.Subject,
                 Body = model.Body,
-                IsSystemDefault = model.IsSystemDefault
+                IsSystemDefault = model.IsSystemDefault,
+                IsActive = model.IsActive
             };
         }
 

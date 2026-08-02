@@ -4,6 +4,7 @@ using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
+using ShareService.Enums.Roles;
 using ShareService.Models.Enrolment;
 using ShareService.Models.Financial;
 using ShareService.Models.Setting;
@@ -22,6 +23,7 @@ namespace ShareService.Services
         private readonly IAzureBlobDocStorageService _blobStorageService;
         private readonly IAzureEmailService _emailService;
         private readonly IInvoicePdfService _invoicePdfService;
+        private readonly INotificationPublisher _notificationPublisher;
         private readonly ILogger<FinancialRecordService> _logger;
         private readonly int _documentLinkExpiryDays;
 
@@ -34,6 +36,7 @@ namespace ShareService.Services
             IAzureBlobDocStorageService blobStorageService,
             IAzureEmailService emailService,
             IInvoicePdfService invoicePdfService,
+            INotificationPublisher notificationPublisher,
             IOptions<DocumentLinkSettings> documentLinkSettings,
             ILogger<FinancialRecordService> logger)
         {
@@ -45,6 +48,7 @@ namespace ShareService.Services
             _blobStorageService = blobStorageService;
             _emailService = emailService;
             _invoicePdfService = invoicePdfService;
+            _notificationPublisher = notificationPublisher;
             _documentLinkExpiryDays = documentLinkSettings.Value.ExpiryDays;
             _logger = logger;
         }
@@ -65,7 +69,6 @@ namespace ShareService.Services
             return user != null ? $"{user.FirstName} {user.LastName}".Trim() : userId;
         }
 
-        // Auth: none — internal system-triggered hook, see interface doc comment.
         public async Task<FinancialRecordModel> CreateForEnrolmentIfNotExistsAsync(EnrolmentModel enrolment, string actingUserId)
         {
             var existing = await _financialRecordDataAccess.GetByEnrolmentIdAsync(enrolment.Id);
@@ -85,9 +88,6 @@ namespace ShareService.Services
                 : null;
             var businessPartnerCommissionRate = businessPartner?.CommissionBaseRate ?? 0;
 
-            // Direct-contract enrolments (no linked Business Partner) skip the second
-            // multiplier entirely rather than treating a missing rate as 0% — otherwise
-            // every direct-contract enrolment would show an expected commission of $0.
             var expectedCommission = businessPartner != null
                 ? (courseCommissionRate / 100m) * (businessPartnerCommissionRate / 100m) * totalTuition
                 : (courseCommissionRate / 100m) * totalTuition;
@@ -120,32 +120,35 @@ namespace ShareService.Services
             };
 
             await _financialRecordDataAccess.CreateAsync(record);
+
+            await _notificationPublisher.PublishToRoleAsync(
+                module: "Finance",
+                entityId: record.Id,
+                summary: $"Financial record created for enrolment {enrolment.Id}",
+                role: SystemRole.Manager);
+
             _logger.LogInformation("Created financial record {FinancialRecordId} for enrolment {EnrolmentId}", record.Id, enrolment.Id);
             return record;
         }
 
-        // Auth: requires FinanceView permission.
         public async Task<FinancialRecordModel?> GetByIdAsync(string id, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.FinanceView, "view financial records");
             return await _financialRecordDataAccess.GetByIdAsync(id);
         }
 
-        // Auth: requires FinanceView permission.
         public async Task<FinancialRecordModel?> GetByEnrolmentIdAsync(string enrolmentId, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.FinanceView, "view financial records");
             return await _financialRecordDataAccess.GetByEnrolmentIdAsync(enrolmentId);
         }
 
-        // Auth: requires FinanceView permission.
         public async Task<PagedResult<FinancialRecordModel>> SearchAsync(FinancialRecordFilter filter, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.FinanceView, "view financial records");
             return await _financialRecordDataAccess.GetFinancialRecordsAsync(filter);
         }
 
-        // Auth: requires FinanceEdit permission.
         public async Task<CommissionAdjustmentModel> AddCommissionAdjustmentAsync(string id, string reason, decimal amount, string actingUserId)
         {
             await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit financial records");
@@ -167,7 +170,6 @@ namespace ShareService.Services
             return adjustment;
         }
 
-        // Auth: requires FinanceAdd permission.
         public async Task<InvoiceModel> CreateInvoiceDraftAsync(string id, string invoiceNo, string invoiceToType, string invoiceToId, string invoiceToName, string studentName,
             DateTime periodStart, DateTime periodEnd, decimal periodTotal, string htmlContent, string actingUserId)
         {
@@ -195,11 +197,16 @@ namespace ShareService.Services
             existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Created invoice draft \"{invoiceNo}\"", actingUserId, actingUserName));
 
             await _financialRecordDataAccess.ReplaceAsync(id, existing);
+
+            await _notificationPublisher.PublishToRoleAsync(
+                module: "Finance",
+                entityId: id,
+                summary: $"Invoice draft \"{invoiceNo}\" created",
+                role: SystemRole.Manager);
+
             return invoice;
         }
 
-        // Auth: requires FinanceEdit permission. Only meaningful while the invoice is
-        // still Draft — once Generated, the PDF is the source of truth.
         public async Task<bool> UpdateInvoiceDraftAsync(string id, string invoiceId, string htmlContent, decimal periodTotal, string actingUserId)
         {
             await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit invoices");
@@ -220,9 +227,6 @@ namespace ShareService.Services
             return await _financialRecordDataAccess.ReplaceAsync(id, existing);
         }
 
-        // Auth: requires FinanceEdit permission. Renders the invoice's current HTML
-        // content to PDF, uploads it to Azure Blob Storage, and marks the invoice (and
-        // its matching invoice-plan entry, if any) as Generated.
         public async Task<InvoiceModel> GenerateInvoicePdfAsync(string id, string invoiceId, string actingUserId)
         {
             await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "generate invoice PDFs");
@@ -251,11 +255,16 @@ namespace ShareService.Services
             existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Generated PDF for invoice \"{invoice.InvoiceNo}\"", actingUserId, actingUserName));
 
             await _financialRecordDataAccess.ReplaceAsync(id, existing);
+
+            await _notificationPublisher.PublishToRoleAsync(
+                module: "Finance",
+                entityId: id,
+                summary: $"Invoice \"{invoice.InvoiceNo}\" status changed to Generated",
+                role: SystemRole.Manager);
+
             return invoice;
         }
 
-        // Auth: requires FinanceView permission. Resolves a fresh, time-limited SAS link
-        // on demand rather than the page embedding a long-lived signed URL.
         public async Task<Uri> GetInvoiceDownloadLinkAsync(string id, string invoiceId, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.FinanceView, "view financial records");
@@ -270,10 +279,6 @@ namespace ShareService.Services
             return _blobStorageService.GetExpiringDownloadUri(invoice.PdfUrl, _documentLinkExpiryDays);
         }
 
-        // Auth: requires FinanceEdit permission. Same shape as
-        // EnrolmentService.SendCommunicationAsync, but recipients are limited to
-        // EducationPartner/BusinessPartner (no Student option) and an optional
-        // relatedInvoiceId's expiring download link is appended to the body.
         public async Task<FinancialCommunicationModel> SendCommunicationAsync(string id, string toEmail, string recipientType, string subject, string body,
             string? templateKey, string? relatedInvoiceId, string actingUserId)
         {

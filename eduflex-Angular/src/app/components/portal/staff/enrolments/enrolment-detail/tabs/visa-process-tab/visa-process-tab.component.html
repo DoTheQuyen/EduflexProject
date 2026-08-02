@@ -13,6 +13,10 @@
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </button>
 
+      <button *ngIf="boundTemplateFor('StudentInfo')" type="button" class="form-marker" [title]="boundTemplateFor('StudentInfo')?.name" (click)="openFormPopup('StudentInfo')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </button>
+
       <div class="step-body" *ngIf="openStepKey === 'StudentInfo'" [formGroup]="studentForm">
         <div class="row g-4">
           <div class="col-lg-6">
@@ -169,6 +173,10 @@
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </button>
 
+      <button *ngIf="boundTemplateFor('EnrolmentForm')" type="button" class="form-marker" [title]="boundTemplateFor('EnrolmentForm')?.name" (click)="openFormPopup('EnrolmentForm')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </button>
+
       <div class="step-body" *ngIf="openStepKey === 'EnrolmentForm'" [formGroup]="enrolmentForm">
         <div class="row g-3">
           <div class="col-md-6">
@@ -297,6 +305,10 @@
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </button>
 
+      <button *ngIf="boundTemplateFor('ApplyOffer')" type="button" class="form-marker" [title]="boundTemplateFor('ApplyOffer')?.name" (click)="openFormPopup('ApplyOffer')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </button>
+
       <div class="step-body" *ngIf="openStepKey === 'ApplyOffer' && getStep('ApplyOffer')?.status !== 'Locked'">
         <div class="row g-3">
           <div class="col-md-6">
@@ -367,6 +379,10 @@
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </button>
 
+      <button *ngIf="boundTemplateFor('CoeCompletion')" type="button" class="form-marker" [title]="boundTemplateFor('CoeCompletion')?.name" (click)="openFormPopup('CoeCompletion')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </button>
+
       <div class="step-body" *ngIf="openStepKey === 'CoeCompletion' && getStep('CoeCompletion')?.status !== 'Locked'">
         <div class="row g-3">
           <div class="col-md-6">
@@ -431,6 +447,10 @@
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </button>
 
+      <button *ngIf="boundTemplateFor('VisaApplication')" type="button" class="form-marker" [title]="boundTemplateFor('VisaApplication')?.name" (click)="openFormPopup('VisaApplication')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </button>
+
       <div class="step-body" *ngIf="openStepKey === 'VisaApplication' && getStep('VisaApplication')?.status !== 'Locked'">
         <div class="row g-3">
           <div class="col-md-6">
@@ -493,6 +513,10 @@
         </span>
         <span class="pill" [class.pill-complete]="getStep('VisaOutcome')?.status === 'Complete'" [class.pill-draft]="getStep('VisaOutcome')?.status === 'Draft'">{{ getStep('VisaOutcome')?.status }}</span>
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <button *ngIf="boundTemplateFor('VisaOutcome')" type="button" class="form-marker" [title]="boundTemplateFor('VisaOutcome')?.name" (click)="openFormPopup('VisaOutcome')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
       </button>
 
       <div class="step-body" *ngIf="openStepKey === 'VisaOutcome' && getStep('VisaOutcome')?.status !== 'Locked'">
@@ -565,4 +589,15 @@
     </div>
 
   </div>
+
+  <app-modal *ngIf="formPopupStepKey && formPopupTemplate as template" [title]="template.name" size="lg"
+    [isSaving]="isRequestingBoundForm" [showSave]="!isAlreadyRequested(template.id)"
+    saveLabel="Request Student to Answer" cancelLabel="Close"
+    (closeModal)="closeFormPopup()" (cancel)="closeFormPopup()" (save)="requestBoundForm()">
+    <p class="text-muted small mb-3" *ngIf="isAlreadyRequested(template.id)">
+      This form has already been requested on this enrolment — see the Forms tab for its status.
+    </p>
+    <app-form-print-preview [formName]="template.name" [description]="template.description" [questions]="template.questions" mode="blank" [compact]="true">
+    </app-form-print-preview>
+  </app-modal>
 </div>

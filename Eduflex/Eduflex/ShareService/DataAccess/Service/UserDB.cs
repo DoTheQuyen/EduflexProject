@@ -113,6 +113,14 @@ namespace ShareService.DataAccess
                 .ToListAsync();
         }
 
+        public async Task<List<string>> GetUserIdsByRoleIdAsync(string roleId)
+        {
+            return await Collection
+                .Find(u => u.RoleId == roleId && u.IsActive)
+                .Project(u => u.Id)
+                .ToListAsync();
+        }
+
         public async Task<bool> SetActiveStatusAsync(string userId, bool isActive)
         {
             var update = Builders<UserModel>.Update.Set(u => u.IsActive, isActive);

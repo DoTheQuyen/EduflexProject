@@ -15,8 +15,11 @@ services:
       - DOTNET_HOST_PATH=/usr/share/dotnet/dotnet
       # Mongo connection string points to "mongo" service
       - ConnectionStrings__MongoDb=mongodb://mongo:27017/EduflexDB
+      # Redis connection string points to "redis" service
+      - ConnectionStrings__RedisConnection=redis:6379
     depends_on:
       - mongo
+      - redis
 
   eduflex-angular:
     build:
@@ -36,6 +39,13 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
 
 volumes:
   mongo_data:

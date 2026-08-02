@@ -33,6 +33,15 @@ namespace ShareService.DataAccess
                 .FirstOrDefaultAsync();
         }
 
+        // Used by the student-facing Dynamic Forms endpoints — a student's Application
+        // module only knows its own applicationId, not the linked Enrolment's id.
+        public async Task<EnrolmentModel?> GetEnrolmentByStudentApplicationIdAsync(string studentApplicationId)
+        {
+            return await Collection
+                .Find(e => e.StudentApplicationId == studentApplicationId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<EnrolmentModel>> GetByIdsAsync(IEnumerable<string> ids)
         {
             var idList = ids.ToList();

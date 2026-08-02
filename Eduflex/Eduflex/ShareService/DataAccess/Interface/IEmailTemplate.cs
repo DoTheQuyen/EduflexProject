@@ -9,6 +9,5 @@ namespace ShareService.DataAccess.Interface
         Task<EmailTemplateModel?> GetByKeyAsync(string key);
         Task<bool> CreateAsync(EmailTemplateModel template);
         Task<bool> ReplaceAsync(string id, EmailTemplateModel template);
-        Task<bool> DeleteAsync(string id);
     }
 }

@@ -1,0 +1,141 @@
+<div class="dynamic-form-edit-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Dynamic Forms
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">{{ isEditMode ? 'Edit Form' : 'New Form' }}</h3>
+          <p class="text-muted mb-0">Full page, not a popup — question builder on the left, live preview on the right.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="goBack()" [disabled]="isSaving">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving">
+            {{ isSaving ? 'Saving...' : 'Save Form' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="builder-grid">
+        <div class="builder-column">
+          <div class="card border shadow-sm mb-3">
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Form name</label>
+                  <input type="text" class="form-control" [(ngModel)]="name" placeholder="e.g. Student Declaration Form" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Bind to Enrolment step</label>
+                  <select class="form-select" [(ngModel)]="boundStepKey">
+                    <option value="">— Not bound (ad hoc) —</option>
+                    <option *ngFor="let key of stepOrder" [value]="key">{{ stepLabels[key] }}</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Description <span class="text-muted small">(shown to staff, not printed)</span></label>
+                  <textarea class="form-control" rows="2" [(ngModel)]="description"></textarea>
+                </div>
+                <div class="col-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="statusToggle"
+                      [checked]="status === 'Active'" (change)="status = status === 'Active' ? 'Inactive' : 'Active'">
+                    <label class="form-check-label" for="statusToggle">
+                      {{ status === 'Active' ? 'Active' : 'Inactive' }}
+                      <span class="text-muted small d-block">Inactive forms can't be requested, but past responses stay visible.</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="question-card" *ngFor="let q of questions; let i = index; trackBy: trackByIndex">
+            <div class="question-card-head">
+              <span class="question-num">QUESTION {{ i + 1 }}<span *ngIf="q.isRequired"> · REQUIRED</span></span>
+              <div class="question-tools">
+                <button type="button" class="btn btn-sm btn-link" title="Move up" [disabled]="i === 0" (click)="moveQuestion(i, -1)"><i class="fas fa-arrow-up"></i></button>
+                <button type="button" class="btn btn-sm btn-link" title="Move down" [disabled]="i === questions.length - 1" (click)="moveQuestion(i, 1)"><i class="fas fa-arrow-down"></i></button>
+                <button type="button" class="btn btn-sm btn-link text-danger" title="Delete" (click)="removeQuestion(i)"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <input type="text" class="form-control" [(ngModel)]="q.questionText" placeholder="Question text" />
+            </div>
+
+            <div class="mb-2">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="q.helpText" placeholder="Hint text shown under the question (optional)" />
+            </div>
+
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-6">
+                <select class="form-select form-select-sm" [(ngModel)]="q.answerType">
+                  <option *ngFor="let t of answerTypes" [value]="t">{{ answerTypeLabels[t] }}</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" [id]="'req-' + i"
+                    [(ngModel)]="q.isRequired">
+                  <label class="form-check-label small" [for]="'req-' + i">Required</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-2 align-items-center mt-1" *ngIf="q.answerType === 'RichText'">
+              <div class="col-sm-6">
+                <label class="form-label small text-muted mb-1">Max length (characters)</label>
+                <input type="number" min="1" class="form-control form-control-sm" [(ngModel)]="q.maxLength"
+                  [placeholder]="'Default: ' + defaultRichTextMaxLength" />
+              </div>
+            </div>
+
+            <div class="option-list" *ngIf="needsOptions(q.answerType)">
+              <div class="option-row" *ngFor="let opt of q.options; let oi = index; trackBy: trackByIndex">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="q.options[oi]" placeholder="Option text" />
+                <button type="button" class="btn btn-sm btn-link text-danger" (click)="removeOption(q, oi)">&times;</button>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="addOption(q)">+ Add option</button>
+
+              <div class="layout-choice">
+                <span class="layout-choice-label">Options layout</span>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn" [class.btn-primary]="!q.optionsHorizontal" [class.btn-outline-secondary]="q.optionsHorizontal"
+                    (click)="q.optionsHorizontal = false">Vertical</button>
+                  <button type="button" class="btn" [class.btn-primary]="q.optionsHorizontal" [class.btn-outline-secondary]="!q.optionsHorizontal"
+                    (click)="q.optionsHorizontal = true">Horizontal</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline-primary w-100 add-question-btn" (click)="addQuestion()">
+            <i class="fas fa-plus me-1"></i>Add question
+          </button>
+        </div>
+
+        <div class="preview-column">
+          <div class="preview-label">
+            <span>Live print preview</span>
+            <span class="text-muted small">updates as you edit</span>
+          </div>
+          <app-form-print-preview
+            [formName]="name || 'Untitled form'"
+            [description]="description"
+            [questions]="questions"
+            mode="blank">
+          </app-form-print-preview>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

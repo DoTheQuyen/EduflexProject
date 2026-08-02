@@ -7,6 +7,7 @@ using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
+using ShareService.Mapping;
 using ShareService.Models.Auth;
 using ShareService.Models.Setting;
 using ShareService.Services.Interface;

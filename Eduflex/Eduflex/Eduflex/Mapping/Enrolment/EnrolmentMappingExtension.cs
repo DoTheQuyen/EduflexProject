@@ -1,5 +1,6 @@
 using Eduflex.DTOs.Enrolment;
 using Eduflex.Mapping.Address;
+using Eduflex.Mapping.DynamicForm;
 using ShareService.Models.Enrolment;
 
 namespace Eduflex.Mapping.Enrolment
@@ -158,6 +159,7 @@ namespace Eduflex.Mapping.Enrolment
                     SentByName = c.SentByName,
                     SentAt = c.SentAt
                 }).OrderByDescending(c => c.SentAt).ToList(),
+                FormResponses = model.FormResponses.Select(f => f.ToDto()).OrderByDescending(f => f.RequestedAt).ToList(),
                 AuditTrail = model.AuditTrail.Select(a => new EnrolmentAuditEntryDto
                 {
                     Id = a.Id,

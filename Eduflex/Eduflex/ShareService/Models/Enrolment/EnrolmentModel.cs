@@ -122,6 +122,12 @@ namespace ShareService.Models.Enrolment
         [BsonElement("communications")]
         public List<EnrolmentCommunicationModel> Communications { get; set; } = new();
 
+        // Dynamic Form requests/responses on this enrolment — one entry per requested
+        // form. See EnrolmentFormResponseModel for why this is embedded rather than a
+        // separate top-level collection.
+        [BsonElement("formResponses")]
+        public List<EnrolmentFormResponseModel> FormResponses { get; set; } = new();
+
         [BsonElement("auditTrail")]
         public List<EnrolmentAuditEntryModel> AuditTrail { get; set; } = new();
 
@@ -129,40 +135,5 @@ namespace ShareService.Models.Enrolment
         // mutated only via EnrolmentService.SaveVisaStepDraftAsync/CompleteVisaStepAsync. -----
         [BsonElement("visaProcessSteps")]
         public List<VisaProcessStepModel> VisaProcessSteps { get; set; } = new();
-
-        /// <summary>
-        /// Overwrites only the staff-editable Student Information + Enrolment Form fields.
-        /// Ownership/linkage fields and the append-only sub-collections are never touched here —
-        /// they're mutated through their own dedicated service methods so every change is audited.
-        /// </summary>
-        public void ApplyEditableFields(EnrolmentModel updateModel)
-        {
-            FirstName = updateModel.FirstName;
-            MiddleName = updateModel.MiddleName;
-            LastName = updateModel.LastName;
-            DateOfBirth = updateModel.DateOfBirth;
-            Gender = updateModel.Gender;
-            Email = updateModel.Email;
-            Mobile = updateModel.Mobile;
-            Nationality = updateModel.Nationality;
-            PassportNumber = updateModel.PassportNumber;
-            HometownAddress = updateModel.HometownAddress;
-            CurrentAddress = updateModel.CurrentAddress;
-            EmergencyContact = updateModel.EmergencyContact;
-
-            EducationPartnerId = updateModel.EducationPartnerId;
-            CourseId = updateModel.CourseId;
-            Intake = updateModel.Intake;
-            StudyMode = updateModel.StudyMode;
-            Campus = updateModel.Campus;
-            CommencementDate = updateModel.CommencementDate;
-            ActualCommencementDate = updateModel.ActualCommencementDate;
-            ExpectedCompletionDate = updateModel.ExpectedCompletionDate;
-            FundingSource = updateModel.FundingSource;
-            VisaStatus = updateModel.VisaStatus;
-            Status = updateModel.Status;
-            Notes = updateModel.Notes;
-            TuitionFee = updateModel.TuitionFee;
-        }
     }
 }

@@ -1,23 +1,17 @@
 <div class="flex min-h-screen bg-surface">
   <!-- Sidebar -->
-  <app-sidebar
-    [userInfo]="userInfo"
-    [isCollapsed]="isSidebarCollapsed"
-    (toggle)="toggleSidebar()">
+  <app-sidebar [userInfo]="userInfo" [isCollapsed]="isSidebarCollapsed" (toggle)="toggleSidebar()">
   </app-sidebar>
 
   <!-- Main Content -->
-    <div
-    class="flex-1 min-w-0 transition-[padding-left] duration-300 ease-in-out"
+  <div class="flex-1 min-w-0 transition-[padding-left] duration-300 ease-in-out"
     [style.padding-left.px]="isSidebarCollapsed ? 64 : 256">
 
     <!-- Header -->
     <header class="flex items-center justify-between border-b border-border bg-white p-3 px-6 py-1 shadow-sm">
       <!-- Breadcrumb -->
       <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm">
-        <a
-          [routerLink]="portalRootLink"
-          class="font-medium !text-muted !no-underline hover:!text-ink">
+        <a [routerLink]="portalRootLink" class="font-medium !text-muted !no-underline hover:!text-ink">
           {{ portalRootLabel }}
         </a>
         <i class="fas fa-chevron-right text-[10px] !text-muted"></i>
@@ -26,9 +20,9 @@
 
       <!-- User -->
       <div class="flex items-center gap-4">
+        <app-notification-bell></app-notification-bell>
         <span class="text-sm font-medium !text-muted">Welcome, {{ userInfo?.firstName }} {{ userInfo?.lastName }}</span>
-        <button
-          type="button"
+        <button type="button"
           class="d-btn d-btn-outline d-btn-sm border-error text-error hover:bg-error hover:text-white px-2 logout"
           (click)="onLogoutClick()">
           <i class="fas fa-sign-out-alt"></i> Logout
@@ -36,15 +30,16 @@
       </div>
     </header>
 
-<div class="logout-confirm-overlay" *ngIf="showLogoutConfirm">
-  <div class="logout-confirm-box">
-    <p class="logout-confirm-message">Are you sure you want to log out?</p>
-    <div class="logout-confirm-actions">
-      <button type="button" class="d-btn d-btn-outline d-btn-sm px-2" (click)="showLogoutConfirm = false">Cancel</button>
-      <button type="button" class="d-btn d-btn-sm logout-confirm-ok px-4" (click)="logout()">OK</button>
+    <div class="logout-confirm-overlay" *ngIf="showLogoutConfirm">
+      <div class="logout-confirm-box">
+        <p class="logout-confirm-message">Are you sure you want to log out?</p>
+        <div class="logout-confirm-actions">
+          <button type="button" class="d-btn d-btn-outline d-btn-sm px-2"
+            (click)="showLogoutConfirm = false">Cancel</button>
+          <button type="button" class="d-btn d-btn-sm logout-confirm-ok px-4" (click)="logout()">OK</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <!-- Dynamic Content Area -->
     <main class="min-h-[calc(100vh-4rem)] bg-white p-2">

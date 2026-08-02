@@ -1,0 +1,46 @@
+<div class="answer-editor">
+  <div class="aq" *ngFor="let q of sortedQuestions; let i = index">
+    <div class="aq-title">
+      {{ i + 1 }}. {{ q.questionText }}
+      <span class="req-star" *ngIf="q.isRequired">*</span>
+    </div>
+    <p *ngIf="q.helpText" class="aq-help">{{ q.helpText }}</p>
+
+    <!-- Yes/No -->
+    <div class="yn-check" *ngIf="q.answerType === 'YesNo'">
+      <label class="form-check">
+        <input type="checkbox" class="form-check-input" [disabled]="disabled" [checked]="isYes(q.id)" (change)="setYesNo(q.id, 'Yes')">
+        <span class="form-check-label">Yes</span>
+      </label>
+      <label class="form-check">
+        <input type="checkbox" class="form-check-input" [disabled]="disabled" [checked]="isNo(q.id)" (change)="setYesNo(q.id, 'No')">
+        <span class="form-check-label">No</span>
+      </label>
+    </div>
+
+    <!-- Single select -->
+    <div class="option-group" [class.horizontal]="q.optionsHorizontal" *ngIf="q.answerType === 'SingleSelect'">
+      <button type="button" class="pill-option" *ngFor="let opt of q.options" [class.selected]="isSelected(q.id, opt)"
+        [disabled]="disabled" (click)="setSingleOption(q.id, opt)">
+        <span class="pill-mark round"></span>{{ opt }}
+      </button>
+    </div>
+
+    <!-- Multi select -->
+    <div class="option-group" [class.horizontal]="q.optionsHorizontal" *ngIf="q.answerType === 'MultiSelect'">
+      <button type="button" class="pill-option" *ngFor="let opt of q.options" [class.selected]="isSelected(q.id, opt)"
+        [disabled]="disabled" (click)="toggleMultiOption(q.id, opt)">
+        <span class="pill-mark"></span>{{ opt }}
+      </button>
+    </div>
+
+    <!-- Rich text -->
+    <ng-container *ngIf="q.answerType === 'RichText'">
+      <textarea class="form-control" rows="3" [disabled]="disabled" [maxLength]="maxLengthFor(q)"
+        [ngModel]="textValue(q.id)" (ngModelChange)="setText(q.id, $event)"></textarea>
+      <div class="char-count" [class.char-count-limit]="charCount(q.id) >= maxLengthFor(q)">
+        {{ charCount(q.id) }} / {{ maxLengthFor(q) }}
+      </div>
+    </ng-container>
+  </div>
+</div>

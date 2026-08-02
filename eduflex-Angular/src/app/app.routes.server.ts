@@ -34,6 +34,14 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'staff-portal/dynamic-forms/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/email-templates/:id',
+    renderMode: RenderMode.Client
+  },
+  {
     path: '**',
     renderMode: RenderMode.Prerender
   }

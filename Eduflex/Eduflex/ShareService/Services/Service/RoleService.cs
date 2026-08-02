@@ -72,6 +72,22 @@ namespace ShareService.Services
             return permissions.Select(p => p.Key).ToList();
         }
 
+        // Auth: none — internal plumbing (e.g. NotificationPublisher.PublishToRoleAsync
+        // resolving a SystemRole to its current RoleModel id), not exposed as its own
+        // controller action.
+        public async Task<RoleModel?> GetByNameAsync(string name)
+        {
+            try
+            {
+                return await _role.GetByNameAsync(name);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting role by name: {RoleName}", name);
+                throw;
+            }
+        }
+
         // Auth: none — internal plumbing (e.g. UsersController's role-name lookup for
         // the search-users listing), not exposed as its own controller action.
         public async Task<List<RoleModel>> GetAllRolesAsync()

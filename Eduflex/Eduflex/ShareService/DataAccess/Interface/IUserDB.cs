@@ -17,6 +17,7 @@ namespace ShareService.DataAccess.Interface
         Task<UserModel?> GetUserByMobileAsync(string mobile);
         Task<List<UserModel>> GetUsersByIdsAsync(IEnumerable<string> ids);
         Task<List<string>> GetUserIdsByActiveStatusAsync(bool isActive);
+        Task<List<string>> GetUserIdsByRoleIdAsync(string roleId);
         Task<bool> SetActiveStatusAsync(string userId, bool isActive);
         Task<bool> UpdateContactInfoAsync(string userId, string email, string mobile);
         Task<bool> SetPasswordResetTokenAsync(string userId, string token, DateTime expiry);

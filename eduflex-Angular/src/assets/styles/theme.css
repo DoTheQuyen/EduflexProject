@@ -113,6 +113,10 @@
   background: color-mix(in srgb, var(--color-error) 12%, white);
   color: var(--color-error-dark);
 }
+.badge-pill-muted-soft {
+  background: color-mix(in srgb, var(--color-muted) 14%, white);
+  color: var(--color-muted);
+}
 .badge-pill {
   padding: 0.25rem 0.65rem;
   font-size: 0.78rem;

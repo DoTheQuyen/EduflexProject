@@ -46,21 +46,5 @@ namespace ShareService.Models.CoursePromotion
 
         [BsonElement("displayOrder")]
         public int DisplayOrder { get; set; }
-
-        public void ApplyEditableFields(CoursePromotionModel updateModel)
-        {
-            CourseName = updateModel.CourseName;
-            UniversityName = updateModel.UniversityName;
-            Semester = updateModel.Semester;
-            ScholarshipLabel = updateModel.ScholarshipLabel;
-            Location = updateModel.Location;
-            Tuition = updateModel.Tuition;
-            Opportunities = updateModel.Opportunities;
-            ExpiryDate = updateModel.ExpiryDate;
-            Note = updateModel.Note;
-            WebsiteUrl = updateModel.WebsiteUrl;
-            IsFeatured = updateModel.IsFeatured;
-            DisplayOrder = updateModel.DisplayOrder;
-        }
     }
 }

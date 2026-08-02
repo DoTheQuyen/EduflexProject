@@ -55,23 +55,5 @@ namespace ShareService.Models.EducationPartner
 
         [BsonElement("acn")]
         public string? Acn { get; set; }
-
-        public void ApplyEditableFields(EducationPartnerModel updateModel)
-        {
-            Name = updateModel.Name;
-            Location = updateModel.Location;
-            Trademark = updateModel.Trademark;
-            LogoUrl = updateModel.LogoUrl;
-            Description = updateModel.Description;
-            Country = updateModel.Country;
-            PartnerType = updateModel.PartnerType;
-            Intakes = updateModel.Intakes;
-            Email = updateModel.Email;
-            PhoneNumber = updateModel.PhoneNumber;
-            BusinessPartnerId = updateModel.BusinessPartnerId;
-            CommissionBaseRate = updateModel.CommissionBaseRate;
-            Abn = updateModel.Abn;
-            Acn = updateModel.Acn;
-        }
     }
 }

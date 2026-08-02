@@ -8,6 +8,8 @@ using ShareService.Models.Auth;
 using ShareService.Models.BusinessPartner;
 using ShareService.Models.Course;
 using ShareService.Models.CoursePromotion;
+using ShareService.Models.Department;
+using ShareService.Models.DynamicForm;
 using ShareService.Models.EducationPartner;
 using ShareService.Models.Enquiry;
 using ShareService.Models.Enrolment;
@@ -24,6 +26,8 @@ using ShareService.Validations.Auth;
 using ShareService.Validations.BusinessPartner;
 using ShareService.Validations.Course;
 using ShareService.Validations.CoursePromotion;
+using ShareService.Validations.Department;
+using ShareService.Validations.DynamicForm;
 using ShareService.Validations.EducationPartner;
 using ShareService.Validations.Enquiry;
 using ShareService.Validations.Enrolment;
@@ -58,6 +62,10 @@ namespace ShareService.Inject
             services.AddScoped<IEmailTemplate, EmailTemplate>();
             services.AddScoped<ISettings, Settings>();
             services.AddScoped<IFinancialRecord, FinancialRecord>();
+            services.AddScoped<INotification, Notification>();
+            services.AddScoped<IDepartment, Department>();
+            services.AddScoped<IDynamicFormTemplate, DynamicFormTemplate>();
+
 
             #endregion
 
@@ -81,6 +89,11 @@ namespace ShareService.Inject
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IFinancialRecordService, FinancialRecordService>();
+            services.AddScoped<INotificationPublisher, NotificationPublisher>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IDynamicFormTemplateService, DynamicFormTemplateService>();
+
 
             #endregion
 
@@ -102,6 +115,8 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<StudentModel>, StudentModelValidator>();
             services.AddScoped<IValidator<EnrolmentModel>, EnrolmentModelValidator>();
             services.AddScoped<IValidator<EmailTemplateModel>, EmailTemplateModelValidator>();
+            services.AddScoped<IValidator<DepartmentModel>, DepartmentModelValidator>();
+            services.AddScoped<IValidator<DynamicFormTemplateModel>, DynamicFormTemplateModelValidator>();
 
             #endregion
 

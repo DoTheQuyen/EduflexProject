@@ -22,6 +22,9 @@ namespace ShareService.Models.Auth
         [BsonElement("firstName")]
         public string FirstName { get; set; }
 
+        [BsonElement("middleName")]
+        public string? MiddleName { get; set; }
+
         [BsonElement("lastName")]
         public string LastName { get; set; }
 
@@ -52,15 +55,5 @@ namespace ShareService.Models.Auth
         /// </summary>
         [BsonIgnore]
         public string Password { get; set; } = string.Empty;
-
-        public void ApplyEditableFields(UserModel updateModel)
-        {
-            Email = updateModel.Email;
-            FirstName = updateModel.FirstName;
-            LastName = updateModel.LastName;
-            Mobile = updateModel.Mobile;
-            RoleId = updateModel.RoleId;
-            IsActive = updateModel.IsActive;
-        }
     }
 }

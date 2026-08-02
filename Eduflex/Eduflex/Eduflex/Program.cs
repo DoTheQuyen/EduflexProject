@@ -9,6 +9,9 @@ using ShareService.Models.Setting;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Eduflex.Authorization;
+using Eduflex.API.BackgroundServices;
+using Eduflex.API.Hubs;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,37 @@ builder.Services.AddEndpointsApiExplorer();
 
 // ✅ Register memory cache
 builder.Services.AddMemoryCache();
+
+// ✅ Register Redis as the distributed cache (feedback/course-promotion cache-aside)
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+    options.InstanceName = "eduflex:";
+});
+
+// ✅ Register a shared Redis connection multiplexer for pub/sub (feeds the notification listener)
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Redis");
+    var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
+
+    // StackExchange.Redis auto-reconnects on its own — these are just visibility hooks so an
+    // outage shows up in logs instead of silently degrading (cache calls fail open, pub/sub
+    // messages stop arriving, with nothing telling you why).
+    multiplexer.ConnectionFailed += (_, args) =>
+        logger.LogError("Redis connection failed on {EndPoint}: {FailureType}", args.EndPoint, args.FailureType);
+
+    multiplexer.ConnectionRestored += (_, args) =>
+        logger.LogInformation("Redis connection restored on {EndPoint}", args.EndPoint);
+
+    return multiplexer;
+});
+
+// ✅ SignalR for pushing live notifications to connected clients
+builder.Services.AddSignalR();
+
+// ✅ Background listener that subscribes to the notifications channel and fans out to SignalR groups
+builder.Services.AddHostedService<NotificationListener>();
 
 // ✅ Register health checks
 builder.Services.AddHealthChecks();
@@ -98,6 +132,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false
         };
+
+        // Browsers can't set the Authorization header on WebSocket/SSE connections, so the
+        // SignalR JS client sends the JWT as an "access_token" query string param instead —
+        // this reads it from there, but only for requests hitting a hub path.
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 // Add Authorization services + our custom permission-based handlers
@@ -153,6 +204,7 @@ app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.MapGet("/", () => "Eduflex API is running 🚀");
 app.MapHealthChecks("/health");

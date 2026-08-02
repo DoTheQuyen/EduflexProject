@@ -4,6 +4,7 @@ using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
+using ShareService.Mapping;
 using ShareService.Models.EducationPartner;
 using ShareService.Services.Interface;
 

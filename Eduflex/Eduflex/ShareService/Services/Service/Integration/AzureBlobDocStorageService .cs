@@ -20,12 +20,17 @@ namespace ShareService.Services.Service.Integration
 
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string contentType)
         {
+            // The GUID prefix is only to keep the blob's storage path collision-free —
+            // ContentDisposition is what a browser actually uses as the saved/downloaded
+            // filename, so callers' friendly names (e.g. "FormName-StudentName-date.pdf")
+            // show up correctly regardless of the underlying blob path.
             var blobName = $"{Guid.NewGuid()}-{fileName}";
             var blobClient = _containerClient.GetBlobClient(blobName);
 
             await blobClient.UploadAsync(fileStream, new BlobHttpHeaders
             {
-                ContentType = contentType
+                ContentType = contentType,
+                ContentDisposition = $"inline; filename=\"{fileName}\""
             });
 
             return blobClient.Uri.ToString();

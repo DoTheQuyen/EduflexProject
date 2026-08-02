@@ -49,22 +49,5 @@ namespace ShareService.Models.BusinessPartner
 
         [BsonElement("contacts")]
         public List<BusinessPartnerContactModel> Contacts { get; set; } = new();
-
-        public void ApplyEditableFields(BusinessPartnerModel updateModel)
-        {
-            Name = updateModel.Name;
-            Trademark = updateModel.Trademark;
-            Address = updateModel.Address;
-            Email = updateModel.Email;
-            PhoneNumber = updateModel.PhoneNumber;
-            Abn = updateModel.Abn;
-            Acn = updateModel.Acn;
-            CommissionBaseRate = updateModel.CommissionBaseRate;
-            ContractStartDate = updateModel.ContractStartDate;
-            ContractEndDate = updateModel.ContractEndDate;
-            ContractFileUrl = updateModel.ContractFileUrl;
-            ContractFileName = updateModel.ContractFileName;
-            Contacts = updateModel.Contacts;
-        }
     }
 }

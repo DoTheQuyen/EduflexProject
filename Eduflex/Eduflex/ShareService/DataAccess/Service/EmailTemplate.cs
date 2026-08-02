@@ -40,11 +40,5 @@ namespace ShareService.DataAccess
         {
             return await ReplaceOneAsync(t => t.Id == id, template);
         }
-
-        public async Task<bool> DeleteAsync(string id)
-        {
-            var result = await Collection.DeleteOneAsync(t => t.Id == id);
-            return result.DeletedCount > 0;
-        }
     }
 }

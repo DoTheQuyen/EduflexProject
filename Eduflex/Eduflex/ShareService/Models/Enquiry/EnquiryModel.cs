@@ -44,18 +44,5 @@ namespace ShareService.Models.Enquiry
 
         [BsonIgnore]
         public string RecaptchaToken { get; set; } = string.Empty;
-
-        public void ApplyEditableFields(EnquiryModel updateModel)
-        {
-            // Subject and CoursePromotionId are set once at creation and never editable by staff.
-            FirstName = updateModel.FirstName;
-            MiddleName = updateModel.MiddleName;
-            LastName = updateModel.LastName;
-            Email = updateModel.Email;
-            Mobile = updateModel.Mobile;
-            Enquiry = updateModel.Enquiry;
-            Status = updateModel.Status;
-            Response = updateModel.Response;
-        }
     }
 }

@@ -7654,3 +7654,257 @@ Eduflex.Authorization.MustChangePasswordRequirement
 2026-07-29 16:48:47.709 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
 2026-07-29 16:48:47.711 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 77.6428ms
 2026-07-29 16:48:47.713 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 86.3946ms
+2026-07-30 17:08:41.334 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-30 17:08:42.343 +07:00 [INF] Now listening on: https://localhost:5083
+2026-07-30 17:08:42.350 +07:00 [INF] Now listening on: http://localhost:5084
+2026-07-30 17:08:42.505 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-30 17:08:42.509 +07:00 [INF] Hosting environment: Development
+2026-07-30 17:08:42.512 +07:00 [INF] Content root path: D:\Self training\EduflexProject\Eduflex\Eduflex\Eduflex
+2026-07-30 17:08:45.243 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.html - null null
+2026-07-30 17:08:46.123 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.html - 200 null text/html;charset=utf-8 896.1503ms
+2026-07-30 17:08:46.197 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.css - null null
+2026-07-30 17:08:46.197 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui.css - null null
+2026-07-30 17:08:46.198 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui-bundle.js - null null
+2026-07-30 17:08:46.198 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2026-07-30 17:08:46.198 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.js - null null
+2026-07-30 17:08:46.199 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui-standalone-preset.js - null null
+2026-07-30 17:08:46.290 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2026-07-30 17:08:46.468 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.js - 200 null application/javascript;charset=utf-8 269.1314ms
+2026-07-30 17:08:46.517 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui-standalone-preset.js - 304 null null 317.9567ms
+2026-07-30 17:08:46.517 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.css - 304 null null 320.0683ms
+2026-07-30 17:08:46.557 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 358.546ms
+2026-07-30 17:08:46.574 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui.css - 304 null null 376.4902ms
+2026-07-30 17:08:46.643 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 393.6756ms
+2026-07-30 17:08:46.652 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui-bundle.js - 304 null null 454.2579ms
+2026-07-30 17:08:46.843 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2026-07-30 17:08:46.885 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/favicon-32x32.png - null null
+2026-07-30 17:08:47.185 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/favicon-32x32.png - 200 628 image/png 300.2888ms
+2026-07-30 17:08:47.208 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 364.9558ms
+2026-07-30 17:18:28.492 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-30 17:18:28.492 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-30 17:18:28.582 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:18:28.583 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:18:30.538 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:18:30.538 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:18:30.726 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:18:30.726 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-30 17:18:31.932 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:18:31.934 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:18:31.998 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 1262.5898ms
+2026-07-30 17:18:31.998 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 1259.5068ms
+2026-07-30 17:18:32.001 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:18:32.002 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:18:32.007 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 3530.4146ms
+2026-07-30 17:18:32.007 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 3530.4186ms
+2026-07-30 17:24:10.330 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-30 17:24:10.330 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-30 17:24:10.360 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:24:10.361 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:24:10.447 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:24:10.447 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:24:10.470 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-30 17:24:10.470 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:24:10.533 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:24:10.533 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:24:10.540 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 64.4056ms
+2026-07-30 17:24:10.572 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 61.1888ms
+2026-07-30 17:24:10.829 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:24:10.832 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:24:10.834 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 573.0863ms
+2026-07-30 17:24:10.836 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 575.2557ms
+2026-07-30 17:24:19.835 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-30 17:24:19.835 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-30 17:24:19.840 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:24:19.843 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:24:19.846 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:24:19.846 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:24:19.848 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-30 17:24:19.851 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:24:19.862 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:24:19.864 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:24:19.866 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 9.546ms
+2026-07-30 17:24:19.867 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 13.8981ms
+2026-07-30 17:24:19.869 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:24:19.872 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:24:19.873 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 38.5264ms
+2026-07-30 17:24:19.875 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 40.3943ms
+2026-07-30 17:25:14.496 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2026-07-30 17:25:14.509 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:14.526 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 29.8664ms
+2026-07-30 17:25:14.576 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 51
+2026-07-30 17:25:14.604 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:14.610 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-30 17:25:14.637 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Auth.AuthResponseDto]] Login(Eduflex.DTOs.Auth.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2026-07-30 17:25:15.027 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2026-07-30 17:25:15.298 +07:00 [INF] Last login updated for user: 6a65bf12c651d2df053a0385
+2026-07-30 17:25:15.639 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Auth.AuthResponseDto'.
+2026-07-30 17:25:15.647 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 1004.0782ms
+2026-07-30 17:25:15.649 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-30 17:25:15.651 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 1075.3646ms
+2026-07-30 17:25:24.933 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-07-30 17:25:24.935 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Settings - null null
+2026-07-30 17:25:24.942 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:24.951 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:24.953 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 20.1228ms
+2026-07-30 17:25:24.955 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Settings - 204 null null 20.0773ms
+2026-07-30 17:25:24.957 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-07-30 17:25:24.995 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Settings - null null
+2026-07-30 17:25:25.003 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:25.006 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:25:25.163 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-30 17:25:25.164 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-30 17:25:25.188 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:25:25.188 +07:00 [INF] Route matched with {action = "GetSettings", controller = "Settings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Settings.SettingsDto]] GetSettings() on controller Eduflex.API.Controllers.SettingsController (Eduflex).
+2026-07-30 17:25:25.235 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Settings.SettingsDto'.
+2026-07-30 17:25:25.266 +07:00 [INF] Executed action Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex) in 56.3523ms
+2026-07-30 17:25:25.269 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-30 17:25:25.271 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Settings - 200 null application/json; charset=utf-8 276.7012ms
+2026-07-30 17:25:25.529 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:25:25.555 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 359.45ms
+2026-07-30 17:25:25.568 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-30 17:25:25.573 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 616.3893ms
+2026-07-30 17:26:58.467 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - null null
+2026-07-30 17:26:58.485 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:26:58.487 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - 204 null null 20.1343ms
+2026-07-30 17:26:58.490 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks - application/json 15602
+2026-07-30 17:26:58.497 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:26:58.505 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-07-30 17:26:58.513 +07:00 [INF] Route matched with {action = "CreateFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Boolean]] CreateFeedback(Eduflex.DTOs.Feedback.CreateFeedbackDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:26:58.602 +07:00 [INF] Created new feedback with ID: 6a6b26f20a5af40318eb3b7f for Nguyen
+2026-07-30 17:26:58.606 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Boolean'.
+2026-07-30 17:26:58.610 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex) in 94.4352ms
+2026-07-30 17:26:58.612 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-07-30 17:26:58.614 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks - 200 null application/json; charset=utf-8 123.7545ms
+2026-07-30 17:26:58.619 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-07-30 17:26:58.621 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:26:58.621 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 1.8836ms
+2026-07-30 17:26:58.622 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-07-30 17:26:58.648 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:26:58.653 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-30 17:26:58.655 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:26:58.668 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:26:58.674 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 17.3516ms
+2026-07-30 17:26:58.675 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-30 17:26:58.678 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 55.499ms
+2026-07-30 17:27:01.843 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-30 17:27:01.843 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-30 17:27:01.849 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:27:01.856 +07:00 [INF] CORS policy execution successful.
+2026-07-30 17:27:01.861 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:27:01.872 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:27:01.874 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-30 17:27:01.884 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-30 17:27:01.896 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:27:01.900 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 10.1652ms
+2026-07-30 17:27:01.901 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-30 17:27:01.913 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-30 17:27:01.917 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 19.7764ms
+2026-07-30 17:27:01.918 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 74.6595ms
+2026-07-30 17:27:01.920 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-30 17:27:01.925 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 81.9598ms
+2026-07-31 03:44:41.248 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-31 03:44:41.248 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-31 03:44:41.309 +07:00 [INF] CORS policy execution successful.
+2026-07-31 03:44:41.309 +07:00 [INF] CORS policy execution successful.
+2026-07-31 03:44:41.423 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 03:44:41.424 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 03:44:41.437 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-31 03:44:41.438 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 03:44:42.810 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 03:44:42.810 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 03:44:42.874 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 1428.2003ms
+2026-07-31 03:44:42.895 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 1450.1073ms
+2026-07-31 03:44:42.913 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 03:44:42.923 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 1680.5936ms
+2026-07-31 03:44:42.925 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 03:44:42.932 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 1691.3706ms
+2026-07-31 06:28:31.813 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-31 06:28:31.813 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-31 06:28:31.897 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:31.897 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:31.996 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 06:28:31.997 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 06:28:32.012 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 06:28:32.012 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-31 06:28:33.150 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:28:33.189 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:28:33.346 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 1321.524ms
+2026-07-31 06:28:33.365 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 1347.3951ms
+2026-07-31 06:28:33.365 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 06:28:33.376 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 06:28:33.379 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 1606.3453ms
+2026-07-31 06:28:33.382 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 1630.2682ms
+2026-07-31 06:28:37.177 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2026-07-31 06:28:37.181 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:37.183 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 6.5264ms
+2026-07-31 06:28:37.189 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 51
+2026-07-31 06:28:37.194 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:37.199 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-31 06:28:37.201 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Auth.AuthResponseDto]] Login(Eduflex.DTOs.Auth.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2026-07-31 06:28:37.444 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2026-07-31 06:28:37.797 +07:00 [INF] Last login updated for user: 6a65bf12c651d2df053a0385
+2026-07-31 06:28:38.081 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Auth.AuthResponseDto'.
+2026-07-31 06:28:38.112 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 907.7273ms
+2026-07-31 06:28:38.120 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-07-31 06:28:38.122 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 933.6315ms
+2026-07-31 06:28:42.884 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-07-31 06:28:42.885 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Settings - null null
+2026-07-31 06:28:42.895 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:42.900 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:42.901 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 17.2687ms
+2026-07-31 06:28:42.903 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Settings - 204 null null 17.5411ms
+2026-07-31 06:28:42.940 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-07-31 06:28:42.971 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Settings - null null
+2026-07-31 06:28:42.991 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:42.993 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:28:43.005 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-31 06:28:43.005 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-31 06:28:43.007 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 06:28:43.008 +07:00 [INF] Route matched with {action = "GetSettings", controller = "Settings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Settings.SettingsDto]] GetSettings() on controller Eduflex.API.Controllers.SettingsController (Eduflex).
+2026-07-31 06:28:43.018 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Settings.SettingsDto'.
+2026-07-31 06:28:43.026 +07:00 [INF] Executed action Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex) in 12.9342ms
+2026-07-31 06:28:43.029 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-07-31 06:28:43.030 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Settings - 200 null application/json; charset=utf-8 59.8396ms
+2026-07-31 06:28:43.479 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:28:43.488 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 478.1091ms
+2026-07-31 06:28:43.491 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-31 06:28:43.493 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 588.6368ms
+2026-07-31 06:29:32.724 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - null null
+2026-07-31 06:29:32.737 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:32.739 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - 204 null null 15.1753ms
+2026-07-31 06:29:32.741 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks - application/json 32207
+2026-07-31 06:29:32.745 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:32.750 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-07-31 06:29:32.752 +07:00 [INF] Route matched with {action = "CreateFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Boolean]] CreateFeedback(Eduflex.DTOs.Feedback.CreateFeedbackDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 06:29:32.879 +07:00 [INF] Created new feedback with ID: 6a6bde5c0a5af40318eb3b80 for Phuc Lan
+2026-07-31 06:29:32.881 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Boolean'.
+2026-07-31 06:29:32.892 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex) in 136.5771ms
+2026-07-31 06:29:32.894 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-07-31 06:29:32.896 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks - 200 null application/json; charset=utf-8 155.8352ms
+2026-07-31 06:29:32.905 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-07-31 06:29:32.908 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:32.910 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 8.888ms
+2026-07-31 06:29:32.911 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-07-31 06:29:32.919 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:32.930 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-31 06:29:32.934 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 06:29:32.986 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:29:32.998 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 59.5158ms
+2026-07-31 06:29:33.000 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-07-31 06:29:33.001 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 90.3092ms
+2026-07-31 06:29:36.446 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - null null
+2026-07-31 06:29:36.446 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - null null
+2026-07-31 06:29:36.458 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:36.468 +07:00 [INF] CORS policy execution successful.
+2026-07-31 06:29:36.472 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 06:29:36.474 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 06:29:36.477 +07:00 [INF] Route matched with {action = "GetFeaturedActiveCoursePromotions", controller = "CoursePromotions"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Course.CoursePromotionDto]]] GetFeaturedActiveCoursePromotions(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.CoursePromotionsController (Eduflex).
+2026-07-31 06:29:36.480 +07:00 [INF] Route matched with {action = "GetLatestFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[Eduflex.DTOs.Feedback.FeedbackDto]]] GetLatestFeedback(System.Nullable`1[System.Int32]) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-07-31 06:29:36.489 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Course.CoursePromotionDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:29:36.491 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-07-31 06:29:36.492 +07:00 [INF] Executed action Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex) in 7.7452ms
+2026-07-31 06:29:36.496 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex) in 8.6798ms
+2026-07-31 06:29:36.512 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.CoursePromotionsController.GetFeaturedActiveCoursePromotions (Eduflex)'
+2026-07-31 06:29:36.514 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.GetLatestFeedback (Eduflex)'
+2026-07-31 06:29:36.515 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/CoursePromotions/course-latest?count=10 - 200 null application/json; charset=utf-8 69.0484ms
+2026-07-31 06:29:36.516 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Feedbacks/feedback-latest?count=10 - 200 null application/json; charset=utf-8 70.397ms

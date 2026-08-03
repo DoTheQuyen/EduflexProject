@@ -46,20 +46,20 @@ public class ConsoleApp
                     .PageSize(10)
                     .AddChoices(new[] {
                         "0. Update Connection String for this environment",
-                        "1. Create Database Tables (Collections)",
-                        "2. Insert Test Data",
-                        "3. Generate C# Models",
-                        "4. View Current Collections",
+                        "1. Run Database Migrations",
+                        "2. View Migration History",
+                        "3. Export Reference Data (run this in Local first)",
+                        "4. Insert Test Data (department users + reference data)",
                         "5. Clear Test Data",
-                        "6. Drop All Collections",
-                        "7. Run Database Migrations",
-                        "8. View Migration History",
+                        "6. View Current Collections",
+                        "7. Generate C# Models",
+                        "8. Drop All Collections",
                         "9. Exit"
                     }));
 
             try
             {
-                switch (choice.Substring(0, 1))
+                switch (choice.Substring(0, choice.IndexOf('.')))
                 {
                     case "0":
                         var (connectionString, databaseName) = MongoConnectionStore.Prompt();
@@ -68,43 +68,6 @@ public class ConsoleApp
                         break;
 
                     case "1":
-                        await _databaseService.CreateCollectionsAsync();
-                        await DisplayCurrentStateAsync();
-                        break;
-
-                    case "2":
-                        if (ConfirmProAction("insert sample test data"))
-                        {
-                            await _databaseService.InsertTestDataAsync();
-                            await DisplayCurrentStateAsync();
-                        }
-                        break;
-
-                    case "3":
-                        await ModelGenerator.BuildDbModelsAsync(_databaseService);
-                        break;
-
-                    case "4":
-                        await DisplayCurrentStateAsync();
-                        break;
-
-                    case "5":
-                        if (ConfirmProAction("clear all test data"))
-                        {
-                            await _databaseService.ClearTestDataAsync();
-                            await DisplayCurrentStateAsync();
-                        }
-                        break;
-
-                    case "6":
-                        if (ConfirmProAction("drop all collections and delete all data"))
-                        {
-                            await _databaseService.DropCollectionsAsync();
-                            await DisplayCurrentStateAsync();
-                        }
-                        break;
-
-                    case "7":
                         if (ConfirmProAction("run database migrations"))
                         {
                             if (await _migrationService.RunMigrationsAsync())
@@ -118,8 +81,47 @@ public class ConsoleApp
                         }
                         break;
 
-                    case "8":
+                    case "2":
                         await DisplayMigrationHistoryAsync();
+                        break;
+
+                    case "3":
+                        if (ConfirmProAction("export reference data (CoursePromotions, Feedbacks, DynamicFormTemplates, EducationPartners, Courses, BusinessPartners) from this environment to SeedData/*.json"))
+                        {
+                            await _databaseService.ExportReferenceDataAsync();
+                        }
+                        break;
+
+                    case "4":
+                        if (ConfirmProAction("insert department test data + import reference data from SeedData/*.json"))
+                        {
+                            await _databaseService.InsertTestDataAsync();
+                            await DisplayCurrentStateAsync();
+                        }
+                        break;
+
+                    case "5":
+                        if (ConfirmProAction("clear the seeded department test data"))
+                        {
+                            await _databaseService.ClearTestDataAsync();
+                            await DisplayCurrentStateAsync();
+                        }
+                        break;
+
+                    case "6":
+                        await DisplayCurrentStateAsync();
+                        break;
+
+                    case "7":
+                        await ModelGenerator.BuildDbModelsAsync(_databaseService);
+                        break;
+
+                    case "8":
+                        if (ConfirmProAction("drop all collections and delete all data"))
+                        {
+                            await _databaseService.DropCollectionsAsync();
+                            await DisplayCurrentStateAsync();
+                        }
                         break;
 
                     case "9":

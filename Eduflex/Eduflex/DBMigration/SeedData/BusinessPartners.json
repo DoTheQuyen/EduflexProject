@@ -1,0 +1,26 @@
+[{
+    "_id" : { "$oid" : "6a692e3e89187fbd9b3179cf" },
+    "createdBy" : "6a65bf12c651d2df053a0385",
+    "createdAt" : { "$date" : { "$numberLong" : "1785278014976" } },
+    "updatedBy" : "6a65bf12c651d2df053a0385",
+    "updatedAt" : { "$date" : { "$numberLong" : "1785278078956" } },
+    "name" : "Eduflex",
+    "trademark" : "Eduflex",
+    "address" : "123 gdrgd fsgsd",
+    "email" : "eduflex.au@gmail.com",
+    "phoneNumber" : "0421649083",
+    "abn" : "12345678911",
+    "acn" : "123456789",
+    "commissionBaseRate" : { "$numberDecimal" : "35" },
+    "contractStartDate" : { "$date" : { "$numberLong" : "1609200000000" } },
+    "contractEndDate" : { "$date" : { "$numberLong" : "1785456000000" } },
+    "contractFileUrl" : "https://eduflexstorage.blob.core.windows.net/uploads/40372e44-9c07-48a5-b7cb-cb3e53447a98-Itinerary-W68RE6.pdf",
+    "contractFileName" : "Itinerary-W68RE6.pdf",
+    "contacts" : [{
+        "_id" : "2c9512ec-28d9-4259-950c-4f28051b91a8",
+        "firstName" : "q",
+        "lastName" : "d",
+        "email" : "quyen.glaiso@gmail.com",
+        "contactNo" : "0421649083"
+      }]
+  }]

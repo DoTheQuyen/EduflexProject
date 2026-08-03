@@ -1,0 +1,82 @@
+[{
+    "_id" : { "$oid" : "6a6f1f45c948d8e906a47dc3" },
+    "createdBy" : "6a65bf12c651d2df053a0385",
+    "createdAt" : { "$date" : { "$numberLong" : "1785667397094" } },
+    "updatedBy" : "6a65bf12c651d2df053a0385",
+    "updatedAt" : { "$date" : { "$numberLong" : "1785674471415" } },
+    "name" : "Genuine Student Statement (GS)",
+    "description" : "This is dynamic GS form which use to apply Offer, CoE, Visa",
+    "status" : "Active",
+    "boundStepKey" : "EnrolmentForm",
+    "questions" : [{
+        "_id" : "4c8bdadb-8cea-4c8b-b427-fd687bf171e0",
+        "order" : { "$numberInt" : "0" },
+        "questionText" : "Current Circumstances: Give details of your current circumstances. This includes ties to family, community, employment and economic circumstances.",
+        "helpText" : "Your immediate family setup, current employment or recent schooling status, and the financial stability of yourself or your sponsors in your home country.",
+        "answerType" : "RichText",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : { "$numberInt" : "1000" },
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "6939515a-12b7-4f4d-9d60-d1019012db16",
+        "order" : { "$numberInt" : "1" },
+        "questionText" : "Educational Rationale: : Explain why you wish to study this course in Australia with this particular education provider. This must include your understanding of the requirements of the intended course and study and living in Australia.",
+        "helpText" : " Why you chose this exact degree, your specific reasons for choosing this university/college over others, and why studying in Australia is a better investment than doing a similar course in your home country.",
+        "answerType" : "RichText",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : { "$numberInt" : "1000" },
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "47af52a1-00c9-4f25-bf1e-2937af831c63",
+        "order" : { "$numberInt" : "2" },
+        "questionText" : "Future Career Value: Explain how completing this course will be of benefit to your future career and employment goals.",
+        "helpText" : "The specific job positions you aim to target after graduation, estimated future salary prospects, and how the skills from this course directly bridge the gap to your career goals.",
+        "answerType" : "RichText",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : { "$numberInt" : "1000" },
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "29bc5d42-1b64-4e6e-b985-52fd954c550f",
+        "order" : { "$numberInt" : "3" },
+        "questionText" : "Other Relevant Information: Give details of any other relevant matter you would like to be considered.",
+        "helpText" : "This is where you proactively address any potential \"red flags\" in your application, such as long gaps in study/employment, sudden career pivots, or your history of strong compliance with previous international visas.",
+        "answerType" : "RichText",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : { "$numberInt" : "1000" },
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "3985fced-d40d-424e-9339-fe598a6ebc7d",
+        "order" : { "$numberInt" : "4" },
+        "questionText" : "For Onshore Applicants Only: If you are currently in Australia, explain your reasons for applying for a student visa while in Australia.",
+        "helpText" : "If you are currently in Australia on a Visitor (Subclass 600), Temporary Graduate (Subclass 485), or Working Holiday visa, you must explicitly justify why you are switching to a student visa instead of applying from offshore.",
+        "answerType" : "RichText",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : { "$numberInt" : "1000" },
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "52f66a5e-ce58-473e-b75e-d14d3d733f5c",
+        "order" : { "$numberInt" : "5" },
+        "questionText" : "I declare that I have answered these questions truthfully, accurately, and to the best of my knowledge. I confirm that all statements made in this application are genuine reflections of my own educational and career intentions, and that all supporting documents provided are authentic.",
+        "helpText" : "",
+        "answerType" : "YesNo",
+        "options" : [],
+        "isRequired" : true,
+        "maxLength" : null,
+        "optionsHorizontal" : false
+      }, {
+        "_id" : "c7b61389-fb88-4f31-8cc5-c13099176390",
+        "order" : { "$numberInt" : "6" },
+        "questionText" : "test options",
+        "helpText" : "",
+        "answerType" : "MultiSelect",
+        "options" : ["Option A", "Option B", "Option C"],
+        "isRequired" : false,
+        "maxLength" : null,
+        "optionsHorizontal" : true
+      }]
+  }]

@@ -6,6 +6,7 @@ using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
+using ShareService.Mapping;
 using ShareService.Models.Auth;
 using ShareService.Models.Enquiry;
 using ShareService.Services.Interface;
@@ -19,6 +20,7 @@ namespace ShareService.Services
         private readonly IRecaptchaService _recaptchaService;
         private readonly IValidator<EnquiryModel> _createEnquiryValidator;
         private readonly IPermissionService _permissionService;
+        private readonly INotificationPublisher _notificationPublisher;
         private readonly ILogger<EnquiryService> _logger;
 
         public EnquiryService(
@@ -26,12 +28,14 @@ namespace ShareService.Services
             IRecaptchaService recaptchaService,
             IValidator<EnquiryModel> createEnquiryValidator,
             IPermissionService permissionService,
+            INotificationPublisher notificationPublisher,
             ILogger<EnquiryService> logger)
         {
             _enquiryDataAccess = enquiryDataAccess;
             _recaptchaService = recaptchaService;
             _createEnquiryValidator = createEnquiryValidator;
             _permissionService = permissionService;
+            _notificationPublisher = notificationPublisher;
             _logger = logger;
         }
 
@@ -44,8 +48,6 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: none — deliberately public/anonymous (reCAPTCHA is the anti-abuse gate
-        // instead), this is the public "contact us" form submission.
         public async Task<bool> CreateEnquiry(EnquiryModel enquiry)
         {
             var validate = await _createEnquiryValidator.ValidateAsync(enquiry, options => options.IncludeRuleSets("default", "Create"));
@@ -77,6 +79,15 @@ namespace ShareService.Services
 
                 var created = await _enquiryDataAccess.CreateEnquiryAsync(enquiry);
 
+                if (created)
+                {
+                    await _notificationPublisher.PublishToRoleAsync(
+                        module: "Enquiry",
+                        entityId: enquiry.Id,
+                        summary: $"New enquiry from {enquiry.FirstName} {enquiry.LastName}",
+                        role: SystemRole.Staff);
+                }
+
                 _logger.LogInformation("Created new enquiry with ID: {EnquiryId} from {Email}",
                     enquiry.Id, enquiry.Email);
 
@@ -89,7 +100,6 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: requires EnquiryView permission (staff-only).
         public async Task<PagedResult<EnquiryModel>> GetEnquiries(EnquiryFilter filter, string userId)
         {
             try
@@ -104,9 +114,6 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: requires EnquiryView permission (staff-only). Also called internally by
-        // EnrolmentService when converting an enquiry to an enrolment, so the acting
-        // staff user needs EnquiryView in addition to EnrolmentsAdd for that flow.
         public async Task<EnquiryModel?> GetEnquiryAsync(string id, string userId)
         {
             try
@@ -121,8 +128,6 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: requires EnquiryEdit permission (staff-only). Also called internally by
-        // EnrolmentService to flip a converted enquiry's status.
         public async Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel updateModel, string userId)
         {
             try
@@ -148,9 +153,24 @@ namespace ShareService.Services
                     throw new ArgumentException("This enquiry has already been responded to and its response message cannot be changed.");
                 }
 
+                var previousStatus = existingEnquiry.Status;
                 existingEnquiry.ApplyEditableFields(updateModel);
 
-                return await _enquiryDataAccess.UpdateEnquiriesAsync(existingEnquiry.Id, existingEnquiry);
+                var updated = await _enquiryDataAccess.UpdateEnquiriesAsync(existingEnquiry.Id, existingEnquiry);
+
+                if (updated)
+                {
+                    var statusChanged = existingEnquiry.Status != previousStatus;
+                    await _notificationPublisher.PublishToRoleAsync(
+                        module: "Enquiry",
+                        entityId: existingEnquiry.Id,
+                        summary: statusChanged
+                            ? $"Enquiry status changed to {existingEnquiry.Status}"
+                            : $"Enquiry updated for {existingEnquiry.FirstName} {existingEnquiry.LastName}",
+                        role: statusChanged ? SystemRole.Manager : SystemRole.Staff);
+                }
+
+                return updated;
             }
             catch (Exception ex)
             {
@@ -159,7 +179,6 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: requires EnquiryDelete permission (staff-only).
         public async Task<bool> DeleteEnquiriesAsync(string id, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.EnquiryDelete, "delete enquiries");

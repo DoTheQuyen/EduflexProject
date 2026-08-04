@@ -11,6 +11,7 @@ import { APPLICATION_API_BASE_URL } from '../app/services/api.services';
 import { APPLICATION_API_BASE_URL as CONTENT_API_BASE_URL } from '../app/services/content.services';
 import { environment } from './environments/environment';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideQuillConfig } from 'ngx-quill/config';
 import { LanguageService } from './services/language.service';
 
 export const appConfig: ApplicationConfig = {
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     provideAnimationsAsync(),
+    provideQuillConfig({}),
     { provide: APPLICATION_API_BASE_URL, useValue: environment.apiClientUrl },
     { provide: CONTENT_API_BASE_URL, useValue: environment.apiClientUrl },
     { provide: AUTH_API_BASE_URL, useValue: environment.publicApiUrl },

@@ -1,5 +1,6 @@
 using Eduflex.DTOs.Auth;
 using Eduflex.Mapping.Auth;
+using Eduflex.Mapping.Department;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareService.Common;
@@ -15,12 +16,18 @@ namespace Eduflex.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IDepartmentService _departmentService;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService, IRoleService roleService, ILogger<UsersController> logger)
+        public UsersController(
+            IUserService userService,
+            IRoleService roleService,
+            IDepartmentService departmentService,
+            ILogger<UsersController> logger)
         {
             _userService = userService;
             _roleService = roleService;
+            _departmentService = departmentService;
             _logger = logger;
         }
 
@@ -34,18 +41,21 @@ namespace Eduflex.API.Controllers
                 var result = await _userService.GetUsersAsync(filterDto.ToFilter(), actingUserId);
                 var roles = await _roleService.GetAllRolesAsync();
                 var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
+                var departments = await _departmentService.GetAllDepartmentsAsync();
 
                 var items = result.Items.Select(u => new UserSummaryDto
                 {
                     Id = u.Id,
                     Email = u.Email,
                     FirstName = u.FirstName,
+                    MiddleName = u.MiddleName,
                     LastName = u.LastName,
                     Mobile = u.Mobile,
                     RoleId = u.RoleId,
                     RoleName = roleNameById.TryGetValue(u.RoleId ?? string.Empty, out var name) ? name : "Unknown",
                     IsActive = u.IsActive,
-                    LastLogin = u.LastLogin
+                    LastLogin = u.LastLogin,
+                    Departments = departments.ToBadges(u.Id)
                 }).ToList();
 
                 return new PagedResult<UserSummaryDto>

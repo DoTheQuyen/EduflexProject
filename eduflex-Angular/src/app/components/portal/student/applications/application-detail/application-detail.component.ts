@@ -5,7 +5,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AddressDto, Client, CourseDto, CreateApplicationDto, EducationPartnerDto, EmergencyContactDto, SettingsDto, UploadLimitDto } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
+import { EnrolmentService } from '@services/enrolment.service';
+import { ModalComponent } from '@generic/modal/modal.component';
+import { FormAnswerEditorComponent } from '@generic/form-answer-editor/form-answer-editor.component';
+import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
+// import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
+import { EnrolmentFormResponse, FormAnswer, formResponseStatusBadgeClass } from '@app/models/dynamic-form';
 
 interface DocFile {
   name: string;
@@ -133,12 +139,17 @@ export class ApplicationDetailComponent implements OnInit {
 
   settings: SettingsDto | null = null;
 
+
+myEnrolmentId: string | null = null;
+myForms: EnrolmentFormResponse[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private appService: Client,
     private authHelper: AuthHelperService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private enrolmentService: EnrolmentService
   ) {}
 
   ngOnInit(): void {
@@ -197,6 +208,10 @@ export class ApplicationDetailComponent implements OnInit {
 
         this.mode = LOCKED_STATUSES.includes(this.status) ? 'view' : 'edit';
         this.isLoading = false;
+
+        if (!this.isStaffPortal) {
+          this.loadMyForms(id);
+        }
       },
       error: () => {
         this.notification.error('Could not load this application.');
@@ -317,6 +332,10 @@ export class ApplicationDetailComponent implements OnInit {
     this.docs[key].splice(index, 1);
   }
 
+  goBack(): void {
+    this.router.navigate([this.isStaffPortal ? '/staff-portal/applications' : '/student-portal/application']);
+  }
+
   cancelUpdate(): void {
     if (this.mode === 'new') {
       const dirty = !!this.university || !!this.course || !!this.description ||
@@ -385,5 +404,31 @@ export class ApplicationDetailComponent implements OnInit {
 
   formatDate(value: any): string {
     return formatDateTime(value, 'dd MMM yyyy');
+  }
+
+  // ===================== Dynamic Forms (student) =====================
+
+  loadMyForms(applicationId: string): void {
+    this.enrolmentService.getMyForms(applicationId).subscribe({
+      next: (result) => {
+        this.myEnrolmentId = result.enrolmentId;
+        this.myForms = result.forms;
+      },
+      // A 404 here just means no Enrolment is linked to this application yet
+      // (e.g. still Pending) — not every application has one.
+      error: () => { this.myEnrolmentId = null; this.myForms = []; }
+    });
+  }
+
+  formStatusBadgeClass(form: EnrolmentFormResponse): string {
+    return formResponseStatusBadgeClass(form.status);
+  }
+
+  isFormLocked(form: EnrolmentFormResponse): boolean {
+    return form.status === 'Responded';
+  }
+  
+ openForm(form: EnrolmentFormResponse): void {
+    this.router.navigate(['/student-portal/application', this.appId, 'forms', form.id]);
   }
 }

@@ -1,0 +1,100 @@
+<div class="feedback-portal">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 class="mb-2">Manage Departments</h2>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <button class="btn btn-primary btn-lg" *ngIf="permissions.add" (click)="openModal()">
+          <i class="fas fa-plus me-2"></i>Add Department
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="isLoading" class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading departments...</p>
+        </div>
+
+        <div *ngIf="!isLoading" class="card border shadow-sm">
+          <div class="card-body p-0">
+            <app-data-table
+              [columns]="columns"
+              [data]="departments"
+              [rowActions]="rowActions"
+              [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize"
+              [totalCount]="pager.totalCount"
+              [showSearch]="true"
+              searchPlaceholder="Search department name..."
+              (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)"
+              (actionClick)="onTableAction($event)"
+              tableClass="table table-bordered table-hover mb-0">
+            </app-data-table>
+            <p *ngIf="!isLoading && departments.length === 0" class="text-center text-muted py-4 mb-0">
+              No departments yet. Click "Add Department" to create one.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Department Modal -->
+<app-modal *ngIf="isModalOpen" [title]="editingId ? 'Edit Department' : 'Add Department'" [isSaving]="isSubmitting"
+  [saveLabel]="editingId ? 'Save Changes' : 'Save Department'"
+  [showDelete]="!!editingId && permissions.delete"
+  (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()" (delete)="onDelete()">
+  <form [formGroup]="departmentForm">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name *</label>
+      <input id="name" type="text" class="form-control" formControlName="name">
+      <span class="field-error" *ngIf="isFieldInvalid('name')">Department name is required</span>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" rows="2" class="form-control" formControlName="description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="parentDepartmentId" class="form-label">Parent department</label>
+      <select id="parentDepartmentId" class="form-select" formControlName="parentDepartmentId">
+        <option value="">None (top-level)</option>
+        <option *ngFor="let dept of allDepartments" [value]="dept.id" [disabled]="dept.id === editingId">{{ dept.name }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Members</label>
+      <div class="member-checklist">
+        <div class="form-check" *ngFor="let staff of allStaff">
+          <input class="form-check-input" type="checkbox" [id]="'member-' + staff.id"
+            [checked]="isMemberSelected(staff.id)"
+            (change)="toggleMember(staff.id, $any($event.target).checked)">
+          <label class="form-check-label" [for]="'member-' + staff.id">{{ staff.firstName }} {{ $any(staff).middleName ? $any(staff).middleName + ' ' : '' }}{{ staff.lastName }} - Role: {{ staff.roleName }}</label>
+        </div>
+      </div>
+      <p *ngIf="allStaff.length === 0" class="text-muted small">No staff available yet.</p>
+    </div>
+
+    <div class="mb-3">
+      <label for="headUserId" class="form-label">Department head</label>
+      <select id="headUserId" class="form-select" [value]="selectedHeadId" (change)="selectedHeadId = $any($event.target).value">
+        <option value="">None</option>
+        <option *ngFor="let memberId of selectedMemberIds" [value]="memberId">{{ getStaffName(memberId) }}</option>
+      </select>
+      <div class="form-text">Only selected members can be assigned as head.</div>
+    </div>
+
+    <app-notification type="error" [message]="errorMessage"></app-notification>
+  </form>
+</app-modal>

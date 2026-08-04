@@ -1,0 +1,99 @@
+<div class="invoice-section">
+  <div class="invoice-section-head">
+    <span class="label">Invoice</span>
+    <ng-container [ngSwitch]="invoiceStatus">
+      <span *ngSwitchCase="'Paid'" class="pill pill-complete">Paid</span>
+      <span *ngSwitchCase="'Sent'" class="pill pill-draft">Sent, awaiting payment</span>
+      <span *ngSwitchDefault class="pill">Not invoiced</span>
+    </ng-container>
+  </div>
+
+  <div class="invoice-section-body">
+    <p class="text-muted small mb-2" *ngIf="invoiceStatus === 'NotSent'">
+      An invoice must be sent to the student before Apply Offer can be marked complete.
+    </p>
+
+    <button type="button" class="btn btn-outline-primary btn-sm" *ngIf="invoiceStatus === 'NotSent' && isOwner && permissions.edit" (click)="toggleInvoicePanel()">
+      {{ showInvoicePanel ? 'Close' : 'Invoice' }}
+    </button>
+
+    <div class="invoice-compose" *ngIf="showInvoicePanel">
+      <div class="mb-3">
+        <label class="form-label">Invoice template</label>
+        <select class="form-select form-select-sm" [(ngModel)]="selectedInvoiceTemplateId" (ngModelChange)="onInvoiceTemplateChange()" [ngModelOptions]="{standalone: true}">
+          <option value="">Select…</option>
+          <option *ngFor="let t of invoiceTemplates" [value]="t.id">{{ t.name }}</option>
+        </select>
+      </div>
+
+      <ng-container *ngIf="selectedInvoiceTemplateId">
+        <div class="row g-3 mb-2">
+          <div class="col-md-6">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="invoiceDescription" [ngModelOptions]="{standalone: true}"
+              [disabled]="descriptionLocked" [class.locked-field]="descriptionLocked">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label d-flex align-items-center gap-1">
+              Amount
+              <button type="button" class="unlock-btn" *ngIf="amountLocked && isManager" (click)="amountOverrideUnlocked = true" title="Manager override">
+                <i class="fas fa-lock"></i>
+              </button>
+            </label>
+            <input type="number" min="0" step="0.01" class="form-control form-control-sm" [(ngModel)]="invoiceAmount" [ngModelOptions]="{standalone: true}"
+              [disabled]="amountLocked" [class.locked-field]="amountLocked">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">GST %</label>
+            <input type="number" min="0" max="100" step="0.1" class="form-control form-control-sm" [(ngModel)]="invoiceGstRate" [ngModelOptions]="{standalone: true}"
+              [disabled]="gstLocked" [class.locked-field]="gstLocked">
+          </div>
+        </div>
+        <p class="text-muted small mb-3" *ngIf="descriptionLocked || gstLocked || amountLocked">
+          Values set on this invoice template are read-only.<span *ngIf="selectedInvoiceTemplate?.defaultAmount != null && isManager"> Managers can unlock the amount with the lock icon.</span>
+        </p>
+
+        <div class="recipient-strip">To: <strong>{{ enrolment.firstName }} {{ enrolment.lastName }}</strong> &lt;{{ enrolment.email }}&gt;</div>
+
+        <div class="d-flex flex-wrap gap-2 my-2" *ngIf="emailTemplates.length > 0">
+          <button type="button" class="btn btn-sm" *ngFor="let t of emailTemplates"
+            [class.btn-primary]="selectedEmailTemplateKey === t.key" [class.btn-outline-secondary]="selectedEmailTemplateKey !== t.key"
+            (click)="applyEmailTemplate(t)">{{ t.name }}</button>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="invoiceEmailSubject" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Message</label>
+          <textarea class="form-control form-control-sm" rows="5" [(ngModel)]="invoiceEmailBody" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" [disabled]="isSendingInvoice || !canSendInvoice" (click)="sendInvoice()">
+          {{ isSendingInvoice ? 'Sending...' : 'Send Invoice' }}
+        </button>
+      </ng-container>
+    </div>
+
+    <div class="invoice-sent-info" *ngIf="invoiceStatus !== 'NotSent'">
+      <p class="mb-1"><strong>Invoice sent</strong> {{ formatDate(invoiceSentAt) }}</p>
+      <p class="mb-2" *ngIf="invoiceStatus === 'Paid'">
+        <strong>Payment confirmed</strong> {{ formatDate(invoicePaidAt) }}
+      </p>
+
+      <ng-container *ngIf="invoiceStatus === 'Sent' && isOwner && permissions.edit">
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="showPaymentUploader = !showPaymentUploader">
+          Confirm Payment Received
+        </button>
+        <div class="payment-confirm" *ngIf="showPaymentUploader">
+          <app-file-uploader label="Add payment evidence (optional)" uploadCategory="enrolment" (fileSelected)="onPaymentEvidenceSelected($event)"></app-file-uploader>
+          <p *ngIf="isUploadingPaymentEvidence" class="text-muted small mb-0">Uploading…</p>
+          <p *ngIf="paymentEvidenceUrl" class="text-success small mb-0">Evidence attached.</p>
+          <button type="button" class="btn btn-primary btn-sm mt-2" [disabled]="isConfirmingPayment" (click)="confirmPayment()">
+            {{ isConfirmingPayment ? 'Confirming...' : 'Confirm Payment' }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

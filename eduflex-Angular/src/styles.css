@@ -61,6 +61,11 @@
   --color-success-dark: color-mix(in srgb, #1F7A5C 80%, black);
   --color-error: #B3413A;
   --color-error-dark: color-mix(in srgb, #B3413A 80%, black);
+  /* Deliberately a stronger, more saturated orange than --color-accent (a muted
+     brass) — reserved for "needs your attention now" highlights, e.g. the
+     Requested Forms card, where the softer brass reads too calm. */
+  --color-highlight: #D2530C;
+  --color-highlight-dark: color-mix(in srgb, #D2530C 80%, black);
   --color-ink: #1B2430;
   --color-muted: #5C6B7A;
   --color-muted-on-dark: #C7CEDA;

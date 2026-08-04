@@ -54,6 +54,10 @@ namespace ShareService.Services
             {
                 throw new ArgumentException("CoursePromotionDefaultLatestCount must be greater than zero");
             }
+            if (settings.MaxApplicationsPerStudent <= 0)
+            {
+                throw new ArgumentException("MaxApplicationsPerStudent must be greater than zero");
+            }
             ValidateUploadLimit(settings.DocumentUpload.Default, "Default");
             ValidateUploadLimit(settings.DocumentUpload.Other, "Other");
             ValidateUploadLimit(settings.ImageUpload, "Image");

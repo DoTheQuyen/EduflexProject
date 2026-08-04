@@ -18,8 +18,15 @@ namespace Eduflex.Authorization
             AuthorizationHandlerContext context,
             MustChangePasswordRequirement requirement)
         {
-            if (context.Resource is Endpoint endpoint &&
-                endpoint.Metadata.GetMetadata<SkipMustChangePasswordCheckAttribute>() != null)
+          
+            var endpoint = context.Resource switch
+            {
+                HttpContext httpContext => httpContext.GetEndpoint(),
+                Endpoint e => e,
+                _ => null
+            };
+
+            if (endpoint?.Metadata.GetMetadata<SkipMustChangePasswordCheckAttribute>() != null)
             {
                 context.Succeed(requirement);
                 return;

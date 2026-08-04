@@ -1,5 +1,4 @@
-
-<app-navbar  *ngIf="!isPortalRoute()"></app-navbar>
+<app-navbar *ngIf="!isPortalRoute()"></app-navbar>
 <router-outlet></router-outlet>
-<app-footer></app-footer>
+<app-footer *ngIf="!isPortalRoute()"></app-footer>
 <app-toast-container></app-toast-container>

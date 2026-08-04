@@ -54,6 +54,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Application Detail' }
       },
+            {
+        path: 'application/:id/forms/:formId',
+        loadComponent: () => import('./components/portal/student/applications/application-form-fill/application-form-fill.component').then(m => m.ApplicationFormFillComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Fill Form' }
+      },
       {
         path: 'profile',
         loadComponent: () => import('./components/portal/share-component/profile/profile.component').then(m => m.ProfileComponent),
@@ -191,6 +197,12 @@ export const routes: Routes = [
         data: { roles: ['Admin'], breadcrumb: 'Users' }
       },
       {
+        path: 'departments',
+        loadComponent: () => import('./components/portal/staff/department-management/department-management.component').then(m => m.DepartmentManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager'], breadcrumb: 'Departments' }
+      },
+      {
         path: 'students',
         loadComponent: () => import('./components/portal/staff/student-management/student-management.component').then(m => m.StudentManagementComponent),
         canActivate: [AuthGuard, RoleGuard],
@@ -213,6 +225,66 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/settings-management/settings-management.component').then(m => m.SettingsManagementComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin'], breadcrumb: 'Settings' }
+      },
+      {
+        path: 'dynamic-forms',
+        loadComponent: () => import('./components/portal/staff/dynamic-forms/dynamic-form-management/dynamic-form-management.component').then(m => m.DynamicFormManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Dynamic Forms' }
+      },
+      {
+        path: 'dynamic-forms/new',
+        loadComponent: () => import('./components/portal/staff/dynamic-forms/dynamic-form-edit/dynamic-form-edit.component').then(m => m.DynamicFormEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'New Form' }
+      },
+      {
+        path: 'dynamic-forms/:id',
+        loadComponent: () => import('./components/portal/staff/dynamic-forms/dynamic-form-edit/dynamic-form-edit.component').then(m => m.DynamicFormEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Edit Form' }
+      },
+      {
+        path: 'email-templates',
+        loadComponent: () => import('./components/portal/staff/email-templates/email-template-management/email-template-management.component').then(m => m.EmailTemplateManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Email Templates' }
+      },
+      {
+        path: 'email-templates/new',
+        loadComponent: () => import('./components/portal/staff/email-templates/email-template-edit/email-template-edit.component').then(m => m.EmailTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'New Email Template' }
+      },
+      {
+        path: 'email-templates/:id',
+        loadComponent: () => import('./components/portal/staff/email-templates/email-template-edit/email-template-edit.component').then(m => m.EmailTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Edit Email Template' }
+      },
+      {
+        path: 'invoice-templates',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-management/invoice-template-management.component').then(m => m.InvoiceTemplateManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Invoice Templates' }
+      },
+      {
+        path: 'invoice-templates/ledger',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-ledger/invoice-ledger.component').then(m => m.InvoiceLedgerComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Sent Invoices' }
+      },
+      {
+        path: 'invoice-templates/new',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-edit/invoice-template-edit.component').then(m => m.InvoiceTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'New Invoice Template' }
+      },
+      {
+        path: 'invoice-templates/:id',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-edit/invoice-template-edit.component').then(m => m.InvoiceTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Edit Invoice Template' }
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

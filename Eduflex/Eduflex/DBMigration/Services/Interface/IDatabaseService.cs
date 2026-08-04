@@ -12,11 +12,11 @@ namespace DBMigration.Services.Interface
         Task<bool> TestConnectionAsync();
         string GetOutputDirectory();
         Task<BsonDocument> GetCollection(string collectionName);
-        Task CreateCollectionsAsync();
         Task DropCollectionsAsync();
         Task<List<string>> GetCollectionNamesAsync();
         Task<long> GetCollectionCountAsync(string collectionName);
         Task InsertTestDataAsync();
         Task ClearTestDataAsync();
+        Task ExportReferenceDataAsync();
     }
 }

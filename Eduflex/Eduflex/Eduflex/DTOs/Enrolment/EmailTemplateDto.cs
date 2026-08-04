@@ -8,6 +8,7 @@ namespace Eduflex.DTOs.Enrolment
         public string Subject { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
         public bool IsSystemDefault { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class CreateEmailTemplateDto
@@ -23,5 +24,10 @@ namespace Eduflex.DTOs.Enrolment
         public string Name { get; set; } = string.Empty;
         public string Subject { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
+    }
+
+    public class SetEmailTemplateStatusDto
+    {
+        public bool IsActive { get; set; }
     }
 }

@@ -1,0 +1,165 @@
+2026-08-01 05:24:39.559 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-08-01 05:24:39.798 +07:00 [INF] Subscribed to Redis channel eduflex:feedback:published
+2026-08-01 05:24:41.548 +07:00 [INF] Now listening on: https://localhost:5083
+2026-08-01 05:24:41.550 +07:00 [INF] Now listening on: http://localhost:5084
+2026-08-01 05:24:41.911 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-08-01 05:24:41.914 +07:00 [INF] Hosting environment: Development
+2026-08-01 05:24:41.917 +07:00 [INF] Content root path: D:\Self training\EduflexProject\Eduflex\Eduflex\Eduflex
+2026-08-01 05:24:43.839 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger - null null
+2026-08-01 05:24:44.718 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger - 301 0 null 900.802ms
+2026-08-01 05:24:44.741 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.html - null null
+2026-08-01 05:24:44.922 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.html - 200 null text/html;charset=utf-8 181.7731ms
+2026-08-01 05:24:44.997 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.css - null null
+2026-08-01 05:24:44.997 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui.css - null null
+2026-08-01 05:24:44.998 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui-bundle.js - null null
+2026-08-01 05:24:44.998 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/swagger-ui-standalone-preset.js - null null
+2026-08-01 05:24:44.998 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2026-08-01 05:24:45.038 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/index.js - null null
+2026-08-01 05:24:45.085 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2026-08-01 05:24:45.110 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.js - 200 null application/javascript;charset=utf-8 110.1853ms
+2026-08-01 05:24:45.205 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/index.css - 200 152 text/css 207.3926ms
+2026-08-01 05:24:45.258 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui-standalone-preset.js - 200 70860 text/javascript 259.6729ms
+2026-08-01 05:24:45.262 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui.css - 200 23647 text/css 264.828ms
+2026-08-01 05:24:45.284 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 285.5062ms
+2026-08-01 05:24:45.380 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/swagger-ui-bundle.js - 200 417980 text/javascript 382.2058ms
+2026-08-01 05:24:45.499 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 200 null text/javascript; charset=UTF-8 453.7507ms
+2026-08-01 05:24:45.631 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2026-08-01 05:24:45.668 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/favicon-32x32.png - null null
+2026-08-01 05:24:45.671 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 40.8288ms
+2026-08-01 05:24:45.687 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/favicon-32x32.png - 200 628 image/png 19.2926ms
+2026-08-01 05:24:50.979 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/public/swagger.json - null null
+2026-08-01 05:24:51.020 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/public/swagger.json - 200 null application/json;charset=utf-8 42.1253ms
+2026-08-01 05:24:57.697 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/app/swagger.json - null null
+2026-08-01 05:24:57.936 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/app/swagger.json - 200 null application/json;charset=utf-8 239.1553ms
+2026-08-01 05:27:59.934 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2026-08-01 05:28:00.378 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:00.446 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 514.6629ms
+2026-08-01 05:28:00.528 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 51
+2026-08-01 05:28:00.588 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:01.155 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-08-01 05:28:01.457 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Auth.AuthResponseDto]] Login(Eduflex.DTOs.Auth.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2026-08-01 05:28:05.336 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2026-08-01 05:28:05.722 +07:00 [INF] Last login updated for user: 6a65bf12c651d2df053a0385
+2026-08-01 05:28:06.604 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Auth.AuthResponseDto'.
+2026-08-01 05:28:06.664 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 5193.0978ms
+2026-08-01 05:28:06.764 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-08-01 05:28:06.774 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 6246.2072ms
+2026-08-01 05:28:13.291 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Settings - null null
+2026-08-01 05:28:13.295 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-08-01 05:28:13.329 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:13.330 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:13.331 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Settings - 204 null null 40.5726ms
+2026-08-01 05:28:13.333 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 38.003ms
+2026-08-01 05:28:13.335 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-08-01 05:28:13.405 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/api/Settings - null null
+2026-08-01 05:28:13.433 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:13.436 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:13.991 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-08-01 05:28:13.995 +07:00 [INF] Route matched with {action = "GetSettings", controller = "Settings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Settings.SettingsDto]] GetSettings() on controller Eduflex.API.Controllers.SettingsController (Eduflex).
+2026-08-01 05:28:14.003 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-08-01 05:28:14.008 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-08-01 05:28:14.123 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Settings.SettingsDto'.
+2026-08-01 05:28:14.145 +07:00 [INF] Executed action Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex) in 147.5157ms
+2026-08-01 05:28:14.150 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.SettingsController.GetSettings (Eduflex)'
+2026-08-01 05:28:14.153 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/api/Settings - 200 null application/json; charset=utf-8 747.8793ms
+2026-08-01 05:28:14.716 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-08-01 05:28:14.862 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 745.3445ms
+2026-08-01 05:28:14.882 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-08-01 05:28:14.884 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 1549.4025ms
+2026-08-01 05:28:47.883 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - null null
+2026-08-01 05:28:48.078 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:48.079 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks - 204 null null 195.6196ms
+2026-08-01 05:28:48.082 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks - application/json 10111
+2026-08-01 05:28:48.237 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:48.266 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-08-01 05:28:48.427 +07:00 [INF] Route matched with {action = "CreateFeedback", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Boolean]] CreateFeedback(Eduflex.DTOs.Feedback.CreateFeedbackDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-08-01 05:28:49.098 +07:00 [INF] Created new feedback with ID: 6a6d21a0060606cc890b44b5 for test
+2026-08-01 05:28:49.209 +07:00 [INF] New feedback received: 6a6d21a0060606cc890b44b5 from test about test
+2026-08-01 05:28:49.240 +07:00 [INF] Executing OkObjectResult, writing value of type 'System.Boolean'.
+2026-08-01 05:28:49.241 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex) in 810.6933ms
+2026-08-01 05:28:49.262 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.CreateFeedback (Eduflex)'
+2026-08-01 05:28:49.263 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks - 200 null application/json; charset=utf-8 1181.2048ms
+2026-08-01 05:28:49.289 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - null null
+2026-08-01 05:28:49.295 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:49.296 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Feedbacks/search-feedbacks - 204 null null 7.4137ms
+2026-08-01 05:28:49.361 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - application/json 30
+2026-08-01 05:28:49.503 +07:00 [INF] CORS policy execution successful.
+2026-08-01 05:28:49.508 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-08-01 05:28:49.511 +07:00 [INF] Route matched with {action = "SearchFeedbacks", controller = "Feedbacks"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[ShareService.Common.PagedResult`1[Eduflex.DTOs.Feedback.FeedbackDto]]] SearchFeedbacks(Eduflex.DTOs.Feedback.FeedbackFilterDto) on controller Eduflex.API.Controllers.FeedbacksController (Eduflex).
+2026-08-01 05:28:49.528 +07:00 [INF] Executing OkObjectResult, writing value of type 'ShareService.Common.PagedResult`1[[Eduflex.DTOs.Feedback.FeedbackDto, Eduflex, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-08-01 05:28:49.640 +07:00 [INF] Executed action Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex) in 128.5154ms
+2026-08-01 05:28:49.644 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.FeedbacksController.SearchFeedbacks (Eduflex)'
+2026-08-01 05:28:49.656 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Feedbacks/search-feedbacks - 200 null application/json; charset=utf-8 295.0194ms
+2026-08-01 06:02:52.952 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-08-01 06:02:53.001 +07:00 [INF] Subscribed to Redis channel eduflex:notifications
+2026-08-01 06:02:53.077 +07:00 [INF] Now listening on: http://localhost:5246
+2026-08-01 06:02:53.081 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-08-01 06:02:53.083 +07:00 [INF] Hosting environment: Development
+2026-08-01 06:02:53.086 +07:00 [INF] Content root path: D:\Self training\EduflexProject\Eduflex\Eduflex\Eduflex
+2026-08-01 06:03:22.199 +07:00 [INF] Notified role Staff: Test 1 — hello world
+2026-08-01 06:14:23.113 +07:00 [INF] Application is shutting down...
+2026-08-01 06:14:35.889 +07:00 [INF] User profile is available. Using 'C:\Users\edufl\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-08-01 06:14:35.934 +07:00 [INF] Subscribed to Redis channel eduflex:notifications
+2026-08-01 06:14:36.034 +07:00 [INF] Now listening on: https://localhost:5083
+2026-08-01 06:14:36.035 +07:00 [INF] Now listening on: http://localhost:5084
+2026-08-01 06:14:36.036 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-08-01 06:14:36.037 +07:00 [INF] Hosting environment: Development
+2026-08-01 06:14:36.037 +07:00 [INF] Content root path: D:\Self training\EduflexProject\Eduflex\Eduflex\Eduflex
+2026-08-01 06:24:09.572 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2026-08-01 06:24:09.572 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2026-08-01 06:24:09.836 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 404 0 null 272.4129ms
+2026-08-01 06:24:09.836 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 404 0 null 272.4073ms
+2026-08-01 06:24:09.859 +07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5083/_vs/browserLink, Response status code: 404
+2026-08-01 06:24:09.871 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2026-08-01 06:24:09.874 +07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js, Response status code: 404
+2026-08-01 06:24:10.163 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 291.8235ms
+2026-08-01 06:24:40.527 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - null null
+2026-08-01 06:24:40.558 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/_vs/browserLink - null null
+2026-08-01 06:24:40.925 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_vs/browserLink - 404 0 null 383.0134ms
+2026-08-01 06:24:40.927 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js - 404 0 null 400.3359ms
+2026-08-01 06:24:41.269 +07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5083/_vs/browserLink, Response status code: 404
+2026-08-01 06:24:41.284 +07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5083/_framework/aspnetcore-browser-refresh.js, Response status code: 404
+2026-08-01 06:24:49.048 +07:00 [INF] Request starting HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - null null
+2026-08-01 06:24:50.285 +07:00 [INF] Request finished HTTP/2 GET https://localhost:5083/swagger/auth/swagger.json - 200 null application/json;charset=utf-8 1237.1749ms
+2026-08-01 06:25:50.085 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - null null
+2026-08-01 06:25:50.155 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:25:50.176 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/api/Auth/login - 204 null null 91.3577ms
+2026-08-01 06:25:50.182 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/api/Auth/login - application/json 51
+2026-08-01 06:25:50.371 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:25:50.375 +07:00 [INF] Executing endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-08-01 06:25:50.567 +07:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Eduflex.DTOs.Auth.AuthResponseDto]] Login(Eduflex.DTOs.Auth.LoginDto) on controller Eduflex.API.Controllers.AuthController (Eduflex).
+2026-08-01 06:25:54.080 +07:00 [INF] User validation result for admin@eduflex.com: Success
+2026-08-01 06:25:55.248 +07:00 [INF] Last login updated for user: 6a65bf12c651d2df053a0385
+2026-08-01 06:25:55.969 +07:00 [INF] Executing OkObjectResult, writing value of type 'Eduflex.DTOs.Auth.AuthResponseDto'.
+2026-08-01 06:25:56.204 +07:00 [INF] Executed action Eduflex.API.Controllers.AuthController.Login (Eduflex) in 5621.4179ms
+2026-08-01 06:25:56.232 +07:00 [INF] Executed endpoint 'Eduflex.API.Controllers.AuthController.Login (Eduflex)'
+2026-08-01 06:25:56.264 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/api/Auth/login - 200 null application/json; charset=utf-8 6082.2981ms
+2026-08-01 06:25:57.264 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - null null
+2026-08-01 06:25:57.288 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:25:57.291 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - 204 null null 26.5087ms
+2026-08-01 06:25:57.333 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - null 0
+2026-08-01 06:25:57.363 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:25:57.995 +07:00 [INF] Executing endpoint '/hubs/notifications/negotiate'
+2026-08-01 06:25:58.037 +07:00 [INF] Executed endpoint '/hubs/notifications/negotiate'
+2026-08-01 06:25:58.051 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - 200 316 application/json 718.1041ms
+2026-08-01 06:25:58.067 +07:00 [INF] Request starting HTTP/2 CONNECT https://localhost:5083/hubs/notifications?id=6e47K-dh8cFlM7n0kpfeUQ&access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2YTY1YmYxMmM2NTFkMmRmMDUzYTAzODUiLCJlbWFpbCI6ImFkbWluQGVkdWZsZXguY29tIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzg1NTQwMzU1LCJleHAiOjE3ODU1ODM1NTUsImlhdCI6MTc4NTU0MDM1NX0.ZvpQT5dNHT1T8OAbBZO5afPnUip_x4uR5oNGjpzOzrg - null null
+2026-08-01 06:25:58.088 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:25:58.142 +07:00 [INF] Executing endpoint '/hubs/notifications'
+2026-08-01 06:26:19.455 +07:00 [INF] Notified role Staff: Test 1 — hello world
+2026-08-01 06:27:31.851 +07:00 [INF] Notified role Admin: Test 1 — hello admin
+2026-08-01 06:30:37.103 +07:00 [INF] Executed endpoint '/hubs/notifications'
+2026-08-01 06:30:37.254 +07:00 [INF] Request finished HTTP/2 CONNECT https://localhost:5083/hubs/notifications?id=6e47K-dh8cFlM7n0kpfeUQ&access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2YTY1YmYxMmM2NTFkMmRmMDUzYTAzODUiLCJlbWFpbCI6ImFkbWluQGVkdWZsZXguY29tIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzg1NTQwMzU1LCJleHAiOjE3ODU1ODM1NTUsImlhdCI6MTc4NTU0MDM1NX0.ZvpQT5dNHT1T8OAbBZO5afPnUip_x4uR5oNGjpzOzrg - 200 null null 279191.5499ms
+2026-08-01 06:30:38.419 +07:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - null null
+2026-08-01 06:30:38.488 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:30:38.497 +07:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - 204 null null 78.4937ms
+2026-08-01 06:30:38.540 +07:00 [INF] Request starting HTTP/2 POST https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - null 0
+2026-08-01 06:30:40.792 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:30:41.069 +07:00 [INF] Executing endpoint '/hubs/notifications/negotiate'
+2026-08-01 06:30:41.096 +07:00 [INF] Executed endpoint '/hubs/notifications/negotiate'
+2026-08-01 06:30:41.228 +07:00 [INF] Request finished HTTP/2 POST https://localhost:5083/hubs/notifications/negotiate?negotiateVersion=1 - 200 316 application/json 2688.5521ms
+2026-08-01 06:30:41.241 +07:00 [INF] Request starting HTTP/2 CONNECT https://localhost:5083/hubs/notifications?id=4zPEWA1aFvBwMgLgfvwzVw&access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI2YTY1YmYxMmM2NTFkMmRmMDUzYTAzODUiLCJlbWFpbCI6ImFkbWluQGVkdWZsZXguY29tIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzg1NTQwMzU1LCJleHAiOjE3ODU1ODM1NTUsImlhdCI6MTc4NTU0MDM1NX0.ZvpQT5dNHT1T8OAbBZO5afPnUip_x4uR5oNGjpzOzrg - null null
+2026-08-01 06:30:41.257 +07:00 [INF] CORS policy execution successful.
+2026-08-01 06:30:41.368 +07:00 [INF] Executing endpoint '/hubs/notifications'
+2026-08-01 06:30:54.728 +07:00 [INF] Notified role Admin: Test 1 — hello admin
+2026-08-01 06:31:27.332 +07:00 [INF] Notified role Admin: Test 2 1 — hello admin
+2026-08-01 06:31:31.357 +07:00 [INF] Notified role Admin: Test 2 1 — hello admin

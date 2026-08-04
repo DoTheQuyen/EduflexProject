@@ -1,0 +1,71 @@
+<div class="invoice-ledger-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Invoice Templates
+    </button>
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+      <div>
+        <h3 class="mb-1">Sent Invoices</h3>
+        <p class="text-muted mb-0">Every invoice ever sent through the Invoice Template system, in issue order.</p>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-3">
+      <select class="form-select form-select-sm w-auto" [(ngModel)]="categoryFilter" (ngModelChange)="load()">
+        <option value="">All categories</option>
+        <option value="Customer">Customer</option>
+        <option value="Partner">Partner</option>
+      </select>
+      <select class="form-select form-select-sm w-auto" [(ngModel)]="statusFilter" (ngModelChange)="load()">
+        <option value="">All statuses</option>
+        <option value="Sent">Sent</option>
+        <option value="Paid">Paid</option>
+      </select>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading" class="card border shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Invoice No.</th>
+              <th>Recipient</th>
+              <th>Category</th>
+              <th class="text-end">Total</th>
+              <th class="text-center">Status</th>
+              <th>Sent</th>
+              <th class="text-center">PDF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let inv of invoices">
+              <td class="fw-semibold">{{ inv.invoiceNo }}</td>
+              <td>{{ inv.recipientName }}<div class="text-muted small">{{ inv.recipientEmail }}</div></td>
+              <td>
+                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.category === 'Customer'" [class.badge-pill-accent-soft]="inv.category === 'Partner'">{{ inv.category }}</span>
+              </td>
+              <td class="text-end">{{ inv.total | number:'1.2-2' }}</td>
+              <td class="text-center">
+                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Sent'" [class.badge-pill-success-soft]="inv.status === 'Paid'">{{ inv.status }}</span>
+              </td>
+              <td>{{ inv.sentAt | date:'dd/MM/yyyy' }}</td>
+              <td class="text-center">
+                <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="inv.pdfUrl" (click)="download(inv)">
+                  <i class="fas fa-file-pdf"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="invoices.length === 0" class="text-center text-muted py-4 mb-0">No invoices sent yet.</p>
+      </div>
+    </div>
+  </div>
+</div>

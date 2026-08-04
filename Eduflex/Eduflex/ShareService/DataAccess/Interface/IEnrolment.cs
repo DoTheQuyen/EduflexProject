@@ -9,6 +9,7 @@ namespace ShareService.DataAccess.Interface
         Task<bool> CreateEnrolmentAsync(EnrolmentModel enrolment, IClientSessionHandle? session = null);
         Task<EnrolmentModel?> GetEnrolmentAsync(string id);
         Task<EnrolmentModel?> GetEnrolmentByEnquiryIdAsync(string enquiryId);
+        Task<EnrolmentModel?> GetEnrolmentByStudentApplicationIdAsync(string studentApplicationId);
         Task<List<EnrolmentModel>> GetByIdsAsync(IEnumerable<string> ids);
         Task<PagedResult<EnrolmentModel>> GetEnrolmentsAsync(EnrolmentFilter filter);
         Task<bool> ReplaceEnrolmentAsync(string id, EnrolmentModel enrolment);

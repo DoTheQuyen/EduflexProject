@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'student-portal/application/:id/forms/:formId',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'staff-portal/enquiries/:id',
     renderMode: RenderMode.Client
   },
@@ -31,6 +35,18 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'staff-portal/financial-records/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/dynamic-forms/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/email-templates/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/invoice-templates/:id',
     renderMode: RenderMode.Client
   },
   {

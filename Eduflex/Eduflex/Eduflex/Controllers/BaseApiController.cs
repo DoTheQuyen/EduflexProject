@@ -19,6 +19,11 @@ namespace Eduflex.API.Controllers
         protected string GetRequiredUserId() =>
             GetActingUserId() ?? throw new UnauthorizedAccessException("User not authenticated");
 
+        protected string? GetActingRole() => User.FindFirst(ClaimTypes.Role)?.Value;
+
+        protected string GetRequiredRole() =>
+            GetActingRole() ?? throw new UnauthorizedAccessException("User role not found");
+
         protected async Task<ActionResult<bool>> HandleCreateAsync<T>(ILogger logger, string errorContext, Func<Task<T>> action)
         {
             try

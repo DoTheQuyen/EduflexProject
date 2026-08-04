@@ -4,6 +4,7 @@ using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
+using ShareService.Enums.Roles;
 using ShareService.Models.Application;
 using ShareService.Services.Interface;
 
@@ -15,45 +16,33 @@ namespace ShareService.Services
         private readonly IValidator<ApplicationModel> _createApplicationValidator;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IPermissionService _permissionService;
+        private readonly INotificationPublisher _notificationPublisher;
 
         public ApplicationService(
             IApplication applicationDataAccess,
             IValidator<ApplicationModel> createApplicationValidator,
             ILogger<ApplicationService> logger,
-            IPermissionService permissionService)
+            IPermissionService permissionService,
+            INotificationPublisher notificationPublisher)
         {
             _applicationDataAccess = applicationDataAccess;
             _createApplicationValidator = createApplicationValidator;
             _logger = logger;
             _permissionService = permissionService;
+            _notificationPublisher = notificationPublisher;
         }
 
-        /// <summary>
-        /// Get applications by student ID with business logic processing
-        /// </summary>
-        /// <param name="studentId"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="Exception"></exception>
-        // Auth: none — and unlike the other methods here, that's not a deliberate "open"
-        // decision, it's because nothing in the codebase currently calls this method at
-        // all (dead code). Add a permission check before wiring up a real caller.
         public async Task<List<ApplicationModel>> GetApplicationsByStudentId(string studentId)
         {
             try
             {
-                // Validation
                 if (string.IsNullOrWhiteSpace(studentId))
                 {
                     throw new ArgumentException("Student ID cannot be empty");
                 }
 
-                // Authorization here (future implementation)
-
-                // Process business rule here
                 var applications = await _applicationDataAccess.GetApplicationsByStudentIdAsync(studentId);
 
-                // Business logic: Return limited information for list view
                 var result = applications.Select(a => new ApplicationModel
                 {
                     Id = a.Id,
@@ -73,14 +62,10 @@ namespace ShareService.Services
             }
         }
 
-        // Auth: requires ApplicationsView permission. Results are further scoped to the
-        // caller's own student record — this is a "list my applications" endpoint, not a
-        // staff-wide search (see the known gap noted in GetApplicationsByStudentId below).
         public async Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query)
         {
             try
             {
-                // Validation
                 if (string.IsNullOrWhiteSpace(userId))
                 {
                     throw new ArgumentException("User ID cannot be empty");
@@ -99,10 +84,8 @@ namespace ShareService.Services
                     return new PagedResult<ApplicationModel> { PageNumber = query.PageNumber, PageSize = query.PageSize };
                 }
 
-                // Process business rule here
                 var result = await _applicationDataAccess.GetApplicationsByStudentIdAsync(student.Id, query);
 
-                // Business logic: Return limited information for list view
                 result.Items = result.Items.Select(a => new ApplicationModel
                 {
                     Id = a.Id,
@@ -132,20 +115,10 @@ namespace ShareService.Services
             }
         }
 
-        /// <summary>
-        /// Get application details by ID with validation and business logic
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        // Auth: requires ApplicationsView permission, AND ownership — the caller must be
-        // the student the application belongs to. Both checks are needed: permission
-        // alone can't tell you whose application this is.
         public async Task<ApplicationDetailModel?> GetApplicationById(string id, string userId)
         {
             try
             {
-                // Validation
                 if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(userId))
                 {
                     throw new ArgumentException("Application ID and User ID cannot be empty");
@@ -157,7 +130,6 @@ namespace ShareService.Services
                     throw new UnauthorizedAccessException("You do not have permission to view applications");
                 }
 
-                // Get student by userId for authorization
                 var student = await _applicationDataAccess.GetStudentByUserIdAsync(userId);
                 if (student == null)
                 {
@@ -165,7 +137,6 @@ namespace ShareService.Services
                     return null;
                 }
 
-                // Get application
                 var application = await _applicationDataAccess.GetApplicationByIdAsync(id);
                 if (application == null)
                 {
@@ -173,7 +144,6 @@ namespace ShareService.Services
                     return null;
                 }
 
-                // Authorization: Check if application belongs to student
                 if (application.StudentId != student.Id)
                 {
                     _logger.LogWarning("User {UserId} attempted to access application {ApplicationId} that doesn't belong to them",
@@ -212,17 +182,8 @@ namespace ShareService.Services
             }
         }
 
-        /// <summary>
-        /// Create new application with validation and business logic
-        /// </summary>
-        /// <param name="createDto"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="Exception"></exception>
-        // Auth: requires ApplicationsAdd permission (granted to Student, Staff, Manager, Admin).
         public async Task<ApplicationModel> CreateApplication(ApplicationModel application, string userId)
         {
-            // Use FluentValidation to validate input
             var validate = await _createApplicationValidator.ValidateAsync(application);
             if (!validate.IsValid)
             {
@@ -239,15 +200,12 @@ namespace ShareService.Services
                     throw new UnauthorizedAccessException("You do not have permission to create applications");
                 }
 
-                // Process business rule here
-
                 application.Id = string.Empty;
                 application.DateApplied = DateTime.UtcNow;
-                application.Status = "Pending"; // Default status
+                application.Status = "Pending";
 
                 var createdApplication = await _applicationDataAccess.CreateApplicationAsync(application);
 
-                // Business logic: Return limited information
                 var result = new ApplicationModel
                 {
                     Id = createdApplication.Id,
@@ -256,6 +214,13 @@ namespace ShareService.Services
                     Status = createdApplication.Status,
                     ApplicationType = createdApplication.ApplicationType
                 };
+
+                await _notificationPublisher.PublishToRoleAsync(
+                    module: "Application",
+                    entityId: result.Id,
+                    summary: $"New application submitted ({result.ApplicationType})",
+                    role: SystemRole.Staff);
+
                 _logger.LogInformation("Created new application with ID: {ApplicationId} for student {StudentId}",
                     result.Id, application.StudentId);
 
@@ -272,15 +237,6 @@ namespace ShareService.Services
             }
         }
 
-        /// <summary>
-        /// Update application status with validation and business logic
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        /// <exception cref="Exception"></exception>
-        // Auth: requires ApplicationsEdit permission (staff-only — Student is never granted this).
         public async Task<bool> UpdateApplicationStatus(string id, string status, string userId)
         {
             try
@@ -291,14 +247,21 @@ namespace ShareService.Services
                     throw new UnauthorizedAccessException("You do not have permission to update application status");
                 }
 
-                // Process business rule here
-
                 if (!isAValidStatus(status))
                 {
                     throw new ArgumentException("Status must be one of: Pending, Approved, Rejected, Studying");
                 }
 
                 var result = await _applicationDataAccess.UpdateApplicationStatusAsync(id, status);
+
+                if (result)
+                {
+                    await _notificationPublisher.PublishToRoleAsync(
+                        module: "Application",
+                        entityId: id,
+                        summary: $"Application status changed to {status}",
+                        role: SystemRole.Manager);
+                }
 
                 _logger.LogInformation("Status update for application {ApplicationId}: {Status} - Success: {Success}",
                     id, status, result);
@@ -322,11 +285,7 @@ namespace ShareService.Services
 
         private bool isAValidStatus(string status)
         {
-            // "Studying" is set by EnrolmentService once staff enrol an accepted
-            // application, not chosen directly through this status endpoint's normal
-            // staff workflow, but it's still a legitimate value to accept/store here.
             return status == "Pending" || status == "Approved" || status == "Rejected" || status == "Studying";
         }
-
     }
 }

@@ -27,13 +27,13 @@ namespace DBMigration.Migrations
                 var defaultUploadLimit = new BsonDocument
                 {
                     { "maxSizeMB", 5.0 },
-                    { "allowedExtensions", new BsonArray { ".pdf", ".jpg", ".jpeg", ".png" } },
+                    { "allowedExtensions", new BsonArray { ".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".rtf", ".csv" } },
                     { "maxFileCount", 1 }
                 };
                 var otherUploadLimit = new BsonDocument
                 {
                     { "maxSizeMB", 5.0 },
-                    { "allowedExtensions", new BsonArray { ".pdf", ".jpg", ".jpeg", ".png" } },
+                    { "allowedExtensions", new BsonArray {  ".pdf", ".jpg", ".jpeg", ".png", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".rtf", ".csv" } },
                     { "maxFileCount", 4 }
                 };
 

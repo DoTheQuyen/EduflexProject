@@ -8,7 +8,7 @@ using MongoDB.Driver;
 using ShareService.Models.Setting;
 using Spectre.Console;
 
-AnsiConsole.Write(new FigletText("EduFlex DB Manager").Color(Color.Blue));
+//AnsiConsole.Write(new FigletText("EduFlex DB Manager").Color(Color.Blue));
 AnsiConsole.MarkupLine("[green]MongoDB Database Management Console. Developed by Quyen Do[/]");
 AnsiConsole.WriteLine();
 

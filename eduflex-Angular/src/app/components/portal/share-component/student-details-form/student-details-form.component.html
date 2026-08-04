@@ -28,7 +28,8 @@
   <div class="row">
     <div class="col-md-4 mb-3">
       <label for="nationality" class="form-label">Nationality *</label>
-      <input id="nationality" type="text" class="form-control" formControlName="nationality">
+      <app-country-select id="nationality" formControlName="nationality"
+        placeholder="Start typing a nationality…"></app-country-select>
       <span class="field-error" *ngIf="isFieldInvalid('nationality')">Nationality is required</span>
     </div>
     <div class="col-md-4 mb-3">
@@ -75,7 +76,8 @@
   <div class="row">
     <div class="col-md-6 mb-3">
       <label for="country" class="form-label">Country *</label>
-      <input id="country" type="text" class="form-control" formControlName="country">
+      <app-country-select id="country" formControlName="country"
+        placeholder="Start typing a country…"></app-country-select>
       <span class="field-error" *ngIf="isFieldInvalid('country')">Country is required</span>
     </div>
   </div>

@@ -1,3 +1,6 @@
+import type { EnrolmentFormResponse } from './dynamic-form';
+import { templateStatusBadgeClass } from './dynamic-form';
+
 export interface Address {
   street?: string;
   suburb?: string;
@@ -76,6 +79,17 @@ export const VISA_STEP_ORDER: VisaStepKey[] = [
   'StudentInfo', 'EnrolmentForm', 'ApplyOffer', 'CoeCompletion', 'VisaApplication', 'VisaOutcome'
 ];
 
+// Shared with the Dynamic Forms module (bound-step picker/labels), not just the
+// VISA Process tab — kept here alongside VISA_STEP_ORDER as the one source of truth.
+export const VISA_STEP_LABELS: Record<VisaStepKey, string> = {
+  StudentInfo: 'Student Info',
+  EnrolmentForm: 'Enrolment Form',
+  ApplyOffer: 'Apply Offer',
+  CoeCompletion: 'CoE Completion',
+  VisaApplication: 'VISA Application',
+  VisaOutcome: 'VISA Outcome'
+};
+
 // EnrolmentForm's 'GS' entry is here only so its upload zone renders — that step is
 // already Complete by the time it's shown (auto-completed at creation), so unlike the
 // other four it's never actually *required* to unlock anything.
@@ -96,6 +110,47 @@ export interface VisaProcessStep {
 }
 
 export type EnrolmentStatus = 'Draft' | 'Offer' | 'Coe' | 'ApplyVisa' | 'VisaSuccess' | 'VisaFail' | 'Cancel';
+
+// A student can be pursuing several courses/universities at once under one Enrolment —
+// each gets its own row here, nested as a sub-panel inside the Enrolment Form step.
+// Finalized is only reachable from Offered (via the dedicated Finalize action, not the
+// general status setter), and finalizing one withdraws every sibling automatically.
+export type CourseApplicationStatus = 'Init' | 'Applied' | 'Offered' | 'Finalized' | 'Withdrawn';
+
+export const COURSE_APPLICATION_STATUS_LABELS: Record<CourseApplicationStatus, string> = {
+  Init: 'Init',
+  Applied: 'Applied',
+  Offered: 'Offered',
+  Finalized: 'Finalized',
+  Withdrawn: 'Withdrawn'
+};
+
+export function courseApplicationStatusBadgeClass(status: CourseApplicationStatus): string {
+  switch (status) {
+    case 'Finalized': return 'badge-pill-success-soft';
+    case 'Withdrawn': return 'badge-pill-muted-soft';
+    case 'Offered': return 'badge-pill-accent-soft';
+    default: return 'badge-pill-navy-soft';
+  }
+}
+
+export interface CourseApplication {
+  id: string;
+  educationPartnerId: string;
+  courseId: string;
+  status: CourseApplicationStatus;
+  intake?: string;
+  studyMode?: string;
+  campus?: string;
+  commencementDate?: string;
+  expectedCompletionDate?: string;
+  actualCommencementDate?: string;
+  notes?: string;
+  tuitionFee?: number;
+  createdAt: string;
+  statusUpdatedAt?: string;
+  statusUpdatedByName?: string;
+}
 
 export interface Enrolment {
   id: string;
@@ -136,8 +191,13 @@ export interface Enrolment {
 
   documents: EnrolmentDocument[];
   communications: EnrolmentCommunication[];
+  formResponses: EnrolmentFormResponse[];
   auditTrail: EnrolmentAuditEntry[];
   visaProcessSteps: VisaProcessStep[];
+  courseApplications: CourseApplication[];
+  // Null means "use the global Settings.maxApplicationsPerStudent value" — see
+  // visa-process-tab.component.ts's effectiveMaxApplications.
+  maxApplicationsOverride?: number;
 
   createdAt: string;
   updatedAt: string;
@@ -199,4 +259,11 @@ export interface EmailTemplate {
   subject: string;
   body: string;
   isSystemDefault: boolean;
+  isActive: boolean;
+}
+
+// Reuses the DynamicForms module's badge styling (identical Active/Inactive shape)
+// rather than duplicating the color-class mapping — see templateStatusBadgeClass.
+export function emailTemplateStatusBadgeClass(template: EmailTemplate): string {
+  return templateStatusBadgeClass(template.isActive ? 'Active' : 'Inactive');
 }

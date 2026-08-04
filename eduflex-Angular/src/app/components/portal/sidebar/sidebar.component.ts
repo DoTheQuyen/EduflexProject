@@ -125,8 +125,20 @@ onGroupHeaderClick(item: MenuItem): void {
         if (this.authHelper.hasRolesPermission().view) {
       settingChildren.push({ title: 'Roles', icon: 'lock', route: '/staff-portal/roles' });
     }
+    if (this.authHelper.hasDepartmentsPermission().view) {
+      settingChildren.push({ title: 'Departments', icon: 'sitemap', route: '/staff-portal/departments' });
+    }
     if (this.authHelper.hasSettingsPermission().view) {
       settingChildren.push({ title: 'App Settings', icon: 'sliders', route: '/staff-portal/settings' });
+    }
+    if (this.authHelper.hasDynamicFormsPermission().view) {
+      settingChildren.push({ title: 'Dynamic Forms', icon: 'file-lines', route: '/staff-portal/dynamic-forms' });
+    }
+    if (this.authHelper.hasEmailTemplatesPermission().view) {
+      settingChildren.push({ title: 'Email Templates', icon: 'envelope-open-text', route: '/staff-portal/email-templates' });
+    }
+    if (this.authHelper.hasInvoiceTemplatesPermission().view) {
+      settingChildren.push({ title: 'Invoice Templates', icon: 'file-invoice-dollar', route: '/staff-portal/invoice-templates' });
     }
     if (settingChildren.length) {
       items.push({ title: 'Administration', icon: 'gear', children: settingChildren, expanded: false });

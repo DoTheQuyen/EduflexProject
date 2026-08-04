@@ -24,6 +24,7 @@ namespace ShareService.Tests
         private Mock<IValidator<ApplicationModel>> _validatorMock;
         private Mock<ILogger<ApplicationService>> _loggerMock;
         private Mock<IPermissionService> _permissionServiceMock;
+        private Mock<INotificationPublisher> _notificationPublisher;
         private ApplicationService _service;
 
         [SetUp]
@@ -33,6 +34,7 @@ namespace ShareService.Tests
             _validatorMock = new Mock<IValidator<ApplicationModel>>();
             _loggerMock = new Mock<ILogger<ApplicationService>>();
             _permissionServiceMock = new Mock<IPermissionService>();
+            _notificationPublisher = new Mock<INotificationPublisher>();
 
             // Validator always passes
             _validatorMock
@@ -57,7 +59,8 @@ namespace ShareService.Tests
                 _appRepoMock.Object,
                 _validatorMock.Object,
                 _loggerMock.Object,
-                _permissionServiceMock.Object
+                _permissionServiceMock.Object,
+                _notificationPublisher.Object
             );
         }
 

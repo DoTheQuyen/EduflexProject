@@ -22,7 +22,10 @@ namespace ShareService.Validations.Enrolment
 
             RuleFor(x => x.Body)
                 .NotEmpty().WithMessage("Body is required")
-                .MaximumLength(5000).WithMessage("Body must not exceed 5000 characters");
+                // Body now stores rich-text HTML from the editor, not plain text — markup
+                // (font/color/size spans) eats the character budget fast, so this is well
+                // above the old plain-text 5000 limit.
+                .MaximumLength(20000).WithMessage("Body must not exceed 20000 characters");
         }
     }
 }

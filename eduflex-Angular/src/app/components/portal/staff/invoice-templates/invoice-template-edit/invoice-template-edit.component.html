@@ -1,0 +1,193 @@
+<div class="invoice-template-edit-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Invoice Templates
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">{{ isEditMode ? 'Edit Invoice Template' : 'New Invoice Template' }}</h3>
+          <p class="text-muted mb-0">Branding and numbering used whenever an invoice is sent from this template.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="goBack()"
+            [disabled]="isSaving">Cancel</button>
+          <button type="button" class="btn btn-outline-info" (click)="openPreview()" [disabled]="isSaving">
+            <i class="fas fa-eye me-1"></i>Preview
+          </button>
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving">
+            {{ isSaving ? 'Saving...' : 'Save Template' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-8">
+          <div class="card border shadow-sm mb-3">
+            <div class="card-header bg-white"><strong>Template</strong></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Template name</label>
+                  <input type="text" class="form-control" [(ngModel)]="name"
+                    placeholder="e.g. Standard student invoice" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Category</label>
+                  <div class="btn-group d-block">
+                    <button type="button" class="btn btn-sm" [class.btn-primary]="category === 'Customer'"
+                      [class.btn-outline-secondary]="category !== 'Customer'" [disabled]="isEditMode"
+                      (click)="category = 'Customer'">Customer (Student)</button>
+                    <button type="button" class="btn btn-sm ms-2" [class.btn-primary]="category === 'Partner'"
+                      [class.btn-outline-secondary]="category !== 'Partner'" [disabled]="isEditMode"
+                      (click)="category = 'Partner'">Partner</button>
+                  </div>
+                  <span *ngIf="isEditMode" class="text-muted small d-block mt-1">Category can't be changed after
+                    creation.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border shadow-sm mb-3">
+            <div class="card-header bg-white"><strong>Sender details</strong></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Sender name</label>
+                  <input type="text" class="form-control" [(ngModel)]="senderName"
+                    placeholder="e.g. Edu Flex PTY LTD" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">ABN <span class="text-muted small">(optional)</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="senderAbn" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Address</label>
+                  <div class="d-flex gap-2 mb-2"
+                    *ngFor="let line of senderAddressLines; let i = index; trackBy: trackByIndex">
+                    <input type="text" class="form-control" [(ngModel)]="senderAddressLines[i]"
+                      placeholder="Address line" />
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                      (click)="removeAddressLine(i)">&times;</button>
+                  </div>
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="addAddressLine()">+ Add
+                    line</button>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" [(ngModel)]="senderEmail" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone <span class="text-muted small">(optional)</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="senderPhone" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border shadow-sm">
+            <div class="card-header bg-white"><strong>Bank details <span class="text-muted small fw-normal">(optional —
+                  shown on the invoice PDF if filled in)</span></strong></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Bank name</label>
+                  <input type="text" class="form-control" [(ngModel)]="bankName" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">BSB</label>
+                  <input type="text" class="form-control" [(ngModel)]="bankBsb" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Account number</label>
+                  <input type="text" class="form-control" [(ngModel)]="bankAccountNumber" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Account name</label>
+                  <input type="text" class="form-control" [(ngModel)]="bankAccountName" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card border shadow-sm mb-3">
+            <div class="card-header bg-white"><strong>Logo</strong></div>
+            <div class="card-body text-center">
+              <app-file-uploader variant="avatar" label="Upload logo" accept="image/*" [maxSizeMB]="2"
+                [previewUrl]="logoUrl" (fileSelected)="onLogoSelected($event)">
+              </app-file-uploader>
+              <p *ngIf="isUploadingLogo" class="text-muted small mt-2 mb-0">Uploading...</p>
+            </div>
+          </div>
+
+          <div class="card border shadow-sm">
+            <div class="card-header bg-white"><strong>Numbering</strong></div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Prefix</label>
+                <input type="text" class="form-control" [(ngModel)]="invoiceNoPrefix" [disabled]="isEditMode"
+                  placeholder="e.g. INV-Eduflex" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Number padding</label>
+                <input type="number" class="form-control" [(ngModel)]="numberPadding" [disabled]="isEditMode" min="1"
+                  max="8" />
+              </div>
+              <span *ngIf="isEditMode" class="text-muted small d-block mb-2">Prefix and padding can't be changed after
+                creation.</span>
+              <div class="preview-box">
+                <p class="text-muted small mb-1">{{ isEditMode ? 'Next invoice number' : 'First invoice will be' }}</p>
+                <p class="mb-0 fw-bold">{{ livePreview }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border shadow-sm mt-3">
+            <div class="card-header bg-white"><strong>Line item defaults <span
+                  class="text-muted small fw-normal">(optional)</span></strong></div>
+            <div class="card-body">
+              <p class="text-muted small mb-3">
+                When set, staff sending an invoice from this template see these values read-only instead of typing a
+                price in.
+                Leave a field blank to keep it free input. Amount can still be overridden by a Manager or Admin;
+                description and GST cannot.
+              </p>
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" [(ngModel)]="defaultDescription"
+                  placeholder="e.g. Enrolment Service Fee" />
+              </div>
+              <div class="row g-3">
+                <div class="col-6">
+                  <label class="form-label">Amount</label>
+                  <input type="number" min="0" step="0.01" class="form-control" [(ngModel)]="defaultAmount"
+                    placeholder="Free input" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label">GST %</label>
+                  <input type="number" min="0" max="100" step="0.1" class="form-control"
+                    [(ngModel)]="defaultGstRatePercent" placeholder="Free input" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-modal *ngIf="showPreview" title="Invoice Preview" size="lg" [showSave]="false" [showCancel]="true"
+      cancelLabel="Close" (cancel)="closePreview()" (closeModal)="closePreview()">
+      <div style="background:#fff;padding:24px;border:1px solid #DCE0E4;border-radius:4px;" [innerHTML]="previewHtml">
+      </div>
+    </app-modal>
+  </div>
+</div>

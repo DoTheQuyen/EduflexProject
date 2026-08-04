@@ -158,4 +158,55 @@ export class AuthHelperService {
       delete: false
     };
   }
+
+  // TODO(department-migration): switch these string literals to PermissionKey.Departments*
+  // once `nswag run` has been re-run against the updated backend — the enum doesn't have
+  // these members yet because api.services.ts hasn't been regenerated.
+  hasDepartmentsPermission(): ModulePermissions {
+    return {
+      view: this.hasPermission('DepartmentsView'),
+      add: this.hasPermission('DepartmentsAdd'),
+      edit: this.hasPermission('DepartmentsEdit'),
+      delete: this.hasPermission('DepartmentsDelete')
+    };
+  }
+
+  // TODO: switch to PermissionKey.DynamicFormsEdit once `nswag run` has been re-run
+  // against the updated backend. Single flat key, same shape as hasSettingsPermission —
+  // Dynamic Forms template management is admin-only, no separate Add/Delete keys.
+  hasDynamicFormsPermission(): ModulePermissions {
+    const canEdit = this.hasPermission('DynamicFormsEdit');
+    return {
+      view: canEdit,
+      add: canEdit,
+      edit: canEdit,
+      delete: canEdit
+    };
+  }
+
+  // TODO: switch to PermissionKey.EmailTemplatesEdit once `nswag run` has been re-run
+  // against the updated backend. Single flat key, same shape as hasDynamicFormsPermission —
+  // Email Templates management is admin-only, no separate Add/Delete keys.
+  hasEmailTemplatesPermission(): ModulePermissions {
+    const canEdit = this.hasPermission('EmailTemplatesEdit');
+    return {
+      view: canEdit,
+      add: canEdit,
+      edit: canEdit,
+      delete: canEdit
+    };
+  }
+
+  // Same flat-key shape as hasEmailTemplatesPermission — gates the admin Invoice
+  // Template management screen and the sent-invoice ledger. Sending an individual
+  // invoice from the Enrolment Form step doesn't use this — that's EnrolmentsEdit.
+  hasInvoiceTemplatesPermission(): ModulePermissions {
+    const canEdit = this.hasPermission('InvoiceTemplatesEdit');
+    return {
+      view: canEdit,
+      add: canEdit,
+      edit: canEdit,
+      delete: canEdit
+    };
+  }
 }

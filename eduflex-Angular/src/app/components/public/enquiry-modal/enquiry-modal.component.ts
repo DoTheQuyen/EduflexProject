@@ -53,7 +53,7 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
 
   private waitForRecaptchaAndRender(): void {
     this.recaptchaPollHandle = setInterval(() => {
-      const g = (window as any).grecaptcha;
+      const g = (window as any).grecaptcha?.enterprise;
       if (g && typeof g.render === 'function' && this.recaptchaContainer) {
         clearInterval(this.recaptchaPollHandle);
         this.recaptchaWidgetId = g.render(this.recaptchaContainer.nativeElement, {
@@ -129,8 +129,8 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
       error: (err) => {
         this.isSubmitting = false;
         this.errorMessage = extractApiErrorMessage(err, 'Something went wrong submitting your enquiry. Please try again.');
-        if (this.recaptchaWidgetId !== null && (window as any).grecaptcha) {
-          (window as any).grecaptcha.reset(this.recaptchaWidgetId);
+       if (this.recaptchaWidgetId !== null && (window as any).grecaptcha?.enterprise) {
+  (window as any).grecaptcha.enterprise.reset(this.recaptchaWidgetId);
           this.recaptchaToken = '';
         }
       }

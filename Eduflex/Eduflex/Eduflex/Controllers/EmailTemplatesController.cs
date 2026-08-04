@@ -21,15 +21,30 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
+        // Lightweight, non-permission-gated directory — any authenticated staff member
+        // needs this to populate a template picker when composing an enrolment/finance
+        // email, same reasoning as DynamicFormTemplatesController.GetAll. The gated
+        // GetById/Create/Update/SetStatus below are the admin management screen.
         [HttpGet]
         public Task<ActionResult<List<EmailTemplateDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll email templates endpoint", async () =>
             {
+                var templates = await _emailTemplateService.GetAllAsync();
+                return templates.Select(t => t.ToDto()).ToList();
+            });
+        }
+
+        [HttpGet("{id}")]
+        public Task<ActionResult<EmailTemplateDto>> GetById(string id)
+        {
+            return HandleRequestAsync(_logger, "Error in GetById email template endpoint", async () =>
+            {
                 var userId = GetRequiredUserId();
 
-                var templates = await _emailTemplateService.GetAllAsync(userId);
-                return templates.Select(t => t.ToDto()).ToList();
+                var template = await _emailTemplateService.GetByIdAsync(id, userId)
+                    ?? throw new KeyNotFoundException("Template not found");
+                return template.ToDto();
             });
         }
 
@@ -56,14 +71,14 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        [HttpDelete("{id}")]
-        public Task<IActionResult> Delete(string id)
+        [HttpPost("{id}/status")]
+        public Task<ActionResult<bool>> SetStatus(string id, SetEmailTemplateStatusDto statusDto)
         {
-            return HandleDeleteAsync(_logger, "Error in Delete email template endpoint", () =>
+            return HandleUpdateAsync(_logger, "Error in SetStatus email template endpoint", () =>
             {
                 var userId = GetRequiredUserId();
 
-                return _emailTemplateService.DeleteAsync(id, userId);
+                return _emailTemplateService.SetStatusAsync(id, statusDto.IsActive, userId);
             });
         }
     }

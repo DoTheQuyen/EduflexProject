@@ -25,6 +25,7 @@ namespace Eduflex.API.Controllers
         }
 
         [HttpGet("profile")]
+        [SkipMustChangePasswordCheck]
         public Task<ActionResult<UserDto>> GetUserProfile()
         {
             return HandleRequestAsync(_logger, "Error getting user profile", async () =>

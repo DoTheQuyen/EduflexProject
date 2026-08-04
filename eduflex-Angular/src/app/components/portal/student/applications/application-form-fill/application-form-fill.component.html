@@ -1,0 +1,57 @@
+<div class="application-form-fill container-fluid py-4">
+
+  <button type="button" class="back-link" (click)="backToApplication()">
+    <span class="back-arrow">&larr;</span> Back
+  </button>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && form as form">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+      <h2 class="mb-0">{{ form.formName }}</h2>
+      <span class="badge-pill" [ngClass]="formStatusBadgeClass()">{{ form.status }}</span>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="alert alert-info small" *ngIf="isFormLocked">
+          This form has been submitted and can't be edited. Contact your enrolment staff if you need changes.
+        </div>
+
+        <app-form-answer-editor *ngIf="!isFormLocked" [questions]="form.questionsSnapshot"
+          [answers]="fillAnswers"></app-form-answer-editor>
+
+        <app-form-print-preview *ngIf="isFormLocked" [formName]="form.formName" [questions]="form.questionsSnapshot"
+          [answers]="form.answers" [submittedAt]="form.submittedAt" mode="filled">
+        </app-form-print-preview>
+      </div>
+    </div>
+  </ng-container>
+
+  <app-modal *ngIf="showFinalizeConfirm && form" title="Submit and lock this form?" saveLabel="I agree, submit"
+    cancelLabel="Go back" [isSaving]="isSubmitting" (closeModal)="showFinalizeConfirm = false"
+    (cancel)="showFinalizeConfirm = false" (save)="confirmSubmitForm()">
+    <p>Once submitted, you <strong>won't be able to edit</strong> your answers. If you need to make changes afterward,
+      you'll have to contact your enrolment staff to unlock it back to Draft.</p>
+    <p class="small !text-muted mb-0">You can still view your submitted answers at any time.</p>
+  </app-modal>
+
+  <div class="detail-footer-bar" *ngIf="!isLoading && form && !isFormLocked">
+    <div class="small !text-muted">Answer the questions above, then save a draft or submit.</div>
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="button" class="btn btn-outline-secondary" (click)="backToApplication()">Back</button>
+      <button type="button" class="btn btn-outline-primary" [disabled]="isSavingDraft" (click)="saveFormDraft()">
+        {{ isSavingDraft ? 'Saving...' : 'Save Draft' }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="isSubmitting" (click)="openFinalizeConfirm()">
+        Final Submit
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3" *ngIf="!isLoading && form && isFormLocked">
+    <button type="button" class="btn btn-outline-secondary" (click)="backToApplication()">Back to Application</button>
+  </div>
+</div>

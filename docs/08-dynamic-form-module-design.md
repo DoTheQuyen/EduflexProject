@@ -213,19 +213,29 @@ trail already covers.
 - **Audit trail** — every action appends one `EnrolmentAuditEntryModel` (existing model, unchanged).
   New action strings: `FormRequested`, `FormWithdrawn`, `FormSubmitted`, `FormReopenedForEdit`,
   `FormStaffEdited`, `FormExported`.
-- **Documents** — appends one `EnrolmentDocumentModel` (existing model, unchanged),
-  `Category = "DynamicForm"`, `IsFromStudent = false`. Shows up in the Documents tab automatically.
-  **This happens automatically as part of `SubmitFormAsync`, not as a separate optional step** — the
-  moment a response is finalized, the server renders it to PDF and saves it as a Document in the same
-  transaction as the status flip to `Responded`, so a finalized answer always exists in two safe
-  places (the response itself + a Document snapshot), never only one. `ExportedDocumentId` on the
-  response always points at the *latest* generated document. If staff edit the response afterward
-  (`StaffEditFormResponseAsync`) or a reopened response gets re-submitted, the PDF is regenerated and
-  a **new** Document is appended (Documents is already an append-only list, per the existing
-  `EnrolmentDocumentModel` convention) — old snapshots aren't deleted, so there's always a record of
-  what the student actually saw and signed at each finalize. The manual "Export PDF / Word" action in
-  the Forms tab is a convenience for staff who want an editable Word copy or an on-demand re-render;
-  it doesn't replace the automatic PDF-on-submit save.
+- **Documents** — saves one `EnrolmentDocumentModel` (existing model, unchanged), `IsFromStudent =
+  false`. Shows up in the Documents tab automatically. **This happens automatically as part of
+  `SubmitFormAsync`, not as a separate optional step** — the moment a response is finalized, the
+  server renders it to PDF and saves it as a Document in the same transaction as the status flip to
+  `Responded`, so a finalized answer always exists in two safe places (the response itself + a
+  Document snapshot), never only one. `ExportedDocumentId` on the response always points at the
+  *latest* generated document. If staff edit the response afterward (`StaffEditFormResponseAsync`) or
+  a reopened response gets re-submitted, the PDF is regenerated and re-saved — what happens to the
+  previous Document depends on whether the response is bound to a VISA step
+  (`EnrolmentFormResponseModel.BoundStepKey`):
+  - **Un-bound (ad-hoc) forms** — `Category = "DynamicForm"`, and Documents is treated as an
+    append-only list, per the existing `EnrolmentDocumentModel` convention: old snapshots aren't
+    deleted, so there's always a record of what the student actually saw and signed at each finalize.
+  - **Step-bound forms** (e.g. the GS statement bound to `EnrolmentForm`) — the response is that
+    step's one canonical evidence file, same as the step's own manual-upload zone
+    (`VISA_STEP_EVIDENCE_CATEGORY`/`EnrolmentService.StepEvidenceCategories` map the step to its
+    category — `GS`, `UniOffer`, `CoE`, `VisaDraft`, `VisaGranted`). Each regeneration **deletes the
+    previous blob and Documents entry and replaces it**, so the step's evidence list and the
+    Documents tab's matching category always show exactly the current version, not a growing pile of
+    every past edit.
+
+  The manual "Export PDF / Word" action in the Forms tab is a convenience for staff who want an
+  editable Word copy or an on-demand re-render; it doesn't replace the automatic PDF-on-submit save.
 
 ## 3. Backend structure (files to add, matching existing module shape 1:1)
 

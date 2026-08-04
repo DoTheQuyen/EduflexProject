@@ -41,23 +41,22 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label for="firstName" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="firstName" 
-                     [(ngModel)]="profileData.firstName" name="firstName" required>
+              <input type="text" class="form-control" id="firstName" [(ngModel)]="profileData.firstName"
+                name="firstName" required>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label for="lastName" class="form-label">Last Name</label>
-              <input type="text" class="form-control" id="lastName" 
-                     [(ngModel)]="profileData.lastName" name="lastName" required>
+              <input type="text" class="form-control" id="lastName" [(ngModel)]="profileData.lastName" name="lastName"
+                required>
             </div>
           </div>
         </div>
-        
+
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="email" 
-                 [(ngModel)]="profileData.email" name="email" required>
+          <input type="email" class="form-control" id="email" [(ngModel)]="profileData.email" name="email" required>
         </div>
 
         <div class="mb-3">
@@ -82,7 +81,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="info-group">
           <label>Email Address</label>
           <p class="info-value">{{profileData.email}}</p>
@@ -112,7 +111,8 @@
   <div *ngIf="!isLoading" class="profile-card mt-4">
     <div class="card-header">
       <h5>Security</h5>
-      <button *ngIf="!showChangePassword && !isEditing" class="btn btn-outline-warning btn-sm" (click)="toggleChangePassword()">
+      <button *ngIf="!showChangePassword && !isEditing" class="btn btn-outline-warning btn-sm"
+        (click)="toggleChangePassword()">
         <i class="fas fa-key"></i> Change Password
       </button>
       <div *ngIf="showChangePassword" class="edit-actions">
@@ -121,35 +121,40 @@
         </button>
       </div>
     </div>
-    
+
     <div class="card-body" *ngIf="showChangePassword">
+      <div *ngIf="passwordMessage" class="alert alert-{{passwordMessageType}} alert-dismissible fade show" role="alert">
+        {{passwordMessage}}
+        <button type="button" class="btn-close" (click)="passwordMessage = ''"></button>
+      </div>
+
       <form>
         <div class="mb-3">
           <label for="currentPassword" class="form-label">Current Password</label>
-          <input type="password" class="form-control" id="currentPassword" 
-                 [(ngModel)]="passwordData.currentPassword" name="currentPassword" required>
+          <input type="password" class="form-control" id="currentPassword" [(ngModel)]="passwordData.currentPassword"
+            name="currentPassword" required>
         </div>
-        
+
         <div class="mb-3">
           <label for="newPassword" class="form-label">New Password</label>
-          <input type="password" class="form-control" id="newPassword" 
-                 [(ngModel)]="passwordData.newPassword" name="newPassword" required>
+          <input type="password" class="form-control" id="newPassword" [(ngModel)]="passwordData.newPassword"
+            name="newPassword" required>
           <div class="form-text">Password must be at least 6 characters long.</div>
         </div>
-        
+
         <div class="mb-3">
           <label for="confirmPassword" class="form-label">Confirm New Password</label>
-          <input type="password" class="form-control" id="confirmPassword" 
-                 [(ngModel)]="passwordData.confirmPassword" name="confirmPassword" required>
+          <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="passwordData.confirmPassword"
+            name="confirmPassword" required>
         </div>
-        
+
         <button type="button" class="btn btn-warning" (click)="changePassword()" [disabled]="isLoading">
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
           {{isLoading ? 'Changing Password...' : 'Change Password'}}
         </button>
       </form>
     </div>
-    
-   
+
+
   </div>
 </div>

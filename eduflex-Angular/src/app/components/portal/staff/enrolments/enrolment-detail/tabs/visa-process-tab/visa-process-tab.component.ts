@@ -1,21 +1,24 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Client, EducationPartnerDto, CourseDto } from '@services/api.services';
+import { Client, EducationPartnerDto, SetMaxApplicationsOverrideDto } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
 import { DynamicFormTemplateService } from '@services/dynamic-form-template.service';
+import { SettingsService } from '@services/settings.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
-import { FileUploaderComponent } from '@generic/file-uploader/file-uploader.component';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
-import { DynamicFormTemplate } from '@app/models/dynamic-form';
+import { DynamicFormTemplate, EnrolmentFormResponse } from '@app/models/dynamic-form';
 import {
   Enrolment, EnrolmentDocument,
   VisaStepKey, VisaProcessStep, VISA_STEP_ORDER, VISA_STEP_EVIDENCE_CATEGORY, VISA_STEP_LABELS
 } from '../../../../../../../models/enrolment';
+import { StepEvidenceSectionComponent } from './step-evidence-section/step-evidence-section.component';
+import { CourseApplicationsPanelComponent } from './course-applications-panel/course-applications-panel.component';
+import { EnrolmentInvoicePanelComponent } from './enrolment-invoice-panel/enrolment-invoice-panel.component';
 
 const STEP_DESCRIPTIONS: Record<VisaStepKey, string> = {
   StudentInfo: 'Personal details captured at enquiry conversion',
@@ -29,7 +32,10 @@ const STEP_DESCRIPTIONS: Record<VisaStepKey, string> = {
 @Component({
   selector: 'app-visa-process-tab',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, FileUploaderComponent, ModalComponent, FormPrintPreviewComponent],
+  imports: [
+    CommonModule, ReactiveFormsModule, FormsModule, ModalComponent, FormPrintPreviewComponent,
+    StepEvidenceSectionComponent, CourseApplicationsPanelComponent, EnrolmentInvoicePanelComponent
+  ],
   templateUrl: './visa-process-tab.component.html',
   styleUrls: ['./visa-process-tab.component.css']
 })
@@ -39,6 +45,9 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
   @Input() isOwner = false;
   @Input({ required: true }) permissions!: ModulePermissions;
   @Output() changed = new EventEmitter<void>();
+  // Staff-facing "Update" link on a completed-online form (e.g. GS statement) routes to
+  // the Forms tab instead of duplicating its edit UI here — see gsFormResponse.
+  @Output() goToFormsTab = new EventEmitter<void>();
 
   readonly stepOrder = VISA_STEP_ORDER;
   readonly stepLabels = VISA_STEP_LABELS;
@@ -51,8 +60,6 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
   enrolmentForm: FormGroup;
   isSaving = false;
 
-  courses: CourseDto[] = [];
-
   // VISA Outcome is the one step that can still be corrected after being marked
   // Complete (the backend allows re-completing it specifically) — this toggle re-opens
   // its fields for editing, mirroring the editingStudent/editingEnrolment pattern above.
@@ -62,20 +69,23 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
   stepFieldsDraft: Partial<Record<VisaStepKey, Record<string, string>>> = {};
   isSavingStep = false;
   isCompletingStep = false;
-  isUploadingStepEvidence: Partial<Record<VisaStepKey, boolean>> = {};
   private hasInitializedOpenStep = false;
-  private lastCourseLookupPartnerId: string | undefined;
-
   // ----- Dynamic Forms — bound-step marker + preview/request popup -----
   activeTemplates: DynamicFormTemplate[] = [];
   formPopupStepKey: VisaStepKey | null = null;
   isRequestingBoundForm = false;
+
+  // ----- Enrolment Form step — "Number applications allowed" header control -----
+  globalMaxApplications = 1;
+  maxApplicationsInput = 1;
+  isSavingMaxApplications = false;
 
   constructor(
     private fb: FormBuilder,
     private apiClient: Client,
     private enrolmentService: EnrolmentService,
     private dynamicFormTemplateService: DynamicFormTemplateService,
+    private settingsService: SettingsService,
     private notificationService: NotificationService
   ) {
     this.studentForm = this.fb.group({
@@ -88,9 +98,7 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     });
 
     this.enrolmentForm = this.fb.group({
-      educationPartnerId: [''], courseId: [''], intake: [''], studyMode: [''], campus: [''],
-      commencementDate: [''], actualCommencementDate: [''], expectedCompletionDate: [''], fundingSource: [''], visaStatus: [''],
-      status: [''], notes: [''], tuitionFee: [null as number | null]
+      fundingSource: [''], visaStatus: [''], status: ['']
     });
   }
 
@@ -98,6 +106,46 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     this.dynamicFormTemplateService.getAll().subscribe({
       next: (templates) => { this.activeTemplates = templates.filter(t => t.status === 'Active'); },
       error: () => {}
+    });
+
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        this.globalMaxApplications = settings.maxApplicationsPerStudent ?? 1;
+        this.maxApplicationsInput = this.enrolment.maxApplicationsOverride ?? this.globalMaxApplications;
+      },
+      error: () => {}
+    });
+  }
+
+  // ----- Enrolment Form step — "Number applications allowed" header control -----
+
+  get effectiveMaxApplications(): number {
+    const override = this.enrolment.maxApplicationsOverride;
+    return override != null ? Math.min(override, this.globalMaxApplications) : this.globalMaxApplications;
+  }
+
+  get hasFinalizedCourseApplication(): boolean {
+    return this.enrolment.courseApplications.some(c => c.status === 'Finalized');
+  }
+
+  saveMaxApplications(): void {
+    if (!this.canEdit()) return;
+    if (this.maxApplicationsInput < 1 || this.maxApplicationsInput > this.globalMaxApplications) {
+      this.notificationService.error(`Number applications allowed must be between 1 and the system maximum (${this.globalMaxApplications}).`);
+      return;
+    }
+
+    this.isSavingMaxApplications = true;
+    this.apiClient.maxApplications(this.enrolment.id, new SetMaxApplicationsOverrideDto({ maxApplications: this.maxApplicationsInput })).subscribe({
+      next: () => {
+        this.isSavingMaxApplications = false;
+        this.notificationService.success('Number applications allowed updated.');
+        this.changed.emit();
+      },
+      error: (err) => {
+        this.isSavingMaxApplications = false;
+        this.notificationService.error(extractHttpErrorMessage(err, 'Could not update the applications limit.'));
+      }
     });
   }
 
@@ -121,6 +169,38 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
 
   get formPopupTemplate(): DynamicFormTemplate | undefined {
     return this.formPopupStepKey ? this.boundTemplateFor(this.formPopupStepKey) : undefined;
+  }
+
+  // Most recent live (non-Withdrawn/Archived) response for the popped-up step's bound
+  // template — lets the popup show what the student actually answered instead of
+  // always falling back to the blank template.
+  get formPopupResponse(): EnrolmentFormResponse | undefined {
+    return this.latestResponseFor(this.formPopupTemplate?.id);
+  }
+
+  get formPopupHasAnswers(): boolean {
+    return (this.formPopupResponse?.answers.length ?? 0) > 0;
+  }
+
+  private latestResponseFor(templateId: string | undefined): EnrolmentFormResponse | undefined {
+    if (!templateId) return undefined;
+    return [...this.enrolment.formResponses]
+      .filter(r => r.formTemplateId === templateId && r.status !== 'Withdrawn' && r.status !== 'Archived')
+      .sort((a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime())[0];
+  }
+
+  // GS statement's bound response — drives the "completed online, no manual upload"
+  // gate in the Enrolment Form step's GS section, see docs/08 §2.4.
+  get gsFormResponse(): EnrolmentFormResponse | undefined {
+    return this.latestResponseFor(this.boundTemplateFor('EnrolmentForm')?.id);
+  }
+
+  get gsCompletedOnline(): boolean {
+    return this.gsFormResponse?.status === 'Responded';
+  }
+
+  openGsResponsePreview(): void {
+    this.openFormPopup('EnrolmentForm');
   }
 
   requestBoundForm(): void {
@@ -153,13 +233,6 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
       this.hasInitializedOpenStep = true;
     }
 
-    if (this.enrolment.educationPartnerId && this.enrolment.educationPartnerId !== this.lastCourseLookupPartnerId) {
-      this.lastCourseLookupPartnerId = this.enrolment.educationPartnerId;
-      this.apiClient.byPartner(this.enrolment.educationPartnerId).subscribe({
-        next: (courses) => { this.courses = courses; },
-        error: () => {}
-      });
-    }
   }
 
   private patchForms(e: Enrolment): void {
@@ -179,29 +252,12 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     });
 
     this.enrolmentForm.reset({
-      educationPartnerId: e.educationPartnerId ?? '', courseId: e.courseId ?? '', intake: e.intake ?? '',
-      studyMode: e.studyMode ?? '', campus: e.campus ?? '',
-      commencementDate: e.commencementDate ? e.commencementDate.substring(0, 10) : '',
-      actualCommencementDate: e.actualCommencementDate ? e.actualCommencementDate.substring(0, 10) : '',
-      expectedCompletionDate: e.expectedCompletionDate ? e.expectedCompletionDate.substring(0, 10) : '',
-      fundingSource: e.fundingSource ?? '', visaStatus: e.visaStatus ?? '', status: e.status, notes: e.notes ?? '',
-      tuitionFee: e.tuitionFee ?? null
+      fundingSource: e.fundingSource ?? '', visaStatus: e.visaStatus ?? '', status: e.status
     });
   }
 
   formatDate(value: string | undefined): string {
     return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';
-  }
-
-  onPartnerChange(): void {
-    const partnerId = this.enrolmentForm.value.educationPartnerId;
-    this.enrolmentForm.patchValue({ courseId: '' });
-    this.courses = [];
-    if (!partnerId) return;
-    this.apiClient.byPartner(partnerId).subscribe({
-      next: (courses) => { this.courses = courses; },
-      error: () => {}
-    });
   }
 
   toggleEditStudent(): void {
@@ -244,17 +300,22 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
       hometownAddress: { street: s.hometownStreet, suburb: s.hometownSuburb, city: s.hometownCity, state: s.hometownState, postalCode: s.hometownPostcode, country: s.hometownCountry },
       currentAddress: { street: s.currentStreet, suburb: s.currentSuburb, city: s.currentCity, state: s.currentState, postalCode: s.currentPostcode, country: s.currentCountry },
       emergencyContact: { name: s.emergencyName, relationship: s.emergencyRelationship, phone: s.emergencyPhone, email: s.emergencyEmail },
-      educationPartnerId: en.educationPartnerId || undefined, courseId: en.courseId || undefined, intake: en.intake || undefined,
-      studyMode: en.studyMode || undefined, campus: en.campus || undefined,
-      commencementDate: en.commencementDate || undefined, actualCommencementDate: en.actualCommencementDate || undefined,
-      expectedCompletionDate: en.expectedCompletionDate || undefined,
+      // Course/intake/study mode/campus/dates/tuition/notes now live per-course-application
+      // (see CourseApplication) rather than once on the enrolment itself — nothing here
+      // overrides them, so update() leaves whatever's already stored untouched.
       fundingSource: en.fundingSource || undefined, visaStatus: en.visaStatus || undefined,
-      status: en.status, notes: en.notes || undefined, tuitionFee: en.tuitionFee ?? undefined
+      status: en.status
     };
 
     this.isSaving = true;
     this.enrolmentService.update(this.enrolment.id, payload).subscribe({
       next: () => {
+        // update() only touches the enrolment's own fields (name/address/etc.), not
+        // visaProcessSteps — the staff comment box on these two steps lives in the
+        // fields bag, so it needs its own save call alongside.
+        const stepKey: VisaStepKey = section === 'student' ? 'StudentInfo' : 'EnrolmentForm';
+        this.enrolmentService.saveVisaStepDraft(this.enrolment.id, stepKey, this.stepFieldsDraft[stepKey] ?? {}).subscribe();
+
         this.isSaving = false;
         this.editingStudent = false;
         this.editingEnrolment = false;
@@ -300,6 +361,37 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     return this.enrolment.documents.filter(d => d.category === category);
   }
 
+  // Client-computed checklist for the warning-zone sidebar — no new backend calls, just
+  // scans the same visaProcessSteps/documents data already loaded for the accordion.
+  get outstandingItems(): string[] {
+    const items: string[] = [];
+
+    for (const key of this.stepOrder) {
+      const step = this.getStep(key);
+      if (!step || step.status === 'Locked' || step.status === 'Complete') continue;
+
+      const category = this.stepEvidenceCategory[key];
+      if (category && this.stepEvidenceDocuments(key).length === 0) {
+        items.push(`${this.stepLabels[key]}: ${category} evidence not uploaded`);
+      }
+    }
+
+    const invoiceId = this.fieldValue('EnrolmentForm', 'invoiceId');
+    if (!invoiceId) {
+      items.push('Enrolment service-fee invoice has not been sent');
+    } else if (!this.fieldValue('EnrolmentForm', 'invoicePaidAt')) {
+      items.push('Enrolment service-fee invoice sent but not yet marked paid');
+    }
+
+    const coeStep = this.getStep('CoeCompletion');
+    if (coeStep && coeStep.status !== 'Locked' && coeStep.status !== 'Complete'
+      && !this.enrolment.courseApplications.some(c => c.status === 'Finalized')) {
+      items.push('No course application has been finalized yet');
+    }
+
+    return items;
+  }
+
   canCompleteStep(key: VisaStepKey): boolean {
     const category = this.stepEvidenceCategory[key];
     const hasEvidence = !category || this.stepEvidenceDocuments(key).length > 0;
@@ -307,43 +399,24 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
       const outcome = this.fieldValue('VisaOutcome', 'outcome');
       return hasEvidence && (outcome === 'Granted' || outcome === 'Refused');
     }
+    // Enrolment Form auto-completes at enrolment creation, so there's no "complete this
+    // step" action to gate on the service-fee invoice — the gate lives on Apply Offer
+    // instead (mirrored server-side in EnrolmentService.CompleteVisaStepAsync, so this
+    // is UX only, not the real enforcement).
+    if (key === 'ApplyOffer' && !this.fieldValue('EnrolmentForm', 'invoiceId')) {
+      return false;
+    }
+    // Mirrors the server-side check in EnrolmentService.CompleteVisaStepAsync — a course
+    // application must have gone through Finalize before CoE Completion can be confirmed.
+    if (key === 'CoeCompletion' && !this.enrolment.courseApplications.some(c => c.status === 'Finalized')) {
+      return false;
+    }
     return hasEvidence;
   }
 
   toggleEditVisaOutcome(): void {
     if (!this.canEdit()) return;
     this.editingVisaOutcome = !this.editingVisaOutcome;
-  }
-
-  onStepEvidenceSelected(key: VisaStepKey, file: File): void {
-    const category = this.stepEvidenceCategory[key];
-    if (!category) return;
-    this.isUploadingStepEvidence[key] = true;
-    this.apiClient.upload({ data: file, fileName: file.name }).subscribe({
-      next: (result) => {
-        this.enrolmentService.addDocument(this.enrolment.id, {
-          fileName: result.fileName ?? file.name,
-          category,
-          url: result.url ?? '',
-          contentType: file.type,
-          sizeBytes: file.size
-        }).subscribe({
-          next: () => {
-            this.isUploadingStepEvidence[key] = false;
-            this.notificationService.success('Evidence uploaded.');
-            this.changed.emit();
-          },
-          error: (err) => {
-            this.isUploadingStepEvidence[key] = false;
-            this.notificationService.error(extractHttpErrorMessage(err, 'Could not attach the uploaded file.'));
-          }
-        });
-      },
-      error: () => {
-        this.isUploadingStepEvidence[key] = false;
-        this.notificationService.error('File upload failed. Please try again.');
-      }
-    });
   }
 
   saveStepDraft(key: VisaStepKey): void {
@@ -381,15 +454,4 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     });
   }
 
-  get partnerName(): string {
-    const id = this.enrolment.educationPartnerId;
-    if (!id) return '—';
-    return this.partners.find(p => p.id === id)?.name ?? '—';
-  }
-
-  get courseName(): string {
-    const id = this.enrolment.courseId;
-    if (!id) return '—';
-    return this.courses.find(c => c.id === id)?.courseName ?? '—';
-  }
 }

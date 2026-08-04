@@ -177,6 +177,8 @@ namespace Eduflex.Mapping.Enrolment
                     CompletedByName = s.CompletedByName,
                     CompletedAt = s.CompletedAt
                 }).ToList(),
+                CourseApplications = model.CourseApplications.Select(c => c.ToDto()).OrderBy(c => c.CreatedAt).ToList(),
+                MaxApplicationsOverride = model.MaxApplicationsOverride,
                 CreatedAt = model.CreatedAt,
                 UpdatedAt = model.UpdatedAt
             };
@@ -191,6 +193,43 @@ namespace Eduflex.Mapping.Enrolment
                 Url = dto.Url,
                 ContentType = dto.ContentType,
                 SizeBytes = dto.SizeBytes
+            };
+        }
+
+        public static CourseApplicationDto ToDto(this CourseApplicationModel model)
+        {
+            return new CourseApplicationDto
+            {
+                Id = model.Id,
+                EducationPartnerId = model.EducationPartnerId,
+                CourseId = model.CourseId,
+                Status = model.Status,
+                Intake = model.Intake,
+                StudyMode = model.StudyMode,
+                Campus = model.Campus,
+                CommencementDate = model.CommencementDate,
+                ExpectedCompletionDate = model.ExpectedCompletionDate,
+                ActualCommencementDate = model.ActualCommencementDate,
+                Notes = model.Notes,
+                TuitionFee = model.TuitionFee,
+                CreatedAt = model.CreatedAt,
+                StatusUpdatedAt = model.StatusUpdatedAt,
+                StatusUpdatedByName = model.StatusUpdatedByName
+            };
+        }
+
+        public static ShareService.Models.Enrolment.CourseApplicationDetailsModel ToModel(this UpdateCourseApplicationDetailsDto dto)
+        {
+            return new ShareService.Models.Enrolment.CourseApplicationDetailsModel
+            {
+                Intake = dto.Intake,
+                StudyMode = dto.StudyMode,
+                Campus = dto.Campus,
+                CommencementDate = dto.CommencementDate,
+                ExpectedCompletionDate = dto.ExpectedCompletionDate,
+                ActualCommencementDate = dto.ActualCommencementDate,
+                TuitionFee = dto.TuitionFee,
+                Notes = dto.Notes
             };
         }
     }

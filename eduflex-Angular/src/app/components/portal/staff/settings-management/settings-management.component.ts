@@ -63,6 +63,7 @@ export class SettingsManagementComponent implements OnInit {
     this.settingsForm = this.fb.group({
       feedbackDefaultLatestCount: [10, [Validators.required, Validators.min(1)]],
       coursePromotionDefaultLatestCount: [10, [Validators.required, Validators.min(1)]],
+      maxApplicationsPerStudent: [1, [Validators.required, Validators.min(1)]],
       documentUpload: this.fb.group({
         default: this.fb.group({
           maxSizeMB: [5, [Validators.required, Validators.min(0.1)]],
@@ -119,6 +120,7 @@ export class SettingsManagementComponent implements OnInit {
     this.settingsForm.patchValue({
       feedbackDefaultLatestCount: settings.feedbackDefaultLatestCount,
       coursePromotionDefaultLatestCount: settings.coursePromotionDefaultLatestCount,
+      maxApplicationsPerStudent: settings.maxApplicationsPerStudent,
       documentUpload: {
         default: {
           maxSizeMB: settings.documentUpload?.default?.maxSizeMB,
@@ -187,7 +189,7 @@ export class SettingsManagementComponent implements OnInit {
   private controlsForTab(tab: SettingsTab): AbstractControl[] {
     switch (tab) {
       case 'general':
-        return [this.settingsForm.get('feedbackDefaultLatestCount')!, this.settingsForm.get('coursePromotionDefaultLatestCount')!];
+        return [this.settingsForm.get('feedbackDefaultLatestCount')!, this.settingsForm.get('coursePromotionDefaultLatestCount')!, this.settingsForm.get('maxApplicationsPerStudent')!];
       case 'documents':
         return [this.settingsForm.get(['documentUpload', 'default'])!, this.settingsForm.get(['documentUpload', 'other'])!];
       case 'images':
@@ -238,6 +240,7 @@ export class SettingsManagementComponent implements OnInit {
     const payload = new UpdateSettingsDto({
       feedbackDefaultLatestCount: value.feedbackDefaultLatestCount,
       coursePromotionDefaultLatestCount: value.coursePromotionDefaultLatestCount,
+      maxApplicationsPerStudent: value.maxApplicationsPerStudent,
       documentUpload: new DocumentUploadSettingsDto({
         default: new UploadLimitDto(value.documentUpload.default),
         other: new UploadLimitDto(value.documentUpload.other)

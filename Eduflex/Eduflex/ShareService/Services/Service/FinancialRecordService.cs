@@ -17,6 +17,7 @@ namespace ShareService.Services
     {
         private readonly IFinancialRecord _financialRecordDataAccess;
         private readonly ICourse _courseDataAccess;
+        private readonly IEducationPartner _educationPartnerDataAccess;
         private readonly IBusinessPartner _businessPartnerDataAccess;
         private readonly IUserService _userService;
         private readonly IPermissionService _permissionService;
@@ -30,6 +31,7 @@ namespace ShareService.Services
         public FinancialRecordService(
             IFinancialRecord financialRecordDataAccess,
             ICourse courseDataAccess,
+            IEducationPartner educationPartnerDataAccess,
             IBusinessPartner businessPartnerDataAccess,
             IUserService userService,
             IPermissionService permissionService,
@@ -42,6 +44,7 @@ namespace ShareService.Services
         {
             _financialRecordDataAccess = financialRecordDataAccess;
             _courseDataAccess = courseDataAccess;
+            _educationPartnerDataAccess = educationPartnerDataAccess;
             _businessPartnerDataAccess = businessPartnerDataAccess;
             _userService = userService;
             _permissionService = permissionService;
@@ -77,14 +80,32 @@ namespace ShareService.Services
                 return existing;
             }
 
-            var course = !string.IsNullOrEmpty(enrolment.CourseId)
-                ? await _courseDataAccess.GetCourseByIdAsync(enrolment.CourseId)
+            // A student can hold several course applications at once (see CourseApplicationModel) —
+            // once one has been Finalized (required before CoE Completion can be marked
+            // complete, which is what triggers this method), that's the course finance
+            // should actually be billing against, not whatever single EducationPartnerId/
+            // CourseId happen to still be sitting on the enrolment's own top-level fields.
+            // Falls back to those enrolment-level fields for enrolments created before
+            // this feature existed, which never got a CourseApplications entry at all.
+            var finalizedCourseApplication = enrolment.CourseApplications.FirstOrDefault(c => c.Status == CourseApplicationStatuses.Finalized);
+            var effectiveEducationPartnerId = finalizedCourseApplication?.EducationPartnerId ?? enrolment.EducationPartnerId;
+            var effectiveCourseId = finalizedCourseApplication?.CourseId ?? enrolment.CourseId;
+
+            var course = !string.IsNullOrEmpty(effectiveCourseId)
+                ? await _courseDataAccess.GetCourseByIdAsync(effectiveCourseId)
                 : null;
             var courseCommissionRate = course?.CommissionBaseRate ?? 0;
-            var totalTuition = enrolment.TuitionFee ?? course?.TuitionFee ?? 0;
+            var totalTuition = finalizedCourseApplication?.TuitionFee ?? enrolment.TuitionFee ?? course?.TuitionFee ?? 0;
 
-            var businessPartner = !string.IsNullOrEmpty(enrolment.BusinessPartnerId)
-                ? await _businessPartnerDataAccess.GetBusinessPartnerByIdAsync(enrolment.BusinessPartnerId)
+            var effectiveBusinessPartnerId = enrolment.BusinessPartnerId;
+            if (finalizedCourseApplication != null && !string.IsNullOrEmpty(effectiveEducationPartnerId))
+            {
+                var educationPartner = await _educationPartnerDataAccess.GetEducationPartnerByIdAsync(effectiveEducationPartnerId);
+                effectiveBusinessPartnerId = educationPartner?.BusinessPartnerId;
+            }
+
+            var businessPartner = !string.IsNullOrEmpty(effectiveBusinessPartnerId)
+                ? await _businessPartnerDataAccess.GetBusinessPartnerByIdAsync(effectiveBusinessPartnerId)
                 : null;
             var businessPartnerCommissionRate = businessPartner?.CommissionBaseRate ?? 0;
 
@@ -106,8 +127,8 @@ namespace ShareService.Services
             var record = new FinancialRecordModel
             {
                 EnrolmentId = enrolment.Id,
-                EducationPartnerId = enrolment.EducationPartnerId,
-                BusinessPartnerId = enrolment.BusinessPartnerId,
+                EducationPartnerId = effectiveEducationPartnerId,
+                BusinessPartnerId = effectiveBusinessPartnerId,
                 CourseCommissionRate = courseCommissionRate,
                 BusinessPartnerCommissionRate = businessPartnerCommissionRate,
                 TotalTuition = totalTuition,

@@ -2,6 +2,22 @@
   padding-bottom: 6rem;
 }
 
+.forms-highlight {
+  border: 1px solid color-mix(in srgb, var(--color-highlight) 45%, var(--color-border)) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-highlight) 30%, transparent), var(--shadow-sm);
+}
+
+.forms-highlight .card-header {
+  background: color-mix(in srgb, var(--color-highlight) 14%, white);
+  color: var(--color-highlight-dark);
+  font-weight: 700;
+  border-bottom-color: color-mix(in srgb, var(--color-highlight) 35%, var(--color-border));
+}
+
+.forms-highlight .card-header i {
+  color: var(--color-highlight-dark);
+}
+
 .forms-list-row {
   display: flex;
   align-items: center;
@@ -21,9 +37,20 @@
   gap: 0.6rem;
 }
 
-.fill-panel {
-  margin-top: 0.5rem;
+.back-link {
+  background: none;
+  border: none;
+  color: var(--color-navy-700);
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
 }
+
+.back-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
 
 .doc-section {
   border: 1px solid var(--color-border);

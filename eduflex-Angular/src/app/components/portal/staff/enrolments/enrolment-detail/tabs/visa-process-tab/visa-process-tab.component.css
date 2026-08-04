@@ -28,6 +28,87 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.visa-process-columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.visa-process-columns .steps {
+  flex: 0 0 80%;
+  max-width: 80%;
+  min-width: 0;
+}
+
+.warning-zone {
+  flex: 0 0 20%;
+  max-width: 20%;
+  min-width: 220px;
+  position: sticky;
+  top: 1rem;
+  background: color-mix(in srgb, var(--color-accent) 6%, white);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+}
+
+.warning-zone-head {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent-dark, var(--color-accent));
+  margin-bottom: 0.65rem;
+}
+
+.warning-zone-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.warning-zone-list li {
+  font-size: 0.82rem;
+  color: var(--color-ink);
+  padding-left: 0.9rem;
+  position: relative;
+}
+
+.warning-zone-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.warning-zone-empty {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .visa-process-columns {
+    flex-direction: column;
+  }
+  .visa-process-columns .steps,
+  .warning-zone {
+    flex: 1 1 auto;
+    max-width: 100%;
+    width: 100%;
+  }
+  .warning-zone {
+    position: static;
+  }
+}
+
 .steps {
   display: flex;
   flex-direction: column;
@@ -208,6 +289,51 @@
   padding-top: 0;
 }
 
+.max-applications-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  background: var(--color-surface-raised, white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.35rem 0.6rem;
+  cursor: default;
+}
+
+.max-applications-title {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--color-navy-700);
+  white-space: nowrap;
+}
+
+.max-applications-inline input {
+  width: 4rem;
+  padding: 0.25rem 0.4rem;
+}
+
+.max-applications-inline .btn {
+  white-space: nowrap;
+}
+
+.comment-block {
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.comment-block textarea {
+  resize: vertical;
+}
+
+.comment-block .char-count {
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+
 .subhead {
   display: flex;
   align-items: center;
@@ -271,78 +397,3 @@
   margin-top: 0.1rem;
 }
 
-/* ===== Evidence upload zone (also duplicated in documents-tab.component.css — small,
-   self-contained rule set kept local to each tab component rather than shared). ===== */
-.doc-section {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  margin-top: 0.25rem;
-}
-
-.doc-section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.7rem 0.95rem;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.doc-section-head .label {
-  font-weight: 700;
-  font-size: 0.86rem;
-}
-
-.doc-section-head .meta {
-  font-size: 0.75rem;
-  color: var(--color-muted);
-}
-
-.doc-section-body {
-  padding: 0.85rem 0.95rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.doc-empty {
-  font-size: 0.83rem;
-  color: var(--color-muted);
-  font-style: italic;
-}
-
-.doc-file-row {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-}
-
-.doc-file-row svg {
-  flex-shrink: 0;
-  color: var(--color-accent-dark, var(--color-accent));
-}
-
-.doc-file-meta {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.doc-file-name {
-  font-weight: 600;
-  font-size: 0.86rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.doc-file-sub {
-  font-size: 0.74rem;
-  color: var(--color-muted);
-}

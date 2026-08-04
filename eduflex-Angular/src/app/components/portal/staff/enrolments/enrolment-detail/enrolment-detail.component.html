@@ -41,7 +41,7 @@
            shouldn't disappear just because staff glanced at Documents. -->
       <app-visa-process-tab [hidden]="activeTab !== 'visa'"
         [enrolment]="enrolment" [partners]="partners" [isOwner]="isOwner" [permissions]="permissions"
-        (changed)="loadEnrolment()">
+        (changed)="loadEnrolment()" (goToFormsTab)="switchTab('forms')">
       </app-visa-process-tab>
 
       <app-documents-tab [hidden]="activeTab !== 'documents'"

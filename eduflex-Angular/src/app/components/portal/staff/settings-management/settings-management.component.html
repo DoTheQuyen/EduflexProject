@@ -41,6 +41,19 @@
                 <span class="field-error" *ngIf="isFieldInvalid('coursePromotionDefaultLatestCount')">Enter a number greater than 0</span>
               </div>
             </div>
+
+            <h6 class="form-section-title mt-4">Applications</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Max applications per student *</label>
+                <input type="number" class="form-control" formControlName="maxApplicationsPerStudent">
+                <span class="field-error" *ngIf="isFieldInvalid('maxApplicationsPerStudent')">Enter a number greater than 0</span>
+                <p class="text-muted small mt-1 mb-0">
+                  System-wide ceiling on how many concurrent course applications a student's enrolment can hold.
+                  Staff can grant an individual student fewer than this from the Enrolment Form step, but never more.
+                </p>
+              </div>
+            </div>
           </ng-container>
 
           <div formGroupName="documentUpload" *ngIf="activeTab === 'documents'">

@@ -111,6 +111,47 @@ export interface VisaProcessStep {
 
 export type EnrolmentStatus = 'Draft' | 'Offer' | 'Coe' | 'ApplyVisa' | 'VisaSuccess' | 'VisaFail' | 'Cancel';
 
+// A student can be pursuing several courses/universities at once under one Enrolment —
+// each gets its own row here, nested as a sub-panel inside the Enrolment Form step.
+// Finalized is only reachable from Offered (via the dedicated Finalize action, not the
+// general status setter), and finalizing one withdraws every sibling automatically.
+export type CourseApplicationStatus = 'Init' | 'Applied' | 'Offered' | 'Finalized' | 'Withdrawn';
+
+export const COURSE_APPLICATION_STATUS_LABELS: Record<CourseApplicationStatus, string> = {
+  Init: 'Init',
+  Applied: 'Applied',
+  Offered: 'Offered',
+  Finalized: 'Finalized',
+  Withdrawn: 'Withdrawn'
+};
+
+export function courseApplicationStatusBadgeClass(status: CourseApplicationStatus): string {
+  switch (status) {
+    case 'Finalized': return 'badge-pill-success-soft';
+    case 'Withdrawn': return 'badge-pill-muted-soft';
+    case 'Offered': return 'badge-pill-accent-soft';
+    default: return 'badge-pill-navy-soft';
+  }
+}
+
+export interface CourseApplication {
+  id: string;
+  educationPartnerId: string;
+  courseId: string;
+  status: CourseApplicationStatus;
+  intake?: string;
+  studyMode?: string;
+  campus?: string;
+  commencementDate?: string;
+  expectedCompletionDate?: string;
+  actualCommencementDate?: string;
+  notes?: string;
+  tuitionFee?: number;
+  createdAt: string;
+  statusUpdatedAt?: string;
+  statusUpdatedByName?: string;
+}
+
 export interface Enrolment {
   id: string;
   ownerUserId: string;
@@ -153,6 +194,10 @@ export interface Enrolment {
   formResponses: EnrolmentFormResponse[];
   auditTrail: EnrolmentAuditEntry[];
   visaProcessSteps: VisaProcessStep[];
+  courseApplications: CourseApplication[];
+  // Null means "use the global Settings.maxApplicationsPerStudent value" — see
+  // visa-process-tab.component.ts's effectiveMaxApplications.
+  maxApplicationsOverride?: number;
 
   createdAt: string;
   updatedAt: string;

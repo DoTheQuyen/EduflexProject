@@ -1,10 +1,8 @@
 <div class="application-detail container-fluid py-4">
 
-  <p class="mb-2">
-    <a routerLink="/student-portal/application" class="text-decoration-none">My Applications</a>
-    <span class="!text-muted"> / </span>
-    <span class="!text-muted">{{ mode === 'new' ? 'New Application' : (university || 'Application') }}</span>
-  </p>
+  <button type="button" class="back-link" (click)="goBack()">
+    <span class="back-arrow">&larr;</span> Back
+  </button>
 
   <div *ngIf="isLoading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
@@ -55,6 +53,26 @@
             </div>
           </div>
         </div>
+
+        <div class="card shadow-sm mt-3 forms-highlight" *ngIf="!isStaffPortal && myForms.length > 0">
+          <div class="card-header d-flex align-items-center gap-2">
+            <i class="fas fa-circle-exclamation"></i>
+            <span>Requested Forms</span>
+          </div>
+          <div class="card-body">
+            <div class="forms-list-row" *ngFor="let form of myForms">
+              <div class="forms-list-info">
+                <strong>{{ form.formName }}</strong>
+                <span class="badge-pill" [ngClass]="formStatusBadgeClass(form)">{{ form.status }}</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" (click)="openForm(form)">
+                {{ isFormLocked(form) ? 'View' : 'Fill' }}
+              </button>
+            </div>
+
+
+          </div>
+        </div>
       </div>
 
       <!-- Form -->
@@ -72,8 +90,8 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label">Course / Program <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="course" [disabled]="isLocked"
-                  list="course-options" placeholder="Pick a listed course or type your own">
+                <input type="text" class="form-control" [(ngModel)]="course" [disabled]="isLocked" list="course-options"
+                  placeholder="Pick a listed course or type your own">
                 <datalist id="course-options">
                   <option *ngFor="let c of availableCourses" [value]="c"></option>
                 </datalist>
@@ -88,8 +106,8 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label">Campus</label>
-                <input type="text" class="form-control" [(ngModel)]="campus" [disabled]="isLocked"
-                  list="campus-options" placeholder="e.g. Sydney CBD">
+                <input type="text" class="form-control" [(ngModel)]="campus" [disabled]="isLocked" list="campus-options"
+                  placeholder="e.g. Sydney CBD">
                 <datalist id="campus-options">
                   <option *ngFor="let c of availableCampuses" [value]="c"></option>
                 </datalist>
@@ -106,7 +124,8 @@
         <div class="card shadow-sm mb-3">
           <div class="card-header">Address &amp; Emergency Contact</div>
           <div class="card-body">
-            <p class="!text-muted small mb-3">These reflect your situation for this application specifically, so they're saved on the application rather than your account.</p>
+            <p class="!text-muted small mb-3">These reflect your situation for this application specifically, so they're
+              saved on the application rather than your account.</p>
 
             <div class="section-divider small fw-semibold text-uppercase !text-muted mb-2">Hometown Address</div>
             <div class="row g-3 mb-3">
@@ -138,33 +157,40 @@
 
             <div class="section-divider small fw-semibold text-uppercase !text-muted mb-2">Current Address</div>
             <div class="form-check mb-2">
-              <input type="checkbox" class="form-check-input" id="sameAsHometown" [(ngModel)]="sameAsHometown" [disabled]="isLocked" (change)="toggleSameAsHometown()">
+              <input type="checkbox" class="form-check-input" id="sameAsHometown" [(ngModel)]="sameAsHometown"
+                [disabled]="isLocked" (change)="toggleSameAsHometown()">
               <label class="form-check-label small" for="sameAsHometown">Same as hometown address</label>
             </div>
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label">Street</label>
-                <input type="text" class="form-control" [(ngModel)]="currentStreet" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentStreet"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Suburb</label>
-                <input type="text" class="form-control" [(ngModel)]="currentSuburb" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentSuburb"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
               <div class="col-md-4">
                 <label class="form-label">City</label>
-                <input type="text" class="form-control" [(ngModel)]="currentCity" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentCity"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
               <div class="col-md-4">
                 <label class="form-label">State</label>
-                <input type="text" class="form-control" [(ngModel)]="currentState" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentState"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
               <div class="col-md-4">
                 <label class="form-label">Postcode</label>
-                <input type="text" class="form-control" [(ngModel)]="currentPostcode" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentPostcode"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Country</label>
-                <input type="text" class="form-control" [(ngModel)]="currentCountry" [disabled]="isLocked || sameAsHometown">
+                <input type="text" class="form-control" [(ngModel)]="currentCountry"
+                  [disabled]="isLocked || sameAsHometown">
               </div>
             </div>
 
@@ -193,12 +219,14 @@
         <div class="card shadow-sm mb-3">
           <div class="card-header d-flex align-items-center justify-content-between">
             <span>Required Documents</span>
-            <span class="small !text-muted">{{ requiredDocsDoneCount }} / {{ requiredKeys.length }} required uploaded</span>
+            <span class="small !text-muted">{{ requiredDocsDoneCount }} / {{ requiredKeys.length }} required
+              uploaded</span>
           </div>
           <div class="card-body">
             <div class="alert alert-warning small">
               <i class="fas fa-triangle-exclamation me-1"></i>
-              Document upload isn't wired to the backend yet — files stay only on this screen and are lost when you leave.
+              Document upload isn't wired to the backend yet — files stay only on this screen and are lost when you
+              leave.
             </div>
 
             <div class="doc-section mb-3" *ngFor="let def of docDefs">
@@ -209,8 +237,11 @@
                     <strong>{{ def.label }}</strong>
                     <span class="text-danger" *ngIf="def.stage === 'initial'"> *</span>
                     <div class="small !text-muted">Max {{ maxFilesFor(def) }} file{{ maxFilesFor(def) > 1 ? 's' : '' }},
-                      up to {{ uploadLimitFor(def).maxSizeMB }}MB each ({{ uploadLimitFor(def).allowedExtensions?.join(', ') }}) &middot;
-                      <span class="badge" [ngClass]="def.stage === 'initial' ? 'bg-info text-dark' : 'bg-light text-dark border'">{{ docStatusTag(def) }}</span>
+                      up to {{ uploadLimitFor(def).maxSizeMB }}MB each ({{
+                      uploadLimitFor(def).allowedExtensions?.join(', ') }}) &middot;
+                      <span class="badge"
+                        [ngClass]="def.stage === 'initial' ? 'bg-info text-dark' : 'bg-light text-dark border'">{{
+                        docStatusTag(def) }}</span>
                     </div>
                   </div>
                 </div>
@@ -218,7 +249,8 @@
               </div>
 
               <div class="doc-section-body">
-                <div class="empty-doc small !text-muted fst-italic" *ngIf="docs[def.key].length === 0">No document uploaded yet.</div>
+                <div class="empty-doc small !text-muted fst-italic" *ngIf="docs[def.key].length === 0">No document
+                  uploaded yet.</div>
 
                 <div class="doc-file-row" *ngFor="let f of docs[def.key]; let i = index">
                   <i class="fas fa-file-lines"></i>
@@ -227,29 +259,37 @@
                     <div class="doc-file-note small !text-muted" *ngIf="f.note">{{ f.note }}</div>
                   </div>
                   <span class="doc-type-tag">{{ f.type }}</span>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="!isLocked" (click)="removeDocument(def.key, i)">&times;</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="!isLocked"
+                    (click)="removeDocument(def.key, i)">&times;</button>
                 </div>
 
                 <ng-container *ngIf="!isLocked && docs[def.key].length < maxFilesFor(def)">
-                  <button type="button" class="btn btn-sm btn-outline-primary align-self-start" (click)="toggleAddForm(def.key)">
+                  <button type="button" class="btn btn-sm btn-outline-primary align-self-start"
+                    (click)="toggleAddForm(def.key)">
                     + Add Document
                   </button>
 
                   <div class="doc-add-form" *ngIf="addFormOpenFor === def.key">
-                    <input type="file" class="form-control form-control-sm" [attr.accept]="uploadLimitFor(def).allowedExtensions?.join(',')" (change)="onDraftFileChange(def.key, $event)">
+                    <input type="file" class="form-control form-control-sm"
+                      [attr.accept]="uploadLimitFor(def).allowedExtensions?.join(',')"
+                      (change)="onDraftFileChange(def.key, $event)">
                     <div class="row g-2 mt-2">
                       <div class="col-md-6">
-                        <select class="form-select form-select-sm" [(ngModel)]="draftType[def.key]" [disabled]="def.fixedType">
+                        <select class="form-select form-select-sm" [(ngModel)]="draftType[def.key]"
+                          [disabled]="def.fixedType">
                           <option *ngFor="let opt of def.options" [value]="opt">{{ opt }}</option>
                         </select>
                       </div>
                       <div class="col-md-6">
-                        <input type="text" class="form-control form-control-sm" placeholder="Note (optional)" [(ngModel)]="draftNote[def.key]">
+                        <input type="text" class="form-control form-control-sm" placeholder="Note (optional)"
+                          [(ngModel)]="draftNote[def.key]">
                       </div>
                     </div>
                     <div class="d-flex gap-2 mt-2">
-                      <button type="button" class="btn btn-sm btn-primary" (click)="attachDocument(def.key)">Attach</button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFormOpenFor = null">Cancel</button>
+                      <button type="button" class="btn btn-sm btn-primary"
+                        (click)="attachDocument(def.key)">Attach</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary"
+                        (click)="addFormOpenFor = null">Cancel</button>
                     </div>
                   </div>
                 </ng-container>
@@ -258,71 +298,23 @@
           </div>
         </div>
 
-        <div class="card shadow-sm mb-3" *ngIf="!isStaffPortal && myForms.length > 0">
-          <div class="card-header">Requested Forms</div>
-          <div class="card-body">
-            <div class="forms-list-row" *ngFor="let form of myForms">
-              <div class="forms-list-info">
-                <strong>{{ form.formName }}</strong>
-                <span class="badge-pill" [ngClass]="formStatusBadgeClass(form)">{{ form.status }}</span>
-              </div>
-              <button type="button" class="btn btn-sm btn-outline-primary" (click)="openForm(form)">
-                {{ isFormLocked(form) ? 'View' : 'Fill in' }}
-              </button>
-            </div>
-
-            <div class="fill-panel" *ngIf="selectedForm as form">
-              <hr>
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <h6 class="mb-0">{{ form.formName }}</h6>
-                <button type="button" class="btn-close" (click)="closeForm()" aria-label="Close"></button>
-              </div>
-
-              <div class="alert alert-info small" *ngIf="isFormLocked(form)">
-                This form has been submitted and can't be edited. Contact your enrolment staff if you need changes.
-              </div>
-
-              <app-form-answer-editor *ngIf="!isFormLocked(form)" [questions]="form.questionsSnapshot" [answers]="fillAnswers"></app-form-answer-editor>
-
-              <app-form-print-preview *ngIf="isFormLocked(form)"
-                [formName]="form.formName" [questions]="form.questionsSnapshot" [answers]="form.answers"
-                [submittedAt]="form.submittedAt" mode="filled" [compact]="true">
-              </app-form-print-preview>
-
-              <div class="d-flex gap-2 mt-3" *ngIf="!isFormLocked(form)">
-                <button type="button" class="btn btn-outline-secondary" (click)="closeForm()">Cancel</button>
-                <button type="button" class="btn btn-outline-primary" [disabled]="isSavingDraft" (click)="saveFormDraft(form)">
-                  {{ isSavingDraft ? 'Saving...' : 'Save Draft' }}
-                </button>
-                <button type="button" class="btn btn-primary" [disabled]="isSubmitting" (click)="openFinalizeConfirm()">
-                  Final Submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </ng-container>
 
-  <app-modal *ngIf="showFinalizeConfirm && selectedForm as form" title="Submit and lock this form?"
-    saveLabel="I agree, submit" cancelLabel="Go back" [isSaving]="isSubmitting"
-    (closeModal)="showFinalizeConfirm = false" (cancel)="showFinalizeConfirm = false" (save)="confirmSubmitForm(form)">
-    <p>Once submitted, you <strong>won't be able to edit</strong> your answers. If you need to make changes afterward,
-      you'll have to contact your enrolment staff to unlock it back to Draft.</p>
-    <p class="small !text-muted mb-0">You can still view your submitted answers at any time.</p>
-  </app-modal>
-
   <!-- Sticky action bar -->
   <div class="detail-footer-bar" *ngIf="!isLoading && !isLocked">
     <div class="small !text-muted">
-      <span *ngIf="mode === 'new' && !canSubmit">Complete the program details and all required documents to enable Submit.</span>
+      <span *ngIf="mode === 'new' && !canSubmit">Complete the program details and all required documents to enable
+        Submit.</span>
       <span *ngIf="mode === 'new' && canSubmit">Ready to submit to the admissions team.</span>
       <span *ngIf="mode === 'edit'">Editing an existing application isn't supported by the backend yet.</span>
     </div>
     <div class="d-flex gap-2 flex-wrap">
-      <button type="button" class="btn btn-outline-secondary" (click)="cancelUpdate()">{{ mode === 'new' ? 'Discard' : 'Cancel Update' }}</button>
-      <button type="button" class="btn btn-outline-danger" *ngIf="mode === 'edit'" (click)="withdraw()">Withdraw Application</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelUpdate()">{{ mode === 'new' ? 'Discard' :
+        'Cancel Update' }}</button>
+      <button type="button" class="btn btn-outline-danger" *ngIf="mode === 'edit'" (click)="withdraw()">Withdraw
+        Application</button>
       <button type="button" class="btn btn-outline-secondary" (click)="saveDraft()">Save Draft</button>
       <button type="button" class="btn btn-primary" [disabled]="mode === 'edit' || !canSubmit" (click)="submit()">
         {{ isSaving ? 'Submitting…' : 'Submit Application' }}

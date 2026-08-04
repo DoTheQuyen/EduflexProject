@@ -44,6 +44,8 @@ namespace Eduflex.DTOs.Enrolment
         public List<EnrolmentFormResponseDto> FormResponses { get; set; } = new();
         public List<EnrolmentAuditEntryDto> AuditTrail { get; set; } = new();
         public List<VisaProcessStepDto> VisaProcessSteps { get; set; } = new();
+        public List<CourseApplicationDto> CourseApplications { get; set; } = new();
+        public int? MaxApplicationsOverride { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

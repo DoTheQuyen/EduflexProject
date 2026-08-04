@@ -30,6 +30,13 @@ export class RealtimeNotificationService {
   constructor(private authHelper: AuthHelperService, private client: Client) {}
 
   connect(): void {
+    // The backend rejects every notifications/hub call with 403 until the user
+    // clears a pending forced password change — don't even try until then, or
+    // withAutomaticReconnect() just retries the same failure forever.
+    if (this.authHelper.getCurrentUser()?.mustChangePassword) {
+      return;
+    }
+
     if (this.hubConnection && this.hubConnection.state !== HubConnectionState.Disconnected) {
       return;
     }

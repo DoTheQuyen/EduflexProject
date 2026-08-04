@@ -77,5 +77,11 @@ namespace ShareService.Enums.Permissions
         // GetAll stays ungated (any staff member composing an email needs the list),
         // only the manage operations (create/update/deactivate) require this key.
         EmailTemplatesEdit,
+
+        // Same shape as EmailTemplatesEdit — gates the admin Invoice Template management
+        // screen and the sent-invoice ledger view. Sending an individual invoice (from the
+        // Enrolment Form step) uses EnrolmentsEdit instead, since that action happens
+        // inside the Enrolments module, not this admin area.
+        InvoiceTemplatesEdit,
     }
 }

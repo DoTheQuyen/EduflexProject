@@ -54,6 +54,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         data: { breadcrumb: 'Application Detail' }
       },
+            {
+        path: 'application/:id/forms/:formId',
+        loadComponent: () => import('./components/portal/student/applications/application-form-fill/application-form-fill.component').then(m => m.ApplicationFormFillComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Fill Form' }
+      },
       {
         path: 'profile',
         loadComponent: () => import('./components/portal/share-component/profile/profile.component').then(m => m.ProfileComponent),
@@ -255,6 +261,30 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/email-templates/email-template-edit/email-template-edit.component').then(m => m.EmailTemplateEditComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin'], breadcrumb: 'Edit Email Template' }
+      },
+      {
+        path: 'invoice-templates',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-management/invoice-template-management.component').then(m => m.InvoiceTemplateManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Invoice Templates' }
+      },
+      {
+        path: 'invoice-templates/ledger',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-ledger/invoice-ledger.component').then(m => m.InvoiceLedgerComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Sent Invoices' }
+      },
+      {
+        path: 'invoice-templates/new',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-edit/invoice-template-edit.component').then(m => m.InvoiceTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'New Invoice Template' }
+      },
+      {
+        path: 'invoice-templates/:id',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-edit/invoice-template-edit.component').then(m => m.InvoiceTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Edit Invoice Template' }
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

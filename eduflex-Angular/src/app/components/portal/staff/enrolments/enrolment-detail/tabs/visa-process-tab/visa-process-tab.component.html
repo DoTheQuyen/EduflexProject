@@ -1,4 +1,5 @@
 <div class="visa-process-wrap">
+  <div class="visa-process-columns">
   <div class="steps">
 
     <!-- STEP 1: Student Info -->
@@ -148,6 +149,14 @@
           </div>
         </div>
 
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('StudentInfo','comment')" (ngModelChange)="setFieldValue('StudentInfo','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('StudentInfo','comment').length }} / 500</div>
+        </div>
+
         <div class="step-actions">
           <span class="hint">Editing re-opens this step for review — it stays marked Complete.</span>
           <div class="btns">
@@ -163,115 +172,57 @@
 
     <!-- STEP 2: Enrolment Form -->
     <div class="step" [attr.data-state]="getStep('EnrolmentForm')?.status">
-      <button type="button" class="step-header" [class.is-open]="openStepKey === 'EnrolmentForm'" (click)="toggleStepPanel('EnrolmentForm')">
+      <div class="step-header" [class.is-open]="openStepKey === 'EnrolmentForm'" role="button" tabindex="0"
+        (click)="toggleStepPanel('EnrolmentForm')" (keydown.enter)="toggleStepPanel('EnrolmentForm')">
         <span class="step-badge">&#10003;</span>
         <span class="step-heading">
           <span class="step-name">2. Enrolment Form</span>
           <span class="step-desc">{{ stepDescriptions.EnrolmentForm }}</span>
         </span>
+
+        <div class="max-applications-inline" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+          <span class="max-applications-title">Number applications allowed</span>
+          <input type="number" class="form-control form-control-sm" [(ngModel)]="maxApplicationsInput" [ngModelOptions]="{standalone: true}"
+            [min]="1" [max]="globalMaxApplications" [disabled]="!isOwner || !permissions.edit">
+          <button type="button" class="btn btn-outline-primary btn-sm" *ngIf="isOwner && permissions.edit" [disabled]="isSavingMaxApplications" (click)="saveMaxApplications()">
+            {{ isSavingMaxApplications ? 'Saving...' : (enrolment.maxApplicationsOverride != null ? 'Update' : 'Save') }}
+          </button>
+        </div>
+
         <span class="pill pill-complete">Complete</span>
         <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
+      </div>
 
       <button *ngIf="boundTemplateFor('EnrolmentForm')" type="button" class="form-marker" [title]="boundTemplateFor('EnrolmentForm')?.name" (click)="openFormPopup('EnrolmentForm')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
       </button>
 
       <div class="step-body" *ngIf="openStepKey === 'EnrolmentForm'" [formGroup]="enrolmentForm">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label class="form-label">University</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ partnerName }}</div>
-            <select *ngIf="editingEnrolment" class="form-select" formControlName="educationPartnerId" (change)="onPartnerChange()">
-              <option value="">Select...</option>
-              <option *ngFor="let p of partners" [value]="p.id">{{ p.name }}</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Course</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ courseName }}</div>
-            <select *ngIf="editingEnrolment" class="form-select" formControlName="courseId">
-              <option value="">Select...</option>
-              <option *ngFor="let c of courses" [value]="c.id">{{ c.courseName }}</option>
-            </select>
-          </div>
 
-          <div class="col-md-4">
-            <label class="form-label">Intake</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.intake || '—' }}</div>
-            <input *ngIf="editingEnrolment" class="form-control" formControlName="intake">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Study mode</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.studyMode || '—' }}</div>
-            <select *ngIf="editingEnrolment" class="form-select" formControlName="studyMode">
-              <option value="">Select...</option><option>Full-time</option><option>Part-time</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Campus</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.campus || '—' }}</div>
-            <input *ngIf="editingEnrolment" class="form-control" formControlName="campus">
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Commencement date</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.commencementDate ? (enrolment.commencementDate | date:'dd/MM/yyyy') : '—' }}</div>
-            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="commencementDate">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Expected completion</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.expectedCompletionDate ? (enrolment.expectedCompletionDate | date:'dd/MM/yyyy') : '—' }}</div>
-            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="expectedCompletionDate">
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Actual commencement date</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.actualCommencementDate ? (enrolment.actualCommencementDate | date:'dd/MM/yyyy') : '—' }}</div>
-            <input *ngIf="editingEnrolment" type="date" class="form-control" formControlName="actualCommencementDate">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Tuition fee</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.tuitionFee != null ? (enrolment.tuitionFee | number) : '—' }}</div>
-            <input *ngIf="editingEnrolment" type="number" min="0" class="form-control" formControlName="tuitionFee" placeholder="Loaded from course, editable">
-          </div>
-
-          <!-- <div class="col-md-6">
-            <label class="form-label">Funding source</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.fundingSource || '—' }}</div>
-            <input *ngIf="editingEnrolment" class="form-control" formControlName="fundingSource">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Visa status</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext">{{ enrolment.visaStatus || '—' }}</div>
-            <input *ngIf="editingEnrolment" class="form-control" formControlName="visaStatus">
-          </div> -->
-
-          <div class="col-12">
-            <label class="form-label">Notes</label>
-            <div *ngIf="!editingEnrolment" class="form-control-plaintext" style="white-space: pre-wrap;">{{ enrolment.notes || '—' }}</div>
-            <textarea *ngIf="editingEnrolment" class="form-control" rows="3" formControlName="notes"></textarea>
-          </div>
-        </div>
+        <div class="subhead">Course applications</div>
+        <app-course-applications-panel [enrolment]="enrolment" [partners]="partners" [isOwner]="isOwner" [permissions]="permissions"
+          [effectiveMaxApplications]="effectiveMaxApplications" (changed)="changed.emit()">
+        </app-course-applications-panel>
 
         <div class="subhead">GS statement</div>
-        <div class="doc-section">
-          <div class="doc-section-head">
-            <span class="label">GS Statement</span>
-            <span class="meta">{{ stepEvidenceDocuments('EnrolmentForm').length }} file(s)</span>
-          </div>
-          <div class="doc-section-body">
-            <div class="doc-empty" *ngIf="stepEvidenceDocuments('EnrolmentForm').length === 0">No GS statement uploaded yet.</div>
-            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('EnrolmentForm')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
-              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
-            </div>
-            <app-file-uploader *ngIf="isOwner && permissions.edit" label="Add GS statement" uploadCategory="enrolment"
-              (fileSelected)="onStepEvidenceSelected('EnrolmentForm', $event)">
-            </app-file-uploader>
-            <p *ngIf="isUploadingStepEvidence['EnrolmentForm']" class="text-muted small mb-0">Uploading…</p>
-          </div>
+        <app-step-evidence-section [enrolment]="enrolment" category="GS" label="GS Statement" [isOwner]="isOwner" [permissions]="permissions"
+          emptyText="No GS statement uploaded yet." uploadLabel="Add GS statement" [canUpload]="isOwner && permissions.edit"
+          [locked]="gsCompletedOnline" lockedBadgeText="Completed online"
+          lockedMessage="The student completed this Genuine Student statement online and it can no longer be uploaded manually. Staff can still update the answers on their behalf."
+          [lockedFileLabel]="gsFormResponse?.formName ?? ''" [lockedFileSub]="'Submitted ' + formatDate(gsFormResponse?.submittedAt)"
+          (viewLocked)="openGsResponsePreview()" (updateLocked)="goToFormsTab.emit()" (changed)="changed.emit()">
+        </app-step-evidence-section>
+
+        <div class="subhead">Enrolment service fee</div>
+        <app-enrolment-invoice-panel [enrolment]="enrolment" [isOwner]="isOwner" [permissions]="permissions" (changed)="changed.emit()">
+        </app-enrolment-invoice-panel>
+
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('EnrolmentForm','comment')" (ngModelChange)="setFieldValue('EnrolmentForm','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('EnrolmentForm','comment').length }} / 500</div>
         </div>
 
         <div class="step-actions">
@@ -332,27 +283,22 @@
         </div>
 
         <div class="subhead">University offer letter</div>
-        <div class="doc-section">
-          <div class="doc-section-head">
-            <span class="label">Uni Offer</span>
-            <span class="meta">{{ stepEvidenceDocuments('ApplyOffer').length }} / 1 uploaded</span>
-          </div>
-          <div class="doc-section-body">
-            <div class="doc-empty" *ngIf="stepEvidenceDocuments('ApplyOffer').length === 0">No document uploaded yet — required to mark this step complete.</div>
-            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('ApplyOffer')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
-              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
-            </div>
-            <app-file-uploader *ngIf="getStep('ApplyOffer')?.status !== 'Complete' && isOwner && permissions.edit" label="Add offer letter" uploadCategory="enrolment"
-              (fileSelected)="onStepEvidenceSelected('ApplyOffer', $event)">
-            </app-file-uploader>
-            <p *ngIf="isUploadingStepEvidence['ApplyOffer']" class="text-muted small mb-0">Uploading…</p>
-          </div>
+        <app-step-evidence-section [enrolment]="enrolment" category="UniOffer" label="Uni Offer" [isOwner]="isOwner" [permissions]="permissions"
+          emptyText="No document uploaded yet — required to mark this step complete." uploadLabel="Add offer letter" [maxCount]="1"
+          [canUpload]="getStep('ApplyOffer')?.status !== 'Complete' && isOwner && permissions.edit" (changed)="changed.emit()">
+        </app-step-evidence-section>
+
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('ApplyOffer','comment')" (ngModelChange)="setFieldValue('ApplyOffer','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('ApplyOffer','comment').length }} / 500</div>
         </div>
 
         <div class="step-actions" *ngIf="getStep('ApplyOffer')?.status !== 'Complete'">
-          <span class="hint">Upload the offer letter to enable Mark Complete.</span>
+          <span class="hint" *ngIf="!fieldValue('EnrolmentForm','invoiceId')">Send the enrolment service-fee invoice (Enrolment Form step) to enable Mark Complete.</span>
+          <span class="hint" *ngIf="fieldValue('EnrolmentForm','invoiceId')">Upload the offer letter to enable Mark Complete.</span>
           <div class="btns">
             <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('ApplyOffer')">Save Draft</button>
             <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('ApplyOffer') || isCompletingStep" (click)="completeStep('ApplyOffer')">Mark Complete &rarr;</button>
@@ -400,27 +346,22 @@
         </div>
 
         <div class="subhead">Confirmation of Enrolment (CoE)</div>
-        <div class="doc-section">
-          <div class="doc-section-head">
-            <span class="label">CoE</span>
-            <span class="meta">{{ stepEvidenceDocuments('CoeCompletion').length }} / 1 uploaded</span>
-          </div>
-          <div class="doc-section-body">
-            <div class="doc-empty" *ngIf="stepEvidenceDocuments('CoeCompletion').length === 0">No document uploaded yet — required to mark this step complete.</div>
-            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('CoeCompletion')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
-              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
-            </div>
-            <app-file-uploader *ngIf="getStep('CoeCompletion')?.status !== 'Complete' && isOwner && permissions.edit" label="Add CoE" uploadCategory="enrolment"
-              (fileSelected)="onStepEvidenceSelected('CoeCompletion', $event)">
-            </app-file-uploader>
-            <p *ngIf="isUploadingStepEvidence['CoeCompletion']" class="text-muted small mb-0">Uploading…</p>
-          </div>
+        <app-step-evidence-section [enrolment]="enrolment" category="CoE" label="CoE" [isOwner]="isOwner" [permissions]="permissions"
+          emptyText="No document uploaded yet — required to mark this step complete." uploadLabel="Add CoE" [maxCount]="1"
+          [canUpload]="getStep('CoeCompletion')?.status !== 'Complete' && isOwner && permissions.edit" (changed)="changed.emit()">
+        </app-step-evidence-section>
+
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('CoeCompletion','comment')" (ngModelChange)="setFieldValue('CoeCompletion','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('CoeCompletion','comment').length }} / 500</div>
         </div>
 
         <div class="step-actions" *ngIf="getStep('CoeCompletion')?.status !== 'Complete'">
-          <span class="hint">Upload the CoE to enable Mark Complete.</span>
+          <span class="hint" *ngIf="!hasFinalizedCourseApplication">Finalize a course application (Enrolment Form step) to enable Mark Complete.</span>
+          <span class="hint" *ngIf="hasFinalizedCourseApplication">Upload the CoE to enable Mark Complete.</span>
           <div class="btns">
             <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isSavingStep" (click)="saveStepDraft('CoeCompletion')">Save Draft</button>
             <button type="button" class="btn btn-primary btn-sm" [disabled]="!canCompleteStep('CoeCompletion') || isCompletingStep" (click)="completeStep('CoeCompletion')">Mark Complete &rarr;</button>
@@ -468,23 +409,17 @@
         </div>
 
         <div class="subhead">VISA application draft</div>
-        <div class="doc-section">
-          <div class="doc-section-head">
-            <span class="label">VISA Draft</span>
-            <span class="meta">{{ stepEvidenceDocuments('VisaApplication').length }} / 1 uploaded</span>
-          </div>
-          <div class="doc-section-body">
-            <div class="doc-empty" *ngIf="stepEvidenceDocuments('VisaApplication').length === 0">No document uploaded yet — required to mark this step complete.</div>
-            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('VisaApplication')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
-              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
-            </div>
-            <app-file-uploader *ngIf="getStep('VisaApplication')?.status !== 'Complete' && isOwner && permissions.edit" label="Add VISA draft" uploadCategory="enrolment"
-              (fileSelected)="onStepEvidenceSelected('VisaApplication', $event)">
-            </app-file-uploader>
-            <p *ngIf="isUploadingStepEvidence['VisaApplication']" class="text-muted small mb-0">Uploading…</p>
-          </div>
+        <app-step-evidence-section [enrolment]="enrolment" category="VisaDraft" label="VISA Draft" [isOwner]="isOwner" [permissions]="permissions"
+          emptyText="No document uploaded yet — required to mark this step complete." uploadLabel="Add VISA draft" [maxCount]="1"
+          [canUpload]="getStep('VisaApplication')?.status !== 'Complete' && isOwner && permissions.edit" (changed)="changed.emit()">
+        </app-step-evidence-section>
+
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('VisaApplication','comment')" (ngModelChange)="setFieldValue('VisaApplication','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('VisaApplication','comment').length }} / 500</div>
         </div>
 
         <div class="step-actions" *ngIf="getStep('VisaApplication')?.status !== 'Complete'">
@@ -544,23 +479,17 @@
         </div>
 
         <div class="subhead">VISA grant letter</div>
-        <div class="doc-section">
-          <div class="doc-section-head">
-            <span class="label">VISA Granted</span>
-            <span class="meta">{{ stepEvidenceDocuments('VisaOutcome').length }} / 1 uploaded</span>
-          </div>
-          <div class="doc-section-body">
-            <div class="doc-empty" *ngIf="stepEvidenceDocuments('VisaOutcome').length === 0">No document uploaded yet — required to mark this step complete.</div>
-            <div class="doc-file-row" *ngFor="let doc of stepEvidenceDocuments('VisaOutcome')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
-              <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
-            </div>
-            <app-file-uploader *ngIf="(getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome) && isOwner && permissions.edit" label="Add grant letter" uploadCategory="enrolment"
-              (fileSelected)="onStepEvidenceSelected('VisaOutcome', $event)">
-            </app-file-uploader>
-            <p *ngIf="isUploadingStepEvidence['VisaOutcome']" class="text-muted small mb-0">Uploading…</p>
-          </div>
+        <app-step-evidence-section [enrolment]="enrolment" category="VisaGranted" label="VISA Granted" [isOwner]="isOwner" [permissions]="permissions"
+          emptyText="No document uploaded yet — required to mark this step complete." uploadLabel="Add grant letter" [maxCount]="1"
+          [canUpload]="(getStep('VisaOutcome')?.status !== 'Complete' || editingVisaOutcome) && isOwner && permissions.edit" (changed)="changed.emit()">
+        </app-step-evidence-section>
+
+        <div class="comment-block">
+          <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff only)</span></label>
+          <textarea class="form-control" rows="2" maxlength="500"
+            [ngModel]="fieldValue('VisaOutcome','comment')" (ngModelChange)="setFieldValue('VisaOutcome','comment',$event)" [ngModelOptions]="{standalone: true}"
+            placeholder="Add any notes about this step…"></textarea>
+          <div class="char-count">{{ fieldValue('VisaOutcome','comment').length }} / 500</div>
         </div>
 
         <div class="final-note">
@@ -590,14 +519,28 @@
 
   </div>
 
+  <aside class="warning-zone">
+    <div class="warning-zone-head">Outstanding items</div>
+    <ul class="warning-zone-list" *ngIf="outstandingItems.length > 0">
+      <li *ngFor="let item of outstandingItems">{{ item }}</li>
+    </ul>
+    <p class="warning-zone-empty" *ngIf="outstandingItems.length === 0">Nothing outstanding — all caught up.</p>
+  </aside>
+  </div>
+
   <app-modal *ngIf="formPopupStepKey && formPopupTemplate as template" [title]="template.name" size="lg"
     [isSaving]="isRequestingBoundForm" [showSave]="!isAlreadyRequested(template.id)"
     saveLabel="Request Student to Answer" cancelLabel="Close"
     (closeModal)="closeFormPopup()" (cancel)="closeFormPopup()" (save)="requestBoundForm()">
-    <p class="text-muted small mb-3" *ngIf="isAlreadyRequested(template.id)">
+    <p class="text-muted small mb-3" *ngIf="formPopupHasAnswers">
+      Showing the student's submitted answers. Manage this response (edit, reopen, export) from the Forms tab.
+    </p>
+    <p class="text-muted small mb-3" *ngIf="!formPopupHasAnswers && isAlreadyRequested(template.id)">
       This form has already been requested on this enrolment — see the Forms tab for its status.
     </p>
-    <app-form-print-preview [formName]="template.name" [description]="template.description" [questions]="template.questions" mode="blank" [compact]="true">
+    <app-form-print-preview [formName]="template.name" [description]="template.description" [questions]="template.questions"
+      [mode]="formPopupHasAnswers ? 'filled' : 'blank'" [answers]="formPopupResponse?.answers ?? []"
+      [submittedAt]="formPopupResponse?.submittedAt" [compact]="true">
     </app-form-print-preview>
   </app-modal>
 </div>

@@ -18,6 +18,18 @@ namespace ShareService.Services.Interface
         Task<bool> SaveVisaStepDraftAsync(string id, string stepKey, Dictionary<string, string> fields, string actingUserId);
         Task<bool> CompleteVisaStepAsync(string id, string stepKey, Dictionary<string, string> fields, string actingUserId);
 
+        // Merges (not replaces) the given keys into one step's Fields bag — used by
+        // InvoiceService to record invoiceId/invoiceSentAt/invoicePaidAt without clobbering
+        // whatever else staff have already saved on that step (e.g. a comment).
+        Task SetStepFieldsAsync(string id, string stepKey, Dictionary<string, string> fieldsToMerge, string auditDescription, string actingUserId);
+
+        // ----- Course Applications (Enrolment Form step's nested sub-panels) -----
+        Task<bool> SetMaxApplicationsOverrideAsync(string id, int newMax, string actingUserId);
+        Task<CourseApplicationModel> AddCourseApplicationAsync(string id, string educationPartnerId, string courseId, string actingUserId);
+        Task<bool> UpdateCourseApplicationDetailsAsync(string id, string courseApplicationId, CourseApplicationDetailsModel details, string actingUserId);
+        Task<bool> SetCourseApplicationStatusAsync(string id, string courseApplicationId, string newStatus, string actingUserId);
+        Task<bool> FinalizeCourseApplicationAsync(string id, string courseApplicationId, string actingUserId);
+
         // ----- Dynamic Forms — staff actions (permission + ownership, via GetOwnedEnrolmentAsync) -----
         Task<EnrolmentFormResponseModel> RequestFormAsync(string id, string formTemplateId, string actingUserId);
         Task<bool> WithdrawFormRequestAsync(string id, string responseId, string actingUserId);

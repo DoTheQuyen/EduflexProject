@@ -137,6 +137,9 @@ onGroupHeaderClick(item: MenuItem): void {
     if (this.authHelper.hasEmailTemplatesPermission().view) {
       settingChildren.push({ title: 'Email Templates', icon: 'envelope-open-text', route: '/staff-portal/email-templates' });
     }
+    if (this.authHelper.hasInvoiceTemplatesPermission().view) {
+      settingChildren.push({ title: 'Invoice Templates', icon: 'file-invoice-dollar', route: '/staff-portal/invoice-templates' });
+    }
     if (settingChildren.length) {
       items.push({ title: 'Administration', icon: 'gear', children: settingChildren, expanded: false });
     }

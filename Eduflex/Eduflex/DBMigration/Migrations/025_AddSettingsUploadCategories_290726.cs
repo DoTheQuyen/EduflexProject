@@ -26,7 +26,7 @@ namespace DBMigration.Migrations
                 updates.Add(Builders<BsonDocument>.Update.Set("imageUpload", new BsonDocument
                 {
                     { "maxSizeMB", 2.0 },
-                    { "allowedExtensions", new BsonArray { ".jpg", ".jpeg", ".png", ".gif", ".webp" } },
+                    { "allowedExtensions", new BsonArray { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".rtf", ".csv" } },
                     { "maxFileCount", 1 }
                 }));
             }
@@ -36,7 +36,7 @@ namespace DBMigration.Migrations
                 updates.Add(Builders<BsonDocument>.Update.Set("contractUpload", new BsonDocument
                 {
                     { "maxSizeMB", 10.0 },
-                    { "allowedExtensions", new BsonArray { ".pdf", ".doc", ".docx" } },
+                    { "allowedExtensions", new BsonArray { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".rtf", ".csv" } },
                     { "maxFileCount", 1 }
                 }));
             }

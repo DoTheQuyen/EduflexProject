@@ -11,6 +11,7 @@ namespace Eduflex.Mapping.Settings
             {
                 FeedbackDefaultLatestCount = model.FeedbackDefaultLatestCount,
                 CoursePromotionDefaultLatestCount = model.CoursePromotionDefaultLatestCount,
+                MaxApplicationsPerStudent = model.MaxApplicationsPerStudent,
                 DocumentUpload = new DocumentUploadSettingsDto
                 {
                     Default = model.DocumentUpload.Default.ToDto(),
@@ -38,6 +39,7 @@ namespace Eduflex.Mapping.Settings
             {
                 FeedbackDefaultLatestCount = dto.FeedbackDefaultLatestCount,
                 CoursePromotionDefaultLatestCount = dto.CoursePromotionDefaultLatestCount,
+                MaxApplicationsPerStudent = dto.MaxApplicationsPerStudent,
                 DocumentUpload = new DocumentUploadSettings
                 {
                     Default = dto.DocumentUpload.Default.ToModel(),

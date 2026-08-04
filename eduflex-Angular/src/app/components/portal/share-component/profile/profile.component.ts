@@ -27,6 +27,10 @@ export class ProfileComponent implements OnInit {
     newPassword: '',
     confirmPassword: ''
   };
+  // Kept separate from `message` so a password validation error shows next
+  // to the password form, not in the banner at the top of a scrolled page.
+  passwordMessage = '';
+  passwordMessageType: 'success' | 'error' = 'success';
 
   constructor(
     private authHelper: AuthHelperService,
@@ -110,7 +114,7 @@ export class ProfileComponent implements OnInit {
           email: updatedProfile.email
         };
         sessionStorage.setItem('userData', JSON.stringify(updatedUser));
-        
+
         this.userInfo = updatedProfile;
         this.isEditing = false;
         this.showMessage('Profile updated successfully!', 'success');
@@ -131,20 +135,27 @@ export class ProfileComponent implements OnInit {
       newPassword: '',
       confirmPassword: ''
     };
+    this.passwordMessage = '';
   }
 
   changePassword(): void {
+    if (!this.passwordData.currentPassword) {
+      this.showPasswordMessage('Enter your current password.', 'error');
+      return;
+    }
+
     if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      this.showMessage('New password and confirmation do not match.', 'error');
+      this.showPasswordMessage('New password and confirmation do not match.', 'error');
       return;
     }
 
     if (this.passwordData.newPassword.length < 6) {
-      this.showMessage('New password must be at least 6 characters long.', 'error');
+      this.showPasswordMessage('New password must be at least 6 characters long.', 'error');
       return;
     }
 
     this.isLoading = true;
+    this.passwordMessage = '';
 
     // Create ChangePasswordDto instance properly
     const passwordData = new ChangePasswordDto();
@@ -165,7 +176,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error changing password:', error);
-        this.showMessage('Error changing password. Please check your current password.', 'error');
+        this.showPasswordMessage('Error changing password. Please check your current password.', 'error');
         this.isLoading = false;
       }
     });
@@ -176,6 +187,14 @@ export class ProfileComponent implements OnInit {
     this.messageType = type;
     setTimeout(() => {
       this.message = '';
+    }, 5000);
+  }
+
+  private showPasswordMessage(text: string, type: 'success' | 'error'): void {
+    this.passwordMessage = text;
+    this.passwordMessageType = type;
+    setTimeout(() => {
+      this.passwordMessage = '';
     }, 5000);
   }
 

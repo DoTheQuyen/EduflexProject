@@ -197,6 +197,57 @@ namespace Eduflex.API.Controllers
             });
         }
 
+        [HttpPut("{id}/max-applications")]
+        public Task<ActionResult<bool>> SetMaxApplicationsOverride(string id, SetMaxApplicationsOverrideDto maxDto)
+        {
+            return HandleUpdateAsync(_logger, "Error in SetMaxApplicationsOverride endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.SetMaxApplicationsOverrideAsync(id, maxDto.MaxApplications, actingUserId);
+            });
+        }
+
+        [HttpPost("{id}/course-applications")]
+        public Task<ActionResult<CourseApplicationDto>> AddCourseApplication(string id, AddCourseApplicationDto addDto)
+        {
+            return HandleRequestAsync(_logger, "Error in AddCourseApplication endpoint", async () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                var courseApplication = await _enrolmentService.AddCourseApplicationAsync(id, addDto.EducationPartnerId, addDto.CourseId, actingUserId);
+                return courseApplication.ToDto();
+            });
+        }
+
+        [HttpPut("{id}/course-applications/{courseApplicationId}/details")]
+        public Task<ActionResult<bool>> UpdateCourseApplicationDetails(string id, string courseApplicationId, UpdateCourseApplicationDetailsDto detailsDto)
+        {
+            return HandleUpdateAsync(_logger, "Error in UpdateCourseApplicationDetails endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.UpdateCourseApplicationDetailsAsync(id, courseApplicationId, detailsDto.ToModel(), actingUserId);
+            });
+        }
+
+        [HttpPut("{id}/course-applications/{courseApplicationId}/status")]
+        public Task<ActionResult<bool>> SetCourseApplicationStatus(string id, string courseApplicationId, SetCourseApplicationStatusDto statusDto)
+        {
+            return HandleUpdateAsync(_logger, "Error in SetCourseApplicationStatus endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.SetCourseApplicationStatusAsync(id, courseApplicationId, statusDto.Status, actingUserId);
+            });
+        }
+
+        [HttpPost("{id}/course-applications/{courseApplicationId}/finalize")]
+        public Task<ActionResult<bool>> FinalizeCourseApplication(string id, string courseApplicationId)
+        {
+            return HandleUpdateAsync(_logger, "Error in FinalizeCourseApplication endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.FinalizeCourseApplicationAsync(id, courseApplicationId, actingUserId);
+            });
+        }
+
         [HttpPost("{id}/communications")]
         public Task<ActionResult<EnrolmentCommunicationDto>> SendCommunication(string id, SendEnrolmentCommunicationDto sendDto)
         {

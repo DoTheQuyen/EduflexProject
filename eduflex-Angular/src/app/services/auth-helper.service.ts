@@ -196,4 +196,17 @@ export class AuthHelperService {
       delete: canEdit
     };
   }
+
+  // Same flat-key shape as hasEmailTemplatesPermission — gates the admin Invoice
+  // Template management screen and the sent-invoice ledger. Sending an individual
+  // invoice from the Enrolment Form step doesn't use this — that's EnrolmentsEdit.
+  hasInvoiceTemplatesPermission(): ModulePermissions {
+    const canEdit = this.hasPermission('InvoiceTemplatesEdit');
+    return {
+      view: canEdit,
+      add: canEdit,
+      edit: canEdit,
+      delete: canEdit
+    };
+  }
 }

@@ -1,0 +1,55 @@
+<div class="invoice-template-management-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="mb-1">Invoice Templates</h3>
+        <p class="text-muted mb-2">Branding, sender details and numbering for Customer (student) and Partner invoices.
+        </p>
+      </div>
+      <div class="col-auto d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="openLedger()">
+          <i class="fas fa-list me-1"></i>Sent Invoices
+        </button>
+        <button type="button" class="btn btn-primary" *ngIf="permissions.add" (click)="createNew()">
+          <i class="fas fa-plus me-1"></i>New Template
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading templates...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="card border shadow-sm">
+      <div class="card-body p-0">
+        <app-data-table [columns]="columns" [data]="templates" [rowActions]="rowActions" [totalCount]="templates.length"
+          [showSearch]="false" (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
+        </app-data-table>
+        <p *ngIf="!isLoading && templates.length === 0" class="text-center text-muted py-4 mb-0">
+          No invoice templates yet — click "New Template" to create one.
+        </p>
+      </div>
+    </div>
+  </div>
+  <app-modal *ngIf="showPreview" title="Invoice Preview" size="lg" [showSave]="false" [showCancel]="true"
+    cancelLabel="Close" (cancel)="closePreview()" (closeModal)="closePreview()">
+    <div style="background:#fff;padding:24px;border:1px solid #DCE0E4;border-radius:4px;" [innerHTML]="previewHtml">
+    </div>
+  </app-modal>
+
+  <div class="confirm-dialog-backdrop" *ngIf="confirmDialog" (click)="cancelConfirm()">
+    <div class="confirm-dialog-panel" (click)="$event.stopPropagation()">
+      <p class="mb-3">{{ confirmDialog.message }}</p>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="cancelConfirm()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="proceedConfirm()">{{ confirmDialog.confirmLabel }}</button>
+      </div>
+    </div>
+  </div>
+
+</div>

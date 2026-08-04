@@ -14,6 +14,7 @@ using ShareService.Models.EducationPartner;
 using ShareService.Models.Enquiry;
 using ShareService.Models.Enrolment;
 using ShareService.Models.Feedback;
+using ShareService.Models.Invoice;
 using ShareService.Models.Role;
 using ShareService.Models.Student;
 using ShareService.Services;
@@ -32,6 +33,7 @@ using ShareService.Validations.EducationPartner;
 using ShareService.Validations.Enquiry;
 using ShareService.Validations.Enrolment;
 using ShareService.Validations.Feedback;
+using ShareService.Validations.Invoice;
 using ShareService.Validations.Role;
 using ShareService.Validations.Student;
 
@@ -65,6 +67,8 @@ namespace ShareService.Inject
             services.AddScoped<INotification, Notification>();
             services.AddScoped<IDepartment, Department>();
             services.AddScoped<IDynamicFormTemplate, DynamicFormTemplate>();
+            services.AddScoped<IInvoiceTemplate, InvoiceTemplate>();
+            services.AddScoped<IInvoice, Invoice>();
 
 
             #endregion
@@ -93,6 +97,8 @@ namespace ShareService.Inject
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IDynamicFormTemplateService, DynamicFormTemplateService>();
+            services.AddScoped<IInvoiceTemplateService, InvoiceTemplateService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
 
 
             #endregion
@@ -117,6 +123,7 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<EmailTemplateModel>, EmailTemplateModelValidator>();
             services.AddScoped<IValidator<DepartmentModel>, DepartmentModelValidator>();
             services.AddScoped<IValidator<DynamicFormTemplateModel>, DynamicFormTemplateModelValidator>();
+            services.AddScoped<IValidator<InvoiceTemplateModel>, InvoiceTemplateModelValidator>();
 
             #endregion
 

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Client } from '@services/api.services';
+import { Client, InvoiceRecordDto } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
@@ -19,7 +19,7 @@ const DOCUMENT_STEP_CATEGORIES: DocumentCategory[] = ['GS', 'UniOffer', 'CoE', '
   templateUrl: './documents-tab.component.html',
   styleUrls: ['./documents-tab.component.css']
 })
-export class DocumentsTabComponent {
+export class DocumentsTabComponent implements OnChanges {
   @Input({ required: true }) enrolment!: Enrolment;
   @Input() isOwner = false;
   @Input({ required: true }) permissions!: ModulePermissions;
@@ -32,11 +32,33 @@ export class DocumentsTabComponent {
   renamingDocumentId: string | null = null;
   renameValue = '';
 
+  // Invoices sent to the student for this enrolment — shown alongside "Other documents"
+  // (in the grid slot next to VISA Granted) since staff think of "everything sent to or
+  // collected from this student" as one list, not two separate places to check.
+  invoices: InvoiceRecordDto[] = [];
+  private lastLoadedEnrolmentId: string | undefined;
+
   constructor(
     private apiClient: Client,
     private enrolmentService: EnrolmentService,
     private notificationService: NotificationService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['enrolment'] || !this.enrolment || this.enrolment.id === this.lastLoadedEnrolmentId) return;
+    this.lastLoadedEnrolmentId = this.enrolment.id;
+    this.apiClient.byEnrolmentAll(this.enrolment.id).subscribe({
+      next: (invoices) => { this.invoices = invoices; },
+      error: () => {}
+    });
+  }
+
+  downloadInvoice(invoice: InvoiceRecordDto): void {
+    this.apiClient.downloadLink2(invoice.id!).subscribe({
+      next: (result) => { window.open(result.url, '_blank', 'noopener'); },
+      error: () => { this.notificationService.error('Could not resolve the download link.'); }
+    });
+  }
 
   formatDate(value: string | undefined): string {
     return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';

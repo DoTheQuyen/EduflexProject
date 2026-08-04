@@ -10,7 +10,7 @@ import { ModalComponent } from '@generic/modal/modal.component';
 import { FormAnswerEditorComponent } from '@generic/form-answer-editor/form-answer-editor.component';
 import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
-import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
+// import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { EnrolmentFormResponse, FormAnswer, formResponseStatusBadgeClass } from '@app/models/dynamic-form';
 
 interface DocFile {
@@ -61,7 +61,7 @@ const FALLBACK_UPLOAD_LIMIT: UploadLimitDto = new UploadLimitDto({
 @Component({
   selector: 'app-application-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ModalComponent, FormAnswerEditorComponent, FormPrintPreviewComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './application-detail.component.html',
   styleUrls: ['./application-detail.component.css']
 })
@@ -139,15 +139,9 @@ export class ApplicationDetailComponent implements OnInit {
 
   settings: SettingsDto | null = null;
 
-  // ----- Dynamic Forms (student-only — staff manage forms via the Enrolment's
-  // own Forms tab, not from here) -----
-  myEnrolmentId: string | null = null;
-  myForms: EnrolmentFormResponse[] = [];
-  selectedFormId: string | null = null;
-  fillAnswers: FormAnswer[] = [];
-  isSavingDraft = false;
-  isSubmitting = false;
-  showFinalizeConfirm = false;
+
+myEnrolmentId: string | null = null;
+myForms: EnrolmentFormResponse[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -338,6 +332,10 @@ export class ApplicationDetailComponent implements OnInit {
     this.docs[key].splice(index, 1);
   }
 
+  goBack(): void {
+    this.router.navigate([this.isStaffPortal ? '/staff-portal/applications' : '/student-portal/application']);
+  }
+
   cancelUpdate(): void {
     if (this.mode === 'new') {
       const dirty = !!this.university || !!this.course || !!this.description ||
@@ -429,57 +427,8 @@ export class ApplicationDetailComponent implements OnInit {
   isFormLocked(form: EnrolmentFormResponse): boolean {
     return form.status === 'Responded';
   }
-
-  get selectedForm(): EnrolmentFormResponse | undefined {
-    return this.myForms.find(f => f.id === this.selectedFormId);
-  }
-
-  openForm(form: EnrolmentFormResponse): void {
-    this.selectedFormId = form.id;
-    this.fillAnswers = form.answers.map(a => ({ ...a, selectedOptions: [...a.selectedOptions] }));
-  }
-
-  closeForm(): void {
-    this.selectedFormId = null;
-    this.fillAnswers = [];
-    this.showFinalizeConfirm = false;
-  }
-
-  saveFormDraft(form: EnrolmentFormResponse): void {
-    if (!this.myEnrolmentId) return;
-    this.isSavingDraft = true;
-    this.enrolmentService.saveFormDraft(this.myEnrolmentId, form.id, this.fillAnswers).subscribe({
-      next: () => {
-        this.isSavingDraft = false;
-        this.notification.success('Draft saved.');
-        if (this.appId) this.loadMyForms(this.appId);
-      },
-      error: (err) => {
-        this.isSavingDraft = false;
-        this.notification.error(extractHttpErrorMessage(err, 'Could not save your draft.'));
-      }
-    });
-  }
-
-  openFinalizeConfirm(): void {
-    this.showFinalizeConfirm = true;
-  }
-
-  confirmSubmitForm(form: EnrolmentFormResponse): void {
-    if (!this.myEnrolmentId) return;
-    this.isSubmitting = true;
-    this.enrolmentService.submitForm(this.myEnrolmentId, form.id, this.fillAnswers).subscribe({
-      next: () => {
-        this.isSubmitting = false;
-        this.showFinalizeConfirm = false;
-        this.notification.success('Form submitted.');
-        this.closeForm();
-        if (this.appId) this.loadMyForms(this.appId);
-      },
-      error: (err) => {
-        this.isSubmitting = false;
-        this.notification.error(extractHttpErrorMessage(err, 'Could not submit this form — check every required question is answered.'));
-      }
-    });
+  
+ openForm(form: EnrolmentFormResponse): void {
+    this.router.navigate(['/student-portal/application', this.appId, 'forms', form.id]);
   }
 }

@@ -1,0 +1,30 @@
+<div class="doc-section">
+  <div class="doc-section-head">
+    <span class="label">{{ label }}</span>
+    <span class="meta" *ngIf="!locked">{{ documents.length }}{{ maxCount ? ' / ' + maxCount + ' uploaded' : ' file(s)' }}</span>
+    <span class="badge-pill badge-pill-success-soft" *ngIf="locked">{{ lockedBadgeText }}</span>
+  </div>
+  <div class="doc-section-body">
+    <ng-container *ngIf="locked; else uploadZone">
+      <p class="text-muted small mb-2" *ngIf="lockedMessage">{{ lockedMessage }}</p>
+      <div class="doc-file-row" *ngIf="documents[0] as doc">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span class="doc-file-meta"><span class="doc-file-name">{{ lockedFileLabel }}</span><span class="doc-file-sub">{{ lockedFileSub }}</span></span>
+        <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download PDF</a>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="viewLocked.emit()">View</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="isOwner && permissions.edit" (click)="updateLocked.emit()">Update</button>
+      </div>
+    </ng-container>
+    <ng-template #uploadZone>
+      <div class="doc-empty" *ngIf="documents.length === 0">{{ emptyText }}</div>
+      <div class="doc-file-row" *ngFor="let doc of documents">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        <span class="doc-file-meta"><span class="doc-file-name">{{ doc.fileName }}</span><span class="doc-file-sub">{{ doc.uploadedByName }} &middot; {{ formatDate(doc.uploadedAt) }}</span></span>
+        <a class="btn btn-outline-secondary btn-sm" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+      </div>
+      <app-file-uploader *ngIf="canUpload" [label]="uploadLabel" uploadCategory="enrolment" (fileSelected)="onFileSelected($event)">
+      </app-file-uploader>
+      <p *ngIf="isUploading" class="text-muted small mb-0">Uploading…</p>
+    </ng-template>
+  </div>
+</div>

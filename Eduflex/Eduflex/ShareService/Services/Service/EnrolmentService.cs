@@ -32,6 +32,7 @@ namespace ShareService.Services
         private readonly IAzureBlobDocStorageService _blobStorageService;
         private readonly IEducationPartner _educationPartnerDataAccess;
         private readonly ICourse _courseDataAccess;
+        private readonly ISettings _settingsDataAccess;
         private readonly IFinancialRecordService _financialRecordService;
         private readonly INotificationPublisher _notificationPublisher;
         private readonly IDynamicFormTemplate _dynamicFormTemplateDataAccess;
@@ -54,6 +55,7 @@ namespace ShareService.Services
             IAzureBlobDocStorageService blobStorageService,
             IEducationPartner educationPartnerDataAccess,
             ICourse courseDataAccess,
+            ISettings settingsDataAccess,
             IFinancialRecordService financialRecordService,
             INotificationPublisher notificationPublisher,
             IDynamicFormTemplate dynamicFormTemplateDataAccess,
@@ -75,6 +77,7 @@ namespace ShareService.Services
             _blobStorageService = blobStorageService;
             _educationPartnerDataAccess = educationPartnerDataAccess;
             _courseDataAccess = courseDataAccess;
+            _settingsDataAccess = settingsDataAccess;
             _financialRecordService = financialRecordService;
             _notificationPublisher = notificationPublisher;
             _dynamicFormTemplateDataAccess = dynamicFormTemplateDataAccess;
@@ -500,6 +503,194 @@ namespace ShareService.Services
         }
 
         // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Unlike SaveVisaStepDraftAsync (which replaces the whole Fields bag with whatever
+        // the frontend form currently holds), this merges just the given keys — used by
+        // InvoiceService so recording invoiceId/invoiceSentAt/invoicePaidAt can never wipe
+        // out an unrelated field (e.g. a staff comment) saved on the same step.
+        public async Task SetStepFieldsAsync(string id, string stepKey, Dictionary<string, string> fieldsToMerge, string auditDescription, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var step = FindStep(existing, stepKey);
+
+            foreach (var (key, value) in fieldsToMerge)
+            {
+                step.Fields[key] = value;
+            }
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create(auditDescription, actingUserId, actingUserName));
+            await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // ----- Course Applications (Enrolment Form step's nested sub-panels) -----
+
+        private async Task<int> GetEffectiveMaxApplicationsAsync(EnrolmentModel enrolment)
+        {
+            var settings = await _settingsDataAccess.GetSettingsAsync();
+            var globalMax = settings?.MaxApplicationsPerStudent ?? 1;
+            // The override can never exceed the current global ceiling — if an admin
+            // lowers the global setting after an override was saved, the lower ceiling
+            // wins from that point on rather than honouring the stale override.
+            return enrolment.MaxApplicationsOverride.HasValue
+                ? Math.Min(enrolment.MaxApplicationsOverride.Value, globalMax)
+                : globalMax;
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        public async Task<bool> SetMaxApplicationsOverrideAsync(string id, int newMax, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var settings = await _settingsDataAccess.GetSettingsAsync();
+            var globalMax = settings?.MaxApplicationsPerStudent ?? 1;
+
+            if (newMax < 1)
+            {
+                throw new ArgumentException("Number of applications allowed must be at least 1.");
+            }
+            if (newMax > globalMax)
+            {
+                throw new ArgumentException($"Number of applications allowed can't exceed the system maximum ({globalMax}).");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.MaxApplicationsOverride = newMax;
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Set applications allowed to {newMax}", actingUserId, actingUserName));
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        public async Task<CourseApplicationModel> AddCourseApplicationAsync(string id, string educationPartnerId, string courseId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+
+            var activeCount = existing.CourseApplications.Count(c => c.Status != CourseApplicationStatuses.Withdrawn);
+            var effectiveMax = await GetEffectiveMaxApplicationsAsync(existing);
+            if (activeCount >= effectiveMax)
+            {
+                throw new ArgumentException($"This student is already at their application limit ({effectiveMax}). Increase \"Number applications allowed\" first.");
+            }
+
+            var course = await _courseDataAccess.GetCourseByIdAsync(courseId);
+
+            var courseApplication = new CourseApplicationModel
+            {
+                EducationPartnerId = educationPartnerId,
+                CourseId = courseId,
+                Status = CourseApplicationStatuses.Init,
+                TuitionFee = course?.TuitionFee
+            };
+            existing.CourseApplications.Add(courseApplication);
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create("Added a course application", actingUserId, actingUserName));
+
+            await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+            return courseApplication;
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Editable any time except once Withdrawn — a Finalized entry can still be
+        // corrected (e.g. a typo in intake), same "the winning one might need a fix"
+        // reasoning as VisaOutcome staying editable after completion.
+        public async Task<bool> UpdateCourseApplicationDetailsAsync(string id, string courseApplicationId, CourseApplicationDetailsModel details, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var courseApplication = existing.CourseApplications.FirstOrDefault(c => c.Id == courseApplicationId)
+                ?? throw new KeyNotFoundException("Course application not found");
+
+            if (courseApplication.Status == CourseApplicationStatuses.Withdrawn)
+            {
+                throw new ArgumentException("A withdrawn course application can't be edited.");
+            }
+
+            courseApplication.Intake = details.Intake;
+            courseApplication.StudyMode = details.StudyMode;
+            courseApplication.Campus = details.Campus;
+            courseApplication.CommencementDate = details.CommencementDate;
+            courseApplication.ExpectedCompletionDate = details.ExpectedCompletionDate;
+            courseApplication.ActualCommencementDate = details.ActualCommencementDate;
+            courseApplication.Notes = details.Notes;
+            if (details.TuitionFee.HasValue)
+            {
+                courseApplication.TuitionFee = details.TuitionFee;
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create("Updated course application details", actingUserId, actingUserName));
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // General status changes (Init/Applied/Offered/Withdrawn) — Finalized is
+        // deliberately excluded here, see FinalizeCourseApplicationAsync for why it needs
+        // its own dedicated action instead of being just another value on this setter.
+        public async Task<bool> SetCourseApplicationStatusAsync(string id, string courseApplicationId, string newStatus, string actingUserId)
+        {
+            if (newStatus == CourseApplicationStatuses.Finalized)
+            {
+                throw new ArgumentException("Use the Finalize action to move a course application to Finalized.");
+            }
+            var validStatuses = new[] { CourseApplicationStatuses.Init, CourseApplicationStatuses.Applied, CourseApplicationStatuses.Offered, CourseApplicationStatuses.Withdrawn };
+            if (!validStatuses.Contains(newStatus))
+            {
+                throw new ArgumentException($"\"{newStatus}\" is not a valid status.");
+            }
+
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var courseApplication = existing.CourseApplications.FirstOrDefault(c => c.Id == courseApplicationId)
+                ?? throw new KeyNotFoundException("Course application not found");
+
+            if (courseApplication.Status == CourseApplicationStatuses.Finalized)
+            {
+                throw new ArgumentException("This course application has already been finalized and can't be changed here.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            courseApplication.Status = newStatus;
+            courseApplication.StatusUpdatedAt = DateTime.UtcNow;
+            courseApplication.StatusUpdatedByName = actingUserName;
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Course application status changed to \"{newStatus}\"", actingUserId, actingUserName));
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Only reachable from Offered (enforced here, not just the frontend button's
+        // disabled state) — finalizing represents "this is the one course the student is
+        // actually going ahead with", so every sibling course application on this
+        // enrolment is withdrawn in the same call. This is also the precondition
+        // CompleteVisaStepAsync checks before allowing CoE Completion to be marked done.
+        public async Task<bool> FinalizeCourseApplicationAsync(string id, string courseApplicationId, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var courseApplication = existing.CourseApplications.FirstOrDefault(c => c.Id == courseApplicationId)
+                ?? throw new KeyNotFoundException("Course application not found");
+
+            if (courseApplication.Status != CourseApplicationStatuses.Offered)
+            {
+                throw new ArgumentException("Only a course application with status \"Offered\" can be finalized.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var now = DateTime.UtcNow;
+
+            courseApplication.Status = CourseApplicationStatuses.Finalized;
+            courseApplication.StatusUpdatedAt = now;
+            courseApplication.StatusUpdatedByName = actingUserName;
+
+            foreach (var sibling in existing.CourseApplications.Where(c => c.Id != courseApplicationId && c.Status != CourseApplicationStatuses.Withdrawn))
+            {
+                sibling.Status = CourseApplicationStatuses.Withdrawn;
+                sibling.StatusUpdatedAt = now;
+                sibling.StatusUpdatedByName = actingUserName;
+            }
+
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create("Finalized a course application — all other course applications withdrawn", actingUserId, actingUserName));
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
         // Enforces sequential gating (previous step must be Complete) and, for steps that
         // require one, that a matching evidence document has already been uploaded.
         public async Task<bool> CompleteVisaStepAsync(string id, string stepKey, Dictionary<string, string> fields, string actingUserId)
@@ -526,6 +717,32 @@ namespace ShareService.Services
                 && !existing.Documents.Any(d => d.Category == requiredCategory))
             {
                 throw new ArgumentException($"Upload the required \"{requiredCategory}\" evidence document before marking this step complete.");
+            }
+
+            // Enrolment Form is auto-completed at enrolment creation (see
+            // VisaProcessStepModel.CreateDefault), so there's no "complete this step"
+            // action to gate on the service-fee invoice having been sent. The next
+            // actionable step is Apply Offer, so that's where the gate actually lives —
+            // staff shouldn't be able to push the process further while the fee raised on
+            // the Enrolment Form step is still unbilled.
+            if (stepKey == VisaProcessStepKeys.ApplyOffer)
+            {
+                var enrolmentFormStep = FindStep(existing, VisaProcessStepKeys.EnrolmentForm);
+                var hasSentInvoice = enrolmentFormStep.Fields.TryGetValue("invoiceId", out var invoiceId) && !string.IsNullOrEmpty(invoiceId);
+                if (!hasSentInvoice)
+                {
+                    throw new ArgumentException("Send the enrolment service-fee invoice (on the Enrolment Form step) before marking Apply Offer complete.");
+                }
+            }
+
+            // A course must have been through Finalize (see FinalizeCourseApplicationAsync)
+            // before staff can confirm CoE — that action is what decides which course is
+            // actually going ahead and withdraws the rest, so completing CoE for a course
+            // nobody has picked yet doesn't make sense.
+            if (stepKey == VisaProcessStepKeys.CoeCompletion
+                && !existing.CourseApplications.Any(c => c.Status == CourseApplicationStatuses.Finalized))
+            {
+                throw new ArgumentException("Finalize a course application before marking CoE Completion complete.");
             }
 
             // The whole point of this step is recording Granted/Refused — completing it
@@ -876,14 +1093,34 @@ namespace ShareService.Services
             }
         }
 
-        // Renders the finalized response to PDF and appends it as a new Documents entry
-        // (append-only, matching the existing convention) — ExportedDocumentId always
-        // points at the latest one. Never overwrites/removes earlier snapshots, so
-        // there's always a record of what the student saw and signed at each finalize.
+        // Steps whose bound form is that step's single canonical evidence file — mirrors
+        // the frontend's VISA_STEP_EVIDENCE_CATEGORY (models/enrolment.ts) so a step-bound
+        // response's auto-saved PDF lands in the same category the step's own manual-
+        // upload zone reads from (documentsByCategory/stepEvidenceDocuments).
+        private static readonly Dictionary<string, string> StepEvidenceCategories = new()
+        {
+            ["EnrolmentForm"] = "GS",
+            ["ApplyOffer"] = "UniOffer",
+            ["CoeCompletion"] = "CoE",
+            ["VisaApplication"] = "VisaDraft",
+            ["VisaOutcome"] = "VisaGranted"
+        };
+
+        // Renders the finalized response to PDF and saves it as a Documents entry.
+        // A step-bound form (e.g. the GS statement) is that step's one canonical evidence
+        // file — each regeneration deletes the previous blob/Documents entry and replaces
+        // it, same as the step's own manual-upload zone. An un-bound ad-hoc form has no
+        // single "the" evidence slot to replace, so it keeps the original append-only
+        // behavior — every finalize/edit adds a new snapshot, ExportedDocumentId always
+        // pointing at the latest.
         private async Task SaveResponseAsDocumentAsync(EnrolmentModel enrolment, EnrolmentFormResponseModel response, string actingUserId, string actingUserName)
         {
             var studentName = $"{enrolment.FirstName} {enrolment.LastName}".Trim();
             var pdfBytes = await _pdfService.RenderToPdfAsync(response.RenderToHtml(studentName, enrolment.Email, enrolment.Mobile));
+
+            var evidenceCategory = response.BoundStepKey != null && StepEvidenceCategories.TryGetValue(response.BoundStepKey, out var ec) ? ec : null;
+            var isStepEvidence = evidenceCategory != null;
+            var category = evidenceCategory ?? "DynamicForm";
 
             var fileName = $"{response.FormName}-{studentName}-{DateTime.UtcNow:dd MMM yyyy h.mmtt}.pdf";
             using var stream = new MemoryStream(pdfBytes);
@@ -893,7 +1130,7 @@ namespace ShareService.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 FileName = fileName,
-                Category = "DynamicForm",
+                Category = category,
                 Url = url,
                 ContentType = "application/pdf",
                 SizeBytes = pdfBytes.LongLength,
@@ -902,6 +1139,16 @@ namespace ShareService.Services
                 IsFromStudent = false,
                 UploadedAt = DateTime.UtcNow
             };
+
+            if (isStepEvidence && response.ExportedDocumentId != null)
+            {
+                var previous = enrolment.Documents.FirstOrDefault(d => d.Id == response.ExportedDocumentId);
+                if (previous != null)
+                {
+                    await _blobStorageService.DeleteAsync(previous.Url);
+                    enrolment.Documents.Remove(previous);
+                }
+            }
 
             enrolment.Documents.Add(document);
             response.ExportedDocumentId = document.Id;

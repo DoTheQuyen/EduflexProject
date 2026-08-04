@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CountrySelectComponent } from '@generic/country-select/country-select.component';
 
 // Reusable "who is this student" field set — email, mobile, name, nationality,
 // passport, DOB and address. Used standalone by the Add Student page today;
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 @Component({
   selector: 'app-student-details-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, CountrySelectComponent],
   templateUrl: './student-details-form.component.html',
   styleUrls: ['./student-details-form.component.css']
 })

@@ -4,6 +4,7 @@ namespace Eduflex.DTOs.Settings
     {
         public int FeedbackDefaultLatestCount { get; set; }
         public int CoursePromotionDefaultLatestCount { get; set; }
+        public int MaxApplicationsPerStudent { get; set; }
         public DocumentUploadSettingsDto DocumentUpload { get; set; } = new();
         public UploadLimitDto ImageUpload { get; set; } = new();
         public UploadLimitDto ContractUpload { get; set; } = new();

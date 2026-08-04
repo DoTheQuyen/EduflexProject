@@ -21,6 +21,13 @@ namespace ShareService.Models.Settings
         [BsonElement("coursePromotionDefaultLatestCount")]
         public int CoursePromotionDefaultLatestCount { get; set; } = 10;
 
+        // System-wide ceiling on how many concurrent course applications a student's
+        // enrolment can hold — see EnrolmentModel.MaxApplicationsOverride, which lets
+        // staff dial an individual student's allowance anywhere up to this value, but
+        // never past it.
+        [BsonElement("maxApplicationsPerStudent")]
+        public int MaxApplicationsPerStudent { get; set; } = 1;
+
         [BsonElement("documentUpload")]
         public DocumentUploadSettings DocumentUpload { get; set; } = new();
 

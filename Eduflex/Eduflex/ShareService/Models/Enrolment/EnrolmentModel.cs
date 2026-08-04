@@ -135,5 +135,18 @@ namespace ShareService.Models.Enrolment
         // mutated only via EnrolmentService.SaveVisaStepDraftAsync/CompleteVisaStepAsync. -----
         [BsonElement("visaProcessSteps")]
         public List<VisaProcessStepModel> VisaProcessSteps { get; set; } = new();
+
+        // ----- Multiple concurrent course applications (Enrolment Form step's nested
+        // sub-panels), never touched by ApplyEditableFields — mutated only via
+        // EnrolmentService.AddCourseApplicationAsync/SetCourseApplicationStatusAsync/
+        // FinalizeCourseApplicationAsync. -----
+        [BsonElement("courseApplications")]
+        public List<CourseApplicationModel> CourseApplications { get; set; } = new();
+
+        // Null means "use Settings.MaxApplicationsPerStudent" — set explicitly the first
+        // time staff save the override control, and from then on capped at (never above)
+        // whatever the current global setting is. See EnrolmentService.SetMaxApplicationsOverrideAsync.
+        [BsonElement("maxApplicationsOverride")]
+        public int? MaxApplicationsOverride { get; set; }
     }
 }

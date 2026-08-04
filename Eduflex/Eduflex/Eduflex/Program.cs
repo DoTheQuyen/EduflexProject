@@ -200,6 +200,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Must run before CORS/auth — otherwise AuthorizationMiddleware sees no matched endpoint yet,
+// context.Resource ends up being the raw HttpContext instead of the Endpoint, and every
+// endpoint-metadata-based check (like our custom [SkipMustChangePasswordCheck] attribute) is
+// silently unreachable no matter what's applied to a controller action.
+app.UseRouting();
+
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();

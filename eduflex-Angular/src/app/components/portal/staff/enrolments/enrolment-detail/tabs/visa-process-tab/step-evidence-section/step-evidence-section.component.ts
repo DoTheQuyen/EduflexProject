@@ -1,26 +1,29 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Client } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
-import { FileUploaderComponent } from '@generic/file-uploader/file-uploader.component';
+import { DocumentUploaderZoneComponent, UploaderZoneFile } from '@generic/document-uploader-zone/document-uploader-zone.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
-import { formatDateTime } from '@app/shared/utils/date-time.util';
 import { Enrolment, EnrolmentDocument, DocumentCategory } from '../../../../../../../../models/enrolment';
 
-// One step's evidence file slot (GS/UniOffer/CoE/VisaDraft/VisaGranted) — used 5 times
-// by visa-process-tab.component.html, extracted so that repeated markup/CSS lives in
-// one place instead of five near-identical copies. Also supports a "locked" mode for
-// the one case (GS) where an online form response replaces manual upload entirely.
+// Enrolment-specific adapter around the generic app-document-uploader-zone — maps
+// EnrolmentDocument[] (category/courseApplicationId-scoped) to the generic
+// UploaderZoneFile shape, and wires uploads/notes to EnrolmentService. Used 5+ times by
+// visa-process-tab.component.html and course-applications-panel.component.html, so the
+// Enrolment<->API wiring lives in one place instead of being repeated at each call site.
+// isOwner/permissions are kept as inputs purely so existing call sites don't need to
+// change their bindings — canUpload (computed by the caller from those same two things)
+// is what actually gates the UI now, both here and inside the generic component.
 @Component({
   selector: 'app-step-evidence-section',
   standalone: true,
-  imports: [CommonModule, FileUploaderComponent],
+  imports: [CommonModule, DocumentUploaderZoneComponent],
   templateUrl: './step-evidence-section.component.html',
   styleUrls: ['./step-evidence-section.component.css']
 })
-export class StepEvidenceSectionComponent {
+export class StepEvidenceSectionComponent implements OnChanges {
   @Input({ required: true }) enrolment!: Enrolment;
   @Input({ required: true }) category!: DocumentCategory;
   @Input({ required: true }) label!: string;
@@ -30,9 +33,9 @@ export class StepEvidenceSectionComponent {
   @Input() canUpload = false;
   @Input() isOwner = false;
   @Input({ required: true }) permissions!: ModulePermissions;
+  @Input() courseApplicationId?: string;
+  @Input() showNotes = false;
 
-  // Locked mode — the evidence "file" is actually a form response completed online
-  // (currently only the GS statement), so upload is replaced with view/update actions.
   @Input() locked = false;
   @Input() lockedBadgeText = 'Completed online';
   @Input() lockedMessage = '';
@@ -44,6 +47,15 @@ export class StepEvidenceSectionComponent {
   @Output() changed = new EventEmitter<void>();
 
   isUploading = false;
+  savingNoteFileIds: string[] = [];
+
+  // Computed once per input change rather than from a template-bound getter. A getter
+  // here would hand the child a brand-new array (with brand-new object literals) on
+  // every change-detection pass, which makes its *ngFor tear down and rebuild every row
+  // — including the ngModel note inputs — and that in turn schedules another pass, so
+  // change detection never settles. Recomputing only in ngOnChanges keeps the reference
+  // stable between passes.
+  files: UploaderZoneFile[] = [];
 
   constructor(
     private apiClient: Client,
@@ -51,12 +63,32 @@ export class StepEvidenceSectionComponent {
     private notificationService: NotificationService
   ) {}
 
-  get documents(): EnrolmentDocument[] {
-    return this.enrolment.documents.filter(d => d.category === this.category);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['enrolment'] || changes['category'] || changes['courseApplicationId']) {
+      this.files = this.documents.map(d => ({
+        id: d.id, fileName: d.fileName, url: d.url, note: d.note,
+        uploadedByName: d.uploadedByName, uploadedAt: d.uploadedAt
+      }));
+    }
   }
 
-  formatDate(value: string | undefined): string {
-    return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';
+  get documents(): EnrolmentDocument[] {
+    return this.enrolment.documents.filter(d =>
+      d.category === this.category && (this.courseApplicationId === undefined || d.courseApplicationId === this.courseApplicationId));
+  }
+
+  onNoteChanged(event: { file: UploaderZoneFile; note: string }): void {
+    this.savingNoteFileIds = [...this.savingNoteFileIds, event.file.id];
+    this.enrolmentService.renameDocument(this.enrolment.id, event.file.id, event.file.fileName, event.note || undefined).subscribe({
+      next: () => {
+        this.savingNoteFileIds = this.savingNoteFileIds.filter(id => id !== event.file.id);
+        this.changed.emit();
+      },
+      error: (err) => {
+        this.savingNoteFileIds = this.savingNoteFileIds.filter(id => id !== event.file.id);
+        this.notificationService.error(extractHttpErrorMessage(err, 'Could not save this note.'));
+      }
+    });
   }
 
   onFileSelected(file: File): void {
@@ -66,6 +98,7 @@ export class StepEvidenceSectionComponent {
         this.enrolmentService.addDocument(this.enrolment.id, {
           fileName: result.fileName ?? file.name,
           category: this.category,
+          courseApplicationId: this.courseApplicationId,
           url: result.url ?? '',
           contentType: file.type,
           sizeBytes: file.size

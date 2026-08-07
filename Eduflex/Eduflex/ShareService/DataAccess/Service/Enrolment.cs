@@ -53,6 +53,17 @@ namespace ShareService.DataAccess
             return await Collection.Find(e => idList.Contains(e.Id)).ToListAsync();
         }
 
+        // Used by the Student Details page's history panel and by student deactivation's
+        // document-purge step — a student may have more than one enrolment over time,
+        // ordered oldest first so it reads as a timeline.
+        public async Task<List<EnrolmentModel>> GetByStudentUserIdAsync(string studentUserId)
+        {
+            return await Collection
+                .Find(e => e.StudentUserId == studentUserId)
+                .SortBy(e => e.CreatedAt)
+                .ToListAsync();
+        }
+
         public Task<PagedResult<EnrolmentModel>> GetEnrolmentsAsync(EnrolmentFilter filter)
         {
             var filters = new List<FilterDefinition<EnrolmentModel>>

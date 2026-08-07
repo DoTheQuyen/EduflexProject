@@ -10,6 +10,9 @@
         <button type="button" class="btn btn-outline-secondary" (click)="openLedger()">
           <i class="fas fa-list me-1"></i>Sent Invoices
         </button>
+        <button type="button" class="btn btn-outline-primary" *ngIf="permissions.add" (click)="sendCustomInvoice()">
+          <i class="fas fa-paper-plane me-1"></i>Send Custom Invoice
+        </button>
         <button type="button" class="btn btn-primary" *ngIf="permissions.add" (click)="createNew()">
           <i class="fas fa-plus me-1"></i>New Template
         </button>

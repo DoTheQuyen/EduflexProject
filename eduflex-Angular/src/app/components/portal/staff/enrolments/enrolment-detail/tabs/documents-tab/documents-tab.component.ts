@@ -6,16 +6,19 @@ import { EnrolmentService } from '@services/enrolment.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { FileUploaderComponent } from '@generic/file-uploader/file-uploader.component';
+import { DocumentUploaderZoneComponent, UploaderZoneFile } from '@generic/document-uploader-zone/document-uploader-zone.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
 import { Enrolment, EnrolmentDocument, DocumentCategory, DOCUMENT_CATEGORY_LABELS, documentCategoryLabel } from '../../../../../../../models/enrolment';
 
-const DOCUMENT_STEP_CATEGORIES: DocumentCategory[] = ['GS', 'UniOffer', 'CoE', 'VisaDraft', 'VisaGranted'];
+const DOCUMENT_STEP_CATEGORIES: DocumentCategory[] = [
+  'GS', 'UniOffer', 'CoE', 'PaymentReceipt', 'VisaDraft', 'Insurance', 'VisaPaymentReceipt', 'VisaGranted'
+];
 
 @Component({
   selector: 'app-documents-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, FileUploaderComponent],
+  imports: [CommonModule, FormsModule, FileUploaderComponent, DocumentUploaderZoneComponent],
   templateUrl: './documents-tab.component.html',
   styleUrls: ['./documents-tab.component.css']
 })
@@ -38,6 +41,11 @@ export class DocumentsTabComponent implements OnChanges {
   invoices: InvoiceRecordDto[] = [];
   private lastLoadedEnrolmentId: string | undefined;
 
+  // Precomputed per input change instead of called straight from the template — see the
+  // same note in step-evidence-section.component.ts: a method call there hands the child
+  // a new array every change-detection pass, which never lets change detection settle.
+  filesByCategoryMap: Record<string, UploaderZoneFile[]> = {};
+
   constructor(
     private apiClient: Client,
     private enrolmentService: EnrolmentService,
@@ -45,7 +53,16 @@ export class DocumentsTabComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['enrolment'] || !this.enrolment || this.enrolment.id === this.lastLoadedEnrolmentId) return;
+    if (!changes['enrolment'] || !this.enrolment) return;
+
+    // Always rebuilt when the enrolment reference changes (a document was added/renamed/
+    // deleted), unlike the invoice fetch below which only needs the id.
+    this.filesByCategoryMap = {};
+    for (const category of this.documentStepCategories) {
+      this.filesByCategoryMap[category] = this.filesByCategory(category);
+    }
+
+    if (this.enrolment.id === this.lastLoadedEnrolmentId) return;
     this.lastLoadedEnrolmentId = this.enrolment.id;
     this.apiClient.byEnrolmentAll(this.enrolment.id).subscribe({
       next: (invoices) => { this.invoices = invoices; },
@@ -68,8 +85,23 @@ export class DocumentsTabComponent implements OnChanges {
     return this.enrolment.documents.filter(d => d.category === category);
   }
 
+  // Read-only view onto the same category groups the VISA Process tab's step-evidence
+  // zones edit — notes are shown (disabled) here for visibility, but this tab never
+  // uploads/edits them directly, that stays the step tab's job. Called from ngOnChanges
+  // into filesByCategoryMap, never bound directly in the template.
+  private filesByCategory(category: DocumentCategory): UploaderZoneFile[] {
+    return this.documentsByCategory(category).map(d => ({
+      id: d.id, fileName: d.fileName, url: d.url, note: d.note,
+      uploadedByName: d.uploadedByName, uploadedAt: d.uploadedAt
+    }));
+  }
+
+  // Catches true 'Other' uploads plus the per-step "Other" buckets (ApplyOfferOther/
+  // CoeOther/VisaOther) — anything whose category isn't one of the named step sections
+  // above falls in here, so a new step-scoped "other" category never goes missing from
+  // both places by mistake.
   get otherDocuments(): EnrolmentDocument[] {
-    return this.enrolment.documents.filter(d => !d.category || d.category === 'Other');
+    return this.enrolment.documents.filter(d => !d.category || !this.documentStepCategories.includes(d.category as DocumentCategory));
   }
 
   categoryLabel(category?: string): string {
@@ -112,7 +144,7 @@ export class DocumentsTabComponent implements OnChanges {
 
   confirmRename(doc: EnrolmentDocument): void {
     if (!this.renameValue.trim()) return;
-    this.enrolmentService.renameDocument(this.enrolment.id, doc.id, this.renameValue.trim()).subscribe({
+    this.enrolmentService.renameDocument(this.enrolment.id, doc.id, this.renameValue.trim(), doc.note).subscribe({
       next: () => {
         this.renamingDocumentId = null;
         this.changed.emit();

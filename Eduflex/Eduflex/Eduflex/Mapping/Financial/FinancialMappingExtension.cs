@@ -31,9 +31,13 @@ namespace Eduflex.Mapping.Financial
         {
             return new InvoicePlanEntryDto
             {
-                PlannedRequestDate = model.PlannedRequestDate,
+                Id = model.Id,
+                IntakeDate = model.IntakeDate,
+                ClaimDate = model.ClaimDate,
                 Status = model.Status,
-                LinkedInvoiceId = model.LinkedInvoiceId
+                LinkedInvoiceId = model.LinkedInvoiceId,
+                SkipReason = model.SkipReason,
+                IsManual = model.IsManual
             };
         }
 

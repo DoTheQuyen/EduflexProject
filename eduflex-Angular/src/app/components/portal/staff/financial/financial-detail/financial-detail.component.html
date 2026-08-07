@@ -34,12 +34,12 @@
       <app-summary-tab [hidden]="activeTab !== 'summary'" [enrolment]="enrolment"></app-summary-tab>
 
       <app-finance-tab [hidden]="activeTab !== 'finance'"
-        [record]="record" [permissions]="permissions" (changed)="loadRecord()">
+        [record]="record" [permissions]="permissions" (changed)="loadRecord()" (sendClaimInvoice)="onSendClaimInvoice($event)">
       </app-finance-tab>
 
       <app-invoice-tab [hidden]="activeTab !== 'invoice'"
-        [record]="record" [enrolment]="enrolment" [permissions]="permissions"
-        (changed)="loadRecord()" (goToCommunicationWithInvoice)="switchTab('communication')">
+        [record]="record" [enrolment]="enrolment" [permissions]="permissions" [pendingClaim]="pendingClaim"
+        (changed)="loadRecord()">
       </app-invoice-tab>
 
       <app-financial-communication-tab [hidden]="activeTab !== 'communication'"

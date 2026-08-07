@@ -1,0 +1,8 @@
+.back-link {
+  color: var(--color-muted);
+  cursor: pointer;
+  font-size: 13.5px;
+}
+.back-link:hover {
+  color: var(--color-navy-900);
+}

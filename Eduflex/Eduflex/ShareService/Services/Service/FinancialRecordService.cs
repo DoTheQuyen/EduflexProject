@@ -5,6 +5,7 @@ using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
+using ShareService.Models.Course;
 using ShareService.Models.Enrolment;
 using ShareService.Models.Financial;
 using ShareService.Models.Setting;
@@ -25,6 +26,10 @@ namespace ShareService.Services
         private readonly IAzureEmailService _emailService;
         private readonly IInvoicePdfService _invoicePdfService;
         private readonly INotificationPublisher _notificationPublisher;
+        // Needed so the Communication tab's "attach invoice" picker can resolve invoices
+        // from the new top-level Invoices collection — the old embedded Invoices list on
+        // this record is no longer written to (see InvoiceService).
+        private readonly IInvoice _invoiceDataAccess;
         private readonly ILogger<FinancialRecordService> _logger;
         private readonly int _documentLinkExpiryDays;
 
@@ -39,6 +44,7 @@ namespace ShareService.Services
             IAzureEmailService emailService,
             IInvoicePdfService invoicePdfService,
             INotificationPublisher notificationPublisher,
+            IInvoice invoiceDataAccess,
             IOptions<DocumentLinkSettings> documentLinkSettings,
             ILogger<FinancialRecordService> logger)
         {
@@ -52,6 +58,7 @@ namespace ShareService.Services
             _emailService = emailService;
             _invoicePdfService = invoicePdfService;
             _notificationPublisher = notificationPublisher;
+            _invoiceDataAccess = invoiceDataAccess;
             _documentLinkExpiryDays = documentLinkSettings.Value.ExpiryDays;
             _logger = logger;
         }
@@ -113,20 +120,14 @@ namespace ShareService.Services
                 ? (courseCommissionRate / 100m) * (businessPartnerCommissionRate / 100m) * totalTuition
                 : (courseCommissionRate / 100m) * totalTuition;
 
-            var invoicePlan = new List<InvoicePlanEntryModel>();
-            if (enrolment.ActualCommencementDate.HasValue)
-            {
-                invoicePlan.Add(new InvoicePlanEntryModel
-                {
-                    PlannedRequestDate = enrolment.ActualCommencementDate.Value.AddMonths(1),
-                    Status = "Planned"
-                });
-            }
+            var invoicePlan = BuildIntakePlan(course, enrolment.ActualCommencementDate);
 
             var actingUserName = await ResolveUserNameAsync(actingUserId);
             var record = new FinancialRecordModel
             {
                 EnrolmentId = enrolment.Id,
+                CourseId = effectiveCourseId,
+                ActualCommencementDate = enrolment.ActualCommencementDate,
                 EducationPartnerId = effectiveEducationPartnerId,
                 BusinessPartnerId = effectiveBusinessPartnerId,
                 CourseCommissionRate = courseCommissionRate,
@@ -310,7 +311,10 @@ namespace ShareService.Services
             var htmlBody = body.Replace("\n", "<br/>");
             if (!string.IsNullOrEmpty(relatedInvoiceId))
             {
-                var invoice = existing.Invoices.FirstOrDefault(i => i.Id == relatedInvoiceId);
+                // Reads the new top-level Invoices collection, not this record's legacy
+                // embedded Invoices list — nothing writes to that list anymore, so the old
+                // lookup silently attached nothing.
+                var invoice = await _invoiceDataAccess.GetByIdAsync(relatedInvoiceId);
                 if (invoice != null && !string.IsNullOrEmpty(invoice.PdfUrl))
                 {
                     var expiringUri = _blobStorageService.GetExpiringDownloadUri(invoice.PdfUrl, _documentLinkExpiryDays);
@@ -338,6 +342,191 @@ namespace ShareService.Services
 
             await _financialRecordDataAccess.ReplaceAsync(id, existing);
             return communication;
+        }
+
+        public async Task<FinancialRecordModel> RegenerateInvoicePlanAsync(string id, string actingUserId)
+        {
+            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "regenerate the invoice plan");
+            var existing = await GetExistingAsync(id);
+
+            var course = !string.IsNullOrEmpty(existing.CourseId)
+                ? await _courseDataAccess.GetCourseByIdAsync(existing.CourseId)
+                : null;
+            var freshSlots = BuildIntakePlan(course, existing.ActualCommencementDate);
+
+            // Match old auto-generated entries to fresh slots by IntakeDate so a claim
+            // that's already Invoiced or Skipped (or had its date manually nudged) keeps
+            // that state — only genuinely new/removed intake cycles change. Manual entries
+            // (not derived from an intake) are never touched by this.
+            var oldAuto = existing.InvoicePlan.Where(e => !e.IsManual).ToList();
+            var manual = existing.InvoicePlan.Where(e => e.IsManual).ToList();
+
+            foreach (var slot in freshSlots)
+            {
+                var match = oldAuto.FirstOrDefault(o => o.IntakeDate == slot.IntakeDate);
+                if (match == null) continue;
+                slot.Id = match.Id;
+                slot.ClaimDate = match.ClaimDate;
+                slot.Status = match.Status;
+                slot.LinkedInvoiceId = match.LinkedInvoiceId;
+                slot.SkipReason = match.SkipReason;
+            }
+
+            existing.InvoicePlan = freshSlots.Concat(manual).ToList();
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(FinancialAuditEntryModel.Create(
+                $"Regenerated the invoice request calendar ({freshSlots.Count} claim{(freshSlots.Count == 1 ? "" : "s")} from course intakes)",
+                actingUserId, actingUserName));
+
+            await _financialRecordDataAccess.ReplaceAsync(id, existing);
+            return existing;
+        }
+
+        public async Task<FinancialRecordModel> UpdatePlanEntryDateAsync(string id, string entryId, DateTime claimDate, string actingUserId)
+        {
+            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit the invoice plan");
+            var existing = await GetExistingAsync(id);
+            var entry = FindPlanEntry(existing, entryId);
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(FinancialAuditEntryModel.Create(
+                $"Changed claim date from {entry.ClaimDate:dd/MM/yyyy} to {claimDate:dd/MM/yyyy}", actingUserId, actingUserName));
+            entry.ClaimDate = claimDate;
+
+            await _financialRecordDataAccess.ReplaceAsync(id, existing);
+            return existing;
+        }
+
+        public async Task<FinancialRecordModel> SkipPlanEntryAsync(string id, string entryId, string? reason, string actingUserId)
+        {
+            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit the invoice plan");
+            var existing = await GetExistingAsync(id);
+            var entry = FindPlanEntry(existing, entryId);
+            if (entry.Status == "Invoiced")
+            {
+                throw new ArgumentException("This claim already has an invoice — cancel the invoice instead of skipping the claim.");
+            }
+
+            entry.Status = "Skipped";
+            entry.SkipReason = reason;
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var suffix = string.IsNullOrWhiteSpace(reason) ? "" : $" — {reason}";
+            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Skipped claim due {entry.ClaimDate:dd/MM/yyyy}{suffix}", actingUserId, actingUserName));
+
+            await _financialRecordDataAccess.ReplaceAsync(id, existing);
+            return existing;
+        }
+
+        public async Task<FinancialRecordModel> RestorePlanEntryAsync(string id, string entryId, string actingUserId)
+        {
+            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit the invoice plan");
+            var existing = await GetExistingAsync(id);
+            var entry = FindPlanEntry(existing, entryId);
+            if (entry.Status != "Skipped")
+            {
+                throw new ArgumentException("This claim isn't skipped.");
+            }
+
+            entry.Status = "Planned";
+            entry.SkipReason = null;
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Restored claim due {entry.ClaimDate:dd/MM/yyyy}", actingUserId, actingUserName));
+
+            await _financialRecordDataAccess.ReplaceAsync(id, existing);
+            return existing;
+        }
+
+        public async Task<FinancialRecordModel> AddManualPlanEntryAsync(string id, DateTime claimDate, string actingUserId)
+        {
+            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit the invoice plan");
+            var existing = await GetExistingAsync(id);
+
+            existing.InvoicePlan.Add(new InvoicePlanEntryModel
+            {
+                ClaimDate = claimDate,
+                Status = "Planned",
+                IsManual = true
+            });
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Added a manual claim for {claimDate:dd/MM/yyyy}", actingUserId, actingUserName));
+
+            await _financialRecordDataAccess.ReplaceAsync(id, existing);
+            return existing;
+        }
+
+        private static InvoicePlanEntryModel FindPlanEntry(FinancialRecordModel record, string entryId) =>
+            record.InvoicePlan.FirstOrDefault(e => e.Id == entryId) ?? throw new KeyNotFoundException("Invoice plan entry not found");
+
+        // Claims recur once per intake cycle (every 12/intakes.Count months) for as many
+        // cycles as fit in the course duration, each due 45 days after its intake. The
+        // first claim is anchored to the intake at-or-before the student's own
+        // commencement month, so a student starting in the Feb intake of a Feb/Aug course
+        // gets claims at Feb, Aug, Feb, Aug... — see the approved mockup for the worked
+        // example this mirrors exactly (24-month course, 2 intakes/year -> 4 claims).
+        private static List<InvoicePlanEntryModel> BuildIntakePlan(CourseModel? course, DateTime? commencementDate)
+        {
+            if (course == null || !commencementDate.HasValue || course.Intakes.Count == 0
+                || !course.CourseDurationMonths.HasValue || course.CourseDurationMonths.Value <= 0)
+            {
+                return new List<InvoicePlanEntryModel>();
+            }
+
+            var intakeMonths = course.Intakes
+                .Select(ParseIntakeMonth)
+                .Where(m => m.HasValue)
+                .Select(m => m!.Value)
+                .Distinct()
+                .OrderBy(m => m)
+                .ToList();
+            if (intakeMonths.Count == 0) return new List<InvoicePlanEntryModel>();
+
+            var claimCount = Math.Max(1, (int)Math.Round(
+                course.CourseDurationMonths.Value * intakeMonths.Count / 12.0, MidpointRounding.AwayFromZero));
+
+            var startMonth = commencementDate.Value.Month;
+            var startIndex = 0;
+            for (var i = 0; i < intakeMonths.Count; i++)
+            {
+                if (intakeMonths[i] <= startMonth) { startIndex = i; }
+            }
+
+            var entries = new List<InvoicePlanEntryModel>();
+            var idx = startIndex;
+            var year = commencementDate.Value.Year;
+            for (var i = 0; i < claimCount; i++)
+            {
+                var intakeDate = new DateTime(year, intakeMonths[idx], 1);
+                entries.Add(new InvoicePlanEntryModel
+                {
+                    IntakeDate = intakeDate,
+                    ClaimDate = intakeDate.AddDays(45),
+                    Status = "Planned"
+                });
+
+                idx++;
+                if (idx >= intakeMonths.Count) { idx = 0; year++; }
+            }
+
+            return entries;
+        }
+
+        // Course.Intakes stores free-text month labels (e.g. "February") rather than
+        // exact dates — tolerates full and short month names, case/whitespace-insensitive.
+        // Labels that don't parse to a month (a typo, or something like "Semester 1") are
+        // silently skipped rather than failing the whole plan.
+        private static int? ParseIntakeMonth(string label)
+        {
+            var trimmed = label.Trim();
+            if (DateTime.TryParseExact(trimmed, new[] { "MMMM", "MMM" }, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out var parsed))
+            {
+                return parsed.Month;
+            }
+            return null;
         }
 
         private static string BuildInvoiceFileName(string invoiceNo, string partnerName, string studentName, DateTime issuedAt)

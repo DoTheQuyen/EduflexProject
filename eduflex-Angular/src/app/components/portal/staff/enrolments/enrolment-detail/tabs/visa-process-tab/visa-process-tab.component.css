@@ -397,3 +397,13 @@
   margin-top: 0.1rem;
 }
 
+.warning-inline {
+  background: color-mix(in srgb, var(--color-error) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--color-error) 30%, var(--color-border));
+  color: var(--color-error-dark);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+}
+

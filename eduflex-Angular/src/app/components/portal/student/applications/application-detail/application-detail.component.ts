@@ -12,6 +12,7 @@ import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-prin
 import { formatDateTime } from '@app/shared/utils/date-time.util';
 // import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { EnrolmentFormResponse, FormAnswer, formResponseStatusBadgeClass } from '@app/models/dynamic-form';
+import { MyEnrolmentSummary, ENROLMENT_STAGE_STEPS, enrolmentStageIndex, isEnrolmentStopped } from '@app/models/enrolment';
 
 interface DocFile {
   name: string;
@@ -142,6 +143,16 @@ export class ApplicationDetailComponent implements OnInit {
 
 myEnrolmentId: string | null = null;
 myForms: EnrolmentFormResponse[] = [];
+mySummary: MyEnrolmentSummary | null = null;
+readonly stageSteps = ENROLMENT_STAGE_STEPS;
+
+get currentStageIndex(): number {
+  return this.mySummary ? enrolmentStageIndex(this.mySummary.status) : -1;
+}
+
+get enrolmentStopped(): boolean {
+  return this.mySummary ? isEnrolmentStopped(this.mySummary.status) : false;
+}
 
   constructor(
     private route: ActivatedRoute,
@@ -211,6 +222,7 @@ myForms: EnrolmentFormResponse[] = [];
 
         if (!this.isStaffPortal) {
           this.loadMyForms(id);
+          this.loadMySummary(id);
         }
       },
       error: () => {
@@ -417,6 +429,15 @@ myForms: EnrolmentFormResponse[] = [];
       // A 404 here just means no Enrolment is linked to this application yet
       // (e.g. still Pending) — not every application has one.
       error: () => { this.myEnrolmentId = null; this.myForms = []; }
+    });
+  }
+
+  loadMySummary(applicationId: string): void {
+    this.enrolmentService.getMySummary(applicationId).subscribe({
+      next: (summary) => { this.mySummary = summary; },
+      // A 404 here just means no Enrolment is linked to this application yet — same as
+      // loadMyForms, not every application has one.
+      error: () => { this.mySummary = null; }
     });
   }
 

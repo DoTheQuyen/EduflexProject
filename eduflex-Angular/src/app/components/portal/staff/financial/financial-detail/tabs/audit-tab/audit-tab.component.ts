@@ -16,6 +16,15 @@ import { FinancialRecord } from '../../../../../../../models/financial-record';
 export class FinancialAuditTabComponent {
   @Input({ required: true }) record!: FinancialRecord;
 
+  // Entries are appended chronologically server-side, so the raw array is oldest-first.
+  // An activity log reads newest-first, hence the copy-then-sort (slice() so the sort
+  // doesn't mutate the record's own array).
+  get entries() {
+    return this.record.auditTrail
+      .slice()
+      .sort((a, b) => new Date(b.performedAt).getTime() - new Date(a.performedAt).getTime());
+  }
+
   formatDate(value: string | undefined): string {
     return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';
   }

@@ -100,13 +100,173 @@
   color: var(--color-navy-900);
 }
 
-/* Quill editor theming */
-::ng-deep .ql-toolbar.ql-snow {
-  border-color: var(--color-border);
-  border-radius: var(--radius) var(--radius) 0 0;
+.payment-confirm {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
 }
 
-::ng-deep .ql-container.ql-snow {
-  border-color: var(--color-border);
-  border-radius: 0 0 var(--radius) var(--radius);
+/* Inline status callouts inside an expanded invoice history row */
+.alert-inline {
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+}
+
+.alert-inline-error {
+  background: color-mix(in srgb, var(--color-error) 10%, white);
+  color: var(--color-error-dark);
+  border: 1px solid color-mix(in srgb, var(--color-error) 35%, white);
+}
+
+.alert-inline-muted {
+  background: var(--color-surface);
+  color: var(--color-muted);
+  border: 1px solid var(--color-border);
+}
+
+.alert-inline-accent {
+  background: color-mix(in srgb, var(--color-accent) 10%, white);
+  color: var(--color-accent-dark, var(--color-accent));
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, white);
+}
+
+/* Cancel-invoice dialog — self-contained overlay rather than app-modal, so the
+   confirm action is a single click (app-modal wraps its own close in a second
+   "are you sure" prompt). */
+.confirm-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1060;
+  padding: 1rem;
+}
+
+.confirm-dialog-panel {
+  background: white;
+  border-radius: var(--radius, 10px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(22, 35, 58, 0.3));
+  padding: 1.5rem;
+  max-width: 460px;
+  width: 100%;
+}
+
+/* The resend dialog carries a full message editor, so it needs more room than the
+   plain cancel confirmation. */
+.confirm-dialog-panel-wide {
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Student/enrolment summary box */
+.new-block {
+  border: 1.5px dashed var(--color-accent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-accent) 6%, white);
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.field-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem 1.25rem;
+}
+
+.info-grid .k {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+  margin: 0 0 0.1rem;
+}
+
+.info-grid .v {
+  font-size: 0.85rem;
+  color: var(--color-ink);
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Claim items table */
+table.claims {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+table.claims th {
+  text-align: left;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-weight: 700;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+table.claims td {
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+table.claims td.num,
+table.claims th.num {
+  text-align: right;
+}
+
+table.claims tfoot td {
+  font-weight: 700;
+  background: var(--color-surface);
+  padding: 0.5rem 0.6rem;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-ink);
+}
+
+.field-input.num {
+  text-align: right;
+}
+
+.btn-outline-accent {
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent-dark, var(--color-accent));
+  background: transparent;
+}
+
+.btn-outline-accent:hover {
+  background: var(--color-accent);
+  color: white;
+}
+
+.btn-ghost-danger {
+  color: var(--color-error);
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  padding: 0.1rem 0.4rem;
+  cursor: pointer;
 }

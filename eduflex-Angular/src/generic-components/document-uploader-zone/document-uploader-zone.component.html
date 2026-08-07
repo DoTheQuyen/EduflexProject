@@ -1,0 +1,50 @@
+<div class="doc-row">
+  <div class="doc-row-icon" [class.done]="locked || files.length > 0" [class.missing]="!locked && files.length === 0">
+    <svg *ngIf="locked || files.length > 0" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+    <svg *ngIf="!locked && files.length === 0" width="3" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 6v7M12 17v.01"/></svg>
+  </div>
+
+  <div class="doc-row-main">
+    <div class="doc-row-head">
+      <span class="doc-row-label">{{ label }}</span>
+      <span class="doc-row-status" *ngIf="locked">{{ lockedBadgeText }}</span>
+      <span class="doc-row-status" *ngIf="!locked">{{ files.length > 0 ? (files.length + (maxCount ? ' / ' + maxCount : '') + ' uploaded') : 'Not uploaded' }}</span>
+    </div>
+
+    <ng-container *ngIf="locked; else notLocked">
+      <p class="doc-row-hint" *ngIf="lockedMessage">{{ lockedMessage }}</p>
+      <div class="doc-row-file" *ngIf="files?.[0] as file">
+        <span class="doc-row-file-meta">
+          <span class="doc-row-file-name">{{ lockedFileLabel }}</span>
+          <span class="doc-row-file-sub">{{ lockedFileSub }}</span>
+        </span>
+        <a class="doc-row-link" [href]="file.url" target="_blank" rel="noopener">Download PDF</a>
+        <button type="button" class="doc-row-link-btn" (click)="viewLocked.emit()">View</button>
+      </div>
+    </ng-container>
+
+    <ng-template #notLocked>
+      <p class="doc-row-hint" *ngIf="!files.length">{{ emptyText }}</p>
+      <div class="doc-row-file-block" *ngFor="let file of files; trackBy: trackByFileId">
+        <div class="doc-row-file">
+          <span class="doc-row-file-meta">
+            <span class="doc-row-file-name">{{ file.fileName }}</span>
+            <span class="doc-row-file-sub">{{ file.uploadedByName }} &middot; {{ formatDate(file.uploadedAt) }}</span>
+          </span>
+          <a class="doc-row-link" [href]="file.url" target="_blank" rel="noopener">Download</a>
+        </div>
+        <input *ngIf="showNotes" type="text" class="form-control form-control-sm doc-row-note" placeholder="Add a note about this file…"
+          [ngModel]="noteValue(file)" (ngModelChange)="noteDraft[file.id] = $event" [ngModelOptions]="{standalone: true}"
+          [disabled]="!canUpload || isSavingNote(file)" (blur)="onNoteBlur(file)">
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="doc-row-actions">
+    <button *ngIf="locked && canUpload" type="button" class="doc-row-btn" (click)="updateLocked.emit()">Update</button>
+    <app-file-uploader *ngIf="!locked && canUpload" variant="compact" [label]="files.length ? 'Add another' : uploadLabel"
+      [uploadCategory]="uploadCategory" (fileSelected)="fileSelected.emit($event)">
+    </app-file-uploader>
+    <span *ngIf="isUploading" class="doc-row-uploading">Uploading…</span>
+  </div>
+</div>

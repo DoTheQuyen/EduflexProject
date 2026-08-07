@@ -1,5 +1,5 @@
 <div class="row g-4">
-  <div class="col-lg-7">
+  <div class="col-lg-6">
     <div class="card border shadow-sm mb-4">
       <div class="card-header bg-white"><strong>Invoice to</strong></div>
       <div class="card-body">
@@ -75,21 +75,148 @@
     </div>
   </div>
 
-  <div class="col-lg-5">
+  <div class="col-lg-6">
     <div class="card border shadow-sm">
-      <div class="card-header bg-white"><strong>Invoice request calendar</strong></div>
+      <div class="card-header bg-white"><strong>Commission received</strong></div>
       <div class="card-body">
-        <p class="text-muted small">One month after this enrolment's actual commencement date.</p>
-        <div class="plan-entry" *ngFor="let p of record.invoicePlan">
-          <span>{{ formatDate(p.plannedRequestDate) }}</span>
-          <span class="badge-pill" [class.badge-pill-navy-soft]="p.status === 'Planned'" [class.badge-pill-success-soft]="p.status === 'Invoiced'" [class.badge-pill-error-soft]="p.status === 'Skipped'">
-            {{ p.status }}
-          </span>
+        <div class="received-summary">
+          <div class="d-flex justify-content-between align-items-baseline mb-2">
+            <span class="text-muted small">Received to date</span>
+            <span class="received-amount">{{ totalReceived | number:'1.2-2' }} <span class="text-muted small fw-normal">/ {{ totalCommission | number:'1.2-2' }}</span></span>
+          </div>
+          <div class="received-bar"><div class="received-bar-fill" [style.width.%]="receivedPercent"></div></div>
+          <p class="text-muted small mt-2 mb-0">
+            {{ receivedPercent }}% of total commission received across {{ paidInvoices.length }} paid invoice{{ paidInvoices.length === 1 ? '' : 's' }}
+            <span *ngIf="outstanding > 0"> — {{ outstanding | number:'1.2-2' }} still outstanding</span>.
+          </p>
         </div>
-        <p *ngIf="record.invoicePlan.length === 0" class="text-muted text-center py-3 mb-0">
-          No planned invoice date yet — set the enrolment's actual commencement date first.
-        </p>
+
+        <div *ngIf="isLoadingInvoices" class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+        </div>
+
+        <div class="received-timeline" *ngIf="!isLoadingInvoices">
+          <div class="timeline-item" *ngFor="let inv of paidInvoices">
+            <span class="timeline-dot"></span>
+            <div class="timeline-date">{{ formatDate(inv.paidAt ?? inv.sentAt) }}</div>
+            <div class="d-flex justify-content-between align-items-baseline gap-2">
+              <span class="timeline-invno">{{ inv.invoiceNo }}</span>
+              <span class="timeline-amt">{{ inv.total | number:'1.2-2' }}</span>
+            </div>
+            <div class="timeline-items" *ngIf="inv.claimItems.length > 0">
+              {{ inv.claimItems[0].description }}<span *ngIf="inv.claimItems.length > 1">, +{{ inv.claimItems.length - 1 }} more</span>
+            </div>
+            <div class="timeline-items" *ngIf="inv.claimItems.length === 0">{{ inv.description }}</div>
+          </div>
+          <p *ngIf="paidInvoices.length === 0" class="text-muted text-center py-3 mb-0">No paid invoices yet.</p>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Invoice request calendar</strong>
+      </div>
+      <div class="card-body">
+
+        <div class="calendar-header" *ngIf="record.invoicePlan.length > 0">
+          <div class="calendar-header-main">
+            <div><b>{{ educationPartnerName || 'This enrolment' }}</b> — intakes: <b>{{ intakeMonthsLabel }}</b></div>
+            <div>Each claim is due 45 days after its intake. Suggested split: {{ suggestedClaimAmount | number:'1.2-2' }} per claim.</div>
+          </div>
+          <div class="calendar-stat">
+            <div class="calendar-stat-n">{{ record.invoicePlan.length }}</div>
+            <div class="calendar-stat-lbl">claims scheduled</div>
+          </div>
+        </div>
+
+        <p *ngIf="record.invoicePlan.length === 0" class="text-muted text-center py-4 mb-0">
+          No invoice plan yet — set the enrolment's actual commencement date and a course with intakes/duration first, then use "Regenerate" below.
+        </p>
+
+        <div class="claim-rail" *ngIf="record.invoicePlan.length > 0">
+          <div class="claim-card" *ngFor="let entry of record.invoicePlan" [class.is-skipped]="entry.status === 'Skipped'">
+            <div class="claim-card-head">
+              <span>{{ claimLabel(entry) }}</span>
+              <span>{{ entry.status }}</span>
+            </div>
+            <div class="claim-card-body">
+              <div class="claim-field" *ngIf="entry.intakeDate">
+                <div class="claim-field-k">Intake</div>
+                <div class="claim-field-v">{{ formatDate(entry.intakeDate) }}</div>
+              </div>
+              <div class="claim-field" *ngIf="!entry.intakeDate">
+                <div class="claim-field-k">Source</div>
+                <div class="claim-field-v">Manual claim</div>
+              </div>
+
+              <div class="claim-field">
+                <div class="claim-field-k">Claim date</div>
+                <div *ngIf="editingEntryId !== entry.id" class="claim-date-editable" (click)="startEditDate(entry)">
+                  <span class="claim-field-v">{{ formatDate(entry.claimDate) }}</span>
+                  <span class="edit-icon" *ngIf="permissions.edit">&#9998;</span>
+                </div>
+                <div *ngIf="editingEntryId === entry.id" class="d-flex gap-1">
+                  <input type="date" class="form-control form-control-sm" [(ngModel)]="editingDate" [ngModelOptions]="{standalone: true}">
+                  <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan" (click)="saveEditDate(entry)">&check;</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="isMutatingPlan" (click)="cancelEditDate()">&times;</button>
+                </div>
+              </div>
+
+              <p class="claim-suggested" *ngIf="entry.status === 'Planned'">Suggested amount: {{ suggestedClaimAmount | number:'1.2-2' }}</p>
+              <p class="claim-suggested" *ngIf="entry.status === 'Skipped' && entry.skipReason">Reason: {{ entry.skipReason }}</p>
+            </div>
+            <div class="claim-card-foot">
+              <button type="button" class="claim-btn claim-btn-linked" *ngIf="entry.status === 'Invoiced'" disabled>
+                <i class="fas fa-check me-1"></i>Invoiced
+              </button>
+              <ng-container *ngIf="entry.status === 'Planned' && permissions.edit">
+                <button type="button" class="claim-btn claim-btn-primary" (click)="requestClaimInvoice(entry)">Send Invoice</button>
+                <button type="button" class="claim-btn" [disabled]="isMutatingPlan" (click)="openSkipDialog(entry)">Skip</button>
+              </ng-container>
+              <button type="button" class="claim-btn" *ngIf="entry.status === 'Skipped' && permissions.edit" [disabled]="isMutatingPlan" (click)="restoreEntry(entry)">
+                Restore
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-3" *ngIf="permissions.edit">
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="toggleManualForm()">
+            {{ showManualForm ? 'Cancel' : '+ Add manual claim' }}
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isMutatingPlan" (click)="regeneratePlan()">
+            Regenerate from course intakes
+          </button>
+        </div>
+
+        <div class="manual-claim-form" *ngIf="showManualForm">
+          <label class="form-label small">Claim date</label>
+          <div class="d-flex gap-2">
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="manualDate" [ngModelOptions]="{standalone: true}">
+            <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan" (click)="addManualEntry()">Add</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-dialog-backdrop" *ngIf="skipDialogEntry" (click)="closeSkipDialog()">
+  <div class="confirm-dialog-panel" (click)="$event.stopPropagation()">
+    <h6 class="mb-2">Skip {{ claimLabel(skipDialogEntry) }}?</h6>
+    <p class="text-muted small mb-3">The claim stays on the calendar as Skipped and can be restored later.</p>
+    <label class="form-label small">Reason <span class="text-muted">(optional)</span></label>
+    <textarea class="form-control form-control-sm mb-3" rows="2" [(ngModel)]="skipReason" [ngModelOptions]="{standalone: true}"
+      placeholder="e.g. Combined into the next claim"></textarea>
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isMutatingPlan" (click)="closeSkipDialog()">Keep claim</button>
+      <button type="button" class="btn btn-danger btn-sm" [disabled]="isMutatingPlan" (click)="confirmSkip()">
+        {{ isMutatingPlan ? 'Skipping...' : 'Skip claim' }}
+      </button>
     </div>
   </div>
 </div>

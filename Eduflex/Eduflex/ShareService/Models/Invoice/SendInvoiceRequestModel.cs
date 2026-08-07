@@ -13,9 +13,23 @@ namespace ShareService.Models.Invoice
         public string RecipientEmail { get; set; } = string.Empty;
         public string? RelatedEnrolmentId { get; set; }
         public string? RelatedStepKey { get; set; }
+        public string? RelatedFinancialRecordId { get; set; }
+        // When set, marks this specific FinancialRecord.InvoicePlan entry as Invoiced once
+        // the send succeeds (see InvoiceService.RecordFinancialActivityAsync) — the Finance
+        // tab's claim schedule can then show "this claim is done" without a separate call.
+        public string? RelatedInvoicePlanEntryId { get; set; }
         public string Description { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public decimal GstRatePercent { get; set; } = 10m;
+        public List<InvoiceClaimItem> ClaimItems { get; set; } = new();
+        public string? StudentName { get; set; }
+        public string? StudentRefCode { get; set; }
+        public string? StudentEmail { get; set; }
+        public string? StudentPhone { get; set; }
+        public string? CourseName { get; set; }
+        public string? Campus { get; set; }
+        public string? EducationPartnerName { get; set; }
+        public string? CustomContent { get; set; }
         public string EmailSubject { get; set; } = string.Empty;
         public string EmailBody { get; set; } = string.Empty;
     }

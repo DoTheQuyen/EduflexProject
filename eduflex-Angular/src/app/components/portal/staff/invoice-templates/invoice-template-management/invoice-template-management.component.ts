@@ -26,9 +26,11 @@ export class InvoiceTemplateManagementComponent implements OnInit {
   columns: DataTableColumn<InvoiceTemplateDto>[] = [
     { field: 'name', title: 'Template name' },
     { field: 'categoryBadge', title: 'Category', className: 'text-center',
-      render: (_value, row: InvoiceTemplateDto) => row.category === 'Customer'
-        ? '<span class="badge-pill badge-pill-navy-soft">Customer</span>'
-        : '<span class="badge-pill badge-pill-accent-soft">Partner</span>' },
+      render: (_value, row: InvoiceTemplateDto) => {
+        if (row.category === 'Customer') { return '<span class="badge-pill badge-pill-navy-soft">Customer</span>'; }
+        if (row.category === 'Partner') { return '<span class="badge-pill badge-pill-accent-soft">Partner</span>'; }
+        return '<span class="badge-pill badge-pill-muted-soft">Custom</span>';
+      } },
     { field: 'nextInvoiceNoPreview', title: 'Next invoice no.' },
     { field: 'statusBadge', title: 'Status', className: 'text-center',
       render: (_value, row: InvoiceTemplateDto) => row.isActive
@@ -85,6 +87,10 @@ export class InvoiceTemplateManagementComponent implements OnInit {
     this.router.navigate(['/staff-portal/invoice-templates/ledger']);
   }
 
+  sendCustomInvoice(): void {
+    this.router.navigate(['/staff-portal/invoice-templates/send-custom']);
+  }
+
   onTableAction(event: DataTableAction<InvoiceTemplateDto>): void {
     switch (event.action) {
        case 'view':
@@ -131,6 +137,7 @@ export class InvoiceTemplateManagementComponent implements OnInit {
 
   openPreview(template: InvoiceTemplateDto): void {
     this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(buildInvoiceTemplatePreviewHtml({
+      category: template.category ?? 'Customer',
       logoUrl: template.logoUrl,
       senderName: template.senderName ?? '',
       senderAddressLines: template.senderAddressLines ?? [],

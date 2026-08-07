@@ -78,6 +78,24 @@ namespace Eduflex.API.Controllers
             });
         }
 
+        [HttpGet("by-student/{studentUserId}")]
+        public Task<ActionResult<List<EnrolmentDto>>> GetEnrolmentsForStudent(string studentUserId)
+        {
+            return HandleRequestAsync(_logger, $"Error getting enrolments for student user: {studentUserId}", async () =>
+            {
+                var actingUserId = GetRequiredUserId();
+
+                var enrolments = await _enrolmentService.GetEnrolmentsForStudentAsync(studentUserId, actingUserId);
+                var result = new List<EnrolmentDto>();
+                foreach (var enrolment in enrolments)
+                {
+                    var ownerName = await ResolveOwnerNameAsync(enrolment.OwnerUserId);
+                    result.Add(enrolment.ToDto(ownerName));
+                }
+                return result;
+            });
+        }
+
         [HttpGet("enrolment-statuses")]
         [RequirePermission(PermissionKey.EnrolmentsView)]
         public Task<ActionResult<List<EnrolmentStatusDto>>> GetEnrolmentStatuses()
@@ -146,6 +164,8 @@ namespace Eduflex.API.Controllers
                     Id = document.Id,
                     FileName = document.FileName,
                     Category = document.Category,
+                    CourseApplicationId = document.CourseApplicationId,
+                    Note = document.Note,
                     Url = document.Url,
                     ContentType = document.ContentType,
                     SizeBytes = document.SizeBytes,
@@ -163,7 +183,7 @@ namespace Eduflex.API.Controllers
             return HandleUpdateAsync(_logger, "Error in RenameDocument endpoint", () =>
             {
                 var actingUserId = GetRequiredUserId();
-                return _enrolmentService.RenameDocumentAsync(id, documentId, renameDto.FileName, actingUserId);
+                return _enrolmentService.RenameDocumentAsync(id, documentId, renameDto.FileName, renameDto.Note, actingUserId);
             });
         }
 
@@ -194,6 +214,26 @@ namespace Eduflex.API.Controllers
             {
                 var actingUserId = GetRequiredUserId();
                 return _enrolmentService.CompleteVisaStepAsync(id, stepKey, completeDto.Fields, actingUserId);
+            });
+        }
+
+        [HttpPost("{id}/visa-steps/{stepKey}/reopen")]
+        public Task<ActionResult<bool>> ReopenVisaStep(string id, string stepKey)
+        {
+            return HandleUpdateAsync(_logger, "Error in ReopenVisaStep endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.ReopenVisaStepAsync(id, stepKey, actingUserId);
+            });
+        }
+
+        [HttpPost("{id}/finalize")]
+        public Task<ActionResult<bool>> Finalize(string id)
+        {
+            return HandleUpdateAsync(_logger, "Error in Finalize endpoint", () =>
+            {
+                var actingUserId = GetRequiredUserId();
+                return _enrolmentService.FinalizeEnrolmentAsync(id, actingUserId);
             });
         }
 
@@ -393,6 +433,21 @@ namespace Eduflex.API.Controllers
                         .Select(r => r.ToDto())
                         .ToList()
                 };
+            });
+        }
+
+        // Same ownership pattern as GetMyForms above — status + counts only, never the
+        // full CourseApplications list (see GetMyEnrolmentSummaryAsync).
+        [HttpGet("by-application/{applicationId}/summary")]
+        public Task<ActionResult<MyEnrolmentSummaryDto>> GetMySummary(string applicationId)
+        {
+            return HandleRequestAsync(_logger, "Error in GetMySummary endpoint", async () =>
+            {
+                var studentUserId = GetRequiredUserId();
+                var summary = await _enrolmentService.GetMyEnrolmentSummaryAsync(applicationId, studentUserId)
+                    ?? throw new KeyNotFoundException("No enrolment found for this application");
+
+                return summary.ToDto();
             });
         }
 

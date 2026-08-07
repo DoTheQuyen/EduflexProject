@@ -48,6 +48,9 @@
                     <button type="button" class="btn btn-sm ms-2" [class.btn-primary]="category === 'Partner'"
                       [class.btn-outline-secondary]="category !== 'Partner'" [disabled]="isEditMode"
                       (click)="category = 'Partner'">Partner</button>
+                    <button type="button" class="btn btn-sm ms-2" [class.btn-primary]="category === 'Custom'"
+                      [class.btn-outline-secondary]="category !== 'Custom'" [disabled]="isEditMode"
+                      (click)="category = 'Custom'">Custom Invoice</button>
                   </div>
                   <span *ngIf="isEditMode" class="text-muted small d-block mt-1">Category can't be changed after
                     creation.</span>

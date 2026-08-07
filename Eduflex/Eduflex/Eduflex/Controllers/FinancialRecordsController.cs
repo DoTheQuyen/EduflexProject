@@ -156,5 +156,66 @@ namespace Eduflex.API.Controllers
                 return communication.ToDto();
             });
         }
+
+        private async Task<FinancialRecordDto> ToDtoWithEnrolmentAsync(ShareService.Models.Financial.FinancialRecordModel record)
+        {
+            var enrolment = await _enrolmentDataAccess.GetEnrolmentAsync(record.EnrolmentId);
+            return record.ToDto(StudentNameOf(enrolment), enrolment?.Status ?? string.Empty);
+        }
+
+        [HttpPost("{id}/invoice-plan/regenerate")]
+        public Task<ActionResult<FinancialRecordDto>> RegenerateInvoicePlan(string id)
+        {
+            return HandleRequestAsync(_logger, "Error in RegenerateInvoicePlan endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var record = await _financialRecordService.RegenerateInvoicePlanAsync(id, userId);
+                return await ToDtoWithEnrolmentAsync(record);
+            });
+        }
+
+        [HttpPut("{id}/invoice-plan/{entryId}/date")]
+        public Task<ActionResult<FinancialRecordDto>> UpdatePlanEntryDate(string id, string entryId, UpdatePlanEntryDateDto updateDto)
+        {
+            return HandleRequestAsync(_logger, "Error in UpdatePlanEntryDate endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var record = await _financialRecordService.UpdatePlanEntryDateAsync(id, entryId, updateDto.ClaimDate, userId);
+                return await ToDtoWithEnrolmentAsync(record);
+            });
+        }
+
+        [HttpPost("{id}/invoice-plan/{entryId}/skip")]
+        public Task<ActionResult<FinancialRecordDto>> SkipPlanEntry(string id, string entryId, SkipPlanEntryDto skipDto)
+        {
+            return HandleRequestAsync(_logger, "Error in SkipPlanEntry endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var record = await _financialRecordService.SkipPlanEntryAsync(id, entryId, skipDto.Reason, userId);
+                return await ToDtoWithEnrolmentAsync(record);
+            });
+        }
+
+        [HttpPost("{id}/invoice-plan/{entryId}/restore")]
+        public Task<ActionResult<FinancialRecordDto>> RestorePlanEntry(string id, string entryId)
+        {
+            return HandleRequestAsync(_logger, "Error in RestorePlanEntry endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var record = await _financialRecordService.RestorePlanEntryAsync(id, entryId, userId);
+                return await ToDtoWithEnrolmentAsync(record);
+            });
+        }
+
+        [HttpPost("{id}/invoice-plan/manual")]
+        public Task<ActionResult<FinancialRecordDto>> AddManualPlanEntry(string id, AddManualPlanEntryDto addDto)
+        {
+            return HandleRequestAsync(_logger, "Error in AddManualPlanEntry endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var record = await _financialRecordService.AddManualPlanEntryAsync(id, addDto.ClaimDate, userId);
+                return await ToDtoWithEnrolmentAsync(record);
+            });
+        }
     }
 }

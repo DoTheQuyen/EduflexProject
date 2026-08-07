@@ -1,0 +1,13 @@
+.back-link {
+  background: none;
+  border: none;
+  color: var(--color-navy-700);
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.back-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+}

@@ -10,7 +10,13 @@
 }
 
 .course-app-panel[data-status="Finalized"] {
-  border-color: color-mix(in srgb, var(--color-success) 40%, var(--color-border));
+  border-color: var(--color-success);
+  border-width: 2px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-success) 25%, transparent);
+}
+
+.course-app-panel[data-status="Finalized"] .course-app-header {
+  background: color-mix(in srgb, var(--color-success) 8%, var(--color-surface));
 }
 
 .course-app-panel[data-status="Withdrawn"] {

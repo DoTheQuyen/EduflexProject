@@ -6,6 +6,7 @@ namespace ShareService.DataAccess.Interface
     {
         Task<List<InvoiceModel>> GetAllAsync(string? category, string? status);
         Task<List<InvoiceModel>> GetByEnrolmentIdAsync(string enrolmentId);
+        Task<List<InvoiceModel>> GetByFinancialRecordIdAsync(string financialRecordId);
         Task<InvoiceModel?> GetByIdAsync(string id);
         Task<bool> CreateAsync(InvoiceModel invoice);
         Task<bool> ReplaceAsync(string id, InvoiceModel invoice);

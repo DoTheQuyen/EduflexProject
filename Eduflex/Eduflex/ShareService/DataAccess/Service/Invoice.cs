@@ -39,6 +39,13 @@ namespace ShareService.DataAccess
                 .ToListAsync();
         }
 
+        public async Task<List<InvoiceModel>> GetByFinancialRecordIdAsync(string financialRecordId)
+        {
+            return await Collection.Find(i => i.RelatedFinancialRecordId == financialRecordId)
+                .SortByDescending(i => i.SentAt)
+                .ToListAsync();
+        }
+
         public async Task<InvoiceModel?> GetByIdAsync(string id)
         {
             return await Collection.Find(i => i.Id == id).FirstOrDefaultAsync();

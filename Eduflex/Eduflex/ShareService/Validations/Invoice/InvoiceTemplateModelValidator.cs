@@ -12,8 +12,8 @@ namespace ShareService.Validations.Invoice
                 .MaximumLength(100).WithMessage("Name must not exceed 100 characters");
 
             RuleFor(x => x.Category)
-                .Must(c => c == InvoiceTemplateCategories.Customer || c == InvoiceTemplateCategories.Partner)
-                .WithMessage("Category must be Customer or Partner");
+                .Must(c => c == InvoiceTemplateCategories.Customer || c == InvoiceTemplateCategories.Partner || c == InvoiceTemplateCategories.Custom)
+                .WithMessage("Category must be Customer, Partner or Custom");
 
             RuleFor(x => x.SenderName)
                 .NotEmpty().WithMessage("Sender name is required")

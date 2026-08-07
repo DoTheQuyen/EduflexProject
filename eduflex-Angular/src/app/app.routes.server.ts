@@ -34,6 +34,14 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'staff-portal/students/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/students/:id/edit',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'staff-portal/financial-records/:id',
     renderMode: RenderMode.Client
   },

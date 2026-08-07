@@ -27,5 +27,11 @@ namespace ShareService.Services.Interface
 
         Task<FinancialCommunicationModel> SendCommunicationAsync(string id, string toEmail, string recipientType, string subject, string body,
             string? templateKey, string? relatedInvoiceId, string actingUserId);
+
+        Task<FinancialRecordModel> RegenerateInvoicePlanAsync(string id, string actingUserId);
+        Task<FinancialRecordModel> UpdatePlanEntryDateAsync(string id, string entryId, DateTime claimDate, string actingUserId);
+        Task<FinancialRecordModel> SkipPlanEntryAsync(string id, string entryId, string? reason, string actingUserId);
+        Task<FinancialRecordModel> RestorePlanEntryAsync(string id, string entryId, string actingUserId);
+        Task<FinancialRecordModel> AddManualPlanEntryAsync(string id, DateTime claimDate, string actingUserId);
     }
 }

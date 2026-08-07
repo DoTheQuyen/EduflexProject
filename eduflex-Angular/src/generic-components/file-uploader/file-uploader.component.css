@@ -58,3 +58,28 @@
   border-radius: var(--radius, 8px);
   object-fit: cover;
 }
+
+.uploader-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.7rem;
+  border: 1px solid var(--color-border, #DCE0E4);
+  border-radius: var(--radius, 8px);
+  background: var(--color-surface-raised, #fff);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.uploader-compact.dragging {
+  border-color: var(--color-accent, #B8862F);
+  background-color: color-mix(in srgb, var(--color-accent, #B8862F) 8%, white);
+}
+.uploader-compact-icon {
+  font-size: 0.72rem;
+  color: var(--color-accent-dark, var(--color-accent, #B8862F));
+}
+.uploader-compact-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent-dark, var(--color-accent, #B8862F));
+  white-space: nowrap;
+}

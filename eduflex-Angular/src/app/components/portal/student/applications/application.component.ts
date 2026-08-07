@@ -88,6 +88,14 @@ export class ApplicationComponent implements OnInit {
     return this.applications.some(a => BLOCKS_NEW_APPLICATION_STATUSES.includes(a.status ?? ''));
   }
 
+  get inProgressApplicationsCount(): number {
+    return this.applications.filter(a => BLOCKS_NEW_APPLICATION_STATUSES.includes(a.status ?? '')).length;
+  }
+
+  get studyingApplicationsCount(): number {
+    return this.applications.filter(a => a.status === 'Studying').length;
+  }
+
   filterApplications(): void {
     let filtered = this.applications;
 

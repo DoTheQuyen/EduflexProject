@@ -1,3 +1,5 @@
+import { InvoiceClaimItem } from './invoice';
+
 export interface CommissionAdjustment {
   id: string;
   reason: string;
@@ -7,9 +9,15 @@ export interface CommissionAdjustment {
 }
 
 export interface InvoicePlanEntry {
-  plannedRequestDate: string;
+  id: string;
+  // The course intake this claim is tied to — absent for manually-added claims.
+  intakeDate?: string;
+  // Editable — defaults to intakeDate + 45 days when generated.
+  claimDate: string;
   status: 'Planned' | 'Invoiced' | 'Skipped';
   linkedInvoiceId?: string;
+  skipReason?: string;
+  isManual: boolean;
 }
 
 export type InvoiceToType = 'BusinessPartner' | 'EducationPartner';
@@ -90,4 +98,70 @@ export interface CreateInvoiceDraftRequest {
   periodEnd: string;
   periodTotal: number;
   htmlContent: string;
+}
+
+// The new Invoice module's shape (ShareService.Models.Invoice.InvoiceModel /
+// Eduflex.DTOs.Invoice.InvoiceRecordDto) — distinct from the old embedded `Invoice`
+// above, which the Communication tab still reads for now. Declared locally rather than
+// via the NSwag-generated Client so this doesn't wait on a `nswag run` cycle — same
+// reasoning as FinancialRecordService's other hand-written calls.
+export interface FinanceInvoice {
+  id: string;
+  invoiceNo: string;
+  category: string;
+  recipientType: 'BusinessPartner' | 'EducationPartner';
+  recipientId?: string;
+  recipientName: string;
+  recipientEmail: string;
+  description: string;
+  amount: number;
+  gstAmount: number;
+  total: number;
+  claimItems: InvoiceClaimItem[];
+  studentName?: string;
+  studentRefCode?: string;
+  studentEmail?: string;
+  studentPhone?: string;
+  courseName?: string;
+  campus?: string;
+  educationPartnerName?: string;
+  pdfUrl?: string;
+  pdfFileName?: string;
+  // Failed = invoice + PDF exist but the email didn't go out (retry with Resend).
+  // Cancelled = soft void, excluded from income totals. Neither counts as income.
+  status: 'Sent' | 'Paid' | 'Failed' | 'Cancelled';
+  sentAt: string;
+  paidAt?: string;
+  paymentEvidenceUrl?: string;
+  lastEmailError?: string;
+  cancelledAt?: string;
+  cancelReason?: string;
+  // Last message sent for this invoice — prefills the Resend dialog. Empty on invoices
+  // created before these were persisted.
+  emailSubject: string;
+  emailBody: string;
+  createdByName: string;
+}
+
+export interface SendFinanceInvoiceRequest {
+  templateId: string;
+  recipientType: 'BusinessPartner' | 'EducationPartner';
+  recipientId: string;
+  recipientName: string;
+  recipientEmail: string;
+  relatedFinancialRecordId: string;
+  relatedInvoicePlanEntryId?: string;
+  description: string;
+  amount: number;
+  gstRatePercent: number;
+  claimItems: InvoiceClaimItem[];
+  studentName?: string;
+  studentRefCode?: string;
+  studentEmail?: string;
+  studentPhone?: string;
+  courseName?: string;
+  campus?: string;
+  educationPartnerName?: string;
+  emailSubject: string;
+  emailBody: string;
 }

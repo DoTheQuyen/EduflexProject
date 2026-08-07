@@ -42,6 +42,32 @@ public class ApplicationsController : BaseApiController
         });
     }
 
+    [HttpGet("by-student/{studentId}")]
+    public Task<ActionResult<List<ApplicationDto>>> GetApplicationsForStudent(string studentId)
+    {
+        return HandleRequestAsync(_logger, $"Error getting applications for student: {studentId}", async () =>
+        {
+            var actingUserId = GetRequiredUserId();
+
+            var applications = await _applicationService.GetApplicationsForStudentAsync(studentId, actingUserId);
+            return applications.Select(a => a.ToDto()).ToList();
+        });
+    }
+
+    [HttpGet("{id}/staff-view")]
+    public Task<ActionResult<ApplicationDetailDto>> GetApplicationForStaff(string id)
+    {
+        return HandleRequestAsync(_logger, $"Error in GetApplicationForStaff endpoint for ID: {id}", async () =>
+        {
+            var actingUserId = GetRequiredUserId();
+
+            var application = await _applicationService.GetApplicationDetailForStaffAsync(id, actingUserId)
+                ?? throw new KeyNotFoundException("Application not found");
+
+            return application.ToDto();
+        });
+    }
+
     [HttpGet("{id}")]
     public Task<ActionResult<ApplicationDetailDto>> GetApplication(string id)
     {

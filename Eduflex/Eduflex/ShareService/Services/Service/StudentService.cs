@@ -7,6 +7,7 @@ using ShareService.Enums;
 using ShareService.Enums.Permissions;
 using ShareService.Enums.Roles;
 using ShareService.Models.Auth;
+using ShareService.Models.Enrolment;
 using ShareService.Models.Setting;
 using ShareService.Models.Student;
 using ShareService.Services.Interface;
@@ -25,9 +26,16 @@ namespace ShareService.Services
         private readonly IRoleService _roleService;
         private readonly IPermissionService _permissionService;
         private readonly IAzureEmailService _emailService;
+        private readonly IEnrolment _enrolmentDataAccess;
+        private readonly IAzureBlobDocStorageService _blobStorageService;
         private readonly IValidator<StudentModel> _validator;
         private readonly WebURLSettings _appSettings;
         private readonly ILogger<StudentService> _logger;
+
+        // Documents kept regardless of student status — Finance needs the paper trail even
+        // after a student is deactivated. Everything else attached to the student's
+        // enrolment(s) is removed on deactivation.
+        private static readonly HashSet<string> ReceiptDocumentCategories = new() { "PaymentReceipt", "VisaPaymentReceipt" };
 
         public StudentService(
             IApplication applicationDataAccess,
@@ -37,6 +45,8 @@ namespace ShareService.Services
             IRoleService roleService,
             IPermissionService permissionService,
             IAzureEmailService emailService,
+            IEnrolment enrolmentDataAccess,
+            IAzureBlobDocStorageService blobStorageService,
             IValidator<StudentModel> validator,
             IOptions<WebURLSettings> appSettings,
             ILogger<StudentService> logger)
@@ -48,6 +58,8 @@ namespace ShareService.Services
             _roleService = roleService;
             _permissionService = permissionService;
             _emailService = emailService;
+            _enrolmentDataAccess = enrolmentDataAccess;
+            _blobStorageService = blobStorageService;
             _validator = validator;
             _appSettings = appSettings.Value;
             _logger = logger;
@@ -313,7 +325,46 @@ namespace ShareService.Services
             existing.AuditTrail.Add(StudentAuditEntryModel.Create("Student deactivated", actingUserId, actingUserName));
             await _studentDB.UpdateAsync(id, existing);
 
+            await PurgeNonFinancialDocumentsAsync(existing.UserId, actingUserId, actingUserName);
+
             return await _userDB.SetActiveStatusAsync(existing.UserId, false);
+        }
+
+        // Runs against IEnrolment (DataAccess) directly rather than IEnrolmentService — that
+        // service already depends on IStudentService, so depending on it here would create a
+        // circular dependency the DI container can't construct (same reasoning as
+        // PermissionService's own DataAccess-only dependencies).
+        private async Task PurgeNonFinancialDocumentsAsync(string studentUserId, string actingUserId, string actingUserName)
+        {
+            var enrolments = await _enrolmentDataAccess.GetByStudentUserIdAsync(studentUserId);
+
+            foreach (var enrolment in enrolments)
+            {
+                var toRemove = enrolment.Documents
+                    .Where(d => string.IsNullOrEmpty(d.Category) || !ReceiptDocumentCategories.Contains(d.Category))
+                    .ToList();
+
+                if (toRemove.Count == 0) continue;
+
+                foreach (var document in toRemove)
+                {
+                    try
+                    {
+                        await _blobStorageService.DeleteAsync(document.Url);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Enrolment {EnrolmentId}: failed to delete blob for document {DocumentId} during student deactivation", enrolment.Id, document.Id);
+                    }
+
+                    enrolment.Documents.Remove(document);
+                }
+
+                enrolment.AuditTrail.Add(EnrolmentAuditEntryModel.Create(
+                    $"Removed {toRemove.Count} document(s) on student deactivation (payment/visa-payment receipts retained)", actingUserId, actingUserName));
+
+                await _enrolmentDataAccess.ReplaceEnrolmentAsync(enrolment.Id, enrolment);
+            }
         }
 
         // Auth: requires StudentsEdit permission — restoring an archived record is

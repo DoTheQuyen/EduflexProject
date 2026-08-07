@@ -8,7 +8,7 @@ import { NotificationService } from '@services/notification.service';
 import { FinancialRecord } from '../../../../../models/financial-record';
 import { Enrolment } from '../../../../../models/enrolment';
 import { SummaryTabComponent } from './tabs/summary-tab/summary-tab.component';
-import { FinanceTabComponent } from './tabs/finance-tab/finance-tab.component';
+import { FinanceTabComponent, ClaimInvoiceRequest } from './tabs/finance-tab/finance-tab.component';
 import { InvoiceTabComponent } from './tabs/invoice-tab/invoice-tab.component';
 import { FinancialCommunicationTabComponent } from './tabs/communication-tab/communication-tab.component';
 import { FinancialAuditTabComponent } from './tabs/audit-tab/audit-tab.component';
@@ -28,6 +28,7 @@ export class FinancialDetailComponent implements OnInit {
   enrolment: Enrolment | null = null;
   isLoading = true;
   activeTab: FinancialTab = 'summary';
+  pendingClaim: ClaimInvoiceRequest | null = null;
 
   permissions!: ModulePermissions;
 
@@ -79,6 +80,11 @@ export class FinancialDetailComponent implements OnInit {
 
   switchTab(tab: FinancialTab): void {
     this.activeTab = tab;
+  }
+
+  onSendClaimInvoice(claim: ClaimInvoiceRequest): void {
+    this.pendingClaim = claim;
+    this.switchTab('invoice');
   }
 
   goBack(): void {

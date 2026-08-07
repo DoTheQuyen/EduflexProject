@@ -19,7 +19,7 @@ const CATEGORY_FALLBACKS: Record<UploadCategory, { accept: string; maxSizeMB: nu
   styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent implements OnInit {
-  @Input() variant: 'avatar' | 'dropzone' = 'dropzone';
+  @Input() variant: 'avatar' | 'dropzone' | 'compact' = 'dropzone';
   @Input() label = 'Upload a file';
   @Input() accept = 'image/*';
   @Input() maxSizeMB = 5;

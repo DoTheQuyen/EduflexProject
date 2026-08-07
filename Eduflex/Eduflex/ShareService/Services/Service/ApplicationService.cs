@@ -62,6 +62,21 @@ namespace ShareService.Services
             }
         }
 
+        // Auth: requires ApplicationsView permission (staff-only) — used by the Student
+        // Details page's "Active applications" list. Unlike the legacy
+        // GetApplicationsByStudentId (internal, unguarded), this is the permission-checked
+        // entry point new code should call.
+        public async Task<List<ApplicationModel>> GetApplicationsForStudentAsync(string studentId, string actingUserId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            return await _applicationDataAccess.GetApplicationsByStudentIdAsync(studentId);
+        }
+
         public async Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query)
         {
             try
@@ -113,6 +128,38 @@ namespace ShareService.Services
                 _logger.LogError(ex, "Error in GetApplicationsByUserId for user {UserId}", userId);
                 throw new Exception("Error retrieving applications", ex);
             }
+        }
+
+        // Auth: requires ApplicationsView permission (staff-only), no ownership check — staff
+        // can view any application. Backs the "View application" link on the Student Details
+        // page and the Enrolment history panel's "From application" link.
+        public async Task<ApplicationDetailModel?> GetApplicationDetailForStaffAsync(string id, string actingUserId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            var application = await _applicationDataAccess.GetApplicationByIdAsync(id);
+            if (application == null) return null;
+
+            return new ApplicationDetailModel
+            {
+                Id = application.Id,
+                StudentId = application.StudentId,
+                StudentName = application.StudentName,
+                Description = application.Description,
+                DateApplied = application.DateApplied,
+                Status = application.Status,
+                Details = application.Details,
+                ApplicationType = application.ApplicationType,
+                StudyMode = application.StudyMode,
+                Campus = application.Campus,
+                HometownAddress = application.HometownAddress,
+                CurrentAddress = application.CurrentAddress,
+                EmergencyContact = application.EmergencyContact
+            };
         }
 
         public async Task<ApplicationDetailModel?> GetApplicationById(string id, string userId)

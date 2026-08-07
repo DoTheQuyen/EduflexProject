@@ -13,6 +13,19 @@ namespace ShareService.Models.Enrolment
         [BsonElement("category")]
         public string? Category { get; set; }
 
+        // Set only for documents attached to one specific course application (currently
+        // just the "UniOffer" category — a student can have several parallel course
+        // applications, each with its own offer letter). Null for enrolment-wide
+        // documents (GS, CoE, VisaDraft, etc.) that aren't tied to a single application.
+        [BsonElement("courseApplicationId")]
+        public string? CourseApplicationId { get; set; }
+
+        // Free-text note staff can attach to any uploaded file (e.g. "second page of the
+        // offer letter", "receipt for the July instalment") — shown alongside the file in
+        // the uploader zone. Optional, no validation beyond a max length on the DTO.
+        [BsonElement("note")]
+        public string? Note { get; set; }
+
         [BsonElement("url")]
         public string Url { get; set; } = string.Empty;
 

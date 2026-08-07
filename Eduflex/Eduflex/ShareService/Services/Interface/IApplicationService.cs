@@ -11,6 +11,8 @@ namespace ShareService.Services.Interface
     public interface IApplicationService
     {
         Task<List<ApplicationModel>> GetApplicationsByStudentId(string studentId);
+        Task<List<ApplicationModel>> GetApplicationsForStudentAsync(string studentId, string actingUserId);
+        Task<ApplicationDetailModel?> GetApplicationDetailForStaffAsync(string id, string actingUserId);
         Task<PagedResult<ApplicationModel>> GetApplicationsByUserId(string userId, PaginationQuery query);
         Task<ApplicationDetailModel?> GetApplicationById(string id, string userId);
         Task<ApplicationModel> CreateApplication(ApplicationModel application, string userId);

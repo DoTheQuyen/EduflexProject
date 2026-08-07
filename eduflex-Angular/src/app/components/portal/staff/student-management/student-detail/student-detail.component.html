@@ -1,0 +1,140 @@
+<div class="student-detail container-fluid py-3">
+  <a class="back-link" routerLink="/staff-portal/students">&larr; Manage students</a>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && student">
+    <div class="card profile-card">
+      <div class="profile-top">
+        <div class="profile-identity">
+          <div class="avatar">{{ student.firstName?.charAt(0) }}{{ student.lastName?.charAt(0) }}</div>
+          <div>
+            <p class="profile-name">{{ student.firstName }} {{ student.lastName }}</p>
+            <div class="profile-sub">
+              <span class="badge-pill" [ngClass]="student.isActive ? 'badge-pill-success-soft' : 'badge-pill-muted-soft'">
+                {{ student.isActive ? 'Active' : 'Inactive' }}
+              </span>
+              <span>{{ student.email }}</span>
+              <span>&middot;</span>
+              <span>{{ student.mobile }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <a class="btn" [routerLink]="['/staff-portal/students', student.id, 'edit']" *ngIf="permissions.edit">
+            <i class="fas fa-edit me-1"></i>Edit student
+          </a>
+          <button class="btn btn-outline-danger" *ngIf="permissions.delete && student.isActive" (click)="deactivate()">
+            Deactivate
+          </button>
+          <button class="btn btn-outline-success" *ngIf="permissions.edit && !student.isActive" (click)="reactivate()">
+            Reactivate
+          </button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div><div class="info-label">Nationality</div><div class="info-value">{{ student.nationality }}</div></div>
+        <div><div class="info-label">Passport no.</div><div class="info-value">{{ student.passportNumber }}</div></div>
+        <div><div class="info-label">Date of birth</div><div class="info-value">{{ student.dateOfBirth | date:'d MMM yyyy' }}</div></div>
+        <div>
+          <div class="info-label">Address</div>
+          <div class="info-value">
+            {{ student.address?.street }}, {{ student.address?.city }}, {{ student.address?.country }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Applications</div><div class="stat-value">{{ applications.length }}</div></div>
+      <div class="stat-card"><div class="stat-label">Enrolments</div><div class="stat-value">{{ enrolments.length }}</div></div>
+      <div class="stat-card"><div class="stat-label">Documents on file</div><div class="stat-value">{{ totalDocumentCount }}</div></div>
+    </div>
+
+    <div class="card list-card">
+      <div class="list-card-head">
+        <p class="section-title">Active applications</p>
+        <p class="section-sub">Finalized applications move into Student history below as their enrolment; withdrawn or rejected applications aren't shown here.</p>
+      </div>
+      <div class="app-row" *ngFor="let app of activeApplications">
+        <a class="app-id" [routerLink]="['/staff-portal/applications', app.id]">{{ app.id }}</a>
+        <div class="app-course">
+          <div class="app-course-name">{{ app.description }}</div>
+          <div class="app-course-sub">{{ app.applicationType }}</div>
+        </div>
+        <div class="app-date">Applied {{ app.dateApplied | date:'d MMM yyyy' }}</div>
+        <span class="badge-pill badge-pill-accent-soft">{{ app.status }}</span>
+      </div>
+      <p *ngIf="activeApplications.length === 0" class="text-muted px-3 pb-3 mb-0">No active applications.</p>
+    </div>
+
+    <p class="section-title">Student history</p>
+    <p class="section-sub">Enrolment progress and visa outcome for this student. Expand a panel to see its documents.</p>
+
+    <div class="timeline">
+      <div class="t-item acc-item" *ngFor="let entry of history" [class.open]="entry.enrolmentOpen">
+        <span class="t-dot" style="--dot-color: var(--color-navy-900)"></span>
+        <div class="card t-card">
+          <div class="acc-head" role="button" tabindex="0" [attr.aria-expanded]="entry.enrolmentOpen" (click)="toggleEnrolment(entry)" (keydown.enter)="toggleEnrolment(entry)">
+            <span class="acc-head-text">
+              <span class="t-date">{{ entry.enrolment.createdAt | date:'d MMM yyyy' }}</span>
+              <span class="t-title">Enrolment</span>
+              <span class="t-meta">{{ entry.enrolment.intake }} &middot; {{ entry.enrolment.studyMode }} &middot; {{ entry.enrolment.campus }}</span>
+            </span>
+            <span class="badge-pill badge-pill-navy-soft">{{ entry.enrolment.status }}</span>
+            <a class="acc-view-link" [routerLink]="['/staff-portal/enrolments', entry.enrolment.id]" (click)="$event.stopPropagation()">
+              <i class="fas fa-eye"></i> View
+            </a>
+            <svg class="acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="acc-body">
+            <div class="acc-link-row" *ngIf="entry.enrolment.studentApplicationId">
+              <a [routerLink]="['/staff-portal/applications', entry.enrolment.studentApplicationId]">From application {{ entry.enrolment.studentApplicationId }} &rarr;</a>
+            </div>
+            <div class="t-docs-head">Documents ({{ enrolmentDocuments(entry.enrolment).length }})</div>
+            <div class="doc-row" *ngFor="let doc of enrolmentDocuments(entry.enrolment)">
+              <span class="doc-name">{{ doc.fileName }}</span>
+              <span class="doc-cat">{{ categoryLabel(doc.category) }}</span>
+              <span class="doc-meta">{{ doc.uploadedByName }} &middot; {{ doc.uploadedAt | date:'d MMM yyyy' }}</span>
+              <a class="doc-dl" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+            </div>
+            <p *ngIf="enrolmentDocuments(entry.enrolment).length === 0" class="doc-empty">No documents uploaded yet.</p>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let entry of history">
+        <div class="t-item acc-item" *ngIf="entry.hasVisaOutcome" [class.open]="entry.visaOutcomeOpen">
+          <span class="t-dot" [style.--dot-color]="entry.enrolment.status === 'VisaSuccess' ? 'var(--color-success)' : 'var(--color-error)'"></span>
+          <div class="card t-card">
+            <div class="acc-head" role="button" tabindex="0" [attr.aria-expanded]="entry.visaOutcomeOpen" (click)="toggleVisaOutcome(entry)" (keydown.enter)="toggleVisaOutcome(entry)">
+              <span class="acc-head-text">
+                <span class="t-date">{{ entry.enrolment.updatedAt | date:'d MMM yyyy' }}</span>
+                <span class="t-title">Visa outcome</span>
+              </span>
+              <span class="badge-pill" [ngClass]="entry.enrolment.status === 'VisaSuccess' ? 'badge-pill-success-soft' : 'badge-pill-error-soft'">
+                {{ entry.enrolment.status === 'VisaSuccess' ? 'Visa granted' : 'Visa failed' }}
+              </span>
+              <a class="acc-view-link" [routerLink]="['/staff-portal/enrolments', entry.enrolment.id]" (click)="$event.stopPropagation()">
+                <i class="fas fa-eye"></i> View
+              </a>
+              <svg class="acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="acc-body">
+              <div class="t-docs-head" style="padding-top: 14px; border-top: 1px solid var(--color-border);">Documents ({{ visaOutcomeDocuments(entry.enrolment).length }})</div>
+              <div class="doc-row" *ngFor="let doc of visaOutcomeDocuments(entry.enrolment)">
+                <span class="doc-name">{{ doc.fileName }}</span>
+                <span class="doc-cat">{{ categoryLabel(doc.category) }}</span>
+                <span class="doc-meta">{{ doc.uploadedByName }} &middot; {{ doc.uploadedAt | date:'d MMM yyyy' }}</span>
+                <a class="doc-dl" [href]="doc.url" target="_blank" rel="noopener">Download</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

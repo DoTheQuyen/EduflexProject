@@ -20,19 +20,21 @@ namespace ShareService.Models.Enrolment
             StudentInfo, EnrolmentForm, ApplyOffer, CoeCompletion, VisaApplication, VisaOutcome
         };
 
-        // Evidence document Category associated with each step's upload zone. Only
-        // enforced as a completion *requirement* for the four gated steps (ApplyOffer
-        // onward) in CompleteVisaStepAsync — EnrolmentForm's "GS" entry is here purely so
-        // the frontend can render its upload zone; that step is already Complete by the
-        // time it's ever shown (auto-completed at enrolment creation), so the requirement
-        // never actually gets checked for it.
-        public static readonly IReadOnlyDictionary<string, string> RequiredEvidenceCategory = new Dictionary<string, string>
+        // Evidence document Category/-ies associated with each step's upload zone(s). All
+        // categories listed for a step must have at least one matching document before
+        // that step can be marked complete (enforced in CompleteVisaStepAsync) — most
+        // steps only require one, but CoE Completion requires both the CoE itself and the
+        // student's payment receipt to the university. EnrolmentForm's "GS" entry is here
+        // purely so the frontend can render its upload zone; that step is already Complete
+        // by the time it's ever shown (auto-completed at enrolment creation), so the
+        // requirement never actually gets checked for it.
+        public static readonly IReadOnlyDictionary<string, string[]> RequiredEvidenceCategory = new Dictionary<string, string[]>
         {
-            [EnrolmentForm] = "GS",
-            [ApplyOffer] = "UniOffer",
-            [CoeCompletion] = "CoE",
-            [VisaApplication] = "VisaDraft",
-            [VisaOutcome] = "VisaGranted"
+            [EnrolmentForm] = new[] { "GS" },
+            [ApplyOffer] = new[] { "UniOffer" },
+            [CoeCompletion] = new[] { "CoE", "PaymentReceipt" },
+            [VisaApplication] = new[] { "VisaDraft" },
+            [VisaOutcome] = new[] { "VisaGranted" }
         };
     }
 

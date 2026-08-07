@@ -72,5 +72,12 @@ namespace ShareService.Models.Enrolment
 
         [BsonElement("statusUpdatedByName")]
         public string? StatusUpdatedByName { get; set; }
+
+        // Set the first time this application's status becomes Offered — kept separate
+        // from StatusUpdatedAt because that field gets overwritten by every later
+        // transition (e.g. Offered -> Finalized), which would lose the original offer
+        // date. Never cleared once set, even if the application is later withdrawn.
+        [BsonElement("offerAppliedDate")]
+        public DateTime? OfferAppliedDate { get; set; }
     }
 }

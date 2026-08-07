@@ -1,0 +1,25 @@
+<div class="container-fluid py-3">
+  <a class="back-link mb-3 d-inline-block" (click)="goBack()" role="button">&larr; Student details</a>
+
+  <div class="card border shadow-sm">
+    <div class="card-header">Edit student</div>
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+
+      <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-student-details-form [formGroup]="form"></app-student-details-form>
+
+        <app-notification type="error" [message]="errorMessage"></app-notification>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <button type="button" class="btn btn-outline-secondary" (click)="goBack()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Saving...' : 'Save changes' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

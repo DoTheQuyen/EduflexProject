@@ -17,6 +17,11 @@
       </div>
     </div>
 
+    <p class="!text-muted mb-0" *ngIf="!isStaffPortal && !isLoading && applications.length > 0">
+      You have {{ applications.length }} application{{ applications.length > 1 ? 's' : '' }}
+      &mdash; {{ inProgressApplicationsCount }} in progress<ng-container *ngIf="studyingApplicationsCount > 0">, {{ studyingApplicationsCount }} completed</ng-container>.
+    </p>
+
     <div class="alert alert-warning mt-3 mb-0" *ngIf="!isStaffPortal && hasActiveApplication">
       <i class="fas fa-triangle-exclamation me-2"></i>
       You have an application in progress. It must be <strong>Rejected</strong>, or you must be enrolled and <strong>Studying</strong>, before you can start another.

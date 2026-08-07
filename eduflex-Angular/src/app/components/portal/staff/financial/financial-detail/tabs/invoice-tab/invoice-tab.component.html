@@ -1,100 +1,215 @@
 <div class="invoice-grid">
   <div class="invoice-form-col">
     <div class="card border shadow-sm h-100">
-      <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <strong>{{ editingInvoiceId ? 'Edit invoice draft' : 'New invoice' }}</strong>
-        <button *ngIf="editingInvoiceId" type="button" class="btn btn-sm btn-outline-secondary" (click)="startNewDraft()">+ New</button>
-      </div>
+      <div class="card-header bg-white"><strong>Send commission invoice</strong></div>
       <div class="card-body">
-        <div class="mb-3">
-          <label class="form-label">Invoice No *</label>
-          <input class="form-control" [(ngModel)]="invoiceNo" [ngModelOptions]="{standalone: true}">
+        <div class="alert-inline alert-inline-accent mb-3" *ngIf="activePlanEntryId">
+          <i class="fas fa-calendar-check me-1"></i>Fulfilling a scheduled claim from the Invoice request calendar — description and amount prefilled below, still editable.
         </div>
 
         <div class="mb-3">
           <label class="form-label">Invoice to</label>
-          <div class="form-control-plaintext">{{ invoiceToOption?.name || '—' }}</div>
+          <div class="form-control-plaintext">
+            {{ invoiceToOption?.name || '—' }}
+            <span class="text-muted small d-block" *ngIf="invoiceToOption && !invoiceToOption.email">
+              No email on file for this partner — add one before sending.
+            </span>
+          </div>
         </div>
 
-        <div class="row g-2 mb-3">
-          <div class="col-6">
-            <label class="form-label small">Period start</label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="periodStart" [ngModelOptions]="{standalone: true}">
+        <div class="new-block" *ngIf="enrolment">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="field-label mb-0">Student &amp; enrolment details</span>
           </div>
-          <div class="col-6">
-            <label class="form-label small">Period end</label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="periodEnd" [ngModelOptions]="{standalone: true}">
+          <div class="info-grid">
+            <div><p class="k">Student</p><p class="v">{{ enrolment.firstName }} {{ enrolment.lastName }}</p></div>
+            <div><p class="k">Student ID</p><p class="v">{{ enrolment.id.slice(-6).toUpperCase() }}</p></div>
+            <div><p class="k">Email</p><p class="v">{{ enrolment.email }}</p></div>
+            <div><p class="k">Phone</p><p class="v">{{ enrolment.mobile }}</p></div>
+            <div><p class="k">Course</p><p class="v">{{ courseName || '—' }}</p></div>
+            <div><p class="k">Campus</p><p class="v">{{ enrolment.campus || '—' }}</p></div>
+            <div><p class="k">Uni</p><p class="v">{{ educationPartnerName || '—' }}</p></div>
           </div>
+          <p class="text-muted small mb-0 mt-2">Included on the invoice so {{ invoiceToOption?.name || 'the recipient' }} can see which enrolment this relates to.</p>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Commission claim for this period</label>
-          <input type="number" step="0.01" class="form-control" [(ngModel)]="periodTotal" [ngModelOptions]="{standalone: true}">
-          <p class="text-muted small mt-1 mb-0">Prefilled from the record's expected commission (plus adjustments) minus already-generated invoices — editable.</p>
+          <label class="form-label">Invoice template</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedInvoiceTemplateId" (ngModelChange)="onInvoiceTemplateChange()" [ngModelOptions]="{standalone: true}">
+            <option value="">Select…</option>
+            <option *ngFor="let t of invoiceTemplates" [value]="t.id">{{ t.name }}</option>
+          </select>
+          <p class="text-muted small mt-1 mb-0" *ngIf="invoiceTemplates.length === 0">No active Partner-category invoice templates yet — create one under Invoice Templates.</p>
         </div>
+
+        <ng-container *ngIf="selectedInvoiceTemplateId">
+          <div class="mb-2">
+            <label class="form-label mb-1">Claim items</label>
+            <div style="overflow-x:auto;">
+              <table class="claims">
+                <thead>
+                  <tr><th style="width:44%;">Description</th><th class="num">Amount</th><th class="num">GST %</th><th class="num">Subtotal</th><th style="width:2rem;"></th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of claimItems; let i = index">
+                    <td><input type="text" class="field-input" [(ngModel)]="item.description" [ngModelOptions]="{standalone: true}" placeholder="e.g. Enrolment Service Fee"></td>
+                    <td class="num"><input type="number" min="0" step="0.01" class="field-input num" [(ngModel)]="item.amount" [ngModelOptions]="{standalone: true}"></td>
+                    <td class="num"><input type="number" min="0" max="100" step="0.1" class="field-input num" [(ngModel)]="item.gstRatePercent" [ngModelOptions]="{standalone: true}"></td>
+                    <td class="num">{{ (item.amount + (item.amount * item.gstRatePercent / 100)) | number:'1.2-2' }}</td>
+                    <td><button type="button" class="btn-ghost-danger" (click)="removeClaimItem(i)" title="Remove">&times;</button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr><td colspan="3" style="text-align:right;">Total</td><td class="num">{{ claimItemsTotal | number:'1.2-2' }}</td><td></td></tr>
+                </tfoot>
+              </table>
+            </div>
+            <button type="button" class="btn btn-outline-accent btn-sm mt-2" (click)="addClaimItem()">+ Add claim item</button>
+            <p class="text-muted small mt-2 mb-0">Amount prefilled from the record's expected commission (plus adjustments) minus already-sent invoices — editable, and you can add more items.</p>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 my-2" *ngIf="emailTemplates.length > 0">
+            <button type="button" class="btn btn-sm" *ngFor="let t of emailTemplates"
+              [class.btn-primary]="selectedEmailTemplateKey === t.key" [class.btn-outline-secondary]="selectedEmailTemplateKey !== t.key"
+              (click)="applyEmailTemplate(t)">{{ t.name }}</button>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="invoiceEmailSubject" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea class="form-control form-control-sm" rows="6" [(ngModel)]="invoiceEmailBody" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+
+          <button type="button" class="btn btn-primary" [disabled]="isSendingInvoice || !canSendInvoice" (click)="sendInvoice()">
+            {{ isSendingInvoice ? 'Sending...' : 'Send Invoice' }}
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>
 
   <div class="invoice-editor-col">
     <div class="card border shadow-sm h-100">
-      <div class="card-header bg-white"><strong>Invoice document</strong></div>
-      <div class="card-body">
-        <quill-editor [(ngModel)]="htmlContent" [ngModelOptions]="{standalone: true}" [styles]="{height: '420px'}"></quill-editor>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="invoice-actions">
-  <button type="button" class="btn btn-outline-secondary" [disabled]="isSaving || isGenerating" (click)="cancel()">Cancel</button>
-  <button type="button" class="btn btn-outline-primary" [disabled]="isSaving || isGenerating" (click)="saveDraft()">
-    {{ isSaving ? 'Saving...' : 'Save Draft' }}
-  </button>
-  <button type="button" class="btn btn-primary" [disabled]="isSaving || isGenerating" (click)="generatePdf()">
-    {{ isGenerating ? 'Generating...' : 'Generate PDF' }}
-  </button>
-</div>
-
-<div class="invoice-bottom">
-  <div class="invoice-history-col">
-    <div class="card border shadow-sm">
       <div class="card-header bg-white"><strong>Invoice history</strong></div>
       <div class="card-body p-0">
-        <div class="history-row" *ngFor="let inv of record.invoices">
+        <div *ngIf="isLoadingInvoices" class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+        </div>
+
+        <div class="history-row" *ngFor="let inv of invoices">
           <button type="button" class="history-row-header" (click)="toggleHistoryRow(inv.id)">
             <span class="hist-invoiceno">{{ inv.invoiceNo }}</span>
-            <span class="hist-to">{{ inv.invoiceToName }}</span>
-            <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Draft'" [class.badge-pill-success-soft]="inv.status === 'Generated'">{{ inv.status }}</span>
-            <span class="hist-amount">{{ inv.periodTotal | number:'1.2-2' }}</span>
-            <button *ngIf="inv.status === 'Draft' && permissions.edit" type="button" class="btn btn-sm btn-outline-primary" (click)="editInvoice(inv); $event.stopPropagation()">Edit</button>
+            <span class="hist-to">{{ inv.recipientName }}</span>
+            <span class="badge-pill" [ngClass]="statusBadgeClass(inv.status)">{{ inv.status }}</span>
+            <span class="hist-amount">{{ inv.total | number:'1.2-2' }}</span>
           </button>
           <div class="history-row-body" *ngIf="expandedHistoryId === inv.id">
-            <p class="mb-1"><strong>Period:</strong> {{ inv.periodStart | date:'dd/MM/yyyy' }} – {{ inv.periodEnd | date:'dd/MM/yyyy' }}</p>
-            <p class="mb-1"><strong>Created by:</strong> {{ inv.createdByName }} on {{ inv.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-            <p class="mb-0" *ngIf="inv.generatedAt"><strong>Generated:</strong> {{ inv.generatedAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            <p class="mb-1" *ngIf="inv.studentName"><strong>Student:</strong> {{ inv.studentName }} <span *ngIf="inv.courseName">— {{ inv.courseName }}</span></p>
+            <div *ngIf="inv.claimItems.length > 0" class="mb-2">
+              <p class="mb-1"><strong>Claim items:</strong></p>
+              <ul class="mb-0 ps-3">
+                <li *ngFor="let item of inv.claimItems">{{ item.description }} — {{ item.amount | number:'1.2-2' }} (+GST {{ item.gstRatePercent }}%)</li>
+              </ul>
+            </div>
+            <p class="mb-1" *ngIf="inv.claimItems.length === 0"><strong>Description:</strong> {{ inv.description }}</p>
+            <p class="mb-1"><strong>Amount:</strong> {{ inv.amount | number:'1.2-2' }} + GST {{ inv.gstAmount | number:'1.2-2' }} = {{ inv.total | number:'1.2-2' }}</p>
+            <p class="mb-1"><strong>Sent by:</strong> {{ inv.createdByName }} on {{ formatDate(inv.sentAt) }}</p>
+            <p class="mb-2" *ngIf="inv.paidAt"><strong>Paid:</strong> {{ formatDate(inv.paidAt) }}</p>
+
+            <div class="alert-inline alert-inline-error" *ngIf="inv.status === 'Failed'">
+              <strong>Email not sent.</strong> The invoice and PDF were created, but delivery to {{ inv.recipientEmail }} failed.
+              <span *ngIf="inv.lastEmailError" class="d-block mt-1 small">{{ inv.lastEmailError }}</span>
+            </div>
+            <div class="alert-inline alert-inline-muted" *ngIf="inv.status === 'Cancelled'">
+              <strong>Cancelled</strong> {{ formatDate(inv.cancelledAt) }} — excluded from income totals.
+              <span *ngIf="inv.cancelReason" class="d-block mt-1 small">Reason: {{ inv.cancelReason }}</span>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary btn-sm me-2 mb-1" *ngIf="inv.pdfUrl" (click)="openDownloadLink(inv); $event.stopPropagation()">
+              <i class="fas fa-file-pdf me-1"></i>Download PDF
+            </button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-1"
+              *ngIf="inv.status !== 'Cancelled' && permissions.edit"
+              (click)="openResendDialog(inv); $event.stopPropagation()">
+              <i class="fas fa-paper-plane me-1"></i>Resend
+            </button>
+            <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-1" *ngIf="inv.status === 'Sent' && permissions.edit"
+              (click)="togglePaymentUploader(inv.id); $event.stopPropagation()">
+              Confirm Payment Received
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm mb-1"
+              *ngIf="inv.status !== 'Cancelled' && inv.status !== 'Paid' && permissions.edit"
+              (click)="openCancelDialog(inv); $event.stopPropagation()">
+              Cancel Invoice
+            </button>
+
+            <div class="payment-confirm" *ngIf="showPaymentUploaderFor === inv.id">
+              <app-file-uploader label="Add payment evidence (optional)" uploadCategory="enrolment" (fileSelected)="onPaymentEvidenceSelected($event)"></app-file-uploader>
+              <p *ngIf="isUploadingPaymentEvidence" class="text-muted small mb-0">Uploading…</p>
+              <p *ngIf="paymentEvidenceUrl" class="text-success small mb-0">Evidence attached.</p>
+              <button type="button" class="btn btn-primary btn-sm mt-2" [disabled]="isConfirmingPayment" (click)="confirmPayment(inv.id)">
+                {{ isConfirmingPayment ? 'Confirming...' : 'Confirm Payment' }}
+              </button>
+            </div>
           </div>
         </div>
-        <p *ngIf="record.invoices.length === 0" class="text-muted text-center py-4 mb-0">No invoices yet.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="invoice-links-col">
-    <div class="card border shadow-sm">
-      <div class="card-header bg-white"><strong>Generated PDFs</strong></div>
-      <div class="card-body p-0">
-        <button type="button" class="pdf-link-row" *ngFor="let inv of generatedInvoices" (click)="openDownloadLink(inv.id)">
-          <i class="fas fa-file-pdf me-2"></i>{{ inv.invoiceNo }}
-        </button>
-        <p *ngIf="generatedInvoices.length === 0" class="text-muted text-center py-4 mb-0">None yet.</p>
+        <p *ngIf="!isLoadingInvoices && invoices.length === 0" class="text-muted text-center py-4 mb-0">No invoices sent yet.</p>
       </div>
     </div>
   </div>
 </div>
 
-<app-modal *ngIf="showSendPrompt" title="Invoice generated" size="sm"
-           saveLabel="Yes, go to Communication" cancelLabel="No, stay here"
-           (closeModal)="dismissSendPrompt()" (cancel)="dismissSendPrompt()" (save)="confirmSendPrompt()">
-  Send this invoice by email now?
-</app-modal>
+<div class="confirm-dialog-backdrop" *ngIf="resendDialogInvoice" (click)="closeResendDialog()">
+  <div class="confirm-dialog-panel confirm-dialog-panel-wide" (click)="$event.stopPropagation()">
+    <h6 class="mb-1">Resend invoice {{ resendDialogInvoice.invoiceNo }}</h6>
+    <p class="text-muted small mb-3">
+      To <strong>{{ resendDialogInvoice.recipientName }}</strong> &lt;{{ resendDialogInvoice.recipientEmail }}&gt;.
+      The existing PDF is reattached — no new invoice number is issued.
+    </p>
+
+    <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="emailTemplates.length > 0">
+      <button type="button" class="btn btn-sm btn-outline-secondary" *ngFor="let t of emailTemplates"
+        (click)="applyResendTemplate(t)">{{ t.name }}</button>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label small">Subject</label>
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="resendSubject" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="mb-2">
+      <label class="form-label small">Message</label>
+      <textarea class="form-control form-control-sm" rows="8" [(ngModel)]="resendBody" [ngModelOptions]="{standalone: true}"></textarea>
+    </div>
+    <p class="text-muted small mb-3" ngNonBindable>
+      <code>{{invoiceNo}}</code>, <code>{{invoiceDescription}}</code> and
+      <code>{{invoiceLink}}</code> are filled in when the email is sent. Edits are saved as this invoice's message.
+    </p>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isResending" (click)="closeResendDialog()">Cancel</button>
+      <button type="button" class="btn btn-primary btn-sm" [disabled]="isResending || !canResend" (click)="confirmResend()">
+        {{ isResending ? 'Sending...' : 'Send Invoice Email' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-dialog-backdrop" *ngIf="cancelDialogInvoice" (click)="closeCancelDialog()">
+  <div class="confirm-dialog-panel" (click)="$event.stopPropagation()">
+    <h6 class="mb-2">Cancel invoice {{ cancelDialogInvoice.invoiceNo }}?</h6>
+    <p class="text-muted small mb-3">
+      The invoice stays in the ledger for audit, but stops counting toward income. This can't be undone from the app.
+    </p>
+    <label class="form-label small">Reason <span class="text-muted">(optional, recorded in the audit trail)</span></label>
+    <textarea class="form-control form-control-sm mb-3" rows="3" [(ngModel)]="cancelReason" [ngModelOptions]="{standalone: true}"
+      placeholder="e.g. Sent to the wrong partner"></textarea>
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isCancelling" (click)="closeCancelDialog()">Keep invoice</button>
+      <button type="button" class="btn btn-danger btn-sm" [disabled]="isCancelling" (click)="confirmCancel()">
+        {{ isCancelling ? 'Cancelling...' : 'Cancel invoice' }}
+      </button>
+    </div>
+  </div>
+</div>

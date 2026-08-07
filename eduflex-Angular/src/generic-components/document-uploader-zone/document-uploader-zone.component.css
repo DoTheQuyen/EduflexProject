@@ -1,0 +1,150 @@
+/* ===== Compact checklist row (replaces the old full-width card + dropzone) ===== */
+.doc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.doc-row-icon {
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.05rem;
+}
+
+/* Reuses the same soft-tint tokens as .badge-pill-success-soft / .badge-pill-error-soft
+   (theme.css) rather than redefining color-mix() locally. */
+.doc-row-icon.done {
+  background: color-mix(in srgb, var(--color-success) 12%, white);
+  color: var(--color-success-dark, var(--color-success));
+}
+
+.doc-row-icon.missing {
+  background: color-mix(in srgb, var(--color-error) 10%, white);
+  color: var(--color-error-dark, var(--color-error));
+}
+
+.doc-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.doc-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.doc-row-label {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--color-ink);
+}
+
+.doc-row-status {
+  flex-shrink: 0;
+  font-size: 0.74rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.doc-row-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.doc-row-file-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.doc-row-file {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.doc-row-file-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-row-file-name {
+  font-weight: 600;
+  font-size: 0.83rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-row-file-sub {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+.doc-row-link,
+.doc-row-link-btn {
+  flex-shrink: 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-accent-dark, var(--color-accent));
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.doc-row-link:hover,
+.doc-row-link-btn:hover {
+  text-decoration: underline;
+}
+
+.doc-row-note {
+  font-size: 0.78rem;
+}
+
+.doc-row-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.doc-row-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent-dark, var(--color-accent));
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.32rem 0.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.doc-row-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.doc-row-uploading {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}

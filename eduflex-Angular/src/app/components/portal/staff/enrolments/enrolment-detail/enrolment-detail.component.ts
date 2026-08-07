@@ -9,7 +9,7 @@ import { AuthHelperService, ModulePermissions } from '@services/auth-helper.serv
 import { NotificationService } from '@services/notification.service';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
-import { Enrolment } from '../../../../../models/enrolment';
+import { Enrolment, ENROLMENT_STATUS_LABELS, enrolmentStatusBadgeClass } from '../../../../../models/enrolment';
 import { VisaProcessTabComponent } from './tabs/visa-process-tab/visa-process-tab.component';
 import { DocumentsTabComponent } from './tabs/documents-tab/documents-tab.component';
 import { FormsTabComponent } from './tabs/forms-tab/forms-tab.component';
@@ -44,6 +44,10 @@ export class EnrolmentDetailComponent implements OnInit {
 
   financePermissions!: ModulePermissions;
   financialRecordId: string | null = null;
+
+  readonly statusLabels = ENROLMENT_STATUS_LABELS;
+  readonly statusBadgeClass = enrolmentStatusBadgeClass;
+  isFinalizing = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -108,7 +112,10 @@ export class EnrolmentDetailComponent implements OnInit {
   // silently and the button below simply doesn't render.
   private loadFinancialRecordLink(): void {
     if (!this.financePermissions.view || !this.enrolment) { return; }
-    if (this.enrolment.status !== 'VisaSuccess' && this.enrolment.status !== 'VisaFail') { return; }
+    // Finalized is what VisaSuccess/VisaFail becomes once staff click Finalize — the
+    // record (if any) stays linked after that transition, so this check has to keep
+    // matching it too, not just the two pre-finalize statuses.
+    if (this.enrolment.status !== 'VisaSuccess' && this.enrolment.status !== 'VisaFail' && this.enrolment.status !== 'Finalized') { return; }
 
     this.financialRecordService.getByEnrolmentId(this.enrolment.id).subscribe({
       next: (record) => { this.financialRecordId = record.id; },
@@ -120,6 +127,35 @@ export class EnrolmentDetailComponent implements OnInit {
     if (this.financialRecordId) {
       this.router.navigate(['/staff-portal/financial-records', this.financialRecordId]);
     }
+  }
+
+  // ----- Finalize -----
+
+  get canFinalize(): boolean {
+    return !!this.enrolment && this.isOwner && this.permissions.edit
+      && (this.enrolment.status === 'VisaSuccess' || this.enrolment.status === 'VisaFail');
+  }
+
+  finalizeEnrolment(): void {
+    if (!this.enrolment || !this.canFinalize) return;
+
+    const message = this.enrolment.status === 'VisaSuccess'
+      ? 'Finalize this enrolment and create its financial record?'
+      : 'Finalize this enrolment? The VISA outcome was a refusal, so no financial record will be created.';
+    if (!confirm(message)) return;
+
+    this.isFinalizing = true;
+    this.enrolmentService.finalize(this.enrolmentId).subscribe({
+      next: () => {
+        this.isFinalizing = false;
+        this.notificationService.success('Enrolment finalized.');
+        this.loadEnrolment();
+      },
+      error: (err) => {
+        this.isFinalizing = false;
+        this.notificationService.error(extractHttpErrorMessage(err, 'Could not finalize this enrolment.'));
+      }
+    });
   }
 
   // ----- Reassign -----

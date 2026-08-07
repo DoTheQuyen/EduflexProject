@@ -295,6 +295,21 @@ namespace ShareService.Services
             return enrolment;
         }
 
+        // Auth: requires EnrolmentsView permission (staff-only) — same permission as the
+        // general enrolments list, pre-filtered to one student for the Student Details
+        // page's history panel. Takes the student's UserId (EnrolmentModel.StudentUserId),
+        // not the Student record's Mongo Id — those are different keys in this app.
+        public async Task<List<EnrolmentModel>> GetEnrolmentsForStudentAsync(string studentUserId, string actingUserId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
+            if (!permissions.Contains(PermissionKey.EnrolmentsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view enrolments");
+            }
+
+            return await _enrolmentDataAccess.GetByStudentUserIdAsync(studentUserId);
+        }
+
         // Auth: requires EnrolmentsEdit permission AND ownership (only the staff member
         // who owns this enrolment may update it) — both enforced inside
         // GetOwnedEnrolmentAsync below, which every mutating method in this class goes
@@ -403,7 +418,9 @@ namespace ShareService.Services
         }
 
         // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
-        public async Task<bool> RenameDocumentAsync(string id, string documentId, string newFileName, string actingUserId)
+        // Also carries the document's Note field, so a single "edit this file" action in
+        // the uploader zones can update the filename and note together.
+        public async Task<bool> RenameDocumentAsync(string id, string documentId, string newFileName, string? note, string actingUserId)
         {
             var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
             var document = existing.Documents.FirstOrDefault(d => d.Id == documentId)
@@ -411,6 +428,7 @@ namespace ShareService.Services
 
             var oldName = document.FileName;
             document.FileName = newFileName;
+            document.Note = note;
 
             var actingUserName = await ResolveUserNameAsync(actingUserId);
             existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Renamed document \"{oldName}\" to \"{newFileName}\"", actingUserId, actingUserName));
@@ -651,6 +669,15 @@ namespace ShareService.Services
             courseApplication.StatusUpdatedAt = DateTime.UtcNow;
             courseApplication.StatusUpdatedByName = actingUserName;
 
+            // Captured once, the first time this application reaches Offered — later
+            // transitions (including a possible bounce back through other statuses) never
+            // overwrite it, so it stays the true "offer applied" date for the Finalize
+            // confirmation to show.
+            if (newStatus == CourseApplicationStatuses.Offered && courseApplication.OfferAppliedDate == null)
+            {
+                courseApplication.OfferAppliedDate = courseApplication.StatusUpdatedAt;
+            }
+
             existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Course application status changed to \"{newStatus}\"", actingUserId, actingUserName));
             return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
         }
@@ -672,6 +699,15 @@ namespace ShareService.Services
                 throw new ArgumentException("Only a course application with status \"Offered\" can be finalized.");
             }
 
+            // The whole point of Finalize is "this is the offer the student is accepting"
+            // — can't make that call without the offer letter actually attached to this
+            // specific application (see the per-application "UniOffer" upload zone on the
+            // course application panel).
+            if (!existing.Documents.Any(d => d.CourseApplicationId == courseApplicationId && d.Category == "UniOffer"))
+            {
+                throw new ArgumentException("Attach the university offer letter to this course application before finalizing.");
+            }
+
             var actingUserName = await ResolveUserNameAsync(actingUserId);
             var now = DateTime.UtcNow;
 
@@ -679,14 +715,42 @@ namespace ShareService.Services
             courseApplication.StatusUpdatedAt = now;
             courseApplication.StatusUpdatedByName = actingUserName;
 
-            foreach (var sibling in existing.CourseApplications.Where(c => c.Id != courseApplicationId && c.Status != CourseApplicationStatuses.Withdrawn))
+            var siblingIds = existing.CourseApplications
+                .Where(c => c.Id != courseApplicationId && c.Status != CourseApplicationStatuses.Withdrawn)
+                .Select(c => c.Id)
+                .ToList();
+
+            foreach (var sibling in existing.CourseApplications.Where(c => siblingIds.Contains(c.Id)))
             {
                 sibling.Status = CourseApplicationStatuses.Withdrawn;
                 sibling.StatusUpdatedAt = now;
                 sibling.StatusUpdatedByName = actingUserName;
             }
 
-            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create("Finalized a course application — all other course applications withdrawn", actingUserId, actingUserName));
+            // Once one offer is accepted, the other universities' offer letters no longer
+            // serve any purpose and are removed outright (not just unlinked) — matches
+            // "finalizing is a real decision" the same way the sibling applications
+            // themselves are withdrawn rather than left dangling.
+            var offersToRemove = existing.Documents
+                .Where(d => siblingIds.Contains(d.CourseApplicationId) && d.Category == "UniOffer")
+                .ToList();
+            foreach (var offer in offersToRemove)
+            {
+                existing.Documents.Remove(offer);
+                try
+                {
+                    await _blobStorageService.DeleteAsync(offer.Url);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Enrolment {EnrolmentId}: failed to delete blob for withdrawn offer document {DocumentId}", id, offer.Id);
+                }
+            }
+
+            var auditMessage = offersToRemove.Count > 0
+                ? $"Finalized a course application — all other course applications withdrawn and their {offersToRemove.Count} offer document(s) removed"
+                : "Finalized a course application — all other course applications withdrawn";
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create(auditMessage, actingUserId, actingUserName));
             return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
         }
 
@@ -699,24 +763,26 @@ namespace ShareService.Services
             var actingUserName = await ResolveUserNameAsync(actingUserId);
             var step = FindStep(existing, stepKey);
 
-            // VisaOutcome is the one exception to "can't re-complete a Complete step" —
-            // its outcome (Granted/Refused) is exactly the kind of thing that sometimes
-            // needs correcting after the fact (e.g. completed without picking one, or the
-            // decision changes), and re-running this branch is safe: the enrolment status
-            // just gets recomputed, and FinancialRecord creation is already idempotent.
-            if (step.Status == "Complete" && stepKey != VisaProcessStepKeys.VisaOutcome)
-            {
-                throw new ArgumentException("This step is already complete.");
-            }
+            // Re-completing an already-Complete step is allowed for every gated step (not
+            // just VisaOutcome) — this is how "Edit details" on a completed step saves its
+            // changes: the frontend reopens the fields for editing but leaves Status at
+            // Complete, then calls this same endpoint again. All the per-step validation
+            // below still re-runs, so a re-save can't silently skip a required document.
+            // Re-running is safe for every step: fields/CompletedAt/By just get
+            // overwritten, the enrolment Status recompute is idempotent, and VisaOutcome's
+            // FinancialRecord creation is already idempotent too.
             if (step.Status == "Locked")
             {
                 throw new ArgumentException("This step is locked — complete the previous step first.");
             }
 
-            if (VisaProcessStepKeys.RequiredEvidenceCategory.TryGetValue(stepKey, out var requiredCategory)
-                && !existing.Documents.Any(d => d.Category == requiredCategory))
+            if (VisaProcessStepKeys.RequiredEvidenceCategory.TryGetValue(stepKey, out var requiredCategories))
             {
-                throw new ArgumentException($"Upload the required \"{requiredCategory}\" evidence document before marking this step complete.");
+                var missingCategory = requiredCategories.FirstOrDefault(cat => !existing.Documents.Any(d => d.Category == cat));
+                if (missingCategory != null)
+                {
+                    throw new ArgumentException($"Upload the required \"{missingCategory}\" evidence document before marking this step complete.");
+                }
             }
 
             // Enrolment Form is auto-completed at enrolment creation (see
@@ -805,8 +871,6 @@ namespace ShareService.Services
                     {
                         await _applicationDataAccess.UpdateApplicationStatusAsync(existing.StudentApplicationId, "Studying");
                     }
-
-                    await _financialRecordService.CreateForEnrolmentIfNotExistsAsync(existing, actingUserId);
                 }
             }
 
@@ -822,6 +886,84 @@ namespace ShareService.Services
             }
 
             return completed;
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // Explicit status change Complete -> Draft — distinct from "Edit details" (which
+        // re-runs CompleteVisaStepAsync and leaves Status at Complete). Reopening doesn't
+        // touch Fields or cascade to lock any later step that was already unlocked; staff
+        // already progressed there, so undoing that would be more disruptive than helpful
+        // for what's meant to be a quick "fix a mistake" action.
+        public async Task<bool> ReopenVisaStepAsync(string id, string stepKey, string actingUserId)
+        {
+            if (stepKey == VisaProcessStepKeys.StudentInfo || stepKey == VisaProcessStepKeys.EnrolmentForm)
+            {
+                throw new ArgumentException("This step doesn't support reopening — edit its details directly instead.");
+            }
+
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+            var step = FindStep(existing, stepKey);
+
+            if (step.Status != "Complete")
+            {
+                throw new ArgumentException("Only a completed step can be reopened.");
+            }
+
+            step.Status = "Draft";
+            step.CompletedAt = null;
+            step.CompletedByUserId = null;
+            step.CompletedByName = null;
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create($"Reopened VISA Process step \"{stepKey}\"", actingUserId, actingUserName));
+
+            return await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+        }
+
+        // Auth: requires EnrolmentsEdit permission + ownership — see GetOwnedEnrolmentAsync.
+        // The one place the enrolment's Financial record gets created — moved here from
+        // CompleteVisaStepAsync's VisaOutcome branch so "record the outcome" and "close
+        // this out financially" are two distinct, explicit staff actions rather than one
+        // step completion silently doing both. CreateForEnrolmentIfNotExistsAsync is
+        // already idempotent, so re-finalizing an enrolment that already has a record
+        // (e.g. one created under the old auto-create behaviour) is harmless.
+        public async Task<bool> FinalizeEnrolmentAsync(string id, string actingUserId)
+        {
+            var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
+
+            if (existing.Status == EnrolmentEnums.Finalized.ToString())
+            {
+                throw new ArgumentException("This enrolment has already been finalized.");
+            }
+            if (existing.Status != EnrolmentEnums.VisaSuccess.ToString() && existing.Status != EnrolmentEnums.VisaFail.ToString())
+            {
+                throw new ArgumentException("Complete the VISA Outcome step before finalizing this enrolment.");
+            }
+
+            var actingUserName = await ResolveUserNameAsync(actingUserId);
+            var wasGranted = existing.Status == EnrolmentEnums.VisaSuccess.ToString();
+
+            if (wasGranted)
+            {
+                await _financialRecordService.CreateForEnrolmentIfNotExistsAsync(existing, actingUserId);
+            }
+
+            existing.Status = EnrolmentEnums.Finalized.ToString();
+            existing.AuditTrail.Add(EnrolmentAuditEntryModel.Create(
+                wasGranted ? "Enrolment finalized — financial record created" : "Enrolment finalized", actingUserId, actingUserName));
+
+            var saved = await _enrolmentDataAccess.ReplaceEnrolmentAsync(id, existing);
+
+            if (saved)
+            {
+                await _notificationPublisher.PublishToRoleAsync(
+                    module: "Enrolment",
+                    entityId: id,
+                    summary: $"Enrolment finalized for {existing.FirstName} {existing.LastName}",
+                    role: SystemRole.Staff);
+            }
+
+            return saved;
         }
 
         // ===================== Dynamic Forms =====================
@@ -997,6 +1139,36 @@ namespace ShareService.Services
         {
             var enrolment = await _enrolmentDataAccess.GetEnrolmentByStudentApplicationIdAsync(applicationId);
             return enrolment != null && enrolment.StudentUserId == studentUserId ? enrolment : null;
+        }
+
+        // Student-facing — no permission key, gated purely by StudentUserId ownership.
+        // Deliberately a narrow summary (status + counts only) rather than the full
+        // CourseApplications list — the individual course-shopping attempts (which were
+        // tried, withdrawn, staff notes) stay staff-only; the student only needs "where am
+        // I" and "how many options are in play".
+        public async Task<MyEnrolmentSummaryModel?> GetMyEnrolmentSummaryAsync(string applicationId, string studentUserId)
+        {
+            var enrolment = await _enrolmentDataAccess.GetEnrolmentByStudentApplicationIdAsync(applicationId);
+            if (enrolment == null || enrolment.StudentUserId != studentUserId) return null;
+
+            string? finalizedName = null;
+            var finalized = enrolment.CourseApplications.FirstOrDefault(c => c.Status == CourseApplicationStatuses.Finalized);
+            if (finalized != null)
+            {
+                var partner = await _educationPartnerDataAccess.GetEducationPartnerByIdAsync(finalized.EducationPartnerId);
+                var course = await _courseDataAccess.GetCourseByIdAsync(finalized.CourseId);
+                var nameParts = new[] { partner?.Name, course?.CourseName }.Where(s => !string.IsNullOrEmpty(s));
+                finalizedName = string.Join(" — ", nameParts);
+                if (string.IsNullOrEmpty(finalizedName)) finalizedName = null;
+            }
+
+            return new MyEnrolmentSummaryModel
+            {
+                EnrolmentId = enrolment.Id,
+                Status = enrolment.Status,
+                CourseApplicationCount = enrolment.CourseApplications.Count,
+                FinalizedCourseApplicationName = finalizedName
+            };
         }
 
         // Student-facing — no permission key, gated purely by StudentUserId ownership.

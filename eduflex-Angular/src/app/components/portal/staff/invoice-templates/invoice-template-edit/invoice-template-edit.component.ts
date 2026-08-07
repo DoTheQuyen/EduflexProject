@@ -25,7 +25,7 @@ export class InvoiceTemplateEditComponent implements OnInit {
   isUploadingLogo = false;
 
   name = '';
-  category: 'Customer' | 'Partner' = 'Customer';
+  category: 'Customer' | 'Partner' | 'Custom' = 'Customer';
   logoUrl: string | null = null;
   senderName = '';
   senderAddressLines: string[] = [''];
@@ -68,7 +68,7 @@ export class InvoiceTemplateEditComponent implements OnInit {
     this.client.invoiceTemplatesGET(id).subscribe({
       next: (template) => {
         this.name = template.name ?? '';
-        this.category = (template.category as 'Customer' | 'Partner') ?? 'Customer';
+        this.category = (template.category as 'Customer' | 'Partner' | 'Custom') ?? 'Customer';
         this.logoUrl = template.logoUrl ?? null;
         this.senderName = template.senderName ?? '';
         this.senderAddressLines = template.senderAddressLines?.length ? [...template.senderAddressLines] : [''];
@@ -100,7 +100,7 @@ export class InvoiceTemplateEditComponent implements OnInit {
     if (!source) { return; }
 
     this.name = source.name ? `${source.name} (Copy)` : '';
-    this.category = (source.category as 'Customer' | 'Partner') ?? 'Customer';
+    this.category = (source.category as 'Customer' | 'Partner' | 'Custom') ?? 'Customer';
     this.logoUrl = source.logoUrl ?? null;
     this.senderName = source.senderName ?? '';
     this.senderAddressLines = source.senderAddressLines?.length ? [...source.senderAddressLines] : [''];
@@ -159,6 +159,7 @@ export class InvoiceTemplateEditComponent implements OnInit {
 
   openPreview(): void {
     this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(buildInvoiceTemplatePreviewHtml({
+      category: this.category,
       logoUrl: this.logoUrl,
       senderName: this.senderName,
       senderAddressLines: this.senderAddressLines,

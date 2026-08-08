@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import {
-  CommissionAdjustment, CreateInvoiceDraftRequest, FinancialCommunication, FinancialRecipientType, FinancialRecord,
-  FinancialRecordFilter, Invoice
+  CommissionAdjustment, FinancialCommunication, FinancialRecipientType, FinancialRecord,
+  FinancialRecordFilter, FinanceInvoice, SendFinanceInvoiceRequest
 } from '../models/financial-record';
 import { PagedResult } from '../models/enrolment';
 
@@ -36,20 +36,42 @@ export class FinancialRecordService {
     return this.http.post<CommissionAdjustment>(`${this.baseUrl}/${id}/commission-adjustments`, { reason, amount });
   }
 
-  createInvoiceDraft(id: string, payload: CreateInvoiceDraftRequest): Observable<Invoice> {
-    return this.http.post<Invoice>(`${this.baseUrl}/${id}/invoices`, payload);
+  regenerateInvoicePlan(id: string): Observable<FinancialRecord> {
+    return this.http.post<FinancialRecord>(`${this.baseUrl}/${id}/invoice-plan/regenerate`, {});
   }
 
-  updateInvoiceDraft(id: string, invoiceId: string, htmlContent: string, periodTotal: number): Observable<boolean> {
-    return this.http.put<boolean>(`${this.baseUrl}/${id}/invoices/${invoiceId}`, { htmlContent, periodTotal });
+  updatePlanEntryDate(id: string, entryId: string, claimDate: string): Observable<FinancialRecord> {
+    return this.http.put<FinancialRecord>(`${this.baseUrl}/${id}/invoice-plan/${entryId}/date`, { claimDate });
   }
 
-  generateInvoicePdf(id: string, invoiceId: string): Observable<Invoice> {
-    return this.http.post<Invoice>(`${this.baseUrl}/${id}/invoices/${invoiceId}/generate-pdf`, {});
+  skipPlanEntry(id: string, entryId: string, reason: string): Observable<FinancialRecord> {
+    return this.http.post<FinancialRecord>(`${this.baseUrl}/${id}/invoice-plan/${entryId}/skip`, { reason });
   }
 
-  getInvoiceDownloadLink(id: string, invoiceId: string): Observable<{ url: string }> {
-    return this.http.get<{ url: string }>(`${this.baseUrl}/${id}/invoices/${invoiceId}/download-link`);
+  restorePlanEntry(id: string, entryId: string): Observable<FinancialRecord> {
+    return this.http.post<FinancialRecord>(`${this.baseUrl}/${id}/invoice-plan/${entryId}/restore`, {});
+  }
+
+  addManualPlanEntry(id: string, claimDate: string): Observable<FinancialRecord> {
+    return this.http.post<FinancialRecord>(`${this.baseUrl}/${id}/invoice-plan/manual`, { claimDate });
+  }
+
+  // Talks straight to InvoicesController (the new Invoice module), not
+  // FinancialRecordsController — that's why these don't share `baseUrl`.
+  getInvoicesForRecord(financialRecordId: string): Observable<FinanceInvoice[]> {
+    return this.http.get<FinanceInvoice[]>(`${environment.apiClientUrl}/api/Invoices/by-financial-record/${financialRecordId}`);
+  }
+
+  sendInvoice(payload: SendFinanceInvoiceRequest): Observable<FinanceInvoice> {
+    return this.http.post<FinanceInvoice>(`${environment.apiClientUrl}/api/Invoices/send`, payload);
+  }
+
+  resendInvoice(invoiceId: string, emailSubject: string, emailBody: string): Observable<FinanceInvoice> {
+    return this.http.post<FinanceInvoice>(`${environment.apiClientUrl}/api/Invoices/${invoiceId}/resend`, { emailSubject, emailBody });
+  }
+
+  cancelInvoice(invoiceId: string, reason: string): Observable<FinanceInvoice> {
+    return this.http.post<FinanceInvoice>(`${environment.apiClientUrl}/api/Invoices/${invoiceId}/cancel`, { reason });
   }
 
   sendCommunication(id: string, toEmail: string, recipientType: FinancialRecipientType, subject: string, body: string,

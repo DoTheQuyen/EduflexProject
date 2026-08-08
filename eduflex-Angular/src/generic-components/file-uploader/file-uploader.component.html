@@ -19,5 +19,10 @@
     </ng-container>
   </ng-container>
 
+  <ng-container *ngIf="variant === 'compact'">
+    <i class="fas fa-plus uploader-compact-icon"></i>
+    <span class="uploader-compact-label">{{ label }}</span>
+  </ng-container>
+
   <input #fileInput type="file" [accept]="accept" hidden (change)="onFileInputChange($event)">
 </div>

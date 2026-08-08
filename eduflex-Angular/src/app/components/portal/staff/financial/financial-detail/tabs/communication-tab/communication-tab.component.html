@@ -22,7 +22,7 @@
           <label class="form-label">Attach invoice</label>
           <select class="form-select" [(ngModel)]="selectedInvoiceId" [ngModelOptions]="{standalone: true}" (change)="onInvoiceSelected()">
             <option value="">None</option>
-            <option *ngFor="let inv of generatedInvoices" [value]="inv.id">{{ inv.invoiceNo }} — {{ inv.invoiceToName }}</option>
+            <option *ngFor="let inv of generatedInvoices" [value]="inv.id">{{ inv.invoiceNo }} — {{ inv.recipientName }}</option>
           </select>
         </div>
 

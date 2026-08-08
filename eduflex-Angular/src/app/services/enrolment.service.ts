@@ -11,7 +11,8 @@ import {
   EnrolmentDocument,
   EnrolmentCommunication,
   RecipientType,
-  VisaStepKey
+  VisaStepKey,
+  MyEnrolmentSummary
 } from '../models/enrolment';
 import { EnrolmentFormResponse, FormAnswer, FormResponseStatus, MyEnrolmentForms } from '../models/dynamic-form';
 
@@ -40,6 +41,10 @@ export class EnrolmentService {
     return this.http.get<Enrolment>(`${this.baseUrl}/${id}`);
   }
 
+  getByStudent(studentUserId: string): Observable<Enrolment[]> {
+    return this.http.get<Enrolment[]>(`${this.baseUrl}/by-student/${studentUserId}`);
+  }
+
   getStatuses(): Observable<EnrolmentStatusOption[]> {
     return this.http.get<EnrolmentStatusOption[]>(`${this.baseUrl}/enrolment-statuses`);
   }
@@ -56,12 +61,12 @@ export class EnrolmentService {
     return this.http.put<boolean>(`${this.baseUrl}/${id}/reassign`, { newOwnerUserId });
   }
 
-  addDocument(id: string, document: { fileName: string; category?: string; url: string; contentType?: string; sizeBytes: number }): Observable<EnrolmentDocument> {
+  addDocument(id: string, document: { fileName: string; category?: string; courseApplicationId?: string; note?: string; url: string; contentType?: string; sizeBytes: number }): Observable<EnrolmentDocument> {
     return this.http.post<EnrolmentDocument>(`${this.baseUrl}/${id}/documents`, document);
   }
 
-  renameDocument(id: string, documentId: string, fileName: string): Observable<boolean> {
-    return this.http.put<boolean>(`${this.baseUrl}/${id}/documents/${documentId}`, { fileName });
+  renameDocument(id: string, documentId: string, fileName: string, note?: string): Observable<boolean> {
+    return this.http.put<boolean>(`${this.baseUrl}/${id}/documents/${documentId}`, { fileName, note });
   }
 
   deleteDocument(id: string, documentId: string): Observable<void> {
@@ -88,6 +93,14 @@ export class EnrolmentService {
 
   completeVisaStep(id: string, stepKey: VisaStepKey, fields: Record<string, string>): Observable<boolean> {
     return this.http.post<boolean>(`${this.baseUrl}/${id}/visa-steps/${stepKey}/complete`, { fields });
+  }
+
+  reopenVisaStep(id: string, stepKey: VisaStepKey): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/visa-steps/${stepKey}/reopen`, {});
+  }
+
+  finalize(id: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/${id}/finalize`, {});
   }
 
   // ----- Dynamic Forms — staff -----
@@ -128,6 +141,10 @@ export class EnrolmentService {
 
   getMyForms(applicationId: string): Observable<MyEnrolmentForms> {
     return this.http.get<MyEnrolmentForms>(`${this.baseUrl}/by-application/${applicationId}/forms`);
+  }
+
+  getMySummary(applicationId: string): Observable<MyEnrolmentSummary> {
+    return this.http.get<MyEnrolmentSummary>(`${this.baseUrl}/by-application/${applicationId}/summary`);
   }
 
   saveFormDraft(id: string, responseId: string, answers: FormAnswer[]): Observable<boolean> {

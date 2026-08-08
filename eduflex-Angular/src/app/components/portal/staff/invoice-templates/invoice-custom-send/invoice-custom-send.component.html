@@ -1,0 +1,97 @@
+<div class="invoice-custom-send-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Invoice Templates
+    </button>
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+      <div>
+        <h3 class="mb-1">Send Custom Invoice</h3>
+        <p class="text-muted mb-0">A free-text, one-off invoice for billing that doesn't map to a student or partner record.</p>
+      </div>
+      <button type="button" class="btn btn-primary" [disabled]="isSending || !canSend" (click)="send()">
+        {{ isSending ? 'Sending...' : 'Send Invoice' }}
+      </button>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-7">
+        <div class="card border shadow-sm mb-3">
+          <div class="card-header bg-white"><strong>Invoice template</strong></div>
+          <div class="card-body">
+            <select class="form-select form-select-sm" [(ngModel)]="selectedTemplateId" (ngModelChange)="onTemplateChange()" [ngModelOptions]="{standalone: true}">
+              <option value="">Select…</option>
+              <option *ngFor="let t of templates" [value]="t.id">{{ t.name }}</option>
+            </select>
+            <p class="text-muted small mt-2 mb-0" *ngIf="templates.length === 0">No active Custom-category invoice templates yet — create one under Invoice Templates.</p>
+          </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3">
+          <div class="card-header bg-white"><strong>Invoice content</strong></div>
+          <div class="card-body">
+            <textarea class="form-control" rows="10" [(ngModel)]="customContent" [ngModelOptions]="{standalone: true}"
+              placeholder="Write anything — this becomes the body of the invoice PDF, inside the template's logo, sender details and numbering."></textarea>
+            <p class="text-muted small mt-2 mb-0">Blank lines start a new paragraph.</p>
+          </div>
+        </div>
+
+        <div class="card border shadow-sm">
+          <div class="card-header bg-white"><strong>Email</strong></div>
+          <div class="card-body">
+            <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="emailTemplates.length > 0">
+              <button type="button" class="btn btn-sm" *ngFor="let t of emailTemplates"
+                [class.btn-primary]="selectedEmailTemplateKey === t.key" [class.btn-outline-secondary]="selectedEmailTemplateKey !== t.key"
+                (click)="applyEmailTemplate(t)">{{ t.name }}</button>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Subject</label>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="emailSubject" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="mb-0">
+              <label class="form-label">Message</label>
+              <textarea class="form-control form-control-sm" rows="4" [(ngModel)]="emailBody" [ngModelOptions]="{standalone: true}"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card border shadow-sm mb-3">
+          <div class="card-header bg-white"><strong>Bill to</strong></div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" [(ngModel)]="recipientName" [ngModelOptions]="{standalone: true}" placeholder="e.g. Northside Language Academy">
+            </div>
+            <div class="mb-0">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="recipientEmail" [ngModelOptions]="{standalone: true}" placeholder="accounts@example.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="card border shadow-sm">
+          <div class="card-header bg-white"><strong>Billing total</strong></div>
+          <div class="card-body">
+            <p class="text-muted small mb-3">Kept separate from the free-text content above so this invoice still shows up correctly in the invoice ledger.</p>
+            <div class="mb-3">
+              <label class="form-label">Reference</label>
+              <input type="text" class="form-control" [(ngModel)]="description" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="form-label">Amount</label>
+                <input type="number" min="0" step="0.01" class="form-control" [(ngModel)]="amount" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="col-6">
+                <label class="form-label">GST %</label>
+                <input type="number" min="0" max="100" step="0.1" class="form-control" [(ngModel)]="gstRatePercent" [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -203,6 +203,12 @@ export const routes: Routes = [
         data: { roles: ['Admin', 'Manager'], breadcrumb: 'Departments' }
       },
       {
+        path: 'applications/:id',
+        loadComponent: () => import('./components/portal/staff/applications/application-detail/application-detail.component').then(m => m.ApplicationDetailComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Application Detail' }
+      },
+      {
         path: 'students',
         loadComponent: () => import('./components/portal/staff/student-management/student-management.component').then(m => m.StudentManagementComponent),
         canActivate: [AuthGuard, RoleGuard],
@@ -213,6 +219,18 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/student-management/student-new/student-new.component').then(m => m.StudentNewComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Add Student' }
+      },
+      {
+        path: 'students/:id/edit',
+        loadComponent: () => import('./components/portal/staff/student-management/student-edit/student-edit.component').then(m => m.StudentEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Edit Student' }
+      },
+      {
+        path: 'students/:id',
+        loadComponent: () => import('./components/portal/staff/student-management/student-detail/student-detail.component').then(m => m.StudentDetailComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Student Details' }
       },
             {
         path: 'profile',
@@ -279,6 +297,14 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-template-edit/invoice-template-edit.component').then(m => m.InvoiceTemplateEditComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin'], breadcrumb: 'New Invoice Template' }
+      },
+      {
+        // Must come before the ':id' catch-all below, or "send-custom" would be parsed
+        // as a template id and route to the edit screen instead.
+        path: 'invoice-templates/send-custom',
+        loadComponent: () => import('./components/portal/staff/invoice-templates/invoice-custom-send/invoice-custom-send.component').then(m => m.InvoiceCustomSendComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Send Custom Invoice' }
       },
       {
         path: 'invoice-templates/:id',

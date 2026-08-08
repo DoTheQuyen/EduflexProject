@@ -17,6 +17,7 @@ namespace Eduflex.DTOs.Enrolment
         public DateTime CreatedAt { get; set; }
         public DateTime? StatusUpdatedAt { get; set; }
         public string? StatusUpdatedByName { get; set; }
+        public DateTime? OfferAppliedDate { get; set; }
     }
 
     public class AddCourseApplicationDto

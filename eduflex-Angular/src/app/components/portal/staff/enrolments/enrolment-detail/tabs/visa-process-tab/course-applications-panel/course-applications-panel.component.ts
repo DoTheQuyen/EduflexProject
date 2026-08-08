@@ -10,6 +10,7 @@ import {
   Enrolment, CourseApplication, CourseApplicationStatus,
   COURSE_APPLICATION_STATUS_LABELS, courseApplicationStatusBadgeClass
 } from '../../../../../../../../models/enrolment';
+import { StepEvidenceSectionComponent } from '../step-evidence-section/step-evidence-section.component';
 
 // The Enrolment Form step's nested "Course applications" sub-panels — a student can
 // pursue several courses/universities at once under one Enrolment, each gets its own
@@ -19,7 +20,7 @@ import {
 @Component({
   selector: 'app-course-applications-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, StepEvidenceSectionComponent],
   templateUrl: './course-applications-panel.component.html',
   styleUrls: ['./course-applications-panel.component.css']
 })
@@ -66,6 +67,14 @@ export class CourseApplicationsPanelComponent {
 
   formatDate(value: string | undefined): string {
     return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';
+  }
+
+  formatDateOnly(value: string | undefined): string {
+    return value ? formatDateTime(value, 'dd/MM/yyyy') : 'unknown date';
+  }
+
+  hasOfferAttached(courseApplication: CourseApplication): boolean {
+    return this.enrolment.documents.some(d => d.courseApplicationId === courseApplication.id && d.category === 'UniOffer');
   }
 
   get activeCourseApplicationCount(): number {
@@ -187,11 +196,18 @@ export class CourseApplicationsPanelComponent {
   }
 
   finalizeCourseApplication(courseApplication: CourseApplication): void {
-    if (!this.canEdit() || courseApplication.status !== 'Offered') return;
-    if (!confirm('Finalize this course application? Every other course application on this enrolment will be withdrawn.')) return;
+    if (!this.canEdit() || courseApplication.status !== 'Offered' || !this.hasOfferAttached(courseApplication)) return;
+
+    const otherActiveCount = this.enrolment.courseApplications.filter(c => c.id !== courseApplication.id && c.status !== 'Withdrawn').length;
+    const offerDate = this.formatDateOnly(courseApplication.offerAppliedDate);
+    const message = `Finalize this course application (offer applied ${offerDate})?\n\n`
+      + (otherActiveCount > 0
+        ? `Every other course application on this enrolment (${otherActiveCount}) will be withdrawn, and their attached offer letters will be permanently removed from the system.`
+        : `This is the only active course application, so nothing else will be affected.`);
+    if (!confirm(message)) return;
 
     this.isSavingCourseApplicationStatus[courseApplication.id] = true;
-    this.apiClient.finalize(this.enrolment.id, courseApplication.id).subscribe({
+    this.apiClient.finalize2(this.enrolment.id, courseApplication.id).subscribe({
       next: () => {
         this.isSavingCourseApplicationStatus[courseApplication.id] = false;
         this.notificationService.success('Course application finalized — other applications withdrawn.');

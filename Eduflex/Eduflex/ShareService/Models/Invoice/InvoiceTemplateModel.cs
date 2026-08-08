@@ -5,12 +5,14 @@ using ShareService.Models.Common;
 namespace ShareService.Models.Invoice
 {
     // Customer = student service-fee invoices, Partner = business/education partner
-    // commission invoices. Kept as a plain string (not an enum) so a new category can be
-    // added later without a schema migration, matching VisaProcessStepModel's convention.
+    // commission invoices, Custom = free-text one-off invoices with no backing
+    // student/partner record. Kept as a plain string (not an enum) so a new category can
+    // be added later without a schema migration, matching VisaProcessStepModel's convention.
     public static class InvoiceTemplateCategories
     {
         public const string Customer = "Customer";
         public const string Partner = "Partner";
+        public const string Custom = "Custom";
     }
 
     public class InvoiceTemplateModel : AuditableEntity

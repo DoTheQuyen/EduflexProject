@@ -19,14 +19,25 @@ export interface EmergencyContact {
 
 // Evidence categories used to tag uploads to a VISA Process step. 'Other' covers
 // anything uploaded outside the step-gated flow (e.g. via the Documents tab directly).
-export type DocumentCategory = 'GS' | 'UniOffer' | 'CoE' | 'VisaDraft' | 'VisaGranted' | 'Other';
+export type DocumentCategory =
+  | 'GS' | 'UniOffer' | 'CoE' | 'PaymentReceipt' | 'VisaDraft' | 'Insurance' | 'VisaPaymentReceipt' | 'VisaGranted'
+  | 'ApplyOfferOther' | 'CoeOther' | 'VisaOther' | 'Other';
 
 export const DOCUMENT_CATEGORY_LABELS: Record<DocumentCategory, string> = {
   GS: 'GS Statement',
   UniOffer: 'Uni Offer',
   CoE: 'CoE',
-  VisaDraft: 'VISA Draft',
+  PaymentReceipt: 'Payment Receipt (Uni)',
+  VisaDraft: 'Visa App',
+  Insurance: 'Insurance',
+  VisaPaymentReceipt: 'Visa Payment Receipt',
   VisaGranted: 'VISA Granted',
+  // Distinct per-step "other" buckets (rather than sharing the one generic 'Other') so
+  // a misc. file attached on one step's zone doesn't also show up on another step's —
+  // 'Other' itself stays reserved for the Documents tab's own general catch-all.
+  ApplyOfferOther: 'Other',
+  CoeOther: 'Other',
+  VisaOther: 'Other',
   Other: 'Other'
 };
 
@@ -41,6 +52,10 @@ export interface EnrolmentDocument {
   id: string;
   fileName: string;
   category?: DocumentCategory | string;
+  // Set only for documents attached to one specific course application (currently just
+  // the per-application "UniOffer" offer letter) — undefined for enrolment-wide documents.
+  courseApplicationId?: string;
+  note?: string;
   url: string;
   contentType?: string;
   sizeBytes: number;
@@ -90,15 +105,18 @@ export const VISA_STEP_LABELS: Record<VisaStepKey, string> = {
   VisaOutcome: 'VISA Outcome'
 };
 
+// Every category listed for a step must have at least one matching document before that
+// step can be marked complete (mirrors VisaProcessStepKeys.RequiredEvidenceCategory
+// server-side) — most steps only need one, CoE Completion needs both entries.
 // EnrolmentForm's 'GS' entry is here only so its upload zone renders — that step is
 // already Complete by the time it's shown (auto-completed at creation), so unlike the
 // other four it's never actually *required* to unlock anything.
-export const VISA_STEP_EVIDENCE_CATEGORY: Partial<Record<VisaStepKey, DocumentCategory>> = {
-  EnrolmentForm: 'GS',
-  ApplyOffer: 'UniOffer',
-  CoeCompletion: 'CoE',
-  VisaApplication: 'VisaDraft',
-  VisaOutcome: 'VisaGranted'
+export const VISA_STEP_EVIDENCE_CATEGORY: Partial<Record<VisaStepKey, DocumentCategory[]>> = {
+  EnrolmentForm: ['GS'],
+  ApplyOffer: ['UniOffer'],
+  CoeCompletion: ['CoE', 'PaymentReceipt'],
+  VisaApplication: ['VisaDraft'],
+  VisaOutcome: ['VisaGranted']
 };
 
 export interface VisaProcessStep {
@@ -109,7 +127,65 @@ export interface VisaProcessStep {
   completedAt?: string;
 }
 
-export type EnrolmentStatus = 'Draft' | 'Offer' | 'Coe' | 'ApplyVisa' | 'VisaSuccess' | 'VisaFail' | 'Cancel';
+export type EnrolmentStatus = 'Draft' | 'Offer' | 'Coe' | 'ApplyVisa' | 'VisaSuccess' | 'VisaFail' | 'Cancel' | 'Completed' | 'Finalized';
+
+export const ENROLMENT_STATUS_LABELS: Record<EnrolmentStatus, string> = {
+  Draft: 'Draft',
+  Offer: 'Offer',
+  Coe: 'COE',
+  ApplyVisa: 'Apply VISA',
+  VisaSuccess: 'VISA success',
+  VisaFail: 'VISA fail',
+  Cancel: 'Cancel',
+  Completed: 'Completed',
+  Finalized: 'Finalized'
+};
+
+// Header status pill — reuses the same soft-pill palette as courseApplicationStatusBadgeClass
+// below, not new colors, per the project's "centralize CSS colors" convention (theme.css).
+export function enrolmentStatusBadgeClass(status: EnrolmentStatus): string {
+  switch (status) {
+    case 'VisaSuccess': return 'badge-pill-success-soft';
+    case 'VisaFail': return 'badge-pill-error-soft';
+    case 'Cancel': return 'badge-pill-error-soft';
+    case 'Finalized': return 'badge-pill-navy-soft';
+    case 'Draft': return 'badge-pill-muted-soft';
+    default: return 'badge-pill-accent-soft'; // Offer / Coe / ApplyVisa / Completed — in-progress
+  }
+}
+
+// Plain-language stage tracker shown to the student — kept separate from EnrolmentStatus
+// (the internal staff-facing vocabulary) so wording can be tuned without touching the
+// backend. Cancel/VisaFail don't get their own step; they're shown as a stopped state.
+export type EnrolmentStageKey = 'Draft' | 'Offer' | 'Coe' | 'ApplyVisa' | 'VisaSuccess';
+
+export const ENROLMENT_STAGE_STEPS: { key: EnrolmentStageKey; label: string }[] = [
+  { key: 'Draft', label: 'Enrolment started' },
+  { key: 'Offer', label: 'Offer received' },
+  { key: 'Coe', label: 'CoE confirmed' },
+  { key: 'ApplyVisa', label: 'Visa lodged' },
+  { key: 'VisaSuccess', label: 'Visa outcome' }
+];
+
+export function enrolmentStageIndex(status: EnrolmentStatus): number {
+  // Finalized is a step *after* the visible stage tracker (it's the finance/close-out
+  // action, not a visa milestone) — shown as the same last stage rather than adding a
+  // 6th column the student has no reason to care about.
+  const effectiveStatus = status === 'Finalized' ? 'VisaSuccess' : status;
+  const idx = ENROLMENT_STAGE_STEPS.findIndex(s => s.key === effectiveStatus);
+  return idx === -1 ? 0 : idx;
+}
+
+export function isEnrolmentStopped(status: EnrolmentStatus): boolean {
+  return status === 'Cancel' || status === 'VisaFail';
+}
+
+export interface MyEnrolmentSummary {
+  enrolmentId: string;
+  status: EnrolmentStatus;
+  courseApplicationCount: number;
+  finalizedCourseApplicationName?: string;
+}
 
 // A student can be pursuing several courses/universities at once under one Enrolment —
 // each gets its own row here, nested as a sub-panel inside the Enrolment Form step.
@@ -150,6 +226,9 @@ export interface CourseApplication {
   createdAt: string;
   statusUpdatedAt?: string;
   statusUpdatedByName?: string;
+  // Set the first time this application reaches 'Offered' — never overwritten by later
+  // transitions, so it stays the true offer date shown in the Finalize confirmation.
+  offerAppliedDate?: string;
 }
 
 export interface Enrolment {

@@ -1,0 +1,44 @@
+<div class="application-detail container-fluid py-3">
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && application">
+    <a class="back-link" [routerLink]="['/staff-portal/students', application.studentId]">&larr; {{ application.studentName }}</a>
+
+    <div class="card detail-card">
+      <div class="detail-top">
+        <div>
+          <p class="detail-title">{{ application.description }}</p>
+          <p class="detail-sub">{{ application.applicationType }} &middot; Applied {{ application.dateApplied | date:'d MMM yyyy' }}</p>
+        </div>
+        <span class="badge-pill badge-pill-accent-soft">{{ application.status }}</span>
+      </div>
+
+      <div class="info-grid">
+        <div *ngIf="application.studyMode"><div class="info-label">Study mode</div><div class="info-value">{{ application.studyMode }}</div></div>
+        <div *ngIf="application.campus"><div class="info-label">Campus</div><div class="info-value">{{ application.campus }}</div></div>
+      </div>
+
+      <div class="section" *ngIf="application.details">
+        <div class="info-label">Details</div>
+        <p class="info-value">{{ application.details }}</p>
+      </div>
+
+      <div class="section" *ngIf="application.hometownAddress as addr">
+        <div class="info-label">Hometown address</div>
+        <p class="info-value">{{ addr.street }}, {{ addr.suburb }} {{ addr.city }}, {{ addr.state }} {{ addr.postalCode }}, {{ addr.country }}</p>
+      </div>
+
+      <div class="section" *ngIf="application.currentAddress as addr">
+        <div class="info-label">Current address</div>
+        <p class="info-value">{{ addr.street }}, {{ addr.suburb }} {{ addr.city }}, {{ addr.state }} {{ addr.postalCode }}, {{ addr.country }}</p>
+      </div>
+
+      <div class="section" *ngIf="application.emergencyContact as contact">
+        <div class="info-label">Emergency contact</div>
+        <p class="info-value">{{ contact.name }} ({{ contact.relationship }}) &middot; {{ contact.phone }} &middot; {{ contact.email }}</p>
+      </div>
+    </div>
+  </ng-container>
+</div>

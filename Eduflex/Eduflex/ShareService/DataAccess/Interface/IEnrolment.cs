@@ -11,6 +11,7 @@ namespace ShareService.DataAccess.Interface
         Task<EnrolmentModel?> GetEnrolmentByEnquiryIdAsync(string enquiryId);
         Task<EnrolmentModel?> GetEnrolmentByStudentApplicationIdAsync(string studentApplicationId);
         Task<List<EnrolmentModel>> GetByIdsAsync(IEnumerable<string> ids);
+        Task<List<EnrolmentModel>> GetByStudentUserIdAsync(string studentUserId);
         Task<PagedResult<EnrolmentModel>> GetEnrolmentsAsync(EnrolmentFilter filter);
         Task<bool> ReplaceEnrolmentAsync(string id, EnrolmentModel enrolment);
         Task<bool> DeleteEnrolmentAsync(string id);

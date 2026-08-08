@@ -31,5 +31,8 @@ dist/
 npm-debug.log
 yarn-error.log
 
+# Application logs
+Eduflex/Eduflex/Eduflex/logs/
+
 # Others
 *.vsidx

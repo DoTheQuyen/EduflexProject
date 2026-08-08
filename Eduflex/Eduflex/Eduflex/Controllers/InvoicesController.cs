@@ -48,6 +48,19 @@ namespace Eduflex.API.Controllers
             });
         }
 
+        // Used by the Finance module's Invoice tab to list every invoice sent for a
+        // given commission record — same no-extra-gate reasoning as GetByEnrolment.
+        [HttpGet("by-financial-record/{financialRecordId}")]
+        public Task<ActionResult<List<InvoiceRecordDto>>> GetByFinancialRecord(string financialRecordId)
+        {
+            return HandleRequestAsync(_logger, "Error in GetByFinancialRecord invoices endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var invoices = await _invoiceService.GetByFinancialRecordIdAsync(financialRecordId, userId);
+                return invoices.Select(i => i.ToDto()).ToList();
+            });
+        }
+
         [HttpPost("send")]
         public Task<ActionResult<InvoiceRecordDto>> Send(SendInvoiceDto sendDto)
         {
@@ -69,6 +82,33 @@ namespace Eduflex.API.Controllers
                 var userId = GetRequiredUserId();
                 var uri = await _invoiceService.GetDownloadLinkAsync(id, userId);
                 return new InvoiceDownloadLinkDto { Url = uri.ToString() };
+            });
+        }
+
+        // Retries the notification email for an invoice whose send failed (status
+        // "Failed") — the invoice and its PDF already exist, so this never re-reserves an
+        // invoice number.
+        [HttpPost("{id}/resend")]
+        public Task<ActionResult<InvoiceRecordDto>> Resend(string id, ResendInvoiceDto resendDto)
+        {
+            return HandleRequestAsync(_logger, "Error in Resend invoice endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var invoice = await _invoiceService.ResendInvoiceAsync(id, resendDto.EmailSubject, resendDto.EmailBody, userId);
+                return invoice.ToDto();
+            });
+        }
+
+        // Soft-voids an invoice so it stops counting toward income, while keeping the
+        // record and its number in the ledger for audit.
+        [HttpPost("{id}/cancel")]
+        public Task<ActionResult<InvoiceRecordDto>> Cancel(string id, CancelInvoiceDto cancelDto)
+        {
+            return HandleRequestAsync(_logger, "Error in Cancel invoice endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var invoice = await _invoiceService.CancelInvoiceAsync(id, cancelDto.Reason, userId);
+                return invoice.ToDto();
             });
         }
 

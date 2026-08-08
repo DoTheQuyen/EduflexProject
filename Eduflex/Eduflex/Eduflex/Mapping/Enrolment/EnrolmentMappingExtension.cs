@@ -139,6 +139,8 @@ namespace Eduflex.Mapping.Enrolment
                     Id = d.Id,
                     FileName = d.FileName,
                     Category = d.Category,
+                    CourseApplicationId = d.CourseApplicationId,
+                    Note = d.Note,
                     Url = d.Url,
                     ContentType = d.ContentType,
                     SizeBytes = d.SizeBytes,
@@ -190,9 +192,22 @@ namespace Eduflex.Mapping.Enrolment
             {
                 FileName = dto.FileName,
                 Category = dto.Category,
+                CourseApplicationId = dto.CourseApplicationId,
+                Note = dto.Note,
                 Url = dto.Url,
                 ContentType = dto.ContentType,
                 SizeBytes = dto.SizeBytes
+            };
+        }
+
+        public static MyEnrolmentSummaryDto ToDto(this MyEnrolmentSummaryModel model)
+        {
+            return new MyEnrolmentSummaryDto
+            {
+                EnrolmentId = model.EnrolmentId,
+                Status = model.Status,
+                CourseApplicationCount = model.CourseApplicationCount,
+                FinalizedCourseApplicationName = model.FinalizedCourseApplicationName
             };
         }
 
@@ -214,7 +229,8 @@ namespace Eduflex.Mapping.Enrolment
                 TuitionFee = model.TuitionFee,
                 CreatedAt = model.CreatedAt,
                 StatusUpdatedAt = model.StatusUpdatedAt,
-                StatusUpdatedByName = model.StatusUpdatedByName
+                StatusUpdatedByName = model.StatusUpdatedByName,
+                OfferAppliedDate = model.OfferAppliedDate
             };
         }
 

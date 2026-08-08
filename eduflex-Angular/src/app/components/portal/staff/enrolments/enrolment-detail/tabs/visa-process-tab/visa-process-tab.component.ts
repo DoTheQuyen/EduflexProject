@@ -14,7 +14,7 @@ import { formatDateTime } from '@app/shared/utils/date-time.util';
 import { DynamicFormTemplate, EnrolmentFormResponse } from '@app/models/dynamic-form';
 import {
   Enrolment, EnrolmentDocument,
-  VisaStepKey, VisaProcessStep, VISA_STEP_ORDER, VISA_STEP_EVIDENCE_CATEGORY, VISA_STEP_LABELS
+  VisaStepKey, VisaProcessStep, VISA_STEP_ORDER, VISA_STEP_EVIDENCE_CATEGORY, VISA_STEP_LABELS, DOCUMENT_CATEGORY_LABELS
 } from '../../../../../../../models/enrolment';
 import { StepEvidenceSectionComponent } from './step-evidence-section/step-evidence-section.component';
 import { CourseApplicationsPanelComponent } from './course-applications-panel/course-applications-panel.component';
@@ -60,10 +60,12 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
   enrolmentForm: FormGroup;
   isSaving = false;
 
-  // VISA Outcome is the one step that can still be corrected after being marked
-  // Complete (the backend allows re-completing it specifically) — this toggle re-opens
-  // its fields for editing, mirroring the editingStudent/editingEnrolment pattern above.
-  editingVisaOutcome = false;
+  // Any gated step (ApplyOffer/CoeCompletion/VisaApplication/VisaOutcome) can be
+  // corrected after being marked Complete — this toggle re-opens the given step's
+  // fields for editing, mirroring the editingStudent/editingEnrolment pattern above.
+  // "Update" re-runs completeStep() (Status stays Complete); reopenStep() is the
+  // separate action that actually changes Status back to Draft.
+  editingStepKey: VisaStepKey | null = null;
 
   openStepKey: VisaStepKey | null = null;
   stepFieldsDraft: Partial<Record<VisaStepKey, Record<string, string>>> = {};
@@ -355,10 +357,10 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     this.openStepKey = this.openStepKey === key ? null : key;
   }
 
-  stepEvidenceDocuments(key: VisaStepKey): EnrolmentDocument[] {
-    const category = this.stepEvidenceCategory[key];
-    if (!category) return [];
-    return this.enrolment.documents.filter(d => d.category === category);
+  stepEvidenceDocuments(key: VisaStepKey, category?: string): EnrolmentDocument[] {
+    const categories = category ? [category] : this.stepEvidenceCategory[key];
+    if (!categories || categories.length === 0) return [];
+    return this.enrolment.documents.filter(d => categories.includes(d.category as string));
   }
 
   // Client-computed checklist for the warning-zone sidebar — no new backend calls, just
@@ -370,9 +372,11 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
       const step = this.getStep(key);
       if (!step || step.status === 'Locked' || step.status === 'Complete') continue;
 
-      const category = this.stepEvidenceCategory[key];
-      if (category && this.stepEvidenceDocuments(key).length === 0) {
-        items.push(`${this.stepLabels[key]}: ${category} evidence not uploaded`);
+      const categories = this.stepEvidenceCategory[key] ?? [];
+      for (const category of categories) {
+        if (this.stepEvidenceDocuments(key, category).length === 0) {
+          items.push(`${this.stepLabels[key]}: ${DOCUMENT_CATEGORY_LABELS[category]} not attached`);
+        }
       }
     }
 
@@ -393,8 +397,8 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
   }
 
   canCompleteStep(key: VisaStepKey): boolean {
-    const category = this.stepEvidenceCategory[key];
-    const hasEvidence = !category || this.stepEvidenceDocuments(key).length > 0;
+    const categories = this.stepEvidenceCategory[key] ?? [];
+    const hasEvidence = categories.every(category => this.stepEvidenceDocuments(key, category).length > 0);
     if (key === 'VisaOutcome') {
       const outcome = this.fieldValue('VisaOutcome', 'outcome');
       return hasEvidence && (outcome === 'Granted' || outcome === 'Refused');
@@ -414,9 +418,13 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
     return hasEvidence;
   }
 
-  toggleEditVisaOutcome(): void {
+  // Reopens a Complete step's fields for editing without changing its Status — "Update"
+  // re-runs the normal complete flow (server re-validates everything, e.g. required
+  // documents), it just doesn't jump to the next step afterwards since staff are fixing
+  // something already-done rather than progressing forward for the first time.
+  toggleEditStep(key: VisaStepKey): void {
     if (!this.canEdit()) return;
-    this.editingVisaOutcome = !this.editingVisaOutcome;
+    this.editingStepKey = this.editingStepKey === key ? null : key;
   }
 
   saveStepDraft(key: VisaStepKey): void {
@@ -437,19 +445,44 @@ export class VisaProcessTabComponent implements OnInit, OnChanges {
 
   completeStep(key: VisaStepKey): void {
     if (!this.canEdit() || !this.canCompleteStep(key)) return;
+    const wasEditingCompletedStep = this.editingStepKey === key;
     this.isCompletingStep = true;
     this.enrolmentService.completeVisaStep(this.enrolment.id, key, this.stepFieldsDraft[key] ?? {}).subscribe({
       next: () => {
         this.isCompletingStep = false;
-        this.editingVisaOutcome = false;
-        this.notificationService.success('Step marked complete.');
-        const nextIndex = this.stepOrder.indexOf(key) + 1;
-        this.openStepKey = nextIndex < this.stepOrder.length ? this.stepOrder[nextIndex] : null;
+        this.editingStepKey = null;
+        this.notificationService.success(wasEditingCompletedStep ? 'Step details updated.' : 'Step marked complete.');
+        if (!wasEditingCompletedStep) {
+          const nextIndex = this.stepOrder.indexOf(key) + 1;
+          this.openStepKey = nextIndex < this.stepOrder.length ? this.stepOrder[nextIndex] : null;
+        }
         this.changed.emit();
       },
       error: (err) => {
         this.isCompletingStep = false;
         this.notificationService.error(extractHttpErrorMessage(err, 'Could not complete this step.'));
+      }
+    });
+  }
+
+  // Explicit status change (Complete -> Draft) — distinct from "Edit details" above,
+  // which leaves Status at Complete. Reopening drops the step back into its normal
+  // editable-Draft rendering, so no separate "reopen mode" is needed in the template.
+  reopenStep(key: VisaStepKey): void {
+    if (!this.canEdit()) return;
+    if (!confirm(`Reopen "${this.stepLabels[key]}"? Its status will change back to Draft until it's marked complete again.`)) return;
+
+    this.isCompletingStep = true;
+    this.enrolmentService.reopenVisaStep(this.enrolment.id, key).subscribe({
+      next: () => {
+        this.isCompletingStep = false;
+        this.editingStepKey = null;
+        this.notificationService.success('Step reopened.');
+        this.changed.emit();
+      },
+      error: (err) => {
+        this.isCompletingStep = false;
+        this.notificationService.error(extractHttpErrorMessage(err, 'Could not reopen this step.'));
       }
     });
   }

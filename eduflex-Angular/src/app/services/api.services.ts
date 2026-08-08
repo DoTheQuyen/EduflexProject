@@ -153,6 +153,121 @@ export class Client {
     /**
      * @return OK
      */
+    byStudent(studentId: string): Observable<ApplicationDto[]> {
+        let url_ = this.baseUrl + "/api/Applications/by-student/{studentId}";
+        if (studentId === undefined || studentId === null)
+            throw new Error("The parameter 'studentId' must be defined.");
+        url_ = url_.replace("{studentId}", encodeURIComponent("" + studentId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processByStudent(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processByStudent(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationDto[]>;
+        }));
+    }
+
+    protected processByStudent(response: HttpResponseBase): Observable<ApplicationDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ApplicationDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    staffView(id: string): Observable<ApplicationDetailDto> {
+        let url_ = this.baseUrl + "/api/Applications/{id}/staff-view";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processStaffView(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processStaffView(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ApplicationDetailDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ApplicationDetailDto>;
+        }));
+    }
+
+    protected processStaffView(response: HttpResponseBase): Observable<ApplicationDetailDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ApplicationDetailDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     applicationsGET2(id: string): Observable<ApplicationDetailDto> {
         let url_ = this.baseUrl + "/api/Applications/{id}";
         if (id === undefined || id === null)
@@ -2859,6 +2974,67 @@ export class Client {
     /**
      * @return OK
      */
+    byStudent2(studentUserId: string): Observable<EnrolmentDto[]> {
+        let url_ = this.baseUrl + "/api/Enrolments/by-student/{studentUserId}";
+        if (studentUserId === undefined || studentUserId === null)
+            throw new Error("The parameter 'studentUserId' must be defined.");
+        url_ = url_.replace("{studentUserId}", encodeURIComponent("" + studentUserId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processByStudent2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processByStudent2(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<EnrolmentDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<EnrolmentDto[]>;
+        }));
+    }
+
+    protected processByStudent2(response: HttpResponseBase): Observable<EnrolmentDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnrolmentDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     enrolmentStatuses(): Observable<EnrolmentStatusDto[]> {
         let url_ = this.baseUrl + "/api/Enrolments/enrolment-statuses";
         url_ = url_.replace(/[?&]$/, "");
@@ -3332,6 +3508,119 @@ export class Client {
     }
 
     /**
+     * @return OK
+     */
+    reopen(id: string, stepKey: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Enrolments/{id}/visa-steps/{stepKey}/reopen";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (stepKey === undefined || stepKey === null)
+            throw new Error("The parameter 'stepKey' must be defined.");
+        url_ = url_.replace("{stepKey}", encodeURIComponent("" + stepKey));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReopen(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReopen(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processReopen(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    finalize(id: string): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Enrolments/{id}/finalize";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFinalize(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFinalize(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processFinalize(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param body (optional) 
      * @return OK
      */
@@ -3579,7 +3868,7 @@ export class Client {
     /**
      * @return OK
      */
-    finalize(id: string, courseApplicationId: string): Observable<boolean> {
+    finalize2(id: string, courseApplicationId: string): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Enrolments/{id}/course-applications/{courseApplicationId}/finalize";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3598,11 +3887,11 @@ export class Client {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFinalize(response_);
+            return this.processFinalize2(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processFinalize(response_ as any);
+                    return this.processFinalize2(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<boolean>;
                 }
@@ -3611,7 +3900,7 @@ export class Client {
         }));
     }
 
-    protected processFinalize(response: HttpResponseBase): Observable<boolean> {
+    protected processFinalize2(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3934,7 +4223,7 @@ export class Client {
     /**
      * @return OK
      */
-    reopen(id: string, responseId: string): Observable<boolean> {
+    reopen2(id: string, responseId: string): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Enrolments/{id}/forms/{responseId}/reopen";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3953,11 +4242,11 @@ export class Client {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processReopen(response_);
+            return this.processReopen2(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processReopen(response_ as any);
+                    return this.processReopen2(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<boolean>;
                 }
@@ -3966,7 +4255,7 @@ export class Client {
         }));
     }
 
-    protected processReopen(response: HttpResponseBase): Observable<boolean> {
+    protected processReopen2(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4149,6 +4438,60 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = MyEnrolmentFormsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    summary(applicationId: string): Observable<MyEnrolmentSummaryDto> {
+        let url_ = this.baseUrl + "/api/Enrolments/by-application/{applicationId}/summary";
+        if (applicationId === undefined || applicationId === null)
+            throw new Error("The parameter 'applicationId' must be defined.");
+        url_ = url_.replace("{applicationId}", encodeURIComponent("" + applicationId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSummary(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSummary(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MyEnrolmentSummaryDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MyEnrolmentSummaryDto>;
+        }));
+    }
+
+    protected processSummary(response: HttpResponseBase): Observable<MyEnrolmentSummaryDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MyEnrolmentSummaryDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -5026,6 +5369,300 @@ export class Client {
     }
 
     /**
+     * @return OK
+     */
+    regenerate(id: string): Observable<FinancialRecordDto> {
+        let url_ = this.baseUrl + "/api/FinancialRecords/{id}/invoice-plan/regenerate";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRegenerate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRegenerate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FinancialRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FinancialRecordDto>;
+        }));
+    }
+
+    protected processRegenerate(response: HttpResponseBase): Observable<FinancialRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinancialRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    date(id: string, entryId: string, body: UpdatePlanEntryDateDto | undefined): Observable<FinancialRecordDto> {
+        let url_ = this.baseUrl + "/api/FinancialRecords/{id}/invoice-plan/{entryId}/date";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (entryId === undefined || entryId === null)
+            throw new Error("The parameter 'entryId' must be defined.");
+        url_ = url_.replace("{entryId}", encodeURIComponent("" + entryId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FinancialRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FinancialRecordDto>;
+        }));
+    }
+
+    protected processDate(response: HttpResponseBase): Observable<FinancialRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinancialRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    skip(id: string, entryId: string, body: SkipPlanEntryDto | undefined): Observable<FinancialRecordDto> {
+        let url_ = this.baseUrl + "/api/FinancialRecords/{id}/invoice-plan/{entryId}/skip";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (entryId === undefined || entryId === null)
+            throw new Error("The parameter 'entryId' must be defined.");
+        url_ = url_.replace("{entryId}", encodeURIComponent("" + entryId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSkip(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSkip(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FinancialRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FinancialRecordDto>;
+        }));
+    }
+
+    protected processSkip(response: HttpResponseBase): Observable<FinancialRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinancialRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    restore(id: string, entryId: string): Observable<FinancialRecordDto> {
+        let url_ = this.baseUrl + "/api/FinancialRecords/{id}/invoice-plan/{entryId}/restore";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (entryId === undefined || entryId === null)
+            throw new Error("The parameter 'entryId' must be defined.");
+        url_ = url_.replace("{entryId}", encodeURIComponent("" + entryId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestore(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestore(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FinancialRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FinancialRecordDto>;
+        }));
+    }
+
+    protected processRestore(response: HttpResponseBase): Observable<FinancialRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinancialRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    manual(id: string, body: AddManualPlanEntryDto | undefined): Observable<FinancialRecordDto> {
+        let url_ = this.baseUrl + "/api/FinancialRecords/{id}/invoice-plan/manual";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processManual(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processManual(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FinancialRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FinancialRecordDto>;
+        }));
+    }
+
+    protected processManual(response: HttpResponseBase): Observable<FinancialRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinancialRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param category (optional) 
      * @param status (optional) 
      * @return OK
@@ -5155,6 +5792,67 @@ export class Client {
     }
 
     /**
+     * @return OK
+     */
+    byFinancialRecord(financialRecordId: string): Observable<InvoiceRecordDto[]> {
+        let url_ = this.baseUrl + "/api/Invoices/by-financial-record/{financialRecordId}";
+        if (financialRecordId === undefined || financialRecordId === null)
+            throw new Error("The parameter 'financialRecordId' must be defined.");
+        url_ = url_.replace("{financialRecordId}", encodeURIComponent("" + financialRecordId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processByFinancialRecord(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processByFinancialRecord(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<InvoiceRecordDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<InvoiceRecordDto[]>;
+        }));
+    }
+
+    protected processByFinancialRecord(response: HttpResponseBase): Observable<InvoiceRecordDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(InvoiceRecordDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param body (optional) 
      * @return OK
      */
@@ -5254,6 +5952,124 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = InvoiceDownloadLinkDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    resend(id: string, body: ResendInvoiceDto | undefined): Observable<InvoiceRecordDto> {
+        let url_ = this.baseUrl + "/api/Invoices/{id}/resend";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processResend(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processResend(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<InvoiceRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<InvoiceRecordDto>;
+        }));
+    }
+
+    protected processResend(response: HttpResponseBase): Observable<InvoiceRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InvoiceRecordDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    cancel(id: string, body: CancelInvoiceDto | undefined): Observable<InvoiceRecordDto> {
+        let url_ = this.baseUrl + "/api/Invoices/{id}/cancel";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCancel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCancel(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<InvoiceRecordDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<InvoiceRecordDto>;
+        }));
+    }
+
+    protected processCancel(response: HttpResponseBase): Observable<InvoiceRecordDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InvoiceRecordDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -7088,6 +7904,8 @@ export interface IAddCourseApplicationDto {
 export class AddEnrolmentDocumentDto implements IAddEnrolmentDocumentDto {
     fileName?: string | undefined;
     category?: string | undefined;
+    courseApplicationId?: string | undefined;
+    note?: string | undefined;
     url?: string | undefined;
     contentType?: string | undefined;
     sizeBytes?: number;
@@ -7105,6 +7923,8 @@ export class AddEnrolmentDocumentDto implements IAddEnrolmentDocumentDto {
         if (_data) {
             this.fileName = _data["fileName"];
             this.category = _data["category"];
+            this.courseApplicationId = _data["courseApplicationId"];
+            this.note = _data["note"];
             this.url = _data["url"];
             this.contentType = _data["contentType"];
             this.sizeBytes = _data["sizeBytes"];
@@ -7122,6 +7942,8 @@ export class AddEnrolmentDocumentDto implements IAddEnrolmentDocumentDto {
         data = typeof data === 'object' ? data : {};
         data["fileName"] = this.fileName;
         data["category"] = this.category;
+        data["courseApplicationId"] = this.courseApplicationId;
+        data["note"] = this.note;
         data["url"] = this.url;
         data["contentType"] = this.contentType;
         data["sizeBytes"] = this.sizeBytes;
@@ -7132,9 +7954,47 @@ export class AddEnrolmentDocumentDto implements IAddEnrolmentDocumentDto {
 export interface IAddEnrolmentDocumentDto {
     fileName?: string | undefined;
     category?: string | undefined;
+    courseApplicationId?: string | undefined;
+    note?: string | undefined;
     url?: string | undefined;
     contentType?: string | undefined;
     sizeBytes?: number;
+}
+
+export class AddManualPlanEntryDto implements IAddManualPlanEntryDto {
+    claimDate?: Date;
+
+    constructor(data?: IAddManualPlanEntryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.claimDate = _data["claimDate"] ? new Date(_data["claimDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): AddManualPlanEntryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddManualPlanEntryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["claimDate"] = this.claimDate ? this.claimDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IAddManualPlanEntryDto {
+    claimDate?: Date;
 }
 
 export class AddressDto implements IAddressDto {
@@ -7829,6 +8689,42 @@ export interface IBusinessPartnerFilterDto {
     searchTerm?: string | undefined;
 }
 
+export class CancelInvoiceDto implements ICancelInvoiceDto {
+    reason?: string | undefined;
+
+    constructor(data?: ICancelInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.reason = _data["reason"];
+        }
+    }
+
+    static fromJS(data: any): CancelInvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CancelInvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["reason"] = this.reason;
+        return data;
+    }
+}
+
+export interface ICancelInvoiceDto {
+    reason?: string | undefined;
+}
+
 export class ChangePasswordDto implements IChangePasswordDto {
     currentPassword?: string | undefined;
     newPassword?: string | undefined;
@@ -8025,6 +8921,7 @@ export class CourseApplicationDto implements ICourseApplicationDto {
     createdAt?: Date;
     statusUpdatedAt?: Date | undefined;
     statusUpdatedByName?: string | undefined;
+    offerAppliedDate?: Date | undefined;
 
     constructor(data?: ICourseApplicationDto) {
         if (data) {
@@ -8052,6 +8949,7 @@ export class CourseApplicationDto implements ICourseApplicationDto {
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.statusUpdatedAt = _data["statusUpdatedAt"] ? new Date(_data["statusUpdatedAt"].toString()) : <any>undefined;
             this.statusUpdatedByName = _data["statusUpdatedByName"];
+            this.offerAppliedDate = _data["offerAppliedDate"] ? new Date(_data["offerAppliedDate"].toString()) : <any>undefined;
         }
     }
 
@@ -8079,6 +8977,7 @@ export class CourseApplicationDto implements ICourseApplicationDto {
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["statusUpdatedAt"] = this.statusUpdatedAt ? this.statusUpdatedAt.toISOString() : <any>undefined;
         data["statusUpdatedByName"] = this.statusUpdatedByName;
+        data["offerAppliedDate"] = this.offerAppliedDate ? this.offerAppliedDate.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -8099,6 +8998,7 @@ export interface ICourseApplicationDto {
     createdAt?: Date;
     statusUpdatedAt?: Date | undefined;
     statusUpdatedByName?: string | undefined;
+    offerAppliedDate?: Date | undefined;
 }
 
 export class CourseDto implements ICourseDto {
@@ -11044,6 +11944,8 @@ export class EnrolmentDocumentDto implements IEnrolmentDocumentDto {
     id?: string | undefined;
     fileName?: string | undefined;
     category?: string | undefined;
+    courseApplicationId?: string | undefined;
+    note?: string | undefined;
     url?: string | undefined;
     contentType?: string | undefined;
     sizeBytes?: number;
@@ -11066,6 +11968,8 @@ export class EnrolmentDocumentDto implements IEnrolmentDocumentDto {
             this.id = _data["id"];
             this.fileName = _data["fileName"];
             this.category = _data["category"];
+            this.courseApplicationId = _data["courseApplicationId"];
+            this.note = _data["note"];
             this.url = _data["url"];
             this.contentType = _data["contentType"];
             this.sizeBytes = _data["sizeBytes"];
@@ -11088,6 +11992,8 @@ export class EnrolmentDocumentDto implements IEnrolmentDocumentDto {
         data["id"] = this.id;
         data["fileName"] = this.fileName;
         data["category"] = this.category;
+        data["courseApplicationId"] = this.courseApplicationId;
+        data["note"] = this.note;
         data["url"] = this.url;
         data["contentType"] = this.contentType;
         data["sizeBytes"] = this.sizeBytes;
@@ -11103,6 +12009,8 @@ export interface IEnrolmentDocumentDto {
     id?: string | undefined;
     fileName?: string | undefined;
     category?: string | undefined;
+    courseApplicationId?: string | undefined;
+    note?: string | undefined;
     url?: string | undefined;
     contentType?: string | undefined;
     sizeBytes?: number;
@@ -11412,6 +12320,8 @@ export enum EnrolmentEnums {
     VisaSuccess = "VisaSuccess",
     VisaFail = "VisaFail",
     Cancel = "Cancel",
+    Completed = "Completed",
+    Finalized = "Finalized",
 }
 
 export class EnrolmentFilterDto implements IEnrolmentFilterDto {
@@ -12338,6 +13248,50 @@ export interface IFormQuestionDto {
     optionsHorizontal?: boolean;
 }
 
+export class InvoiceClaimItemDto implements IInvoiceClaimItemDto {
+    description?: string | undefined;
+    amount?: number;
+    gstRatePercent?: number;
+
+    constructor(data?: IInvoiceClaimItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.amount = _data["amount"];
+            this.gstRatePercent = _data["gstRatePercent"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceClaimItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceClaimItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["amount"] = this.amount;
+        data["gstRatePercent"] = this.gstRatePercent;
+        return data;
+    }
+}
+
+export interface IInvoiceClaimItemDto {
+    description?: string | undefined;
+    amount?: number;
+    gstRatePercent?: number;
+}
+
 export class InvoiceDownloadLinkDto implements IInvoiceDownloadLinkDto {
     url?: string | undefined;
 
@@ -12471,9 +13425,13 @@ export interface IInvoiceDto {
 }
 
 export class InvoicePlanEntryDto implements IInvoicePlanEntryDto {
-    plannedRequestDate?: Date;
+    id?: string | undefined;
+    intakeDate?: Date | undefined;
+    claimDate?: Date;
     status?: string | undefined;
     linkedInvoiceId?: string | undefined;
+    skipReason?: string | undefined;
+    isManual?: boolean;
 
     constructor(data?: IInvoicePlanEntryDto) {
         if (data) {
@@ -12486,9 +13444,13 @@ export class InvoicePlanEntryDto implements IInvoicePlanEntryDto {
 
     init(_data?: any) {
         if (_data) {
-            this.plannedRequestDate = _data["plannedRequestDate"] ? new Date(_data["plannedRequestDate"].toString()) : <any>undefined;
+            this.id = _data["id"];
+            this.intakeDate = _data["intakeDate"] ? new Date(_data["intakeDate"].toString()) : <any>undefined;
+            this.claimDate = _data["claimDate"] ? new Date(_data["claimDate"].toString()) : <any>undefined;
             this.status = _data["status"];
             this.linkedInvoiceId = _data["linkedInvoiceId"];
+            this.skipReason = _data["skipReason"];
+            this.isManual = _data["isManual"];
         }
     }
 
@@ -12501,17 +13463,25 @@ export class InvoicePlanEntryDto implements IInvoicePlanEntryDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["plannedRequestDate"] = this.plannedRequestDate ? this.plannedRequestDate.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        data["intakeDate"] = this.intakeDate ? this.intakeDate.toISOString() : <any>undefined;
+        data["claimDate"] = this.claimDate ? this.claimDate.toISOString() : <any>undefined;
         data["status"] = this.status;
         data["linkedInvoiceId"] = this.linkedInvoiceId;
+        data["skipReason"] = this.skipReason;
+        data["isManual"] = this.isManual;
         return data;
     }
 }
 
 export interface IInvoicePlanEntryDto {
-    plannedRequestDate?: Date;
+    id?: string | undefined;
+    intakeDate?: Date | undefined;
+    claimDate?: Date;
     status?: string | undefined;
     linkedInvoiceId?: string | undefined;
+    skipReason?: string | undefined;
+    isManual?: boolean;
 }
 
 export class InvoiceRecordDto implements IInvoiceRecordDto {
@@ -12525,16 +13495,31 @@ export class InvoiceRecordDto implements IInvoiceRecordDto {
     recipientEmail?: string | undefined;
     relatedEnrolmentId?: string | undefined;
     relatedStepKey?: string | undefined;
+    relatedFinancialRecordId?: string | undefined;
     description?: string | undefined;
     amount?: number;
     gstAmount?: number;
     total?: number;
+    claimItems?: InvoiceClaimItemDto[] | undefined;
+    studentName?: string | undefined;
+    studentRefCode?: string | undefined;
+    studentEmail?: string | undefined;
+    studentPhone?: string | undefined;
+    courseName?: string | undefined;
+    campus?: string | undefined;
+    educationPartnerName?: string | undefined;
+    customContent?: string | undefined;
     pdfUrl?: string | undefined;
     pdfFileName?: string | undefined;
     status?: string | undefined;
     sentAt?: Date;
     paidAt?: Date | undefined;
     paymentEvidenceUrl?: string | undefined;
+    lastEmailError?: string | undefined;
+    cancelledAt?: Date | undefined;
+    cancelReason?: string | undefined;
+    emailSubject?: string | undefined;
+    emailBody?: string | undefined;
     createdByName?: string | undefined;
 
     constructor(data?: IInvoiceRecordDto) {
@@ -12558,16 +13543,35 @@ export class InvoiceRecordDto implements IInvoiceRecordDto {
             this.recipientEmail = _data["recipientEmail"];
             this.relatedEnrolmentId = _data["relatedEnrolmentId"];
             this.relatedStepKey = _data["relatedStepKey"];
+            this.relatedFinancialRecordId = _data["relatedFinancialRecordId"];
             this.description = _data["description"];
             this.amount = _data["amount"];
             this.gstAmount = _data["gstAmount"];
             this.total = _data["total"];
+            if (Array.isArray(_data["claimItems"])) {
+                this.claimItems = [] as any;
+                for (let item of _data["claimItems"])
+                    this.claimItems!.push(InvoiceClaimItemDto.fromJS(item));
+            }
+            this.studentName = _data["studentName"];
+            this.studentRefCode = _data["studentRefCode"];
+            this.studentEmail = _data["studentEmail"];
+            this.studentPhone = _data["studentPhone"];
+            this.courseName = _data["courseName"];
+            this.campus = _data["campus"];
+            this.educationPartnerName = _data["educationPartnerName"];
+            this.customContent = _data["customContent"];
             this.pdfUrl = _data["pdfUrl"];
             this.pdfFileName = _data["pdfFileName"];
             this.status = _data["status"];
             this.sentAt = _data["sentAt"] ? new Date(_data["sentAt"].toString()) : <any>undefined;
             this.paidAt = _data["paidAt"] ? new Date(_data["paidAt"].toString()) : <any>undefined;
             this.paymentEvidenceUrl = _data["paymentEvidenceUrl"];
+            this.lastEmailError = _data["lastEmailError"];
+            this.cancelledAt = _data["cancelledAt"] ? new Date(_data["cancelledAt"].toString()) : <any>undefined;
+            this.cancelReason = _data["cancelReason"];
+            this.emailSubject = _data["emailSubject"];
+            this.emailBody = _data["emailBody"];
             this.createdByName = _data["createdByName"];
         }
     }
@@ -12591,16 +13595,35 @@ export class InvoiceRecordDto implements IInvoiceRecordDto {
         data["recipientEmail"] = this.recipientEmail;
         data["relatedEnrolmentId"] = this.relatedEnrolmentId;
         data["relatedStepKey"] = this.relatedStepKey;
+        data["relatedFinancialRecordId"] = this.relatedFinancialRecordId;
         data["description"] = this.description;
         data["amount"] = this.amount;
         data["gstAmount"] = this.gstAmount;
         data["total"] = this.total;
+        if (Array.isArray(this.claimItems)) {
+            data["claimItems"] = [];
+            for (let item of this.claimItems)
+                data["claimItems"].push(item.toJSON());
+        }
+        data["studentName"] = this.studentName;
+        data["studentRefCode"] = this.studentRefCode;
+        data["studentEmail"] = this.studentEmail;
+        data["studentPhone"] = this.studentPhone;
+        data["courseName"] = this.courseName;
+        data["campus"] = this.campus;
+        data["educationPartnerName"] = this.educationPartnerName;
+        data["customContent"] = this.customContent;
         data["pdfUrl"] = this.pdfUrl;
         data["pdfFileName"] = this.pdfFileName;
         data["status"] = this.status;
         data["sentAt"] = this.sentAt ? this.sentAt.toISOString() : <any>undefined;
         data["paidAt"] = this.paidAt ? this.paidAt.toISOString() : <any>undefined;
         data["paymentEvidenceUrl"] = this.paymentEvidenceUrl;
+        data["lastEmailError"] = this.lastEmailError;
+        data["cancelledAt"] = this.cancelledAt ? this.cancelledAt.toISOString() : <any>undefined;
+        data["cancelReason"] = this.cancelReason;
+        data["emailSubject"] = this.emailSubject;
+        data["emailBody"] = this.emailBody;
         data["createdByName"] = this.createdByName;
         return data;
     }
@@ -12617,16 +13640,31 @@ export interface IInvoiceRecordDto {
     recipientEmail?: string | undefined;
     relatedEnrolmentId?: string | undefined;
     relatedStepKey?: string | undefined;
+    relatedFinancialRecordId?: string | undefined;
     description?: string | undefined;
     amount?: number;
     gstAmount?: number;
     total?: number;
+    claimItems?: InvoiceClaimItemDto[] | undefined;
+    studentName?: string | undefined;
+    studentRefCode?: string | undefined;
+    studentEmail?: string | undefined;
+    studentPhone?: string | undefined;
+    courseName?: string | undefined;
+    campus?: string | undefined;
+    educationPartnerName?: string | undefined;
+    customContent?: string | undefined;
     pdfUrl?: string | undefined;
     pdfFileName?: string | undefined;
     status?: string | undefined;
     sentAt?: Date;
     paidAt?: Date | undefined;
     paymentEvidenceUrl?: string | undefined;
+    lastEmailError?: string | undefined;
+    cancelledAt?: Date | undefined;
+    cancelReason?: string | undefined;
+    emailSubject?: string | undefined;
+    emailBody?: string | undefined;
     createdByName?: string | undefined;
 }
 
@@ -12800,6 +13838,54 @@ export class MyEnrolmentFormsDto implements IMyEnrolmentFormsDto {
 export interface IMyEnrolmentFormsDto {
     enrolmentId?: string | undefined;
     forms?: EnrolmentFormResponseDto[] | undefined;
+}
+
+export class MyEnrolmentSummaryDto implements IMyEnrolmentSummaryDto {
+    enrolmentId?: string | undefined;
+    status?: string | undefined;
+    courseApplicationCount?: number;
+    finalizedCourseApplicationName?: string | undefined;
+
+    constructor(data?: IMyEnrolmentSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.enrolmentId = _data["enrolmentId"];
+            this.status = _data["status"];
+            this.courseApplicationCount = _data["courseApplicationCount"];
+            this.finalizedCourseApplicationName = _data["finalizedCourseApplicationName"];
+        }
+    }
+
+    static fromJS(data: any): MyEnrolmentSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MyEnrolmentSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["enrolmentId"] = this.enrolmentId;
+        data["status"] = this.status;
+        data["courseApplicationCount"] = this.courseApplicationCount;
+        data["finalizedCourseApplicationName"] = this.finalizedCourseApplicationName;
+        return data;
+    }
+}
+
+export interface IMyEnrolmentSummaryDto {
+    enrolmentId?: string | undefined;
+    status?: string | undefined;
+    courseApplicationCount?: number;
+    finalizedCourseApplicationName?: string | undefined;
 }
 
 export class NotificationDto implements INotificationDto {
@@ -13012,6 +14098,7 @@ export interface IReassignEnrolmentDto {
 
 export class RenameEnrolmentDocumentDto implements IRenameEnrolmentDocumentDto {
     fileName?: string | undefined;
+    note?: string | undefined;
 
     constructor(data?: IRenameEnrolmentDocumentDto) {
         if (data) {
@@ -13025,6 +14112,7 @@ export class RenameEnrolmentDocumentDto implements IRenameEnrolmentDocumentDto {
     init(_data?: any) {
         if (_data) {
             this.fileName = _data["fileName"];
+            this.note = _data["note"];
         }
     }
 
@@ -13038,12 +14126,14 @@ export class RenameEnrolmentDocumentDto implements IRenameEnrolmentDocumentDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["fileName"] = this.fileName;
+        data["note"] = this.note;
         return data;
     }
 }
 
 export interface IRenameEnrolmentDocumentDto {
     fileName?: string | undefined;
+    note?: string | undefined;
 }
 
 export class RequestFormDto implements IRequestFormDto {
@@ -13080,6 +14170,46 @@ export class RequestFormDto implements IRequestFormDto {
 
 export interface IRequestFormDto {
     formTemplateId?: string | undefined;
+}
+
+export class ResendInvoiceDto implements IResendInvoiceDto {
+    emailSubject?: string | undefined;
+    emailBody?: string | undefined;
+
+    constructor(data?: IResendInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.emailSubject = _data["emailSubject"];
+            this.emailBody = _data["emailBody"];
+        }
+    }
+
+    static fromJS(data: any): ResendInvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResendInvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["emailSubject"] = this.emailSubject;
+        data["emailBody"] = this.emailBody;
+        return data;
+    }
+}
+
+export interface IResendInvoiceDto {
+    emailSubject?: string | undefined;
+    emailBody?: string | undefined;
 }
 
 export class ResetPasswordRequestDto implements IResetPasswordRequestDto {
@@ -13562,9 +14692,20 @@ export class SendInvoiceDto implements ISendInvoiceDto {
     recipientEmail?: string | undefined;
     relatedEnrolmentId?: string | undefined;
     relatedStepKey?: string | undefined;
+    relatedFinancialRecordId?: string | undefined;
+    relatedInvoicePlanEntryId?: string | undefined;
     description?: string | undefined;
     amount?: number;
     gstRatePercent?: number;
+    claimItems?: InvoiceClaimItemDto[] | undefined;
+    studentName?: string | undefined;
+    studentRefCode?: string | undefined;
+    studentEmail?: string | undefined;
+    studentPhone?: string | undefined;
+    courseName?: string | undefined;
+    campus?: string | undefined;
+    educationPartnerName?: string | undefined;
+    customContent?: string | undefined;
     emailSubject?: string | undefined;
     emailBody?: string | undefined;
 
@@ -13586,9 +14727,24 @@ export class SendInvoiceDto implements ISendInvoiceDto {
             this.recipientEmail = _data["recipientEmail"];
             this.relatedEnrolmentId = _data["relatedEnrolmentId"];
             this.relatedStepKey = _data["relatedStepKey"];
+            this.relatedFinancialRecordId = _data["relatedFinancialRecordId"];
+            this.relatedInvoicePlanEntryId = _data["relatedInvoicePlanEntryId"];
             this.description = _data["description"];
             this.amount = _data["amount"];
             this.gstRatePercent = _data["gstRatePercent"];
+            if (Array.isArray(_data["claimItems"])) {
+                this.claimItems = [] as any;
+                for (let item of _data["claimItems"])
+                    this.claimItems!.push(InvoiceClaimItemDto.fromJS(item));
+            }
+            this.studentName = _data["studentName"];
+            this.studentRefCode = _data["studentRefCode"];
+            this.studentEmail = _data["studentEmail"];
+            this.studentPhone = _data["studentPhone"];
+            this.courseName = _data["courseName"];
+            this.campus = _data["campus"];
+            this.educationPartnerName = _data["educationPartnerName"];
+            this.customContent = _data["customContent"];
             this.emailSubject = _data["emailSubject"];
             this.emailBody = _data["emailBody"];
         }
@@ -13610,9 +14766,24 @@ export class SendInvoiceDto implements ISendInvoiceDto {
         data["recipientEmail"] = this.recipientEmail;
         data["relatedEnrolmentId"] = this.relatedEnrolmentId;
         data["relatedStepKey"] = this.relatedStepKey;
+        data["relatedFinancialRecordId"] = this.relatedFinancialRecordId;
+        data["relatedInvoicePlanEntryId"] = this.relatedInvoicePlanEntryId;
         data["description"] = this.description;
         data["amount"] = this.amount;
         data["gstRatePercent"] = this.gstRatePercent;
+        if (Array.isArray(this.claimItems)) {
+            data["claimItems"] = [];
+            for (let item of this.claimItems)
+                data["claimItems"].push(item.toJSON());
+        }
+        data["studentName"] = this.studentName;
+        data["studentRefCode"] = this.studentRefCode;
+        data["studentEmail"] = this.studentEmail;
+        data["studentPhone"] = this.studentPhone;
+        data["courseName"] = this.courseName;
+        data["campus"] = this.campus;
+        data["educationPartnerName"] = this.educationPartnerName;
+        data["customContent"] = this.customContent;
         data["emailSubject"] = this.emailSubject;
         data["emailBody"] = this.emailBody;
         return data;
@@ -13627,9 +14798,20 @@ export interface ISendInvoiceDto {
     recipientEmail?: string | undefined;
     relatedEnrolmentId?: string | undefined;
     relatedStepKey?: string | undefined;
+    relatedFinancialRecordId?: string | undefined;
+    relatedInvoicePlanEntryId?: string | undefined;
     description?: string | undefined;
     amount?: number;
     gstRatePercent?: number;
+    claimItems?: InvoiceClaimItemDto[] | undefined;
+    studentName?: string | undefined;
+    studentRefCode?: string | undefined;
+    studentEmail?: string | undefined;
+    studentPhone?: string | undefined;
+    courseName?: string | undefined;
+    campus?: string | undefined;
+    educationPartnerName?: string | undefined;
+    customContent?: string | undefined;
     emailSubject?: string | undefined;
     emailBody?: string | undefined;
 }
@@ -13908,6 +15090,42 @@ export interface ISettingsDto {
     imageUpload?: UploadLimitDto;
     contractUpload?: UploadLimitDto;
     enrolmentUpload?: UploadLimitDto;
+}
+
+export class SkipPlanEntryDto implements ISkipPlanEntryDto {
+    reason?: string | undefined;
+
+    constructor(data?: ISkipPlanEntryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.reason = _data["reason"];
+        }
+    }
+
+    static fromJS(data: any): SkipPlanEntryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SkipPlanEntryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["reason"] = this.reason;
+        return data;
+    }
+}
+
+export interface ISkipPlanEntryDto {
+    reason?: string | undefined;
 }
 
 export class StudentAccountDto implements IStudentAccountDto {
@@ -14504,6 +15722,42 @@ export interface IUpdateInvoiceTemplateDto {
     defaultDescription?: string | undefined;
     defaultAmount?: number | undefined;
     defaultGstRatePercent?: number | undefined;
+}
+
+export class UpdatePlanEntryDateDto implements IUpdatePlanEntryDateDto {
+    claimDate?: Date;
+
+    constructor(data?: IUpdatePlanEntryDateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.claimDate = _data["claimDate"] ? new Date(_data["claimDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UpdatePlanEntryDateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePlanEntryDateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["claimDate"] = this.claimDate ? this.claimDate.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IUpdatePlanEntryDateDto {
+    claimDate?: Date;
 }
 
 export class UpdateSettingsDto implements IUpdateSettingsDto {

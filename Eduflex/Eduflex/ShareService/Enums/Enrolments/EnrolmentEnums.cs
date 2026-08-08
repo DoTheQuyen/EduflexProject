@@ -26,5 +26,11 @@ namespace ShareService.Enums.Roles
 
         [Description("Cancel")]
         Cancel = 7,
+
+        [Description("Completed")]
+        Completed = 8,
+
+        [Description("Finalized")]
+        Finalized = 9,
     }
 }

@@ -17,6 +17,15 @@ namespace ShareService.Models.Financial
         [BsonElement("enrolmentId")]
         public string EnrolmentId { get; set; } = string.Empty;
 
+        // Snapshotted at creation so the invoice-plan calendar can be regenerated later
+        // without re-fetching the Enrolment — same "snapshot, not live" reasoning as the
+        // commission-rate fields below.
+        [BsonElement("courseId")]
+        public string? CourseId { get; set; }
+
+        [BsonElement("actualCommencementDate")]
+        public DateTime? ActualCommencementDate { get; set; }
+
         [BsonElement("educationPartnerId")]
         public string? EducationPartnerId { get; set; }
 

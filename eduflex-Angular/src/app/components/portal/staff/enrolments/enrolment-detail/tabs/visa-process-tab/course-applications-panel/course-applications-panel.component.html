@@ -21,6 +21,7 @@
           <div class="col-md-4"><p class="text-muted small mb-1">Expected completion</p><p class="mb-0">{{ ca.expectedCompletionDate ? (ca.expectedCompletionDate | date:'dd/MM/yyyy') : '—' }}</p></div>
           <div class="col-md-4"><p class="text-muted small mb-1">Actual commencement</p><p class="mb-0">{{ ca.actualCommencementDate ? (ca.actualCommencementDate | date:'dd/MM/yyyy') : '—' }}</p></div>
           <div class="col-md-4"><p class="text-muted small mb-1">Tuition fee</p><p class="mb-0">{{ ca.tuitionFee != null ? (ca.tuitionFee | number) : '—' }}</p></div>
+          <div class="col-md-4"><p class="text-muted small mb-1">Offer applied date</p><p class="mb-0">{{ ca.offerAppliedDate ? (ca.offerAppliedDate | date:'dd/MM/yyyy') : '—' }}</p></div>
           <div class="col-md-8"><p class="text-muted small mb-1">Notes</p><p class="mb-0" style="white-space: pre-wrap;">{{ ca.notes || '—' }}</p></div>
         </div>
         <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="isOwner && permissions.edit && ca.status !== 'Withdrawn'" (click)="toggleEditCourseApplicationDetails(ca)">
@@ -77,6 +78,13 @@
         Status last changed by {{ ca.statusUpdatedByName }} on {{ formatDate(ca.statusUpdatedAt) }}
       </p>
 
+      <div class="subhead" *ngIf="ca.status !== 'Withdrawn'">University offer letter</div>
+      <app-step-evidence-section *ngIf="ca.status !== 'Withdrawn'"
+        [enrolment]="enrolment" category="UniOffer" [courseApplicationId]="ca.id" label="Offer letter" [isOwner]="isOwner" [permissions]="permissions"
+        emptyText="No offer letter attached yet — required before this application can be finalized." uploadLabel="Attach offer letter" [maxCount]="1"
+        [canUpload]="isOwner && permissions.edit" (changed)="changed.emit()">
+      </app-step-evidence-section>
+
       <div class="d-flex flex-wrap gap-2 mt-2" *ngIf="isOwner && permissions.edit && ca.status !== 'Finalized' && ca.status !== 'Withdrawn'">
         <select class="form-select form-select-sm w-auto" [ngModel]="ca.status" [ngModelOptions]="{standalone: true}"
           (ngModelChange)="setCourseApplicationStatus(ca, $event)" [disabled]="isSavingCourseApplicationStatus[ca.id]">
@@ -86,9 +94,14 @@
           <option value="Withdrawn">Withdrawn</option>
         </select>
         <button type="button" class="btn btn-primary btn-sm" *ngIf="ca.status === 'Offered'"
-          [disabled]="isSavingCourseApplicationStatus[ca.id]" (click)="finalizeCourseApplication(ca)">
+          [disabled]="isSavingCourseApplicationStatus[ca.id] || !hasOfferAttached(ca)"
+          [title]="!hasOfferAttached(ca) ? 'Attach the offer letter above before finalizing' : ''"
+          (click)="finalizeCourseApplication(ca)">
           Finalize
         </button>
+        <span class="text-muted small align-self-center" *ngIf="ca.status === 'Offered' && !hasOfferAttached(ca)">
+          Attach the offer letter above to enable Finalize.
+        </span>
       </div>
     </div>
   </div>

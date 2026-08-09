@@ -1,4 +1,4 @@
-namespace Eduflex.DTOs.Role
+namespace Eduflex.DTOs.Permission
 {
     public class PermissionDto
     {

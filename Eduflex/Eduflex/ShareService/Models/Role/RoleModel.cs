@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Enums.Roles;
 using ShareService.Models.Common;
 
 namespace ShareService.Models.Role
@@ -18,7 +19,13 @@ namespace ShareService.Models.Role
         [BsonElement("description")]
         public string Description { get; set; }
 
+        [BsonElement("roleType")]
+        public RoleTypeEnums RoleType { get; set; }
+
         [BsonElement("permissionIds")]
         public List<string> PermissionIds { get; set; } = new();
+
+        [BsonIgnore]
+        public int UserCount { get; set; }
     }
 }

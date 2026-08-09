@@ -2,6 +2,7 @@ using MongoDB.Driver;
 using ShareService.Common;
 using ShareService.DataAccess.Common;
 using ShareService.DataAccess.Interface;
+using ShareService.Models.Course;
 using ShareService.Models.Role;
 
 namespace ShareService.DataAccess
@@ -46,6 +47,11 @@ namespace ShareService.DataAccess
         {
             await InsertOneAsync(role);
             return true;
+        }
+
+        public async Task<bool> UpdateAsync(string id, RoleModel role)
+        {
+            return await ReplaceOneAsync(c => c.Id == id, role);
         }
     }
 }

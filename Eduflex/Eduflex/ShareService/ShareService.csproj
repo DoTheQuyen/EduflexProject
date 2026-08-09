@@ -12,6 +12,9 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Enums\Roles\RoleEnums - Copy.cs" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Azure.Communication.Email" Version="1.1.0" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

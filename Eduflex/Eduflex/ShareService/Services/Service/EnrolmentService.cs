@@ -373,7 +373,7 @@ namespace ShareService.Services
             // UI-driven one (the frontend already filters students out of the picker, but
             // that alone isn't enforcement).
             var newOwnerRole = await _roleService.GetByIdAsync(newOwner.RoleId);
-            if (newOwnerRole?.Name.Is(SystemRole.Student) == true)
+            if (newOwnerRole?.RoleType == RoleTypeEnums.Student)
             {
                 throw new ArgumentException("Cannot reassign an enrolment to a student.");
             }

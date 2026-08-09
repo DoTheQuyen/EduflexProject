@@ -1,8 +1,8 @@
-using Eduflex.DTOs.Role;
+using Eduflex.DTOs.Permission;
 using ShareService.Models.Auth;
 using ShareService.Models.Permission;
 
-namespace Eduflex.Mapping.Role
+namespace Eduflex.Mapping.Permission
 {
     public static class PermissionMappingExtension
     {

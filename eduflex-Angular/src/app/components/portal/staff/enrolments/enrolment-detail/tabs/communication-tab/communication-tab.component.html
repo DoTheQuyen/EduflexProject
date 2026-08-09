@@ -3,15 +3,19 @@
     <div class="card border shadow-sm">
       <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <strong>Messages</strong>
-        <button *ngIf="isOwner && permissions.edit" type="button" class="btn btn-sm btn-primary" (click)="toggleCompose()">
+        <button *ngIf="isOwner && permissions.edit" type="button" class="btn btn-sm btn-primary"
+          (click)="toggleCompose()">
           {{ showComposeForm ? 'Close' : '+ Compose' }}
         </button>
       </div>
       <div class="card-body" *ngIf="showComposeForm">
         <div class="recipient-toggle">
-          <button type="button" class="chip" [class.active]="recipientType === 'Student'" (click)="setRecipientType('Student')">Student</button>
-          <button type="button" class="chip" [class.active]="recipientType === 'EducationPartner'" (click)="setRecipientType('EducationPartner')">Education Partner</button>
-          <button type="button" class="chip" [class.active]="recipientType === 'BusinessPartner'" (click)="setRecipientType('BusinessPartner')">Business Partner</button>
+          <button type="button" class="chip" [class.active]="recipientType === 'Student'"
+            (click)="setRecipientType('Student')">Student</button>
+          <button type="button" class="chip" [class.active]="recipientType === 'EducationPartner'"
+            (click)="setRecipientType('EducationPartner')">Education Partner</button>
+          <button type="button" class="chip" [class.active]="recipientType === 'BusinessPartner'"
+            (click)="setRecipientType('BusinessPartner')">Business Partner</button>
         </div>
 
         <div class="partner-info-strip" *ngIf="recipientType === 'EducationPartner'">
@@ -32,8 +36,8 @@
 
         <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="templates.length > 0">
           <button type="button" class="btn btn-sm" *ngFor="let t of templates"
-                  [class.btn-primary]="selectedTemplateKey === t.key" [class.btn-outline-secondary]="selectedTemplateKey !== t.key"
-                  (click)="applyTemplate(t)">
+            [class.btn-primary]="selectedTemplateKey === t.key"
+            [class.btn-outline-secondary]="selectedTemplateKey !== t.key" (click)="applyTemplate(t)">
             {{ t.name }}
           </button>
         </div>
@@ -43,7 +47,8 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Message</label>
-          <textarea class="form-control" rows="7" [(ngModel)]="commBody" [ngModelOptions]="{standalone: true}"></textarea>
+          <textarea class="form-control" rows="7" [(ngModel)]="commBody"
+            [ngModelOptions]="{standalone: true}"></textarea>
         </div>
 
         <div class="mb-3" *ngIf="enrolment.documents.length > 0">
@@ -56,7 +61,8 @@
             </label>
           </div>
           <div class="attach-summary" *ngIf="selectedAttachmentIds.length > 0">
-            <span>{{ selectedAttachmentIds.length }} selected — sent as expiring download links, not raw attachments.</span>
+            <span>{{ selectedAttachmentIds.length }} selected — sent as expiring download links, not raw
+              attachments.</span>
           </div>
         </div>
 
@@ -65,7 +71,8 @@
         </button>
       </div>
       <div class="card-body" *ngIf="!showComposeForm">
-        <p class="text-muted small mb-0">Compose a message to the student, the education partner, or a business partner.</p>
+        <p class="text-muted small mb-0">Compose a message to the student, the education partner, or a business partner.
+        </p>
       </div>
     </div>
   </div>
@@ -75,14 +82,17 @@
       <div class="card-body">
         <div *ngFor="let c of enrolment.communications" class="border-bottom pb-2 mb-2">
           <div class="d-flex justify-content-between text-muted small">
-            <span>{{ c.sentByName }} &rarr; <span class="history-tag">{{ c.recipientType }}</span> {{ c.toEmail }}</span>
+            <span>{{ c.sentByName }} &rarr; <span class="history-tag">{{ c.recipientType }}</span> {{ c.toEmail
+              }}</span>
             <span>{{ formatDate(c.sentAt) }}</span>
           </div>
           <div class="fw-semibold">{{ c.subject }}</div>
           <div class="text-muted small">{{ c.body.length > 140 ? (c.body.substring(0,140) + '…') : c.body }}</div>
-          <div class="text-muted small" *ngIf="c.attachedDocumentIds.length > 0">{{ c.attachedDocumentIds.length }} document(s) attached</div>
+          <div class="text-muted small" *ngIf="c.attachedDocumentIds.length > 0">{{ c.attachedDocumentIds.length }}
+            document(s) attached</div>
         </div>
-        <p *ngIf="enrolment.communications.length === 0" class="text-muted text-center py-3 mb-0">No emails sent yet.</p>
+        <p *ngIf="enrolment.communications.length === 0" class="text-muted text-center py-3 mb-0">No emails sent yet.
+        </p>
       </div>
     </div>
   </div>

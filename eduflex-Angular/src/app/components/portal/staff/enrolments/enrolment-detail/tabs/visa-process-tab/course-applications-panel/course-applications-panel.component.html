@@ -1,12 +1,17 @@
 <div class="course-applications">
   <div class="course-app-panel" *ngFor="let ca of enrolment.courseApplications" [attr.data-status]="ca.status">
-    <button type="button" class="course-app-header" [class.is-open]="openCourseApplicationId === ca.id" (click)="toggleCourseApplicationPanel(ca.id)">
+    <button type="button" class="course-app-header" [class.is-open]="openCourseApplicationId === ca.id"
+      (click)="toggleCourseApplicationPanel(ca.id)">
       <span class="course-app-heading">
         <span class="course-app-uni">{{ courseApplicationPartnerName(ca.educationPartnerId) }}</span>
         <span class="course-app-course">{{ courseApplicationCourseName(ca.educationPartnerId, ca.courseId) }}</span>
       </span>
-      <span class="badge-pill" [ngClass]="courseApplicationBadgeClass(ca.status)">{{ courseApplicationStatusLabels[ca.status] }}</span>
-      <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <span class="badge-pill" [ngClass]="courseApplicationBadgeClass(ca.status)">{{
+        courseApplicationStatusLabels[ca.status] }}</span>
+      <svg class="step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.5">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
     </button>
 
     <div class="course-app-body" *ngIf="openCourseApplicationId === ca.id">
@@ -14,17 +19,46 @@
 
       <ng-container *ngIf="editingCourseApplicationId !== ca.id">
         <div class="row g-3 mb-2">
-          <div class="col-md-4"><p class="text-muted small mb-1">Intake</p><p class="mb-0">{{ ca.intake || '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Study mode</p><p class="mb-0">{{ ca.studyMode || '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Campus</p><p class="mb-0">{{ ca.campus || '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Commencement date</p><p class="mb-0">{{ ca.commencementDate ? (ca.commencementDate | date:'dd/MM/yyyy') : '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Expected completion</p><p class="mb-0">{{ ca.expectedCompletionDate ? (ca.expectedCompletionDate | date:'dd/MM/yyyy') : '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Actual commencement</p><p class="mb-0">{{ ca.actualCommencementDate ? (ca.actualCommencementDate | date:'dd/MM/yyyy') : '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Tuition fee</p><p class="mb-0">{{ ca.tuitionFee != null ? (ca.tuitionFee | number) : '—' }}</p></div>
-          <div class="col-md-4"><p class="text-muted small mb-1">Offer applied date</p><p class="mb-0">{{ ca.offerAppliedDate ? (ca.offerAppliedDate | date:'dd/MM/yyyy') : '—' }}</p></div>
-          <div class="col-md-8"><p class="text-muted small mb-1">Notes</p><p class="mb-0" style="white-space: pre-wrap;">{{ ca.notes || '—' }}</p></div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Intake</p>
+            <p class="mb-0">{{ ca.intake || '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Study mode</p>
+            <p class="mb-0">{{ ca.studyMode || '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Campus</p>
+            <p class="mb-0">{{ ca.campus || '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Commencement date</p>
+            <p class="mb-0">{{ ca.commencementDate ? (ca.commencementDate | date:'dd/MM/yyyy') : '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Expected completion</p>
+            <p class="mb-0">{{ ca.expectedCompletionDate ? (ca.expectedCompletionDate | date:'dd/MM/yyyy') : '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Actual commencement</p>
+            <p class="mb-0">{{ ca.actualCommencementDate ? (ca.actualCommencementDate | date:'dd/MM/yyyy') : '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Tuition fee</p>
+            <p class="mb-0">{{ ca.tuitionFee != null ? (ca.tuitionFee | number) : '—' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p class="text-muted small mb-1">Offer applied date</p>
+            <p class="mb-0">{{ ca.offerAppliedDate ? (ca.offerAppliedDate | date:'dd/MM/yyyy') : '—' }}</p>
+          </div>
+          <div class="col-md-8">
+            <p class="text-muted small mb-1">Notes</p>
+            <p class="mb-0" style="white-space: pre-wrap;">{{ ca.notes || '—' }}</p>
+          </div>
         </div>
-        <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="isOwner && permissions.edit && ca.status !== 'Withdrawn'" (click)="toggleEditCourseApplicationDetails(ca)">
+        <button type="button" class="btn btn-outline-secondary btn-sm"
+          *ngIf="isOwner && permissions.edit && ca.status !== 'Withdrawn'"
+          (click)="toggleEditCourseApplicationDetails(ca)">
           Edit details
         </button>
       </ng-container>
@@ -33,42 +67,54 @@
         <div class="row g-3 mb-2">
           <div class="col-md-4">
             <label class="form-label">Intake</label>
-            <input class="form-control form-control-sm" [(ngModel)]="caDraft.intake" [ngModelOptions]="{standalone: true}">
+            <input class="form-control form-control-sm" [(ngModel)]="caDraft.intake"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-4">
             <label class="form-label">Study mode</label>
-            <select class="form-select form-select-sm" [(ngModel)]="caDraft.studyMode" [ngModelOptions]="{standalone: true}">
-              <option value="">Select...</option><option>Full-time</option><option>Part-time</option>
+            <select class="form-select form-select-sm" [(ngModel)]="caDraft.studyMode"
+              [ngModelOptions]="{standalone: true}">
+              <option value="">Select...</option>
+              <option>Full-time</option>
+              <option>Part-time</option>
             </select>
           </div>
           <div class="col-md-4">
             <label class="form-label">Campus</label>
-            <input class="form-control form-control-sm" [(ngModel)]="caDraft.campus" [ngModelOptions]="{standalone: true}">
+            <input class="form-control form-control-sm" [(ngModel)]="caDraft.campus"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-4">
             <label class="form-label">Commencement date</label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.commencementDate" [ngModelOptions]="{standalone: true}">
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.commencementDate"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-4">
             <label class="form-label">Expected completion</label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.expectedCompletionDate" [ngModelOptions]="{standalone: true}">
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.expectedCompletionDate"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-4">
             <label class="form-label">Actual commencement</label>
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.actualCommencementDate" [ngModelOptions]="{standalone: true}">
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="caDraft.actualCommencementDate"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-4">
             <label class="form-label">Tuition fee</label>
-            <input type="number" min="0" class="form-control form-control-sm" [(ngModel)]="caDraft.tuitionFee" [ngModelOptions]="{standalone: true}">
+            <input type="number" min="0" class="form-control form-control-sm" [(ngModel)]="caDraft.tuitionFee"
+              [ngModelOptions]="{standalone: true}">
           </div>
           <div class="col-md-8">
             <label class="form-label">Notes</label>
-            <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="caDraft.notes" [ngModelOptions]="{standalone: true}"></textarea>
+            <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="caDraft.notes"
+              [ngModelOptions]="{standalone: true}"></textarea>
           </div>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelEditCourseApplicationDetails()">Cancel</button>
-          <button type="button" class="btn btn-primary btn-sm" [disabled]="isSavingCourseApplicationDetails[ca.id]" (click)="saveCourseApplicationDetails(ca)">
+          <button type="button" class="btn btn-outline-secondary btn-sm"
+            (click)="cancelEditCourseApplicationDetails()">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" [disabled]="isSavingCourseApplicationDetails[ca.id]"
+            (click)="saveCourseApplicationDetails(ca)">
             {{ isSavingCourseApplicationDetails[ca.id] ? 'Saving...' : 'Save' }}
           </button>
         </div>
@@ -79,13 +125,15 @@
       </p>
 
       <div class="subhead" *ngIf="ca.status !== 'Withdrawn'">University offer letter</div>
-      <app-step-evidence-section *ngIf="ca.status !== 'Withdrawn'"
-        [enrolment]="enrolment" category="UniOffer" [courseApplicationId]="ca.id" label="Offer letter" [isOwner]="isOwner" [permissions]="permissions"
-        emptyText="No offer letter attached yet — required before this application can be finalized." uploadLabel="Attach offer letter" [maxCount]="1"
-        [canUpload]="isOwner && permissions.edit" (changed)="changed.emit()">
+      <app-step-evidence-section *ngIf="ca.status !== 'Withdrawn'" [enrolment]="enrolment" category="UniOffer"
+        [courseApplicationId]="ca.id" label="Offer letter" [isOwner]="isOwner" [permissions]="permissions"
+        emptyText="No offer letter attached yet — required before this application can be finalized."
+        uploadLabel="Attach offer letter" [maxCount]="1" [canUpload]="isOwner && permissions.edit"
+        (changed)="changed.emit()">
       </app-step-evidence-section>
 
-      <div class="d-flex flex-wrap gap-2 mt-2" *ngIf="isOwner && permissions.edit && ca.status !== 'Finalized' && ca.status !== 'Withdrawn'">
+      <div class="d-flex flex-wrap gap-2 mt-2"
+        *ngIf="isOwner && permissions.edit && ca.status !== 'Finalized' && ca.status !== 'Withdrawn'">
         <select class="form-select form-select-sm w-auto" [ngModel]="ca.status" [ngModelOptions]="{standalone: true}"
           (ngModelChange)="setCourseApplicationStatus(ca, $event)" [disabled]="isSavingCourseApplicationStatus[ca.id]">
           <option value="Init">Init</option>
@@ -106,31 +154,39 @@
     </div>
   </div>
 
-  <p class="text-muted small fst-italic" *ngIf="enrolment.courseApplications.length === 0">No course applications yet.</p>
+  <p class="text-muted small fst-italic" *ngIf="enrolment.courseApplications.length === 0">No course applications yet.
+  </p>
 
-  <button type="button" class="btn btn-outline-primary btn-sm mt-2" *ngIf="isOwner && permissions.edit && canAddCourseApplication" (click)="toggleAddCourseApplicationForm()">
+  <button type="button" class="btn btn-outline-primary btn-sm mt-2"
+    *ngIf="isOwner && permissions.edit && canAddCourseApplication" (click)="toggleAddCourseApplicationForm()">
     {{ showAddCourseApplicationForm ? 'Close' : '+ Add Course Application' }}
   </button>
   <p class="text-muted small mt-2 mb-0" *ngIf="isOwner && permissions.edit && !canAddCourseApplication">
-    At the applications limit ({{ effectiveMaxApplications }}) — withdraw one or increase "Number applications allowed" above.
+    At the applications limit ({{ effectiveMaxApplications }}) — withdraw one or increase "Number applications allowed"
+    above.
   </p>
 
   <div class="course-app-add-form" *ngIf="showAddCourseApplicationForm">
     <div class="row g-2">
       <div class="col-md-6">
-        <select class="form-select form-select-sm" [(ngModel)]="newCourseEducationPartnerId" [ngModelOptions]="{standalone: true}" (ngModelChange)="newCourseCourseId = ''">
+        <select class="form-select form-select-sm" [(ngModel)]="newCourseEducationPartnerId"
+          [ngModelOptions]="{standalone: true}" (ngModelChange)="newCourseCourseId = ''">
           <option value="">Select university…</option>
           <option *ngFor="let p of partners" [value]="p.id">{{ p.name }}</option>
         </select>
       </div>
       <div class="col-md-6">
-        <select class="form-select form-select-sm" [(ngModel)]="newCourseCourseId" [ngModelOptions]="{standalone: true}" [disabled]="!newCourseEducationPartnerId">
+        <select class="form-select form-select-sm" [(ngModel)]="newCourseCourseId" [ngModelOptions]="{standalone: true}"
+          [disabled]="!newCourseEducationPartnerId">
           <option value="">Select course…</option>
-          <option *ngFor="let c of coursesForPartner(newCourseEducationPartnerId)" [value]="c.id">{{ c.courseName }}</option>
+          <option *ngFor="let c of coursesForPartner(newCourseEducationPartnerId)" [value]="c.id">{{ c.courseName }}
+          </option>
         </select>
       </div>
     </div>
-    <button type="button" class="btn btn-primary btn-sm mt-2" [disabled]="!newCourseEducationPartnerId || !newCourseCourseId || isAddingCourseApplication" (click)="addCourseApplication()">
+    <button type="button" class="btn btn-primary btn-sm mt-2"
+      [disabled]="!newCourseEducationPartnerId || !newCourseCourseId || isAddingCourseApplication"
+      (click)="addCourseApplication()">
       {{ isAddingCourseApplication ? 'Adding...' : 'Add' }}
     </button>
   </div>

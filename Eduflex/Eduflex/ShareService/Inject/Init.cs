@@ -69,6 +69,7 @@ namespace ShareService.Inject
             services.AddScoped<IDynamicFormTemplate, DynamicFormTemplate>();
             services.AddScoped<IInvoiceTemplate, InvoiceTemplate>();
             services.AddScoped<IInvoice, Invoice>();
+            services.AddScoped<IChatQuestion, ChatQuestion>();
 
 
             #endregion
@@ -99,6 +100,7 @@ namespace ShareService.Inject
             services.AddScoped<IDynamicFormTemplateService, DynamicFormTemplateService>();
             services.AddScoped<IInvoiceTemplateService, InvoiceTemplateService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IChatService, ChatService>();
 
 
             #endregion

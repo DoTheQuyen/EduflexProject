@@ -4,7 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { Client, StudentAccountDto, StudentFilterDto } from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
@@ -14,7 +18,7 @@ import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util'
   standalone: true,
   imports: [CommonModule, RouterLink, DataTableComponent],
   templateUrl: './student-management.component.html',
-  styleUrls: ['./student-management.component.css']
+  styleUrls: ['./student-management.component.css'],
 })
 export class StudentManagementComponent implements OnInit {
   students: StudentAccountDto[] = [];
@@ -32,8 +36,8 @@ export class StudentManagementComponent implements OnInit {
     { field: 'lastName', title: 'Last Name' },
     { field: 'mobile', title: 'Mobile' },
     { field: 'passportNumber', title: 'Passport No.' },
-    { field: 'isActive', title: 'Active', formatter: (value) => value ? 'Yes' : 'No' },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    { field: 'isActive', title: 'Active', formatter: (value) => (value ? 'Yes' : 'No') },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<StudentAccountDto>[] = [];
@@ -42,14 +46,42 @@ export class StudentManagementComponent implements OnInit {
     private router: Router,
     private apiClient: Client,
     private authHelper: AuthHelperService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {
     this.permissions = this.authHelper.hasStudentsPermission();
 
     this.rowActions = [
-      ...(this.permissions.view ? [{ action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
-      ...(this.permissions.edit ? [{ action: 'reactivate', label: 'Reactivate', icon: 'fa-user-check', cssClass: 'btn btn-sm btn-outline-success', isVisible: (row: StudentAccountDto) => !row.isActive }] : []),
-      ...(this.permissions.edit ? [{ action: 'reset-password', label: 'Send Reset Password', icon: 'fa-key', cssClass: 'btn btn-sm btn-outline-secondary' }] : [])
+      ...(this.permissions.view
+        ? [
+            {
+              action: 'view',
+              label: 'View',
+              icon: 'fa-eye',
+              cssClass: 'btn btn-sm btn-outline-primary',
+            },
+          ]
+        : []),
+      ...(this.permissions.edit
+        ? [
+            {
+              action: 'reactivate',
+              label: 'Reactivate',
+              icon: 'fa-user-check',
+              cssClass: 'btn btn-sm btn-outline-success',
+              isVisible: (row: StudentAccountDto) => !row.isActive,
+            },
+          ]
+        : []),
+      ...(this.permissions.edit
+        ? [
+            {
+              action: 'reset-password',
+              label: 'Send Reset Password',
+              icon: 'fa-key',
+              cssClass: 'btn btn-sm btn-outline-secondary',
+            },
+          ]
+        : []),
     ];
   }
 
@@ -69,7 +101,7 @@ export class StudentManagementComponent implements OnInit {
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
       searchTerm: this.pager.searchTerm || undefined,
-      isActive
+      isActive,
     });
     this.apiClient.searchStudents(filter).subscribe({
       next: (result) => {
@@ -79,7 +111,7 @@ export class StudentManagementComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -123,8 +155,10 @@ export class StudentManagementComponent implements OnInit {
         this.notificationService.success('Student reactivated.');
       },
       error: (err) => {
-        this.notificationService.error(extractApiErrorMessage(err, 'Could not reactivate this student.'));
-      }
+        this.notificationService.error(
+          extractApiErrorMessage(err, 'Could not reactivate this student.'),
+        );
+      },
     });
   }
 
@@ -137,8 +171,10 @@ export class StudentManagementComponent implements OnInit {
         this.notificationService.success('Password reset email sent.');
       },
       error: (err) => {
-        this.notificationService.error(extractApiErrorMessage(err, 'Could not send the password reset email.'));
-      }
+        this.notificationService.error(
+          extractApiErrorMessage(err, 'Could not send the password reset email.'),
+        );
+      },
     });
   }
 }

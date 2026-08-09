@@ -1,11 +1,11 @@
 <div class="feedback-portal">
-  <div class="container-fluid py-4">
+  <div class="container-fluid py-2">
     <div class="row align-items-center">
       <div class="col-md-6">
-        <h2 class="mb-2">Manage Student Feedback</h2>
+        <h3 class="mb-2">Manage Student Feedback</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-lg" (click)="openModal()">
+        <button class="btn btn-primary btn-md" (click)="openModal()">
           <i class="fas fa-plus me-2"></i>Add Feedback
         </button>
       </div>
@@ -23,20 +23,12 @@
         </div>
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
-         
+
           <div class="card-body p-0">
-            <app-data-table
-              [columns]="columns"
-              [data]="feedbacks"
-              [rowActions]="rowActions"
-              [pageNumber]="pager.pageNumber"
-              [pageSize]="pager.pageSize"
-              [totalCount]="pager.totalCount"
-              [showSearch]="true"
-              searchPlaceholder="Search name or course..."
-              (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)"
-              (actionClick)="onTableAction($event)"
+            <app-data-table [columns]="columns" [data]="feedbacks" [rowActions]="rowActions"
+              [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
+              [showSearch]="true" searchPlaceholder="Search name or course..." (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>
             <p *ngIf="!isLoading && feedbacks.length === 0" class="text-center text-muted py-4 mb-0">
@@ -50,8 +42,7 @@
 </div>
 
 <!-- Add Feedback Modal -->
-<app-modal *ngIf="isModalOpen" title="Add Student Feedback" [isSaving]="isSubmitting"
-  saveLabel="Save Feedback"
+<app-modal *ngIf="isModalOpen" title="Add Student Feedback" [isSaving]="isSubmitting" saveLabel="Save Feedback"
   (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
   <form [formGroup]="feedbackForm">
     <div class="d-flex align-items-center gap-3 mb-3">
@@ -61,7 +52,8 @@
       </div>
       <div class="flex-grow-1">
         <label for="photoFile" class="form-label">Photo *</label>
-        <input id="photoFile" type="file" [attr.accept]="photoAccept" class="form-control" (change)="onPhotoSelected($event)">
+        <input id="photoFile" type="file" [attr.accept]="photoAccept" class="form-control"
+          (change)="onPhotoSelected($event)">
         <span class="field-error" *ngIf="isFieldInvalid('photoData')">Photo is required</span>
         <div class="form-text">Resized automatically to 300×300px JPEG before saving.</div>
       </div>
@@ -79,12 +71,13 @@
       <span class="field-error" *ngIf="isFieldInvalid('courseName')">Course name is required</span>
     </div>
 
-       <div class="mb-3">
+    <div class="mb-3">
       <label for="comment" class="form-label">Comment *</label>
       <textarea id="comment" rows="3" class="form-control" formControlName="comment"></textarea>
       <div class="form-text">{{ feedbackForm.get('comment')?.value?.length || 0 }} / 2000 characters</div>
       <span class="field-error" *ngIf="isFieldInvalid('comment')">
-        {{ feedbackForm.get('comment')?.hasError('required') ? 'Comment is required' : 'Comment must not exceed 1000 characters' }}
+        {{ feedbackForm.get('comment')?.hasError('required') ? 'Comment is required' : 'Comment must not exceed 1000
+        characters' }}
       </span>
     </div>
 

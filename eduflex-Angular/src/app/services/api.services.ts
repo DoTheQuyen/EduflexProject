@@ -714,6 +714,69 @@ export class Client {
     }
 
     /**
+     * @param limit (optional) 
+     * @return OK
+     */
+    topQuestions(limit: number | undefined): Observable<QuestionFrequency[]> {
+        let url_ = this.baseUrl + "/api/Chat/top-questions?";
+        if (limit === null)
+            throw new Error("The parameter 'limit' cannot be null.");
+        else if (limit !== undefined)
+            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTopQuestions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTopQuestions(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<QuestionFrequency[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<QuestionFrequency[]>;
+        }));
+    }
+
+    protected processTopQuestions(response: HttpResponseBase): Observable<QuestionFrequency[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(QuestionFrequency.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param body (optional) 
      * @return OK
      */
@@ -6657,6 +6720,64 @@ export class Client {
     /**
      * @return OK
      */
+    roleLookup(): Observable<RoleSummaryDto[]> {
+        let url_ = this.baseUrl + "/api/Roles/role-lookup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRoleLookup(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRoleLookup(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<RoleSummaryDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<RoleSummaryDto[]>;
+        }));
+    }
+
+    protected processRoleLookup(response: HttpResponseBase): Observable<RoleSummaryDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(RoleSummaryDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     permissions(): Observable<PermissionDto[]> {
         let url_ = this.baseUrl + "/api/Roles/permissions";
         url_ = url_.replace(/[?&]$/, "");
@@ -6716,7 +6837,7 @@ export class Client {
      * @param body (optional) 
      * @return OK
      */
-    roles(body: CreateRoleDto | undefined): Observable<boolean> {
+    rolesPOST(body: CreateRoleDto | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Roles";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -6733,11 +6854,11 @@ export class Client {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRoles(response_);
+            return this.processRolesPOST(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processRoles(response_ as any);
+                    return this.processRolesPOST(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<boolean>;
                 }
@@ -6746,7 +6867,67 @@ export class Client {
         }));
     }
 
-    protected processRoles(response: HttpResponseBase): Observable<boolean> {
+    protected processRolesPOST(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    rolesPUT(id: string, body: CreateRoleDto | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/Roles/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRolesPUT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRolesPUT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<boolean>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<boolean>;
+        }));
+    }
+
+    protected processRolesPUT(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -10494,9 +10675,11 @@ export interface ICreateInvoiceTemplateDto {
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
+    id?: string | undefined;
     name?: string | undefined;
     description?: string | undefined;
     permissionIds?: string[] | undefined;
+    roleType?: RoleTypeEnums;
 
     constructor(data?: ICreateRoleDto) {
         if (data) {
@@ -10509,6 +10692,7 @@ export class CreateRoleDto implements ICreateRoleDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.name = _data["name"];
             this.description = _data["description"];
             if (Array.isArray(_data["permissionIds"])) {
@@ -10516,6 +10700,7 @@ export class CreateRoleDto implements ICreateRoleDto {
                 for (let item of _data["permissionIds"])
                     this.permissionIds!.push(item);
             }
+            this.roleType = _data["roleType"];
         }
     }
 
@@ -10528,6 +10713,7 @@ export class CreateRoleDto implements ICreateRoleDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["name"] = this.name;
         data["description"] = this.description;
         if (Array.isArray(this.permissionIds)) {
@@ -10535,14 +10721,17 @@ export class CreateRoleDto implements ICreateRoleDto {
             for (let item of this.permissionIds)
                 data["permissionIds"].push(item);
         }
+        data["roleType"] = this.roleType;
         return data;
     }
 }
 
 export interface ICreateRoleDto {
+    id?: string | undefined;
     name?: string | undefined;
     description?: string | undefined;
     permissionIds?: string[] | undefined;
+    roleType?: RoleTypeEnums;
 }
 
 export class CreateStudentDto implements ICreateStudentDto {
@@ -14060,6 +14249,46 @@ export enum PermissionKey {
     InvoiceTemplatesEdit = "InvoiceTemplatesEdit",
 }
 
+export class QuestionFrequency implements IQuestionFrequency {
+    question?: string | undefined;
+    count?: number;
+
+    constructor(data?: IQuestionFrequency) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.question = _data["question"];
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): QuestionFrequency {
+        data = typeof data === 'object' ? data : {};
+        let result = new QuestionFrequency();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["question"] = this.question;
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IQuestionFrequency {
+    question?: string | undefined;
+    count?: number;
+}
+
 export class ReassignEnrolmentDto implements IReassignEnrolmentDto {
     newOwnerUserId?: string | undefined;
 
@@ -14256,7 +14485,9 @@ export class RoleDto implements IRoleDto {
     id?: string | undefined;
     name?: string | undefined;
     description?: string | undefined;
+    roleType?: RoleTypeEnums;
     permissionIds?: string[] | undefined;
+    userCount?: number;
 
     constructor(data?: IRoleDto) {
         if (data) {
@@ -14272,11 +14503,13 @@ export class RoleDto implements IRoleDto {
             this.id = _data["id"];
             this.name = _data["name"];
             this.description = _data["description"];
+            this.roleType = _data["roleType"];
             if (Array.isArray(_data["permissionIds"])) {
                 this.permissionIds = [] as any;
                 for (let item of _data["permissionIds"])
                     this.permissionIds!.push(item);
             }
+            this.userCount = _data["userCount"];
         }
     }
 
@@ -14292,11 +14525,13 @@ export class RoleDto implements IRoleDto {
         data["id"] = this.id;
         data["name"] = this.name;
         data["description"] = this.description;
+        data["roleType"] = this.roleType;
         if (Array.isArray(this.permissionIds)) {
             data["permissionIds"] = [];
             for (let item of this.permissionIds)
                 data["permissionIds"].push(item);
         }
+        data["userCount"] = this.userCount;
         return data;
     }
 }
@@ -14305,7 +14540,9 @@ export interface IRoleDto {
     id?: string | undefined;
     name?: string | undefined;
     description?: string | undefined;
+    roleType?: RoleTypeEnums;
     permissionIds?: string[] | undefined;
+    userCount?: number;
 }
 
 export class RoleDtoPagedResult implements IRoleDtoPagedResult {
@@ -14372,6 +14609,7 @@ export class RoleFilterDto implements IRoleFilterDto {
     pageNumber?: number;
     pageSize?: number;
     searchTerm?: string | undefined;
+    roleType?: RoleTypeEnums;
 
     constructor(data?: IRoleFilterDto) {
         if (data) {
@@ -14387,6 +14625,7 @@ export class RoleFilterDto implements IRoleFilterDto {
             this.pageNumber = _data["pageNumber"];
             this.pageSize = _data["pageSize"];
             this.searchTerm = _data["searchTerm"];
+            this.roleType = _data["roleType"];
         }
     }
 
@@ -14402,6 +14641,7 @@ export class RoleFilterDto implements IRoleFilterDto {
         data["pageNumber"] = this.pageNumber;
         data["pageSize"] = this.pageSize;
         data["searchTerm"] = this.searchTerm;
+        data["roleType"] = this.roleType;
         return data;
     }
 }
@@ -14410,6 +14650,59 @@ export interface IRoleFilterDto {
     pageNumber?: number;
     pageSize?: number;
     searchTerm?: string | undefined;
+    roleType?: RoleTypeEnums;
+}
+
+export class RoleSummaryDto implements IRoleSummaryDto {
+    id?: string | undefined;
+    name?: string | undefined;
+    roleType?: RoleTypeEnums;
+
+    constructor(data?: IRoleSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.roleType = _data["roleType"];
+        }
+    }
+
+    static fromJS(data: any): RoleSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["roleType"] = this.roleType;
+        return data;
+    }
+}
+
+export interface IRoleSummaryDto {
+    id?: string | undefined;
+    name?: string | undefined;
+    roleType?: RoleTypeEnums;
+}
+
+export enum RoleTypeEnums {
+    Admin = "Admin",
+    Manager = "Manager",
+    Staff = "Staff",
+    Student = "Student",
+    Customer = "Customer",
 }
 
 export class SaveDynamicFormTemplateDto implements ISaveDynamicFormTemplateDto {
@@ -15040,6 +15333,8 @@ export class SettingsDto implements ISettingsDto {
     imageUpload?: UploadLimitDto;
     contractUpload?: UploadLimitDto;
     enrolmentUpload?: UploadLimitDto;
+    chatSystemPrompt?: string | undefined;
+    chatApiUrl?: string | undefined;
 
     constructor(data?: ISettingsDto) {
         if (data) {
@@ -15059,6 +15354,8 @@ export class SettingsDto implements ISettingsDto {
             this.imageUpload = _data["imageUpload"] ? UploadLimitDto.fromJS(_data["imageUpload"]) : <any>undefined;
             this.contractUpload = _data["contractUpload"] ? UploadLimitDto.fromJS(_data["contractUpload"]) : <any>undefined;
             this.enrolmentUpload = _data["enrolmentUpload"] ? UploadLimitDto.fromJS(_data["enrolmentUpload"]) : <any>undefined;
+            this.chatSystemPrompt = _data["chatSystemPrompt"];
+            this.chatApiUrl = _data["chatApiUrl"];
         }
     }
 
@@ -15078,6 +15375,8 @@ export class SettingsDto implements ISettingsDto {
         data["imageUpload"] = this.imageUpload ? this.imageUpload.toJSON() : <any>undefined;
         data["contractUpload"] = this.contractUpload ? this.contractUpload.toJSON() : <any>undefined;
         data["enrolmentUpload"] = this.enrolmentUpload ? this.enrolmentUpload.toJSON() : <any>undefined;
+        data["chatSystemPrompt"] = this.chatSystemPrompt;
+        data["chatApiUrl"] = this.chatApiUrl;
         return data;
     }
 }
@@ -15090,6 +15389,8 @@ export interface ISettingsDto {
     imageUpload?: UploadLimitDto;
     contractUpload?: UploadLimitDto;
     enrolmentUpload?: UploadLimitDto;
+    chatSystemPrompt?: string | undefined;
+    chatApiUrl?: string | undefined;
 }
 
 export class SkipPlanEntryDto implements ISkipPlanEntryDto {
@@ -15768,6 +16069,8 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
     imageUpload?: UploadLimitDto;
     contractUpload?: UploadLimitDto;
     enrolmentUpload?: UploadLimitDto;
+    chatSystemPrompt?: string | undefined;
+    chatApiUrl?: string | undefined;
 
     constructor(data?: IUpdateSettingsDto) {
         if (data) {
@@ -15787,6 +16090,8 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
             this.imageUpload = _data["imageUpload"] ? UploadLimitDto.fromJS(_data["imageUpload"]) : <any>undefined;
             this.contractUpload = _data["contractUpload"] ? UploadLimitDto.fromJS(_data["contractUpload"]) : <any>undefined;
             this.enrolmentUpload = _data["enrolmentUpload"] ? UploadLimitDto.fromJS(_data["enrolmentUpload"]) : <any>undefined;
+            this.chatSystemPrompt = _data["chatSystemPrompt"];
+            this.chatApiUrl = _data["chatApiUrl"];
         }
     }
 
@@ -15806,6 +16111,8 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
         data["imageUpload"] = this.imageUpload ? this.imageUpload.toJSON() : <any>undefined;
         data["contractUpload"] = this.contractUpload ? this.contractUpload.toJSON() : <any>undefined;
         data["enrolmentUpload"] = this.enrolmentUpload ? this.enrolmentUpload.toJSON() : <any>undefined;
+        data["chatSystemPrompt"] = this.chatSystemPrompt;
+        data["chatApiUrl"] = this.chatApiUrl;
         return data;
     }
 }
@@ -15818,6 +16125,8 @@ export interface IUpdateSettingsDto {
     imageUpload?: UploadLimitDto;
     contractUpload?: UploadLimitDto;
     enrolmentUpload?: UploadLimitDto;
+    chatSystemPrompt?: string | undefined;
+    chatApiUrl?: string | undefined;
 }
 
 export class UpdateStudentDto implements IUpdateStudentDto {
@@ -16061,6 +16370,7 @@ export class UserFilterDto implements IUserFilterDto {
     pageSize?: number;
     searchTerm?: string | undefined;
     roleId?: string | undefined;
+    roleIds?: string[] | undefined;
     isActive?: boolean | undefined;
 
     constructor(data?: IUserFilterDto) {
@@ -16078,6 +16388,11 @@ export class UserFilterDto implements IUserFilterDto {
             this.pageSize = _data["pageSize"];
             this.searchTerm = _data["searchTerm"];
             this.roleId = _data["roleId"];
+            if (Array.isArray(_data["roleIds"])) {
+                this.roleIds = [] as any;
+                for (let item of _data["roleIds"])
+                    this.roleIds!.push(item);
+            }
             this.isActive = _data["isActive"];
         }
     }
@@ -16095,6 +16410,11 @@ export class UserFilterDto implements IUserFilterDto {
         data["pageSize"] = this.pageSize;
         data["searchTerm"] = this.searchTerm;
         data["roleId"] = this.roleId;
+        if (Array.isArray(this.roleIds)) {
+            data["roleIds"] = [];
+            for (let item of this.roleIds)
+                data["roleIds"].push(item);
+        }
         data["isActive"] = this.isActive;
         return data;
     }
@@ -16105,6 +16425,7 @@ export interface IUserFilterDto {
     pageSize?: number;
     searchTerm?: string | undefined;
     roleId?: string | undefined;
+    roleIds?: string[] | undefined;
     isActive?: boolean | undefined;
 }
 

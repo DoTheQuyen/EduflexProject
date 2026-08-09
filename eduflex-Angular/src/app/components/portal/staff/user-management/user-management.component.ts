@@ -1,26 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, UserSummaryDto, CreateUserDto, UserDto, RoleDto, UserFilterDto, RoleFilterDto } from '@services/api.services';
+import {
+  Client,
+  UserSummaryDto,
+  CreateUserDto,
+  UserDto,
+  RoleSummaryDto,
+  UserFilterDto,
+  RoleTypeEnums,
+} from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
+type UserRoleTab = 'Student' | 'Customer' | 'Staffs';
+
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, ModalComponent, NotificationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DataTableComponent,
+    ModalComponent,
+    NotificationComponent,
+  ],
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css']
+  styleUrls: ['./user-management.component.css'],
 })
 export class UserManagementComponent implements OnInit {
   users: UserSummaryDto[] = [];
-  roles: RoleDto[] = [];
+  roles: RoleSummaryDto[] = [];
+  visibleRoles: RoleSummaryDto[] = [];
 
   isLoading = false;
   isModalOpen = false;
@@ -32,6 +54,8 @@ export class UserManagementComponent implements OnInit {
   roleFilter = '';
   activeFilter = 'all';
 
+  activeTab: UserRoleTab = 'Staffs';
+
   permissions!: ModulePermissions;
 
   userForm: FormGroup;
@@ -41,14 +65,25 @@ export class UserManagementComponent implements OnInit {
     { field: 'firstName', title: 'First Name' },
     { field: 'lastName', title: 'Last Name' },
     { field: 'roleName', title: 'Role' },
-    { field: 'departments', title: 'Departments', render: (_value, row) => this.renderDepartmentBadges(row) },
-    { field: 'isActive', title: 'Active', formatter: (value) => value ? 'Yes' : 'No' },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'departments',
+      title: 'Departments',
+      render: (_value, row) => this.renderDepartmentBadges(row),
+    },
+    { field: 'isActive', title: 'Active', formatter: (value) => (value ? 'Yes' : 'No') },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<UserSummaryDto>[] = [];
 
-  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService, private notificationService: NotificationService) {
+  constructor(
+    private fb: FormBuilder,
+    private apiClient: Client,
+    private authHelper: AuthHelperService,
+    private notificationService: NotificationService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -57,18 +92,26 @@ export class UserManagementComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       mobile: ['', [Validators.required, Validators.maxLength(20)]],
       roleId: ['', [Validators.required]],
-      isActive: [true]
+      isActive: [true],
     });
 
     this.permissions = this.authHelper.hasUsersPermission();
 
     this.rowActions = [
-      ...(this.permissions.edit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : [])
+      ...(this.permissions.edit
+        ? [
+            {
+              action: 'edit',
+              label: 'Edit',
+              icon: 'fa-edit',
+              cssClass: 'btn btn-sm btn-outline-primary',
+            },
+          ]
+        : []),
     ];
   }
 
   ngOnInit(): void {
-    this.loadUsers();
     this.loadRoles();
   }
 
@@ -85,7 +128,8 @@ export class UserManagementComponent implements OnInit {
       pageSize: this.pager.pageSize,
       searchTerm: this.pager.searchTerm || undefined,
       roleId: this.roleFilter || undefined,
-      isActive
+      roleIds: this.visibleRoles.map((r) => r.id).filter((id): id is string => !!id),
+      isActive,
     });
     this.apiClient.searchUsers(filter).subscribe({
       next: (result) => {
@@ -95,7 +139,7 @@ export class UserManagementComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -122,15 +166,41 @@ export class UserManagementComponent implements OnInit {
   }
 
   loadRoles(): void {
-    // Roles power the dropdown below, not a paginated list view — fetching the
-    // server's max page size (100) is effectively "all roles" for a reference
-    // table this small, without needing a separate unpaginated endpoint.
-    this.apiClient.searchRoles(new RoleFilterDto({ pageNumber: 1, pageSize: 100 })).subscribe({
+    this.apiClient.roleLookup().subscribe({
       next: (result) => {
-        this.roles = result.items ?? [];
+        this.roles = result ?? [];
+        this.updateVisibleRoles();
+        this.loadUsers();
       },
-      error: () => {}
+      error: () => {
+        this.roles = [];
+        this.updateVisibleRoles();
+        this.loadUsers();
+      },
     });
+  }
+
+  private updateVisibleRoles(): void {
+    this.visibleRoles = this.roles.filter((r) =>
+      this.roleTypeMatchesTab(r.roleType, this.activeTab),
+    );
+  }
+
+  private roleTypeMatchesTab(roleType: RoleTypeEnums | undefined, tab: UserRoleTab): boolean {
+    if (roleType === undefined) return false;
+    if (tab === 'Student') return roleType === RoleTypeEnums.Student;
+    if (tab === 'Customer') return roleType === RoleTypeEnums.Customer;
+    return roleType !== RoleTypeEnums.Student && roleType !== RoleTypeEnums.Customer;
+  }
+
+  switchTab(tab: UserRoleTab): void {
+    if (this.activeTab === tab) return;
+    this.activeTab = tab;
+    this.roleFilter = '';
+    this.updateVisibleRoles();
+    this.pager.goToPage(1);
+    this.loadUsers();
+    this.router.navigate([], { relativeTo: this.route, queryParams: { tab }, replaceUrl: true });
   }
 
   // TODO(department-migration): drop the `as any` once `nswag run` has been re-run
@@ -138,13 +208,15 @@ export class UserManagementComponent implements OnInit {
   // because api.services.ts hasn't been regenerated, even though the server already
   // sends it (see UsersController.SearchUsers / DepartmentMappingExtension.ToBadges).
   renderDepartmentBadges(row: UserSummaryDto): string {
-    const departments = (row as any).departments as { id: string; name: string; isHead: boolean }[] | undefined;
+    const departments = (row as any).departments as
+      | { id: string; name: string; isHead: boolean }[]
+      | undefined;
     if (!departments || departments.length === 0) {
       return '<span class="text-muted small">&mdash;</span>';
     }
 
     return departments
-      .map(d => {
+      .map((d) => {
         const cssClass = d.isHead ? 'badge-pill-accent' : 'badge-pill-navy-soft';
         const label = this.escapeHtml(d.name) + (d.isHead ? ' (Head)' : '');
         return `<span class="badge-pill ${cssClass} me-1 mb-1">${label}</span>`;
@@ -167,7 +239,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   openModal(): void {
-     this.editingId = null;
+    this.editingId = null;
     this.userForm.reset({ isActive: true });
     this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
     this.userForm.get('password')?.updateValueAndValidity();
@@ -176,17 +248,15 @@ export class UserManagementComponent implements OnInit {
   }
 
   openEditModal(user: UserSummaryDto): void {
-      this.editingId = user.id ?? null;
+    this.editingId = user.id ?? null;
     this.userForm.reset({
       email: user.email,
       firstName: user.firstName,
-      // TODO(department-migration): drop the `as any` once `nswag run` has regenerated
-      // api.services.ts with MiddleName on UserSummaryDto.
       middleName: (user as any).middleName,
       lastName: user.lastName,
       mobile: user.mobile,
       roleId: user.roleId,
-      isActive: user.isActive
+      isActive: user.isActive,
     });
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('password')?.updateValueAndValidity();
@@ -201,7 +271,11 @@ export class UserManagementComponent implements OnInit {
   onSubmit(): void {
     const requiredPermission = this.editingId ? this.permissions.edit : this.permissions.add;
     if (!requiredPermission) {
-      this.notificationService.error(this.editingId ? 'You do not have permission to edit users.' : 'You do not have permission to add users.');
+      this.notificationService.error(
+        this.editingId
+          ? 'You do not have permission to edit users.'
+          : 'You do not have permission to add users.',
+      );
       return;
     }
 
@@ -223,16 +297,20 @@ export class UserManagementComponent implements OnInit {
         this.isSubmitting = false;
         this.closeModal();
         this.loadUsers();
-        this.notificationService.success(this.editingId ? 'User updated successfully.' : 'User created successfully.');
+        this.notificationService.success(
+          this.editingId ? 'User updated successfully.' : 'User created successfully.',
+        );
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the user. Please try again.');
+        this.errorMessage = extractApiErrorMessage(
+          err,
+          'Something went wrong saving the user. Please try again.',
+        );
         this.notificationService.error(this.errorMessage);
-      }
+      },
     });
   }
-
 
   onTableAction(event: DataTableAction<UserSummaryDto>): void {
     if (event.action === 'edit') {

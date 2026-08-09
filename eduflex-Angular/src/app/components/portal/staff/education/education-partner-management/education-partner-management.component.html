@@ -3,10 +3,11 @@
     <div class="row align-items-center">
       <div class="col-md-6">
         <h2 class="mb-1">Education Partners</h2>
-        <p class="text-muted mb-0">Manage university and college partners, their intakes, and the courses they offer.</p>
+        <p class="text-muted mb-0">Manage university and college partners, their intakes, and the courses they offer.
+        </p>
       </div>
       <div class="col-md-6 text-md-end">
-        <a class="btn btn-primary btn-lg" *ngIf="permissions.add" routerLink="/staff-portal/education-partners/new">
+        <a class="btn btn-primary btn-md" *ngIf="permissions.add" routerLink="/staff-portal/education-partners/new">
           <i class="fas fa-plus me-2"></i>Add Partner
         </a>
       </div>
@@ -44,11 +45,14 @@
 
       <div *ngIf="!isLoadingDirectory" class="country-accordion">
         <div class="country-panel" *ngFor="let group of countryGroups">
-          <button type="button" class="country-panel-header" [class.is-open]="isCountryExpanded(group.country)" (click)="toggleCountry(group.country)">
-            <i class="fas chevron-icon" [ngClass]="isCountryExpanded(group.country) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+          <button type="button" class="country-panel-header" [class.is-open]="isCountryExpanded(group.country)"
+            (click)="toggleCountry(group.country)">
+            <i class="fas chevron-icon"
+              [ngClass]="isCountryExpanded(group.country) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
             <i class="fas fa-globe country-icon"></i>
             <span class="country-name">{{ group.country }}</span>
-            <span class="country-count-badge badge-pill badge-pill-accent">{{ group.universities.length + group.colleges.length }}</span>
+            <span class="country-count-badge badge-pill badge-pill-accent">{{ group.universities.length +
+              group.colleges.length }}</span>
           </button>
 
           <div class="country-panel-body" *ngIf="isCountryExpanded(group.country)">
@@ -80,19 +84,23 @@
           <div class="row g-3">
             <div class="col-md-3">
               <label class="form-label">Course name</label>
-              <input type="text" class="form-control" [(ngModel)]="searchFilters.courseName" (keyup.enter)="onSearchSubmit()">
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.courseName"
+                (keyup.enter)="onSearchSubmit()">
             </div>
             <div class="col-md-3">
               <label class="form-label">University</label>
-              <input type="text" class="form-control" [(ngModel)]="searchFilters.uniName" (keyup.enter)="onSearchSubmit()">
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.uniName"
+                (keyup.enter)="onSearchSubmit()">
             </div>
             <div class="col-md-3">
               <label class="form-label">Country</label>
-              <input type="text" class="form-control" [(ngModel)]="searchFilters.country" (keyup.enter)="onSearchSubmit()">
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.country"
+                (keyup.enter)="onSearchSubmit()">
             </div>
             <div class="col-md-3">
               <label class="form-label">Intake</label>
-              <input type="text" class="form-control" [(ngModel)]="searchFilters.intake" (keyup.enter)="onSearchSubmit()">
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.intake"
+                (keyup.enter)="onSearchSubmit()">
             </div>
           </div>
           <div class="text-end mt-3">
@@ -111,14 +119,9 @@
 
       <div class="card border shadow-sm" *ngIf="!isSearching">
         <div class="card-body p-0">
-          <app-data-table
-            [columns]="searchColumns"
-            [data]="searchResults"
-            [rowActions]="[]"
-            [pageNumber]="searchPager.pageNumber"
-            [pageSize]="searchPager.pageSize"
-            [totalCount]="searchPager.totalCount"
-            (pageChange)="onSearchPageChange($event)"
+          <app-data-table [columns]="searchColumns" [data]="searchResults" [rowActions]="[]"
+            [pageNumber]="searchPager.pageNumber" [pageSize]="searchPager.pageSize"
+            [totalCount]="searchPager.totalCount" (pageChange)="onSearchPageChange($event)"
             tableClass="table table-bordered table-hover mb-0">
           </app-data-table>
           <div class="empty-state" *ngIf="hasSearched && searchResults.length === 0">
@@ -133,15 +136,19 @@
 
 <!-- Partner panel template: reused for both Uni and College/Education Organizations sections -->
 <ng-template #partnerPanel let-partner="partner">
-  <div class="partner-panel-header" role="button" tabindex="0" [class.is-open]="isPartnerExpanded(partner.id)" (click)="togglePartner(partner.id)">
+  <div class="partner-panel-header" role="button" tabindex="0" [class.is-open]="isPartnerExpanded(partner.id)"
+    (click)="togglePartner(partner.id)">
     <i class="fas chevron-icon" [ngClass]="isPartnerExpanded(partner.id) ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
     <img *ngIf="partner.logoUrl" [src]="partner.logoUrl" [alt]="partner.name" class="partner-panel-logo">
-    <div *ngIf="!partner.logoUrl" class="partner-panel-logo partner-logo-placeholder"><i class="fas fa-building"></i></div>
+    <div *ngIf="!partner.logoUrl" class="partner-panel-logo partner-logo-placeholder"><i class="fas fa-building"></i>
+    </div>
     <span class="partner-panel-name">{{ partner.name }}</span>
     <span class="partner-panel-trademark">{{ partner.trademark }}</span>
-    <span class="course-count-badge badge-pill badge-pill-accent" *ngIf="partner.courses?.length">{{ partner.courses?.length }} Courses</span>
+    <span class="course-count-badge badge-pill badge-pill-accent" *ngIf="partner.courses?.length">{{
+      partner.courses?.length }} Courses</span>
     <div class="partner-panel-actions ms-auto" (click)="$event.stopPropagation()">
-      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']" title="View">
+      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']"
+        title="View">
         <i class="fas fa-eye"></i>
       </a>
       <button type="button" class="btn btn-sm btn-outline-danger" *ngIf="permissions.delete"
@@ -155,7 +162,8 @@
     <div class="partner-info-col">
       <div class="partner-info-header">
         <img *ngIf="partner.logoUrl" [src]="partner.logoUrl" [alt]="partner.name" class="partner-info-logo">
-        <div *ngIf="!partner.logoUrl" class="partner-info-logo partner-logo-placeholder"><i class="fas fa-building"></i></div>
+        <div *ngIf="!partner.logoUrl" class="partner-info-logo partner-logo-placeholder"><i class="fas fa-building"></i>
+        </div>
         <div>
           <h5 class="mb-0">{{ partner.name }}</h5>
           <span class="partner-info-trademark">{{ partner.trademark }}</span>
@@ -164,10 +172,12 @@
 
       <span class="partner-type-badge badge-pill badge-pill-navy-soft">{{ partner.partnerType }}</span>
       <a *ngIf="partner.businessPartnerName" class="badge-pill badge-pill-accent-soft managed-under-badge"
-        [routerLink]="['/staff-portal/business-partners', partner.businessPartnerId, 'edit']" (click)="$event.stopPropagation()">
+        [routerLink]="['/staff-portal/business-partners', partner.businessPartnerId, 'edit']"
+        (click)="$event.stopPropagation()">
         Managed under {{ partner.businessPartnerName }}
       </a>
-      <span *ngIf="!partner.businessPartnerName" class="badge-pill badge-pill-navy-soft managed-under-badge">Direct contract</span>
+      <span *ngIf="!partner.businessPartnerName" class="badge-pill badge-pill-navy-soft managed-under-badge">Direct
+        contract</span>
 
       <ul class="partner-meta-list">
         <li><i class="fas fa-location-dot"></i>{{ partner.location }}, {{ partner.country }}</li>
@@ -178,7 +188,8 @@
       <div class="partner-info-intakes">
         <span class="partner-info-label">Intakes</span>
         <div class="intake-badges">
-          <span class="intake-badge badge-pill badge-pill-accent-soft" *ngFor="let intake of partner.intakes">{{ intake }}</span>
+          <span class="intake-badge badge-pill badge-pill-accent-soft" *ngFor="let intake of partner.intakes">{{ intake
+            }}</span>
         </div>
       </div>
 

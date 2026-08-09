@@ -6,7 +6,7 @@ import { AuthHelperService, ModulePermissions } from '@services/auth-helper.serv
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 
-type SettingsTab = 'general' | 'documents' | 'images' | 'contracts' | 'enrolment';
+type SettingsTab = 'general' | 'documents' | 'images' | 'contracts' | 'enrolment' | 'chat';
 
 @Component({
   selector: 'app-settings-management',
@@ -27,7 +27,8 @@ export class SettingsManagementComponent implements OnInit {
     { key: 'documents', label: 'Application Documents' },
     { key: 'images', label: 'Images' },
     { key: 'contracts', label: 'Contracts' },
-    { key: 'enrolment', label: 'Enrolment Documents' }
+    { key: 'enrolment', label: 'Enrolment Documents' },
+    { key: 'chat', label: 'Chat Assistant' }
   ];
 
   settingsForm: FormGroup;
@@ -90,7 +91,9 @@ export class SettingsManagementComponent implements OnInit {
         maxSizeMB: [10, [Validators.required, Validators.min(0.1)]],
         maxFileCount: [1, [Validators.required, Validators.min(1)]],
         allowedExtensions: this.fb.array([])
-      })
+      }),
+      chatSystemPrompt: ['', [Validators.required]],
+      chatApiUrl: ['', [Validators.required]]
     });
   }
 
@@ -142,7 +145,9 @@ export class SettingsManagementComponent implements OnInit {
       enrolmentUpload: {
         maxSizeMB: settings.enrolmentUpload?.maxSizeMB,
         maxFileCount: settings.enrolmentUpload?.maxFileCount
-      }
+      },
+      chatSystemPrompt: settings.chatSystemPrompt,
+      chatApiUrl: settings.chatApiUrl
     });
 
     this.setExtensions(this.defaultExtensions, settings.documentUpload?.default?.allowedExtensions ?? []);
@@ -198,6 +203,8 @@ export class SettingsManagementComponent implements OnInit {
         return [this.settingsForm.get('contractUpload')!];
       case 'enrolment':
         return [this.settingsForm.get('enrolmentUpload')!];
+      case 'chat':
+        return [this.settingsForm.get('chatSystemPrompt')!, this.settingsForm.get('chatApiUrl')!];
     }
   }
 
@@ -247,7 +254,9 @@ export class SettingsManagementComponent implements OnInit {
       }),
       imageUpload: new UploadLimitDto(value.imageUpload),
       contractUpload: new UploadLimitDto(value.contractUpload),
-      enrolmentUpload: new UploadLimitDto(value.enrolmentUpload)
+      enrolmentUpload: new UploadLimitDto(value.enrolmentUpload),
+      chatSystemPrompt: value.chatSystemPrompt,
+      chatApiUrl: value.chatApiUrl
     });
 
     this.apiClient.settingsPUT(payload).subscribe({

@@ -7,13 +7,24 @@ import { FeedbackCarouselComponent } from '../feedback-carousel/feedback-carouse
 import { CoursePromotionCarouselComponent } from '../course-promotion-carousel/course-promotion-carousel.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CoursePromotionDto } from '@services/content.services';
+import { ChatWidgetComponent } from '../chat-widget/chat-widget.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, EnquiryModalComponent, FeedbackCarouselComponent, CoursePromotionCarouselComponent, TranslatePipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+    EnquiryModalComponent,
+    FeedbackCarouselComponent,
+    CoursePromotionCarouselComponent,
+    ChatWidgetComponent,
+    TranslatePipe,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   activeTab: string = 'schools';
@@ -29,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private authHelper: AuthHelperService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -58,15 +69,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isEnquiryModalOpen = true;
   }
 
- closeEnquiryModal(): void {
-  this.isEnquiryModalOpen = false;
-  this.selectedCoursePromotion = undefined;
-}
+  closeEnquiryModal(): void {
+    this.isEnquiryModalOpen = false;
+    this.selectedCoursePromotion = undefined;
+  }
 
-onCourseEnquire(promotion?: CoursePromotionDto): void {
-  this.selectedCoursePromotion = promotion;
-  this.openEnquiryModal();
-}
+  onCourseEnquire(promotion?: CoursePromotionDto): void {
+    this.selectedCoursePromotion = promotion;
+    this.openEnquiryModal();
+  }
 
   onEnquirySubmitted(): void {
     this.isEnquiryModalOpen = false;

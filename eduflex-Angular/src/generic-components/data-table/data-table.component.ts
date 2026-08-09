@@ -10,14 +10,14 @@ import { DataTableColumn, DataTableAction, DataTableRowAction } from './data-tab
   standalone: true,
   imports: [CommonModule],
   templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.css']
+  styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent<T> implements OnDestroy {
   @Input() columns: DataTableColumn<T>[] = [];
   @Input() data: T[] = [];
   @Input() tableClass: string = 'table table-bordered table-hover mb-0';
   @Input() rowActions: DataTableRowAction<T>[] = [
-    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' }
+    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' },
   ];
 
   @Input() pageNumber = 1;
@@ -35,10 +35,9 @@ export class DataTableComponent<T> implements OnDestroy {
   private searchSub: Subscription;
 
   constructor() {
-    this.searchSub = this.searchInput$.pipe(
-      debounceTime(400),
-      distinctUntilChanged()
-    ).subscribe(term => this.searchChange.emit(term));
+    this.searchSub = this.searchInput$
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe((term) => this.searchChange.emit(term));
   }
 
   ngOnDestroy(): void {
@@ -73,7 +72,7 @@ export class DataTableComponent<T> implements OnDestroy {
   getCellData<T>(
     row: T,
     field: keyof T | string,
-    formatter?: (value: T[keyof T], row: T) => string | number
+    formatter?: (value: T[keyof T], row: T) => string | number,
   ): string | number {
     const value = (row as any)[field]; // safe access
 
@@ -88,12 +87,18 @@ export class DataTableComponent<T> implements OnDestroy {
   getStatusBadgeClass(status: unknown): string {
     const value = String(status);
     switch (value) {
-      case 'Approved': return 'bg-success';
-      case 'Rejected': return 'bg-danger';
-      case 'Studying': return 'bg-primary';
-      case 'Under Review': return 'bg-warning text-dark';
-      case 'Documents Required': return 'bg-info text-dark';
-      default: return 'bg-secondary';
+      case 'Approved':
+        return 'bg-success';
+      case 'Rejected':
+        return 'bg-danger';
+      case 'Studying':
+        return 'bg-primary';
+      case 'Under Review':
+        return 'bg-warning text-dark';
+      case 'Documents Required':
+        return 'bg-info text-dark';
+      default:
+        return 'bg-secondary';
     }
   }
 }

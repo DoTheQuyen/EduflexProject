@@ -3,7 +3,8 @@
     <div class="card border shadow-sm mb-4">
       <div class="card-header bg-white"><strong>Invoice to</strong></div>
       <div class="card-body">
-        <p class="mb-1"><span class="badge-pill badge-pill-accent-soft">{{ businessPartnerName ? 'Business Partner' : 'Education Partner (direct contract)' }}</span></p>
+        <p class="mb-1"><span class="badge-pill badge-pill-accent-soft">{{ businessPartnerName ? 'Business Partner' :
+            'Education Partner (direct contract)' }}</span></p>
         <h5 class="mb-0">{{ invoiceToLabel }}</h5>
       </div>
     </div>
@@ -34,22 +35,27 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
           <strong>Extra commission adjustments</strong>
-          <button *ngIf="permissions.edit" type="button" class="btn btn-sm btn-outline-primary" (click)="toggleAdjustmentForm()">
+          <button *ngIf="permissions.edit" type="button" class="btn btn-sm btn-outline-primary"
+            (click)="toggleAdjustmentForm()">
             {{ showAdjustmentForm ? 'Cancel' : '+ Add adjustment' }}
           </button>
         </div>
-        <p class="text-muted small mb-2">For cases such as a student failing and re-studying — additive, human-entered, not formula-derived.</p>
+        <p class="text-muted small mb-2">For cases such as a student failing and re-studying — additive, human-entered,
+          not formula-derived.</p>
 
         <div class="adjustment-form" *ngIf="showAdjustmentForm">
           <div class="row g-2">
             <div class="col-md-7">
-              <input class="form-control form-control-sm" placeholder="Reason (e.g. Repeated Semester 2 after fail)" [(ngModel)]="adjustmentReason" [ngModelOptions]="{standalone: true}">
+              <input class="form-control form-control-sm" placeholder="Reason (e.g. Repeated Semester 2 after fail)"
+                [(ngModel)]="adjustmentReason" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="col-md-3">
-              <input type="number" step="0.01" class="form-control form-control-sm" placeholder="Amount" [(ngModel)]="adjustmentAmount" [ngModelOptions]="{standalone: true}">
+              <input type="number" step="0.01" class="form-control form-control-sm" placeholder="Amount"
+                [(ngModel)]="adjustmentAmount" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="col-md-2">
-              <button type="button" class="btn btn-sm btn-primary w-100" [disabled]="isSavingAdjustment" (click)="addAdjustment()">
+              <button type="button" class="btn btn-sm btn-primary w-100" [disabled]="isSavingAdjustment"
+                (click)="addAdjustment()">
                 {{ isSavingAdjustment ? 'Saving...' : 'Add' }}
               </button>
             </div>
@@ -82,17 +88,22 @@
         <div class="received-summary">
           <div class="d-flex justify-content-between align-items-baseline mb-2">
             <span class="text-muted small">Received to date</span>
-            <span class="received-amount">{{ totalReceived | number:'1.2-2' }} <span class="text-muted small fw-normal">/ {{ totalCommission | number:'1.2-2' }}</span></span>
+            <span class="received-amount">{{ totalReceived | number:'1.2-2' }} <span
+                class="text-muted small fw-normal">/ {{ totalCommission | number:'1.2-2' }}</span></span>
           </div>
-          <div class="received-bar"><div class="received-bar-fill" [style.width.%]="receivedPercent"></div></div>
+          <div class="received-bar">
+            <div class="received-bar-fill" [style.width.%]="receivedPercent"></div>
+          </div>
           <p class="text-muted small mt-2 mb-0">
-            {{ receivedPercent }}% of total commission received across {{ paidInvoices.length }} paid invoice{{ paidInvoices.length === 1 ? '' : 's' }}
+            {{ receivedPercent }}% of total commission received across {{ paidInvoices.length }} paid invoice{{
+            paidInvoices.length === 1 ? '' : 's' }}
             <span *ngIf="outstanding > 0"> — {{ outstanding | number:'1.2-2' }} still outstanding</span>.
           </p>
         </div>
 
         <div *ngIf="isLoadingInvoices" class="text-center py-4">
-          <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+          <div class="spinner-border spinner-border-sm text-primary" role="status"><span
+              class="visually-hidden">Loading...</span></div>
         </div>
 
         <div class="received-timeline" *ngIf="!isLoadingInvoices">
@@ -104,7 +115,8 @@
               <span class="timeline-amt">{{ inv.total | number:'1.2-2' }}</span>
             </div>
             <div class="timeline-items" *ngIf="inv.claimItems.length > 0">
-              {{ inv.claimItems[0].description }}<span *ngIf="inv.claimItems.length > 1">, +{{ inv.claimItems.length - 1 }} more</span>
+              {{ inv.claimItems[0].description }}<span *ngIf="inv.claimItems.length > 1">, +{{ inv.claimItems.length - 1
+                }} more</span>
             </div>
             <div class="timeline-items" *ngIf="inv.claimItems.length === 0">{{ inv.description }}</div>
           </div>
@@ -124,7 +136,8 @@
         <div class="calendar-header" *ngIf="record.invoicePlan.length > 0">
           <div class="calendar-header-main">
             <div><b>{{ educationPartnerName || 'This enrolment' }}</b> — intakes: <b>{{ intakeMonthsLabel }}</b></div>
-            <div>Each claim is due 45 days after its intake. Suggested split: {{ suggestedClaimAmount | number:'1.2-2' }} per claim.</div>
+            <div>Each claim is due 45 days after its intake. Suggested split: {{ suggestedClaimAmount | number:'1.2-2'
+              }} per claim.</div>
           </div>
           <div class="calendar-stat">
             <div class="calendar-stat-n">{{ record.invoicePlan.length }}</div>
@@ -133,11 +146,13 @@
         </div>
 
         <p *ngIf="record.invoicePlan.length === 0" class="text-muted text-center py-4 mb-0">
-          No invoice plan yet — set the enrolment's actual commencement date and a course with intakes/duration first, then use "Regenerate" below.
+          No invoice plan yet — set the enrolment's actual commencement date and a course with intakes/duration first,
+          then use "Regenerate" below.
         </p>
 
         <div class="claim-rail" *ngIf="record.invoicePlan.length > 0">
-          <div class="claim-card" *ngFor="let entry of record.invoicePlan" [class.is-skipped]="entry.status === 'Skipped'">
+          <div class="claim-card" *ngFor="let entry of record.invoicePlan"
+            [class.is-skipped]="entry.status === 'Skipped'">
             <div class="claim-card-head">
               <span>{{ claimLabel(entry) }}</span>
               <span>{{ entry.status }}</span>
@@ -159,24 +174,32 @@
                   <span class="edit-icon" *ngIf="permissions.edit">&#9998;</span>
                 </div>
                 <div *ngIf="editingEntryId === entry.id" class="d-flex gap-1">
-                  <input type="date" class="form-control form-control-sm" [(ngModel)]="editingDate" [ngModelOptions]="{standalone: true}">
-                  <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan" (click)="saveEditDate(entry)">&check;</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="isMutatingPlan" (click)="cancelEditDate()">&times;</button>
+                  <input type="date" class="form-control form-control-sm" [(ngModel)]="editingDate"
+                    [ngModelOptions]="{standalone: true}">
+                  <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan"
+                    (click)="saveEditDate(entry)">&check;</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="isMutatingPlan"
+                    (click)="cancelEditDate()">&times;</button>
                 </div>
               </div>
 
-              <p class="claim-suggested" *ngIf="entry.status === 'Planned'">Suggested amount: {{ suggestedClaimAmount | number:'1.2-2' }}</p>
-              <p class="claim-suggested" *ngIf="entry.status === 'Skipped' && entry.skipReason">Reason: {{ entry.skipReason }}</p>
+              <p class="claim-suggested" *ngIf="entry.status === 'Planned'">Suggested amount: {{ suggestedClaimAmount |
+                number:'1.2-2' }}</p>
+              <p class="claim-suggested" *ngIf="entry.status === 'Skipped' && entry.skipReason">Reason: {{
+                entry.skipReason }}</p>
             </div>
             <div class="claim-card-foot">
               <button type="button" class="claim-btn claim-btn-linked" *ngIf="entry.status === 'Invoiced'" disabled>
                 <i class="fas fa-check me-1"></i>Invoiced
               </button>
               <ng-container *ngIf="entry.status === 'Planned' && permissions.edit">
-                <button type="button" class="claim-btn claim-btn-primary" (click)="requestClaimInvoice(entry)">Send Invoice</button>
-                <button type="button" class="claim-btn" [disabled]="isMutatingPlan" (click)="openSkipDialog(entry)">Skip</button>
+                <button type="button" class="claim-btn claim-btn-primary" (click)="requestClaimInvoice(entry)">Send
+                  Invoice</button>
+                <button type="button" class="claim-btn" [disabled]="isMutatingPlan"
+                  (click)="openSkipDialog(entry)">Skip</button>
               </ng-container>
-              <button type="button" class="claim-btn" *ngIf="entry.status === 'Skipped' && permissions.edit" [disabled]="isMutatingPlan" (click)="restoreEntry(entry)">
+              <button type="button" class="claim-btn" *ngIf="entry.status === 'Skipped' && permissions.edit"
+                [disabled]="isMutatingPlan" (click)="restoreEntry(entry)">
                 Restore
               </button>
             </div>
@@ -187,7 +210,8 @@
           <button type="button" class="btn btn-sm btn-outline-secondary" (click)="toggleManualForm()">
             {{ showManualForm ? 'Cancel' : '+ Add manual claim' }}
           </button>
-          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isMutatingPlan" (click)="regeneratePlan()">
+          <button type="button" class="btn btn-sm btn-outline-primary" [disabled]="isMutatingPlan"
+            (click)="regeneratePlan()">
             Regenerate from course intakes
           </button>
         </div>
@@ -195,8 +219,10 @@
         <div class="manual-claim-form" *ngIf="showManualForm">
           <label class="form-label small">Claim date</label>
           <div class="d-flex gap-2">
-            <input type="date" class="form-control form-control-sm" [(ngModel)]="manualDate" [ngModelOptions]="{standalone: true}">
-            <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan" (click)="addManualEntry()">Add</button>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="manualDate"
+              [ngModelOptions]="{standalone: true}">
+            <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan"
+              (click)="addManualEntry()">Add</button>
           </div>
         </div>
 
@@ -210,10 +236,11 @@
     <h6 class="mb-2">Skip {{ claimLabel(skipDialogEntry) }}?</h6>
     <p class="text-muted small mb-3">The claim stays on the calendar as Skipped and can be restored later.</p>
     <label class="form-label small">Reason <span class="text-muted">(optional)</span></label>
-    <textarea class="form-control form-control-sm mb-3" rows="2" [(ngModel)]="skipReason" [ngModelOptions]="{standalone: true}"
-      placeholder="e.g. Combined into the next claim"></textarea>
+    <textarea class="form-control form-control-sm mb-3" rows="2" [(ngModel)]="skipReason"
+      [ngModelOptions]="{standalone: true}" placeholder="e.g. Combined into the next claim"></textarea>
     <div class="d-flex justify-content-end gap-2">
-      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isMutatingPlan" (click)="closeSkipDialog()">Keep claim</button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isMutatingPlan"
+        (click)="closeSkipDialog()">Keep claim</button>
       <button type="button" class="btn btn-danger btn-sm" [disabled]="isMutatingPlan" (click)="confirmSkip()">
         {{ isMutatingPlan ? 'Skipping...' : 'Skip claim' }}
       </button>

@@ -1,7 +1,7 @@
 <div class="email-template-edit-portal">
   <div class="container-fluid py-1">
     <button type="button" class="back-link" (click)="goBack()">
-      <span class="back-arrow">&larr;</span> Back to Email Templates
+      <span class="back-arrow">&larr;</span> Back
     </button>
 
     <div *ngIf="isLoading" class="text-center py-5">
@@ -14,11 +14,11 @@
       <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
         <div>
           <h3 class="mb-1">{{ isEditMode ? 'Edit Email Template' : 'New Email Template' }}</h3>
-          <p class="text-muted mb-0">Full page, not a popup.</p>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary" (click)="goBack()" [disabled]="isSaving">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goBack()"
+            [disabled]="isSaving">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="isSaving">
             {{ isSaving ? 'Saving...' : 'Save Template' }}
           </button>
         </div>
@@ -28,11 +28,13 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <label class="form-label">Key <span class="text-muted small">(used by the system to find this template)</span></label>
+              <label class="form-label">Key <span class="text-muted small">(used by the system to find this
+                  template)</span></label>
               <input type="text" class="form-control" [(ngModel)]="key" [disabled]="isEditMode"
                 placeholder="e.g. welcome-email" />
               <span *ngIf="isEditMode" class="text-muted small d-block mt-1">Key can't be changed after creation.</span>
-              <span *ngIf="isSystemDefault" class="badge-pill badge-pill-navy-soft mt-1 d-inline-block">System default</span>
+              <span *ngIf="isSystemDefault" class="badge-pill badge-pill-navy-soft mt-1 d-inline-block">System
+                default</span>
             </div>
             <div class="col-md-8">
               <label class="form-label">Template name</label>
@@ -40,7 +42,8 @@
             </div>
             <div class="col-12">
               <label class="form-label">Subject line</label>
-              <input type="text" class="form-control" [(ngModel)]="subject" placeholder="e.g. Welcome to Eduflex — your login details" />
+              <input type="text" class="form-control" [(ngModel)]="subject"
+                placeholder="e.g. Welcome to Eduflex — your login details" />
             </div>
           </div>
         </div>
@@ -50,13 +53,10 @@
         <div class="card-body">
           <label class="form-label">Body</label>
           <p class="text-muted small mb-2">
-            Use <code>{{ '{{studentFirstName}}' }}</code>-style placeholders — the sending flow fills these in when the email goes out.
+            Use <code>{{ '{{studentFirstName}}' }}</code>-style placeholders — the sending flow fills these in when the
+            email goes out.
           </p>
-          <quill-editor
-            [(ngModel)]="body"
-            [modules]="quillModules"
-            format="html"
-            [sanitize]="true"
+          <quill-editor [(ngModel)]="body" [modules]="quillModules" format="html" [sanitize]="true"
             placeholder="Write the email body here...">
           </quill-editor>
         </div>

@@ -12,7 +12,7 @@ import {
   UpdateStudentDto,
   CheckDuplicateStudentDto,
   DuplicateCheckResultDto,
-  AddressDto
+  AddressDto,
 } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { EnrolmentService } from '@services/enrolment.service';
@@ -23,16 +23,27 @@ import { CreateEnrolmentRequest } from '../../../../../models/enrolment';
 import { StudentDetailsFormComponent } from '../../../share-component/student-details-form/student-details-form.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 
 @Component({
   selector: 'app-enrolment-new',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, StudentDetailsFormComponent, NotificationComponent, DataTableComponent, ModalComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    StudentDetailsFormComponent,
+    NotificationComponent,
+    DataTableComponent,
+    ModalComponent,
+  ],
   templateUrl: './enrolment-new.component.html',
-  styleUrls: ['./enrolment-new.component.css']
+  styleUrls: ['./enrolment-new.component.css'],
 })
 export class EnrolmentNewComponent implements OnInit {
   step: 1 | 2 = 1;
@@ -56,11 +67,11 @@ export class EnrolmentNewComponent implements OnInit {
     { field: 'lastName', title: 'Last Name' },
     { field: 'email', title: 'Email' },
     { field: 'mobile', title: 'Mobile' },
-    { field: 'isActive', title: 'Active', formatter: (value) => value ? 'Yes' : 'No' },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    { field: 'isActive', title: 'Active', formatter: (value) => (value ? 'Yes' : 'No') },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
   searchRowActions: DataTableRowAction<StudentAccountDto>[] = [
-    { action: 'select', label: 'Select', icon: 'fa-check', cssClass: 'btn btn-sm btn-primary' }
+    { action: 'select', label: 'Select', icon: 'fa-check', cssClass: 'btn btn-sm btn-primary' },
   ];
 
   showCreateNew = false;
@@ -89,7 +100,7 @@ export class EnrolmentNewComponent implements OnInit {
     private apiClient: Client,
     private authHelper: AuthHelperService,
     private enrolmentService: EnrolmentService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {
     this.studentForm = StudentDetailsFormComponent.buildFormGroup(this.fb);
     this.editStudentForm = StudentDetailsFormComponent.buildFormGroup(this.fb);
@@ -118,7 +129,7 @@ export class EnrolmentNewComponent implements OnInit {
       campus: [''],
       commencementDate: [''],
       expectedCompletionDate: [''],
-      notes: ['']
+      notes: [''],
     });
 
     if (!this.authHelper.hasEnrolmentsPermission().add) {
@@ -152,7 +163,7 @@ export class EnrolmentNewComponent implements OnInit {
     const filter = new StudentFilterDto({
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
-      searchTerm: this.pager.searchTerm || undefined
+      searchTerm: this.pager.searchTerm || undefined,
     });
 
     this.apiClient.searchStudents(filter).subscribe({
@@ -163,7 +174,7 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: () => {
         this.isSearching = false;
-      }
+      },
     });
   }
 
@@ -185,7 +196,9 @@ export class EnrolmentNewComponent implements OnInit {
 
   selectStudent(student: StudentAccountDto): void {
     if (student.isActive === false) {
-      this.notificationService.error('This student is inactive. Reactivate them from Student Management before enrolling.');
+      this.notificationService.error(
+        'This student is inactive. Reactivate them from Student Management before enrolling.',
+      );
       return;
     }
     this.selectedStudent = student;
@@ -215,7 +228,7 @@ export class EnrolmentNewComponent implements OnInit {
       city: s.address?.city,
       state: s.address?.state,
       country: s.address?.country,
-      postalCode: s.address?.postalCode
+      postalCode: s.address?.postalCode,
     });
     this.editStudentErrorMessage = '';
     this.isEditStudentModalOpen = true;
@@ -257,8 +270,8 @@ export class EnrolmentNewComponent implements OnInit {
         city: v.city,
         state: v.state || undefined,
         country: v.country,
-        postalCode: v.postalCode
-      })
+        postalCode: v.postalCode,
+      }),
     });
 
     this.apiClient.studentsPUT(this.selectedStudent.id, updateDto).subscribe({
@@ -271,8 +284,11 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: (err) => {
         this.isSavingStudentEdit = false;
-        this.editStudentErrorMessage = extractApiErrorMessage(err, 'Something went wrong updating this student. Please try again.');
-      }
+        this.editStudentErrorMessage = extractApiErrorMessage(
+          err,
+          'Something went wrong updating this student. Please try again.',
+        );
+      },
     });
   }
 
@@ -292,7 +308,7 @@ export class EnrolmentNewComponent implements OnInit {
       city: v.city,
       state: v.state || undefined,
       country: v.country,
-      postalCode: v.postalCode
+      postalCode: v.postalCode,
     });
   }
 
@@ -313,7 +329,7 @@ export class EnrolmentNewComponent implements OnInit {
       email: v.email,
       mobile: v.mobile,
       dateOfBirth: v.dateOfBirth ? new Date(v.dateOfBirth) : undefined,
-      passportNumber: v.passportNumber
+      passportNumber: v.passportNumber,
     });
 
     this.apiClient.checkDuplicate(checkDto).subscribe({
@@ -327,8 +343,11 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: (err) => {
         this.isCheckingStudent = false;
-        this.studentErrorMessage = extractApiErrorMessage(err, 'Could not check for duplicates. Please try again.');
-      }
+        this.studentErrorMessage = extractApiErrorMessage(
+          err,
+          'Could not check for duplicates. Please try again.',
+        );
+      },
     });
   }
 
@@ -343,19 +362,24 @@ export class EnrolmentNewComponent implements OnInit {
       nationality: v.nationality,
       passportNumber: v.passportNumber,
       dateOfBirth: v.dateOfBirth ? new Date(v.dateOfBirth) : undefined,
-      address: this.buildStudentAddress()
+      address: this.buildStudentAddress(),
     });
 
     this.apiClient.studentsPOST(createDto).subscribe({
       next: (created) => {
         this.isCheckingStudent = false;
-        this.notificationService.success('Student created. They have been emailed their login details.');
+        this.notificationService.success(
+          'Student created. They have been emailed their login details.',
+        );
         this.selectStudent(created);
       },
       error: (err) => {
         this.isCheckingStudent = false;
-        this.studentErrorMessage = extractApiErrorMessage(err, 'Something went wrong creating this student. Please try again.');
-      }
+        this.studentErrorMessage = extractApiErrorMessage(
+          err,
+          'Something went wrong creating this student. Please try again.',
+        );
+      },
     });
   }
 
@@ -370,8 +394,11 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: (err) => {
         this.isCheckingStudent = false;
-        this.studentErrorMessage = extractApiErrorMessage(err, 'Could not load the existing student.');
-      }
+        this.studentErrorMessage = extractApiErrorMessage(
+          err,
+          'Could not load the existing student.',
+        );
+      },
     });
   }
 
@@ -390,14 +417,20 @@ export class EnrolmentNewComponent implements OnInit {
           },
           error: (err) => {
             this.isCheckingStudent = false;
-            this.studentErrorMessage = extractApiErrorMessage(err, 'Reactivated, but could not load the student record.');
-          }
+            this.studentErrorMessage = extractApiErrorMessage(
+              err,
+              'Reactivated, but could not load the student record.',
+            );
+          },
         });
       },
       error: (err) => {
         this.isCheckingStudent = false;
-        this.studentErrorMessage = extractApiErrorMessage(err, 'Could not reactivate this student. Please try again.');
-      }
+        this.studentErrorMessage = extractApiErrorMessage(
+          err,
+          'Could not reactivate this student. Please try again.',
+        );
+      },
     });
   }
 
@@ -422,8 +455,10 @@ export class EnrolmentNewComponent implements OnInit {
 
   private loadPartners(): void {
     this.apiClient.educationPartnersAll().subscribe({
-      next: (partners) => { this.partners = partners; },
-      error: () => {}
+      next: (partners) => {
+        this.partners = partners;
+      },
+      error: () => {},
     });
   }
 
@@ -435,13 +470,15 @@ export class EnrolmentNewComponent implements OnInit {
     if (!partnerId) return;
 
     this.apiClient.byPartner(partnerId).subscribe({
-      next: (courses) => { this.courses = courses; },
-      error: () => {}
+      next: (courses) => {
+        this.courses = courses;
+      },
+      error: () => {},
     });
   }
 
   get selectedCourse(): CourseDto | undefined {
-    return this.courses.find(c => c.id === this.form.value.courseId);
+    return this.courses.find((c) => c.id === this.form.value.courseId);
   }
 
   onCourseChange(): void {
@@ -456,7 +493,7 @@ export class EnrolmentNewComponent implements OnInit {
           firstName: enquiry.firstName,
           lastName: enquiry.lastName,
           email: enquiry.email,
-          mobile: enquiry.mobile
+          mobile: enquiry.mobile,
         });
 
         if (this.canSearchStudents) {
@@ -466,7 +503,7 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: () => {
         this.notificationService.error('Could not load the source enquiry.');
-      }
+      },
     });
   }
 
@@ -479,7 +516,7 @@ export class EnrolmentNewComponent implements OnInit {
       currentCity: a.city,
       currentState: a.state,
       currentPostcode: a.postalCode,
-      currentCountry: a.country
+      currentCountry: a.country,
     });
   }
 
@@ -503,16 +540,26 @@ export class EnrolmentNewComponent implements OnInit {
       nationality: student.nationality || undefined,
       passportNumber: student.passportNumber || undefined,
       hometownAddress: {
-        street: student.address?.street, suburb: student.address?.suburb, city: student.address?.city,
-        state: student.address?.state, postalCode: student.address?.postalCode, country: student.address?.country
+        street: student.address?.street,
+        suburb: student.address?.suburb,
+        city: student.address?.city,
+        state: student.address?.state,
+        postalCode: student.address?.postalCode,
+        country: student.address?.country,
       },
       currentAddress: {
-        street: v.currentStreet, suburb: v.currentSuburb, city: v.currentCity,
-        state: v.currentState, postalCode: v.currentPostcode, country: v.currentCountry
+        street: v.currentStreet,
+        suburb: v.currentSuburb,
+        city: v.currentCity,
+        state: v.currentState,
+        postalCode: v.currentPostcode,
+        country: v.currentCountry,
       },
       emergencyContact: {
-        name: v.emergencyName, relationship: v.emergencyRelationship,
-        phone: v.emergencyPhone, email: v.emergencyEmail
+        name: v.emergencyName,
+        relationship: v.emergencyRelationship,
+        phone: v.emergencyPhone,
+        email: v.emergencyEmail,
       },
       educationPartnerId: v.educationPartnerId,
       courseId: v.courseId,
@@ -521,7 +568,7 @@ export class EnrolmentNewComponent implements OnInit {
       campus: v.campus || undefined,
       commencementDate: v.commencementDate || undefined,
       expectedCompletionDate: v.expectedCompletionDate || undefined,
-      notes: v.notes || undefined
+      notes: v.notes || undefined,
     };
   }
 
@@ -547,8 +594,11 @@ export class EnrolmentNewComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractHttpErrorMessage(err, 'Something went wrong creating this enrolment. Please try again.');
-      }
+        this.errorMessage = extractHttpErrorMessage(
+          err,
+          'Something went wrong creating this enrolment. Please try again.',
+        );
+      },
     });
   }
 

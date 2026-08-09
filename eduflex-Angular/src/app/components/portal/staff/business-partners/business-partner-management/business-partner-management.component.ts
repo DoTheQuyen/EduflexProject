@@ -5,7 +5,11 @@ import { Client, BusinessPartnerDto, BusinessPartnerFilterDto } from '@services/
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 
 @Component({
@@ -13,7 +17,7 @@ import { TablePagerState } from '@generic/data-table/table-pager-state';
   standalone: true,
   imports: [CommonModule, RouterLink, DataTableComponent],
   templateUrl: './business-partner-management.component.html',
-  styleUrls: ['./business-partner-management.component.css']
+  styleUrls: ['./business-partner-management.component.css'],
 })
 export class BusinessPartnerManagementComponent implements OnInit {
   partners: BusinessPartnerDto[] = [];
@@ -27,22 +31,30 @@ export class BusinessPartnerManagementComponent implements OnInit {
     { field: 'name', title: 'Name' },
     { field: 'email', title: 'Email' },
     { field: 'phoneNumber', title: 'Phone' },
-    { field: 'commissionBaseRate', title: 'Commission Rate', className: 'text-end',
-      render: (value) => `${Number(value ?? 0)}%` },
-    { field: 'contractEndDate', title: 'Contract Status', className: 'text-center',
-      render: (_value, row) => this.contractStatusBadge(row) },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'commissionBaseRate',
+      title: 'Commission Rate',
+      className: 'text-end',
+      render: (value) => `${Number(value ?? 0)}%`,
+    },
+    {
+      field: 'contractEndDate',
+      title: 'Contract Status',
+      className: 'text-center',
+      render: (_value, row) => this.contractStatusBadge(row),
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<BusinessPartnerDto>[] = [
-    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' }
+    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' },
   ];
 
   constructor(
     private apiClient: Client,
     private authHelper: AuthHelperService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
   ) {
     this.permissions = this.authHelper.hasBusinessPartnersPermission();
   }
@@ -71,7 +83,7 @@ export class BusinessPartnerManagementComponent implements OnInit {
     const filter = new BusinessPartnerFilterDto({
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
-      searchTerm: this.pager.searchTerm || undefined
+      searchTerm: this.pager.searchTerm || undefined,
     });
 
     this.apiClient.searchBusinessPartners(filter).subscribe({
@@ -80,7 +92,9 @@ export class BusinessPartnerManagementComponent implements OnInit {
         this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
-      error: () => { this.isLoading = false; }
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 

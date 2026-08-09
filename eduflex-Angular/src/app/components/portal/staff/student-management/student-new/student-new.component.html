@@ -5,7 +5,7 @@
         <h3 class="mb-2">Add Student</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-outline-secondary btn-md" (click)="goBack()">
+        <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
           <i class="fas fa-arrow-left me-2"></i>Back to Students
         </button>
       </div>
@@ -22,7 +22,8 @@
 
               <div class="alert alert-warning" *ngIf="duplicateWarning">
                 <p class="mb-2" *ngIf="duplicateWarning.existingIsActive">
-                  An active student already exists with this {{ duplicateWarning.matchedField }}. Choose different details, or cancel.
+                  An active student already exists with this {{ duplicateWarning.matchedField }}. Choose different
+                  details, or cancel.
                 </p>
                 <p class="mb-2" *ngIf="!duplicateWarning.existingIsActive">
                   An inactive (archived) student already exists with this {{ duplicateWarning.matchedField }}.

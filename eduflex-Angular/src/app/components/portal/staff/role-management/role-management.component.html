@@ -1,11 +1,11 @@
 <div class="feedback-portal">
-  <div class="container-fluid py-4">
+  <div class="container-fluid py-2">
     <div class="row align-items-center">
       <div class="col-md-6">
-        <h2 class="mb-2">Manage Roles</h2>
+        <h3 class="mb-2">Manage Roles</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-lg" *ngIf="permissions.add" (click)="openModal()">
+        <button class="btn btn-primary btn-sm" *ngIf="permissions.add" (click)="openModal()">
           <i class="fas fa-plus me-2"></i>Add Role
         </button>
       </div>
@@ -24,16 +24,10 @@
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
           <div class="card-body p-0">
-            <app-data-table
-              [columns]="columns"
-              [data]="roles"
-              [pageNumber]="pager.pageNumber"
-              [pageSize]="pager.pageSize"
-              [totalCount]="pager.totalCount"
-              [showSearch]="true"
-              searchPlaceholder="Search role name..."
-              (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)"
+            <app-data-table [columns]="columns" [data]="roles" [pageNumber]="pager.pageNumber" [rowActions]="rowActions"
+              [pageSize]="pager.pageSize" [totalCount]="pager.totalCount" [showSearch]="true"
+              searchPlaceholder="Search role name..." (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>
             <p *ngIf="!isLoading && roles.length === 0" class="text-center text-muted py-4 mb-0">
@@ -46,17 +40,31 @@
   </div>
 </div>
 
-<!-- Add Role Modal -->
-<app-modal *ngIf="isModalOpen" title="Add Role" [isSaving]="isSubmitting"
-  saveLabel="Save Role"
-  (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
+<!-- Add/Edit Role Modal -->
+<app-modal *ngIf="isModalOpen" [title]="editingId ? 'Edit Role' : 'Add Role'" [isSaving]="isSubmitting"
+  saveLabel="Save Role" (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
   <form [formGroup]="roleForm">
+    <div class="alert alert-info small" *ngIf="editingId && editingUserCount > 0">
+      <i class="fas fa-users me-1"></i>
+      {{ editingUserCount }} user(s) currently have this role. Changes to its type or permissions apply to all of them
+      immediately.
+    </div>
+
     <div class="mb-3">
       <label for="name" class="form-label">Name *</label>
       <input id="name" type="text" class="form-control" formControlName="name">
       <span class="field-error" *ngIf="isFieldInvalid('name')">Role name is required</span>
     </div>
-
+    <div class="mb-3">
+      <label class="form-label">Role Type *</label>
+      <select class="form-select" formControlName="roleType">
+        <option *ngFor="let type of roleTypes" [value]="type">{{ type }} — {{ roleTypeDescriptions[type] }}</option>
+      </select>
+      <div class="alert alert-warning small mt-2 mb-0" *ngIf="roleForm.value.roleType === 'Admin'">
+        <i class="fas fa-triangle-exclamation me-1"></i>
+        Admin-type roles grant full administrative access, including managing other roles and users.
+      </div>
+    </div>
     <div class="mb-3">
       <label for="description" class="form-label">Description</label>
       <textarea id="description" rows="2" class="form-control" formControlName="description"></textarea>
@@ -64,15 +72,45 @@
 
     <div class="mb-3">
       <label class="form-label">Permissions</label>
-      <div *ngFor="let group of groupedPermissions" class="mb-2">
-        <div class="fw-bold">{{ group.moduleName }}</div>
-        <div class="form-check" *ngFor="let permission of group.permissions">
-          <input class="form-check-input" type="checkbox" [id]="permission.id"
-            [checked]="isPermissionSelected(permission.id)"
-            (change)="togglePermission(permission.id, $any($event.target).checked)">
-          <label class="form-check-label" [for]="permission.id">{{ permission.action }} ({{ permission.key }})</label>
-        </div>
+      <div class="table-responsive permission-matrix">
+        <table class="table table-sm table-bordered align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th class="text-center" *ngFor="let action of permissionActionColumns">
+                <div class="permission-col-header">
+                  <span>{{ action }}</span>
+                  <input type="checkbox" class="form-check-input" [checked]="isColumnFullySelected(action)"
+                    (change)="toggleColumn(action, $any($event.target).checked)"
+                    title="Select {{ action }} for every module">
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let group of groupedPermissions">
+              <td>
+                <div class="permission-row-header">
+                  <input type="checkbox" class="form-check-input me-2" [checked]="isModuleFullySelected(group)"
+                    (change)="toggleModule(group, $any($event.target).checked)"
+                    title="Select all {{ group.moduleName }} permissions">
+                  <span class="fw-semibold">{{ group.moduleName }}</span>
+                </div>
+              </td>
+              <td class="text-center" *ngFor="let action of permissionActionColumns">
+                <ng-container *ngIf="getPermission(group, action) as permission; else noAction">
+                  <input type="checkbox" class="form-check-input" [checked]="isPermissionSelected(permission.id)"
+                    (change)="togglePermission(permission.id, $any($event.target).checked)" [title]="permission.key">
+                </ng-container>
+                <ng-template #noAction>
+                  <span class="text-muted">—</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+
       <p *ngIf="groupedPermissions.length === 0" class="text-muted small">No permissions available yet.</p>
     </div>
 

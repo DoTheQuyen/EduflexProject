@@ -5,7 +5,11 @@ import { EnrolmentService } from '@services/enrolment.service';
 import { Enrolment, EnrolmentStatus, EnrolmentStatusOption } from '../../../../../models/enrolment';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
@@ -18,7 +22,7 @@ type OwnerScope = 'mine' | 'all';
   standalone: true,
   imports: [CommonModule, DataTableComponent, NotificationComponent],
   templateUrl: './enrolment-management.component.html',
-  styleUrls: ['./enrolment-management.component.css']
+  styleUrls: ['./enrolment-management.component.css'],
 })
 export class EnrolmentManagementComponent implements OnInit {
   enrolments: Enrolment[] = [];
@@ -31,18 +35,26 @@ export class EnrolmentManagementComponent implements OnInit {
   permissions!: ModulePermissions;
 
   columns: DataTableColumn<Enrolment>[] = [
-    { field: 'firstName', title: 'Student', render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim() },
+    {
+      field: 'firstName',
+      title: 'Student',
+      render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
+    },
     { field: 'email', title: 'Email' },
     { field: 'mobile', title: 'Mobile' },
     { field: 'status', title: 'Status', className: 'text-center' },
     { field: 'ownerName', title: 'Owner' },
-    { field: 'createdAt', title: 'Created', className: 'text-center',
-      formatter: (value) => value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '' },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'createdAt',
+      title: 'Created',
+      className: 'text-center',
+      formatter: (value) => (value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : ''),
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<Enrolment>[] = [
-    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' }
+    { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' },
   ];
 
   constructor(
@@ -50,7 +62,7 @@ export class EnrolmentManagementComponent implements OnInit {
     private authHelper: AuthHelperService,
     private notificationService: NotificationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.permissions = this.authHelper.hasEnrolmentsPermission();
   }
@@ -62,8 +74,10 @@ export class EnrolmentManagementComponent implements OnInit {
 
   loadStatuses(): void {
     this.enrolmentService.getStatuses().subscribe({
-      next: (statuses) => { this.statusOptions = statuses; },
-      error: () => {}
+      next: (statuses) => {
+        this.statusOptions = statuses;
+      },
+      error: () => {},
     });
   }
 
@@ -81,19 +95,23 @@ export class EnrolmentManagementComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.enrolmentService.search({
-      pageNumber: this.pager.pageNumber,
-      pageSize: this.pager.pageSize,
-      searchTerm: this.pager.searchTerm || undefined,
-      mineOnly: this.scope === 'mine'
-    }).subscribe({
-      next: (result) => {
-        this.enrolments = result.items ?? [];
-        this.pager.totalCount = result.totalCount ?? 0;
-        this.isLoading = false;
-      },
-      error: () => { this.isLoading = false; }
-    });
+    this.enrolmentService
+      .search({
+        pageNumber: this.pager.pageNumber,
+        pageSize: this.pager.pageSize,
+        searchTerm: this.pager.searchTerm || undefined,
+        mineOnly: this.scope === 'mine',
+      })
+      .subscribe({
+        next: (result) => {
+          this.enrolments = result.items ?? [];
+          this.pager.totalCount = result.totalCount ?? 0;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   onPageChange(page: number): void {

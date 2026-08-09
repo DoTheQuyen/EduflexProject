@@ -58,10 +58,10 @@ namespace ShareService.Services
 
             var members = await _userDB.GetUsersByIdsAsync(memberUserIds);
             var roles = await _roleService.GetAllRolesAsync();
-            var roleNameById = roles.ToDictionary(r => r.Id, r => r.Name);
+            var roleTypeById = roles.ToDictionary(r => r.Id, r => r.RoleType);
 
             var hasStudent = members.Any(m =>
-                roleNameById.TryGetValue(m.RoleId ?? string.Empty, out var roleName) && roleName.Is(SystemRole.Student));
+                roleTypeById.TryGetValue(m.RoleId ?? string.Empty, out var roleType) && roleType == RoleTypeEnums.Student);
 
             if (hasStudent)
             {

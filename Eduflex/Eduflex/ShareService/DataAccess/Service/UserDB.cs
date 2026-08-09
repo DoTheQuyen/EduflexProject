@@ -77,6 +77,11 @@ namespace ShareService.DataAccess
                 mongoFilters.Add(Builders<UserModel>.Filter.Eq(u => u.RoleId, filter.RoleId));
             }
 
+            if (filter.RoleIds != null && filter.RoleIds.Count > 0)
+            {
+                mongoFilters.Add(Builders<UserModel>.Filter.In(u => u.RoleId, filter.RoleIds));
+            }
+
             if (filter.IsActive.HasValue)
             {
                 mongoFilters.Add(Builders<UserModel>.Filter.Eq(u => u.IsActive, filter.IsActive.Value));
@@ -165,6 +170,21 @@ namespace ShareService.DataAccess
 
             var result = await UpdateOneAsync(u => u.Id == userId, update);
             return result.ModifiedCount > 0;
+        }
+
+        public async Task<Dictionary<string, int>> CountUsersByRoleIdsAsync(IEnumerable<string> roleIds)
+        {
+            var idList = roleIds.ToList();
+            if (idList.Count == 0) return new Dictionary<string, int>();
+
+            var roleIdsOfUsers = await Collection
+                .Find(Builders<UserModel>.Filter.In(u => u.RoleId, idList))
+                .Project(u => u.RoleId)
+                .ToListAsync();
+
+            return roleIdsOfUsers
+                .GroupBy(id => id)
+                .ToDictionary(g => g.Key, g => g.Count());
         }
     }
 }

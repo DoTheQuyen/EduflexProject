@@ -1,3 +1,5 @@
+using ShareService.Enums.Roles;
+
 namespace Eduflex.DTOs.Role
 {
     public class RoleFilterDto
@@ -5,5 +7,6 @@ namespace Eduflex.DTOs.Role
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string? SearchTerm { get; set; }
+        public RoleTypeEnums? roleType { get; set; }
     }
 }

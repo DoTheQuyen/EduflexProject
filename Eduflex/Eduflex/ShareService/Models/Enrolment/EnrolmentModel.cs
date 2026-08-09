@@ -80,11 +80,7 @@ namespace ShareService.Models.Enrolment
 
         [BsonElement("commencementDate")]
         public DateTime? CommencementDate { get; set; }
-
-        // When the student actually starts studying — distinct from CommencementDate,
-        // which is the planned/intake-selected date entered at enrolment time. Confirmed
-        // once COE/VISA outcome is known; the Financial module's invoice calendar keys
-        // off this date, not the planned one.
+      
         [BsonElement("actualCommencementDate")]
         public DateTime? ActualCommencementDate { get; set; }
 

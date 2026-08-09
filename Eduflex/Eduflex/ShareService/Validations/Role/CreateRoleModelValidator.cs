@@ -14,6 +14,9 @@ namespace ShareService.Validations.Role
             RuleFor(x => x.Description)
                 .MaximumLength(200).WithMessage("Description must not exceed 200 characters");
 
+            RuleFor(x => x.RoleType)
+                .NotNull().WithMessage("Role type is required");
+
             RuleFor(x => x.PermissionIds)
                 .NotNull().WithMessage("PermissionIds must be provided (can be an empty list)");
         }

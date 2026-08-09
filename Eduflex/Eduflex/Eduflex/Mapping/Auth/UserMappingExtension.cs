@@ -13,6 +13,7 @@ namespace Eduflex.Mapping.Auth
                 PageSize = dto.PageSize,
                 SearchTerm = dto.SearchTerm,
                 RoleId = dto.RoleId,
+                RoleIds = dto.RoleIds,
                 IsActive = dto.IsActive
             };
         }

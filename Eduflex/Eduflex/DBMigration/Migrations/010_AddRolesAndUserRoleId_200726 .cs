@@ -13,13 +13,7 @@ namespace DBMigration.Migrations
 
         public override async Task Up(IMongoDatabase database)
         {
-            // Deliberately NOT gated on Users existing — this migration's main job is seeding
-            // the Admin/Student roles, which every later permission-granting migration (011+)
-            // depends on. Gating role seeding behind a Users-collection check meant a fresh
-            // database (no manual "Create Database Tables" step first) silently skipped role
-            // seeding entirely, cascading into every downstream migration also skipping its
-            // permission grants. The backfill loop below is naturally a no-op on an empty/
-            // nonexistent Users collection (Find returns an empty cursor), so no gate is needed.
+            
             var rolesCollection = database.GetCollection<BsonDocument>("Roles");
 
             var adminRole = await rolesCollection.Find(Builders<BsonDocument>.Filter.Eq("name", "Admin")).FirstOrDefaultAsync();

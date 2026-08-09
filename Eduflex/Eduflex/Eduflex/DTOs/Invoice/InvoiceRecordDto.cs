@@ -7,8 +7,7 @@ namespace Eduflex.DTOs.Invoice
         public decimal GstRatePercent { get; set; } = 10m;
     }
 
-    // Named InvoiceRecordDto (not InvoiceDto) because Swashbuckle's default schemaId is
-    // the bare class name — Eduflex.DTOs.Financial.InvoiceDto already claims "InvoiceDto".
+
     public class InvoiceRecordDto
     {
         public string Id { get; set; } = string.Empty;

@@ -19,7 +19,9 @@ namespace Eduflex.Mapping.Settings
                 },
                 ImageUpload = model.ImageUpload.ToDto(),
                 ContractUpload = model.ContractUpload.ToDto(),
-                EnrolmentUpload = model.EnrolmentUpload.ToDto()
+                EnrolmentUpload = model.EnrolmentUpload.ToDto(),
+                ChatSystemPrompt = model.ChatSystemPrompt,
+                ChatApiUrl = model.ChatApiUrl
             };
         }
 
@@ -47,7 +49,9 @@ namespace Eduflex.Mapping.Settings
                 },
                 ImageUpload = dto.ImageUpload.ToModel(),
                 ContractUpload = dto.ContractUpload.ToModel(),
-                EnrolmentUpload = dto.EnrolmentUpload.ToModel()
+                EnrolmentUpload = dto.EnrolmentUpload.ToModel(),
+                ChatSystemPrompt = dto.ChatSystemPrompt,
+                ChatApiUrl = dto.ChatApiUrl
             };
         }
 

@@ -536,6 +536,55 @@
         }
       }
     },
+    "/api/Chat/top-questions": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionFrequency"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionFrequency"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionFrequency"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/CoursePromotions/search-course-promotions": {
       "post": {
         "tags": [
@@ -10098,6 +10147,20 @@
         ],
         "type": "string"
       },
+      "QuestionFrequency": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "ReassignEnrolmentDto": {
         "type": "object",
         "properties": {
@@ -10572,6 +10635,14 @@
           },
           "enrolmentUpload": {
             "$ref": "#/components/schemas/UploadLimitDto"
+          },
+          "chatSystemPrompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatApiUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -10964,6 +11035,14 @@
           },
           "enrolmentUpload": {
             "$ref": "#/components/schemas/UploadLimitDto"
+          },
+          "chatSystemPrompt": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatApiUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11248,6 +11327,9 @@
     },
     {
       "name": "BusinessPartners"
+    },
+    {
+      "name": "Chat"
     },
     {
       "name": "CoursePromotions"

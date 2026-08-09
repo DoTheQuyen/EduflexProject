@@ -9,5 +9,7 @@ namespace Eduflex.DTOs.Settings
         public UploadLimitDto ImageUpload { get; set; } = new();
         public UploadLimitDto ContractUpload { get; set; } = new();
         public UploadLimitDto EnrolmentUpload { get; set; } = new();
+        public string ChatSystemPrompt { get; set; } = string.Empty;
+        public string ChatApiUrl { get; set; } = string.Empty;
     }
 }

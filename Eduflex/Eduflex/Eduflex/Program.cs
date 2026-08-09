@@ -12,6 +12,8 @@ using Eduflex.Authorization;
 using Eduflex.API.BackgroundServices;
 using Eduflex.API.Hubs;
 using StackExchange.Redis;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +118,10 @@ builder.Services.Configure<AzureEmailSettings>(
 builder.Services.Configure<WebURLSettings>(
     builder.Configuration.GetSection("WebURLSettings"));
 
+//Configure Gemini Settings (used by AIService for Gemini API calls)
+builder.Services.Configure<GeminiSettings>(
+    builder.Configuration.GetSection("Gemini"));
+
 // Register MongoDB Client (Singleton - recommended by MongoDB)
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
@@ -188,6 +194,28 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Rate limiting for public endpoints that call metered external APIs (e.g. Gemini chat)
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("ChatPolicy", httpContext =>
+        RateLimitPartition.GetSlidingWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 15,
+                Window = TimeSpan.FromMinutes(10),
+                SegmentsPerWindow = 5,
+                QueueLimit = 0
+            }));
+
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsync(
+            "Too many questions in a short time. Please wait a few minutes and try again.", token);
+    };
+});
+
 // Register all shared services (DataAccess, Services, Validators)
 builder.Services.AddSharedServices();
 
@@ -218,6 +246,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors("AllowAngular");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -79,9 +79,15 @@ namespace ShareService.Enums.Permissions
         EmailTemplatesEdit,
 
         // Same shape as EmailTemplatesEdit — gates the admin Invoice Template management
-        // screen and the sent-invoice ledger view. Sending an individual invoice (from the
-        // Enrolment Form step) uses EnrolmentsEdit instead, since that action happens
-        // inside the Enrolments module, not this admin area.
+        // screen and the sent-invoice ledger view. Granted to Admin and Manager (see
+        // migration 040) — Manager already owns the rest of the Finance workflow via
+        // FinanceEdit below, so it shouldn't be Admin-only here.
+        //
+        // Sending/resending/cancelling/confirming a specific invoice does NOT use this
+        // key — InvoiceService.RequireInvoiceActionPermissionAsync routes each action by
+        // the invoice's RecipientType instead: Student invoices check EnrolmentsEdit
+        // (that action happens inside the Enrolments module), EducationPartner/
+        // BusinessPartner/Custom invoices check FinanceEdit (a Finance-module action).
         InvoiceTemplatesEdit,
     }
 }

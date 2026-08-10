@@ -71,6 +71,7 @@ namespace Eduflex.Mapping.Invoice
                 RelatedStepKey = dto.RelatedStepKey,
                 RelatedFinancialRecordId = dto.RelatedFinancialRecordId,
                 RelatedInvoicePlanEntryId = dto.RelatedInvoicePlanEntryId,
+                RelatedStudentPlanEntryId = dto.RelatedStudentPlanEntryId,
                 Description = dto.Description,
                 Amount = dto.Amount,
                 GstRatePercent = dto.GstRatePercent,

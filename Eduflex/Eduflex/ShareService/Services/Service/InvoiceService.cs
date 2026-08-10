@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ShareService.Common;
 using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
@@ -28,6 +29,7 @@ namespace ShareService.Services
         // service's own permission gates, and going through the interface would couple the
         // two services in both directions.
         private readonly IFinancialRecord _financialRecordDataAccess;
+        private readonly IStudentPaymentPlanService _studentPaymentPlanService;
         private readonly ILogger<InvoiceService> _logger;
         private readonly int _documentLinkExpiryDays;
 
@@ -41,6 +43,7 @@ namespace ShareService.Services
             IInvoicePdfService invoicePdfService,
             IEnrolmentService enrolmentService,
             IFinancialRecord financialRecordDataAccess,
+            IStudentPaymentPlanService studentPaymentPlanService,
             ILogger<InvoiceService> logger,
             IOptions<DocumentLinkSettings> documentLinkSettings)
         {
@@ -53,6 +56,7 @@ namespace ShareService.Services
             _invoicePdfService = invoicePdfService;
             _enrolmentService = enrolmentService;
             _financialRecordDataAccess = financialRecordDataAccess;
+            _studentPaymentPlanService = studentPaymentPlanService;
             _logger = logger;
             _documentLinkExpiryDays = documentLinkSettings.Value.ExpiryDays;
         }
@@ -66,6 +70,23 @@ namespace ShareService.Services
             }
         }
 
+        // Which permission gates an invoice action depends on who it's for, not which
+        // screen it was triggered from: a Student invoice is an Enrolments-module action
+        // (raised from the VISA Process step), while EducationPartner/BusinessPartner/
+        // Custom invoices are a Finance-module action (raised from the Finance module's
+        // Invoice tab or the admin Custom Send screen). Previously every action here
+        // checked EnrolmentsEdit regardless of RecipientType, which let a user with
+        // EnrolmentsEdit but no Finance access send/cancel/confirm partner commission
+        // invoices — this routes each recipient type to the permission that actually
+        // owns that workflow.
+        private Task RequireInvoiceActionPermissionAsync(string recipientType, string userId, string action)
+        {
+            var key = recipientType == InvoiceRecipientTypes.Student
+                ? PermissionKey.EnrolmentsEdit
+                : PermissionKey.FinanceEdit;
+            return RequirePermissionAsync(userId, key, action);
+        }
+
         private async Task<string> ResolveUserNameAsync(string? userId)
         {
             if (string.IsNullOrEmpty(userId)) return "Unknown";
@@ -73,10 +94,12 @@ namespace ShareService.Services
             return user != null ? $"{user.FirstName} {user.LastName}".Trim() : userId;
         }
 
-        public async Task<List<InvoiceModel>> GetAllAsync(string? category, string? status, string userId)
+        public async Task<PagedResult<InvoiceModel>> GetAllAsync(string? category, string? status, int pageNumber, int pageSize, string userId)
         {
             await RequirePermissionAsync(userId, PermissionKey.InvoiceTemplatesEdit, "view the invoice ledger");
-            return await _invoiceDataAccess.GetAllAsync(category, status);
+            pageNumber = pageNumber < 1 ? 1 : pageNumber;
+            pageSize = pageSize is < 1 or > 200 ? 50 : pageSize;
+            return await _invoiceDataAccess.GetAllAsync(category, status, pageNumber, pageSize);
         }
 
         public async Task<List<InvoiceModel>> GetByEnrolmentIdAsync(string enrolmentId, string userId)
@@ -93,7 +116,7 @@ namespace ShareService.Services
 
         public async Task<InvoiceModel> SendInvoiceAsync(SendInvoiceRequestModel request, string actingUserId, string? actingUserRole)
         {
-            await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "send invoices");
+            await RequireInvoiceActionPermissionAsync(request.RecipientType, actingUserId, "send invoices");
 
             var template = await _invoiceTemplateDataAccess.GetByIdAsync(request.TemplateId)
                 ?? throw new KeyNotFoundException("Invoice template not found");
@@ -220,6 +243,11 @@ namespace ShareService.Services
                 $"Created and sent invoice \"{invoiceNo}\" ({invoice.Total:N2}) to {invoice.RecipientName} ({invoice.RecipientEmail})",
                 logCommunication: true, planEntryId: request.RelatedInvoicePlanEntryId);
 
+            if (!string.IsNullOrEmpty(request.RelatedStudentPlanEntryId))
+            {
+                await _studentPaymentPlanService.MarkEntryInvoicedAsync(request.RelatedStudentPlanEntryId, invoice.Id);
+            }
+
             if (!string.IsNullOrEmpty(request.RelatedEnrolmentId) && !string.IsNullOrEmpty(request.RelatedStepKey))
             {
                 await _enrolmentService.SetStepFieldsAsync(
@@ -235,10 +263,10 @@ namespace ShareService.Services
 
         public async Task<InvoiceModel> ResendInvoiceAsync(string invoiceId, string? emailSubject, string? emailBody, string actingUserId)
         {
-            await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "resend invoices");
-
             var invoice = await _invoiceDataAccess.GetByIdAsync(invoiceId)
                 ?? throw new KeyNotFoundException("Invoice not found");
+            await RequireInvoiceActionPermissionAsync(invoice.RecipientType, actingUserId, "resend invoices");
+
             if (invoice.Status == InvoiceStatuses.Cancelled)
             {
                 throw new ArgumentException("This invoice has been cancelled and can't be resent.");
@@ -289,10 +317,10 @@ namespace ShareService.Services
 
         public async Task<InvoiceModel> CancelInvoiceAsync(string invoiceId, string? reason, string actingUserId)
         {
-            await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "cancel invoices");
-
             var invoice = await _invoiceDataAccess.GetByIdAsync(invoiceId)
                 ?? throw new KeyNotFoundException("Invoice not found");
+            await RequireInvoiceActionPermissionAsync(invoice.RecipientType, actingUserId, "cancel invoices");
+
             if (invoice.Status == InvoiceStatuses.Cancelled)
             {
                 throw new ArgumentException("This invoice is already cancelled.");
@@ -416,10 +444,9 @@ namespace ShareService.Services
 
         public async Task<InvoiceModel> ConfirmPaymentAsync(string invoiceId, string? paymentEvidenceUrl, string actingUserId)
         {
-            await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "confirm invoice payments");
-
             var invoice = await _invoiceDataAccess.GetByIdAsync(invoiceId)
                 ?? throw new KeyNotFoundException("Invoice not found");
+            await RequireInvoiceActionPermissionAsync(invoice.RecipientType, actingUserId, "confirm invoice payments");
 
             if (invoice.Status == InvoiceStatuses.Cancelled)
             {

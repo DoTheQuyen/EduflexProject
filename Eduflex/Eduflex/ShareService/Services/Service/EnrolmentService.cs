@@ -356,14 +356,29 @@ namespace ShareService.Services
         // View/Add/Edit/Delete but not Reassign, per the seeding migration).
         public async Task<bool> ReassignOwnerAsync(string id, string newOwnerUserId, string actingUserId)
         {
-            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
-            if (!permissions.Contains(PermissionKey.EnrolmentsReassign.GetDescription()))
-            {
-                throw new UnauthorizedAccessException("You do not have permission to reassign enrolments.");
-            }
-
             var existing = await _enrolmentDataAccess.GetEnrolmentAsync(id)
                 ?? throw new KeyNotFoundException("Enrolment not found");
+
+            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
+            var canReassignAny = permissions.Contains(PermissionKey.EnrolmentsReassign.GetDescription());
+            var isOwner = existing.OwnerUserId == actingUserId;
+
+            // Two ways in: a manager can reassign any enrolment (EnrolmentsReassign), or
+            // the current owner can hand their own enrolment off to someone else — the
+            // same "self-service, needs Edit" bar as every other mutating action on this
+            // enrolment (see GetOwnedEnrolmentAsync). Neither alone is enough for someone
+            // who is neither the owner nor a manager.
+            if (!canReassignAny)
+            {
+                if (!isOwner)
+                {
+                    throw new UnauthorizedAccessException("Only the staff member who owns this enrolment, or a manager, can reassign it.");
+                }
+                if (!permissions.Contains(PermissionKey.EnrolmentsEdit.GetDescription()))
+                {
+                    throw new UnauthorizedAccessException("You do not have permission to edit enrolments.");
+                }
+            }
 
             var newOwner = await _userService.GetUserByIdAsync(newOwnerUserId)
                 ?? throw new ArgumentException("The selected staff member was not found");

@@ -1,10 +1,11 @@
+using ShareService.Common;
 using ShareService.Models.Invoice;
 
 namespace ShareService.Services.Interface
 {
     public interface IInvoiceService
     {
-        Task<List<InvoiceModel>> GetAllAsync(string? category, string? status, string userId);
+        Task<PagedResult<InvoiceModel>> GetAllAsync(string? category, string? status, int pageNumber, int pageSize, string userId);
         Task<List<InvoiceModel>> GetByEnrolmentIdAsync(string enrolmentId, string userId);
         Task<List<InvoiceModel>> GetByFinancialRecordIdAsync(string financialRecordId, string userId);
         Task<InvoiceModel> SendInvoiceAsync(SendInvoiceRequestModel request, string actingUserId, string? actingUserRole);

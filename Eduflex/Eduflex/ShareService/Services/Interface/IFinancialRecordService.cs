@@ -18,13 +18,6 @@ namespace ShareService.Services.Interface
 
         Task<CommissionAdjustmentModel> AddCommissionAdjustmentAsync(string id, string reason, decimal amount, string actingUserId);
 
-        Task<InvoiceModel> CreateInvoiceDraftAsync(string id, string invoiceNo, string invoiceToType, string invoiceToId, string invoiceToName, string studentName,
-            DateTime periodStart, DateTime periodEnd, decimal periodTotal, string htmlContent, string actingUserId);
-
-        Task<bool> UpdateInvoiceDraftAsync(string id, string invoiceId, string htmlContent, decimal periodTotal, string actingUserId);
-        Task<InvoiceModel> GenerateInvoicePdfAsync(string id, string invoiceId, string actingUserId);
-        Task<Uri> GetInvoiceDownloadLinkAsync(string id, string invoiceId, string userId);
-
         Task<FinancialCommunicationModel> SendCommunicationAsync(string id, string toEmail, string recipientType, string subject, string body,
             string? templateKey, string? relatedInvoiceId, string actingUserId);
 

@@ -3,6 +3,7 @@ using Eduflex.DTOs.Invoice;
 using Eduflex.Mapping.Invoice;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShareService.Common;
 using ShareService.Services.Interface;
 
 namespace Eduflex.API.Controllers
@@ -24,14 +25,24 @@ namespace Eduflex.API.Controllers
 
         // The full ledger view — lives in the same Admin area as Invoice Templates, so it
         // shares that permission gate (checked inside InvoiceService.GetAllAsync).
+        // Paginated (default 50/page) — the ledger has no upper bound on invoice volume,
+        // so returning the whole collection on every load doesn't scale.
         [HttpGet]
-        public Task<ActionResult<List<InvoiceRecordDto>>> GetAll([FromQuery] string? category, [FromQuery] string? status)
+        public Task<ActionResult<PagedResult<InvoiceRecordDto>>> GetAll(
+            [FromQuery] string? category, [FromQuery] string? status,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)
         {
             return HandleRequestAsync(_logger, "Error in GetAll invoices endpoint", async () =>
             {
                 var userId = GetRequiredUserId();
-                var invoices = await _invoiceService.GetAllAsync(category, status, userId);
-                return invoices.Select(i => i.ToDto()).ToList();
+                var result = await _invoiceService.GetAllAsync(category, status, pageNumber, pageSize, userId);
+                return new PagedResult<InvoiceRecordDto>
+                {
+                    Items = result.Items.Select(i => i.ToDto()).ToList(),
+                    TotalCount = result.TotalCount,
+                    PageNumber = result.PageNumber,
+                    PageSize = result.PageSize
+                };
             });
         }
 

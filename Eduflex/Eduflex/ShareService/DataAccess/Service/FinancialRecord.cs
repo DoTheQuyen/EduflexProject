@@ -37,6 +37,11 @@ namespace ShareService.DataAccess
             return GetPagedAsync(mongoFilter, sort, filter.PageNumber, filter.PageSize);
         }
 
+        public async Task<List<FinancialRecordModel>> GetAllAsync()
+        {
+            return await Collection.Find(FilterDefinition<FinancialRecordModel>.Empty).ToListAsync();
+        }
+
         public async Task<bool> ReplaceAsync(string id, FinancialRecordModel record)
         {
             return await ReplaceOneAsync(r => r.Id == id, record);

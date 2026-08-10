@@ -18,6 +18,10 @@ namespace ShareService.Models.Invoice
         // the send succeeds (see InvoiceService.RecordFinancialActivityAsync) — the Finance
         // tab's claim schedule can then show "this claim is done" without a separate call.
         public string? RelatedInvoicePlanEntryId { get; set; }
+        // Same idea as RelatedInvoicePlanEntryId above, but for the student instalment
+        // schedule (StudentPaymentPlanEntryModel) instead of the partner claim schedule
+        // — set when this send fulfils one instalment of a student's payment plan.
+        public string? RelatedStudentPlanEntryId { get; set; }
         public string Description { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public decimal GstRatePercent { get; set; } = 10m;

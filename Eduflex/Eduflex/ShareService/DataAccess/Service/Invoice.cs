@@ -13,7 +13,7 @@ namespace ShareService.DataAccess
         {
         }
 
-        public async Task<List<InvoiceModel>> GetAllAsync(string? category, string? status)
+        public async Task<PagedResult<InvoiceModel>> GetAllAsync(string? category, string? status, int pageNumber, int pageSize)
         {
             var filters = new List<FilterDefinition<InvoiceModel>>();
             if (!string.IsNullOrWhiteSpace(category))
@@ -27,9 +27,20 @@ namespace ShareService.DataAccess
 
             var filter = filters.Count > 0 ? Builders<InvoiceModel>.Filter.And(filters) : FilterDefinition<InvoiceModel>.Empty;
 
-            return await Collection.Find(filter)
+            var totalCount = (int)await Collection.CountDocumentsAsync(filter);
+            var items = await Collection.Find(filter)
                 .SortByDescending(i => i.SentAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Limit(pageSize)
                 .ToListAsync();
+
+            return new PagedResult<InvoiceModel>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
 
         public async Task<List<InvoiceModel>> GetByEnrolmentIdAsync(string enrolmentId)

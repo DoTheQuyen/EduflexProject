@@ -71,6 +71,7 @@ namespace Eduflex.DTOs.Invoice
         public string? RelatedStepKey { get; set; }
         public string? RelatedFinancialRecordId { get; set; }
         public string? RelatedInvoicePlanEntryId { get; set; }
+        public string? RelatedStudentPlanEntryId { get; set; }
         public string Description { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public decimal GstRatePercent { get; set; } = 10m;

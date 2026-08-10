@@ -100,50 +100,11 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        [HttpPost("{id}/invoices")]
-        public Task<ActionResult<InvoiceDto>> CreateInvoiceDraft(string id, CreateInvoiceDraftDto createDto)
-        {
-            return HandleRequestAsync(_logger, "Error in CreateInvoiceDraft endpoint", async () =>
-            {
-                var userId = GetRequiredUserId();
-                var invoice = await _financialRecordService.CreateInvoiceDraftAsync(
-                    id, createDto.InvoiceNo, createDto.InvoiceToType, createDto.InvoiceToId, createDto.InvoiceToName, createDto.StudentName,
-                    createDto.PeriodStart, createDto.PeriodEnd, createDto.PeriodTotal, createDto.HtmlContent, userId);
-                return invoice.ToDto();
-            });
-        }
-
-        [HttpPut("{id}/invoices/{invoiceId}")]
-        public Task<ActionResult<bool>> UpdateInvoiceDraft(string id, string invoiceId, UpdateInvoiceDraftDto updateDto)
-        {
-            return HandleUpdateAsync(_logger, "Error in UpdateInvoiceDraft endpoint", () =>
-            {
-                var userId = GetRequiredUserId();
-                return _financialRecordService.UpdateInvoiceDraftAsync(id, invoiceId, updateDto.HtmlContent, updateDto.PeriodTotal, userId);
-            });
-        }
-
-        [HttpPost("{id}/invoices/{invoiceId}/generate-pdf")]
-        public Task<ActionResult<InvoiceDto>> GenerateInvoicePdf(string id, string invoiceId)
-        {
-            return HandleRequestAsync(_logger, "Error in GenerateInvoicePdf endpoint", async () =>
-            {
-                var userId = GetRequiredUserId();
-                var invoice = await _financialRecordService.GenerateInvoicePdfAsync(id, invoiceId, userId);
-                return invoice.ToDto();
-            });
-        }
-
-        [HttpGet("{id}/invoices/{invoiceId}/download-link")]
-        public Task<ActionResult<InvoiceDownloadLinkDto>> GetInvoiceDownloadLink(string id, string invoiceId)
-        {
-            return HandleRequestAsync(_logger, "Error in GetInvoiceDownloadLink endpoint", async () =>
-            {
-                var userId = GetRequiredUserId();
-                var uri = await _financialRecordService.GetInvoiceDownloadLinkAsync(id, invoiceId, userId);
-                return new InvoiceDownloadLinkDto { Url = uri.ToString() };
-            });
-        }
+        // The embedded FinancialRecord.Invoices draft/generate/download-link endpoints
+        // that used to live here were removed — they were superseded by the Invoice
+        // Template ledger (see InvoicesController) and confirmed unreachable from the
+        // Angular UI, but stayed live on the API surface, reachable by direct call and
+        // silently diverging from the real ledger. Use POST /api/Invoices/send instead.
 
         [HttpPost("{id}/communications")]
         public Task<ActionResult<FinancialCommunicationDto>> SendCommunication(string id, SendFinancialCommunicationDto sendDto)

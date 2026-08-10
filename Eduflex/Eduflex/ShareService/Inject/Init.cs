@@ -69,6 +69,7 @@ namespace ShareService.Inject
             services.AddScoped<IDynamicFormTemplate, DynamicFormTemplate>();
             services.AddScoped<IInvoiceTemplate, InvoiceTemplate>();
             services.AddScoped<IInvoice, Invoice>();
+            services.AddScoped<IStudentPaymentPlanEntry, StudentPaymentPlanEntry>();
             services.AddScoped<IChatQuestion, ChatQuestion>();
 
 
@@ -100,6 +101,8 @@ namespace ShareService.Inject
             services.AddScoped<IDynamicFormTemplateService, DynamicFormTemplateService>();
             services.AddScoped<IInvoiceTemplateService, InvoiceTemplateService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IStudentPaymentPlanService, StudentPaymentPlanService>();
+            services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IChatService, ChatService>();
 
 

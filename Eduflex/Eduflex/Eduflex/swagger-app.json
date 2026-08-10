@@ -5,6 +5,161 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Accounts/action-queue": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "windowDays",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 14
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionQueueResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionQueueResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActionQueueResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Accounts": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummaryDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummaryDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummaryDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Accounts/timeline": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "parameters": [
+          {
+            "name": "accountType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountTimelineDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountTimelineDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountTimelineDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Applications": {
       "get": {
         "tags": [
@@ -4188,224 +4343,6 @@
         }
       }
     },
-    "/api/FinancialRecords/{id}/invoices": {
-      "post": {
-        "tags": [
-          "FinancialRecords"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceDraftDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceDraftDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceDraftDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/FinancialRecords/{id}/invoices/{invoiceId}": {
-      "put": {
-        "tags": [
-          "FinancialRecords"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invoiceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateInvoiceDraftDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateInvoiceDraftDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateInvoiceDraftDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "boolean"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/FinancialRecords/{id}/invoices/{invoiceId}/generate-pdf": {
-      "post": {
-        "tags": [
-          "FinancialRecords"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invoiceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/FinancialRecords/{id}/invoices/{invoiceId}/download-link": {
-      "get": {
-        "tags": [
-          "FinancialRecords"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invoiceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDownloadLinkDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDownloadLinkDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceDownloadLinkDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/FinancialRecords/{id}/communications": {
       "post": {
         "tags": [
@@ -4759,6 +4696,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
           }
         ],
         "responses": {
@@ -4767,26 +4722,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InvoiceRecordDto"
-                  }
+                  "$ref": "#/components/schemas/InvoiceRecordDtoPagedResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InvoiceRecordDto"
-                  }
+                  "$ref": "#/components/schemas/InvoiceRecordDtoPagedResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InvoiceRecordDto"
-                  }
+                  "$ref": "#/components/schemas/InvoiceRecordDtoPagedResult"
                 }
               }
             }
@@ -5808,6 +5754,334 @@
         }
       }
     },
+    "/api/StudentPaymentPlans/by-enrolment/{enrolmentId}": {
+      "get": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "enrolmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentPaymentPlans/by-enrolment/{enrolmentId}/generate": {
+      "post": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "enrolmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateStudentPaymentPlanDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateStudentPaymentPlanDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateStudentPaymentPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentPaymentPlans/by-enrolment/{enrolmentId}/manual": {
+      "post": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "enrolmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddManualStudentPlanEntryDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddManualStudentPlanEntryDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddManualStudentPlanEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentPaymentPlans/{entryId}/date": {
+      "put": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStudentPlanEntryDateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStudentPlanEntryDateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStudentPlanEntryDateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentPaymentPlans/{entryId}/skip": {
+      "post": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkipStudentPlanEntryDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkipStudentPlanEntryDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkipStudentPlanEntryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/StudentPaymentPlans/{entryId}/restore": {
+      "post": {
+        "tags": [
+          "StudentPaymentPlans"
+        ],
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentPaymentPlanEntryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Students/me": {
       "get": {
         "tags": [
@@ -6552,6 +6826,267 @@
   },
   "components": {
     "schemas": {
+      "AccountSummaryDto": {
+        "type": "object",
+        "properties": {
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "contractTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "received": {
+            "type": "number",
+            "format": "double"
+          },
+          "outstanding": {
+            "type": "number",
+            "format": "double"
+          },
+          "nextDueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "openCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountSummaryDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountSummaryDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountTimelineDto": {
+        "type": "object",
+        "properties": {
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "contractTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "received": {
+            "type": "number",
+            "format": "double"
+          },
+          "outstanding": {
+            "type": "number",
+            "format": "double"
+          },
+          "nextDueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountTimelineEntryDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountTimelineEntryDto": {
+        "type": "object",
+        "properties": {
+          "entryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "scheduleStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "skipReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceTotal": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ActionQueueItemDto": {
+        "type": "object",
+        "properties": {
+          "accountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "subLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "days": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "scheduleLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ActionQueueResultDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActionQueueItemDto"
+            },
+            "nullable": true
+          },
+          "totalAccounts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "overdueAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "overdueCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dueToInvoiceAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "dueToInvoiceCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "AddCommissionAdjustmentDto": {
         "type": "object",
         "properties": {
@@ -6618,6 +7153,32 @@
         "type": "object",
         "properties": {
           "claimDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddManualStudentPlanEntryDto": {
+        "type": "object",
+        "properties": {
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "dueDate": {
             "type": "string",
             "format": "date-time"
           }
@@ -7958,48 +8519,6 @@
             "nullable": true
           },
           "comment": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateInvoiceDraftDto": {
-        "type": "object",
-        "properties": {
-          "invoiceNo": {
-            "type": "string",
-            "nullable": true
-          },
-          "invoiceToType": {
-            "type": "string",
-            "nullable": true
-          },
-          "invoiceToId": {
-            "type": "string",
-            "nullable": true
-          },
-          "invoiceToName": {
-            "type": "string",
-            "nullable": true
-          },
-          "studentName": {
-            "type": "string",
-            "nullable": true
-          },
-          "periodStart": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "periodEnd": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "periodTotal": {
-            "type": "number",
-            "format": "double"
-          },
-          "htmlContent": {
             "type": "string",
             "nullable": true
           }
@@ -9604,6 +10123,36 @@
         },
         "additionalProperties": false
       },
+      "GenerateStudentPaymentPlanDto": {
+        "type": "object",
+        "properties": {
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "instalmentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstDueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "intervalMonths": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "InvoiceClaimItemDto": {
         "type": "object",
         "properties": {
@@ -9888,6 +10437,36 @@
           "createdByName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceRecordDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvoiceRecordDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -10490,6 +11069,10 @@
             "type": "string",
             "nullable": true
           },
+          "relatedStudentPlanEntryId": {
+            "type": "string",
+            "nullable": true
+          },
           "description": {
             "type": "string",
             "nullable": true
@@ -10648,6 +11231,16 @@
         "additionalProperties": false
       },
       "SkipPlanEntryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SkipStudentPlanEntryDto": {
         "type": "object",
         "properties": {
           "reason": {
@@ -10858,6 +11451,63 @@
         },
         "additionalProperties": false
       },
+      "StudentPaymentPlanEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "courseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "instalmentNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalInstalments": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedInvoiceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "skipReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "isManual": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateCourseApplicationDetailsDto": {
         "type": "object",
         "properties": {
@@ -10914,20 +11564,6 @@
           "body": {
             "type": "string",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateInvoiceDraftDto": {
-        "type": "object",
-        "properties": {
-          "htmlContent": {
-            "type": "string",
-            "nullable": true
-          },
-          "periodTotal": {
-            "type": "number",
-            "format": "double"
           }
         },
         "additionalProperties": false
@@ -11080,6 +11716,16 @@
           },
           "address": {
             "$ref": "#/components/schemas/AddressDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateStudentPlanEntryDateDto": {
+        "type": "object",
+        "properties": {
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -11323,6 +11969,9 @@
   },
   "tags": [
     {
+      "name": "Accounts"
+    },
+    {
       "name": "Applications"
     },
     {
@@ -11381,6 +12030,9 @@
     },
     {
       "name": "Settings"
+    },
+    {
+      "name": "StudentPaymentPlans"
     },
     {
       "name": "Students"

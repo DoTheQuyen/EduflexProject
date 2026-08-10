@@ -41,10 +41,12 @@ namespace ShareService.Models.Invoice
         public decimal GstRatePercent { get; set; } = 10m;
     }
 
-    // Top-level ledger of every invoice ever sent through the new Invoice Template
-    // system (student service fees today; partner commission invoices remain on the
-    // existing, untouched FinancialRecord.Invoices embedded list for now). One
-    // collection, one global numbering source of truth per template.
+    // Top-level ledger of every invoice ever sent through the Invoice Template system —
+    // student service fees, partner commission claims, and custom one-offs all write
+    // here now. FinancialRecordModel.Invoices (ShareService.Models.Financial) is the
+    // older, embedded ledger this one replaced; its write endpoints are no longer
+    // reachable from the UI (see FinancialRecordsController). One collection, one
+    // global numbering source of truth per template.
     public class InvoiceModel : AuditableEntity
     {
         [BsonId]

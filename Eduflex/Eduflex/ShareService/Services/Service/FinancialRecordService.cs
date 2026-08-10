@@ -24,7 +24,6 @@ namespace ShareService.Services
         private readonly IPermissionService _permissionService;
         private readonly IAzureBlobDocStorageService _blobStorageService;
         private readonly IAzureEmailService _emailService;
-        private readonly IInvoicePdfService _invoicePdfService;
         private readonly INotificationPublisher _notificationPublisher;
         // Needed so the Communication tab's "attach invoice" picker can resolve invoices
         // from the new top-level Invoices collection — the old embedded Invoices list on
@@ -42,7 +41,6 @@ namespace ShareService.Services
             IPermissionService permissionService,
             IAzureBlobDocStorageService blobStorageService,
             IAzureEmailService emailService,
-            IInvoicePdfService invoicePdfService,
             INotificationPublisher notificationPublisher,
             IInvoice invoiceDataAccess,
             IOptions<DocumentLinkSettings> documentLinkSettings,
@@ -56,7 +54,6 @@ namespace ShareService.Services
             _permissionService = permissionService;
             _blobStorageService = blobStorageService;
             _emailService = emailService;
-            _invoicePdfService = invoicePdfService;
             _notificationPublisher = notificationPublisher;
             _invoiceDataAccess = invoiceDataAccess;
             _documentLinkExpiryDays = documentLinkSettings.Value.ExpiryDays;
@@ -190,115 +187,6 @@ namespace ShareService.Services
 
             await _financialRecordDataAccess.ReplaceAsync(id, existing);
             return adjustment;
-        }
-
-        public async Task<InvoiceModel> CreateInvoiceDraftAsync(string id, string invoiceNo, string invoiceToType, string invoiceToId, string invoiceToName, string studentName,
-            DateTime periodStart, DateTime periodEnd, decimal periodTotal, string htmlContent, string actingUserId)
-        {
-            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceAdd, "add invoices");
-            var existing = await GetExistingAsync(id);
-            var actingUserName = await ResolveUserNameAsync(actingUserId);
-
-            var invoice = new InvoiceModel
-            {
-                InvoiceNo = invoiceNo,
-                InvoiceToType = invoiceToType,
-                InvoiceToId = invoiceToId,
-                InvoiceToName = invoiceToName,
-                StudentName = studentName,
-                PeriodStart = periodStart,
-                PeriodEnd = periodEnd,
-                PeriodTotal = periodTotal,
-                HtmlContent = htmlContent,
-                Status = "Draft",
-                CreatedByUserId = actingUserId,
-                CreatedByName = actingUserName
-            };
-
-            existing.Invoices.Add(invoice);
-            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Created invoice draft \"{invoiceNo}\"", actingUserId, actingUserName));
-
-            await _financialRecordDataAccess.ReplaceAsync(id, existing);
-
-            await _notificationPublisher.PublishToRoleAsync(
-                module: "Finance",
-                entityId: id,
-                summary: $"Invoice draft \"{invoiceNo}\" created",
-                role: SystemRole.Manager);
-
-            return invoice;
-        }
-
-        public async Task<bool> UpdateInvoiceDraftAsync(string id, string invoiceId, string htmlContent, decimal periodTotal, string actingUserId)
-        {
-            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "edit invoices");
-            var existing = await GetExistingAsync(id);
-            var invoice = FindInvoice(existing, invoiceId);
-
-            if (invoice.Status != "Draft")
-            {
-                throw new ArgumentException("This invoice has already been generated and can no longer be edited as a draft.");
-            }
-
-            invoice.HtmlContent = htmlContent;
-            invoice.PeriodTotal = periodTotal;
-
-            var actingUserName = await ResolveUserNameAsync(actingUserId);
-            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Saved draft changes to invoice \"{invoice.InvoiceNo}\"", actingUserId, actingUserName));
-
-            return await _financialRecordDataAccess.ReplaceAsync(id, existing);
-        }
-
-        public async Task<InvoiceModel> GenerateInvoicePdfAsync(string id, string invoiceId, string actingUserId)
-        {
-            await RequirePermissionAsync(actingUserId, PermissionKey.FinanceEdit, "generate invoice PDFs");
-            var existing = await GetExistingAsync(id);
-            var invoice = FindInvoice(existing, invoiceId);
-
-            var fileName = BuildInvoiceFileName(invoice.InvoiceNo, invoice.InvoiceToName, invoice.StudentName, DateTime.UtcNow);
-
-            var pdfBytes = await _invoicePdfService.RenderToPdfAsync(invoice.HtmlContent);
-            using var stream = new MemoryStream(pdfBytes);
-            var pdfUrl = await _blobStorageService.UploadAsync(stream, fileName, "application/pdf");
-
-            invoice.PdfUrl = pdfUrl;
-            invoice.PdfFileName = fileName;
-            invoice.Status = "Generated";
-            invoice.GeneratedAt = DateTime.UtcNow;
-
-            var planEntry = existing.InvoicePlan.FirstOrDefault(p => p.Status == "Planned");
-            if (planEntry != null)
-            {
-                planEntry.Status = "Invoiced";
-                planEntry.LinkedInvoiceId = invoice.Id;
-            }
-
-            var actingUserName = await ResolveUserNameAsync(actingUserId);
-            existing.AuditTrail.Add(FinancialAuditEntryModel.Create($"Generated PDF for invoice \"{invoice.InvoiceNo}\"", actingUserId, actingUserName));
-
-            await _financialRecordDataAccess.ReplaceAsync(id, existing);
-
-            await _notificationPublisher.PublishToRoleAsync(
-                module: "Finance",
-                entityId: id,
-                summary: $"Invoice \"{invoice.InvoiceNo}\" status changed to Generated",
-                role: SystemRole.Manager);
-
-            return invoice;
-        }
-
-        public async Task<Uri> GetInvoiceDownloadLinkAsync(string id, string invoiceId, string userId)
-        {
-            await RequirePermissionAsync(userId, PermissionKey.FinanceView, "view financial records");
-            var existing = await GetExistingAsync(id);
-            var invoice = FindInvoice(existing, invoiceId);
-
-            if (string.IsNullOrEmpty(invoice.PdfUrl))
-            {
-                throw new ArgumentException("This invoice has not been generated yet.");
-            }
-
-            return _blobStorageService.GetExpiringDownloadUri(invoice.PdfUrl, _documentLinkExpiryDays);
         }
 
         public async Task<FinancialCommunicationModel> SendCommunicationAsync(string id, string toEmail, string recipientType, string subject, string body,
@@ -527,21 +415,6 @@ namespace ShareService.Services
                 return parsed.Month;
             }
             return null;
-        }
-
-        private static string BuildInvoiceFileName(string invoiceNo, string partnerName, string studentName, DateTime issuedAt)
-        {
-            static string Sanitize(string value) =>
-                string.Join("_", value.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)).Trim('_');
-
-            var datePart = issuedAt.ToString("ddMMyyyy");
-            return $"{Sanitize(invoiceNo)}-{Sanitize(partnerName)}-{Sanitize(studentName)}-{datePart}.pdf";
-        }
-
-        private static InvoiceModel FindInvoice(FinancialRecordModel record, string invoiceId)
-        {
-            return record.Invoices.FirstOrDefault(i => i.Id == invoiceId)
-                ?? throw new KeyNotFoundException("Invoice not found");
         }
 
         private async Task<FinancialRecordModel> GetExistingAsync(string id)

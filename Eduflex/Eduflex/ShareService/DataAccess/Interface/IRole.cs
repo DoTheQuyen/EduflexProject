@@ -10,5 +10,6 @@ namespace ShareService.DataAccess.Interface
         Task<List<RoleModel>> GetAllAsync();
         Task<PagedResult<RoleModel>> GetRolesAsync(PaginationQuery query);
         Task<bool> CreateAsync(RoleModel role);
+        Task<bool> UpdateAsync(string id, RoleModel role);
     }
 }

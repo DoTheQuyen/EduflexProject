@@ -262,7 +262,7 @@ namespace ShareService.Services
             }
 
             var existingRole = await _roleService.GetByIdAsync(existingUser.RoleId);
-            if (existingUser.Id != actingUserId && existingRole?.Name.Is(SystemRole.Admin) == true)
+            if (existingUser.Id != actingUserId && existingRole?.RoleType == RoleTypeEnums.Admin)
             {
                 throw new ArgumentException("Cannot update another admin's details");
             }
@@ -274,9 +274,8 @@ namespace ShareService.Services
             var actingRole = actingUser != null ? await _roleService.GetByIdAsync(actingUser.RoleId) : null;
             var targetRole = await _roleService.GetByIdAsync(targetRoleId);
 
-            if (Enum.TryParse<SystemRole>(actingRole?.Name, out var actingSystemRole) &&
-                Enum.TryParse<SystemRole>(targetRole?.Name, out var targetSystemRole) &&
-                targetSystemRole > actingSystemRole)
+            if (actingRole != null && targetRole != null &&
+                targetRole.RoleType.IsHigherThan(actingRole.RoleType))
             {
                 throw new ArgumentException("Cannot assign a role higher than your own");
             }

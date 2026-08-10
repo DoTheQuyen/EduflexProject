@@ -23,5 +23,6 @@ namespace ShareService.DataAccess.Interface
         Task<bool> SetPasswordResetTokenAsync(string userId, string token, DateTime expiry);
         Task<UserModel?> GetUserByResetTokenAsync(string token);
         Task<bool> CompletePasswordResetAsync(string userId, string newPasswordHash);
+        Task<Dictionary<string, int>> CountUsersByRoleIdsAsync(IEnumerable<string> roleIds);
     }
 }

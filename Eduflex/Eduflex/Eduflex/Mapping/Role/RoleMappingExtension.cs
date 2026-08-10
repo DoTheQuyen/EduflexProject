@@ -23,7 +23,9 @@ namespace Eduflex.Mapping.Role
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                PermissionIds = model.PermissionIds
+                roleType = model.RoleType,
+                PermissionIds = model.PermissionIds,
+                UserCount = model.UserCount
             };
         }
 
@@ -33,7 +35,18 @@ namespace Eduflex.Mapping.Role
             {
                 Name = dto.Name,
                 Description = dto.Description,
+                RoleType = dto.roleType,
                 PermissionIds = dto.PermissionIds
+            };
+        }
+
+        public static RoleSummaryDto ToSummaryDto(this RoleModel model)
+        {
+            return new RoleSummaryDto
+            {
+                Id = model.Id,
+                Name = model.Name,
+                RoleType = model.RoleType
             };
         }
     }

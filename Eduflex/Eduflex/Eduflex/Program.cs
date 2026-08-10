@@ -12,6 +12,8 @@ using Eduflex.Authorization;
 using Eduflex.API.BackgroundServices;
 using Eduflex.API.Hubs;
 using StackExchange.Redis;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,36 +29,47 @@ builder.Services.AddEndpointsApiExplorer();
 // ✅ Register memory cache
 builder.Services.AddMemoryCache();
 
-// ✅ Register Redis as the distributed cache (feedback/course-promotion cache-aside)
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-    options.InstanceName = "eduflex:";
-});
+// Redis distributed cache disabled (cost) — see project memory. Swapped for the in-box
+// in-memory distributed cache so IDistributedCache still resolves for CoursePromotionService;
+// functionally identical for a single-instance deployment, just not shared across instances.
+// Uncomment below and drop AddDistributedMemoryCache() to restore Redis-backed caching.
+// builder.Services.AddStackExchangeRedisCache(options =>
+// {
+//     options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+//     options.InstanceName = "eduflex:";
+// });
+builder.Services.AddDistributedMemoryCache();
 
-// ✅ Register a shared Redis connection multiplexer for pub/sub (feeds the notification listener)
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Redis");
-    var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
-
-    // StackExchange.Redis auto-reconnects on its own — these are just visibility hooks so an
-    // outage shows up in logs instead of silently degrading (cache calls fail open, pub/sub
-    // messages stop arriving, with nothing telling you why).
-    multiplexer.ConnectionFailed += (_, args) =>
-        logger.LogError("Redis connection failed on {EndPoint}: {FailureType}", args.EndPoint, args.FailureType);
-
-    multiplexer.ConnectionRestored += (_, args) =>
-        logger.LogInformation("Redis connection restored on {EndPoint}", args.EndPoint);
-
-    return multiplexer;
-});
+// Redis pub/sub disabled (cost) — this fed NotificationListener below, which fanned out
+// to SignalR for live notification push. Notifications still persist to Mongo and load
+// on page load/reconnect via NotificationsController; only the *live* push to someone
+// already on the page is skipped. Uncomment this, the IConnectionMultiplexer parameter
+// in NotificationPublisher, and AddHostedService<NotificationListener>() below together
+// to restore it.
+// builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+// {
+//     var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Redis");
+//     var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
+//
+//     // StackExchange.Redis auto-reconnects on its own — these are just visibility hooks so an
+//     // outage shows up in logs instead of silently degrading (cache calls fail open, pub/sub
+//     // messages stop arriving, with nothing telling you why).
+//     multiplexer.ConnectionFailed += (_, args) =>
+//         logger.LogError("Redis connection failed on {EndPoint}: {FailureType}", args.EndPoint, args.FailureType);
+//
+//     multiplexer.ConnectionRestored += (_, args) =>
+//         logger.LogInformation("Redis connection restored on {EndPoint}", args.EndPoint);
+//
+//     return multiplexer;
+// });
 
 // ✅ SignalR for pushing live notifications to connected clients
 builder.Services.AddSignalR();
 
-// ✅ Background listener that subscribes to the notifications channel and fans out to SignalR groups
-builder.Services.AddHostedService<NotificationListener>();
+// Background listener that subscribed to the notifications channel and fanned out to
+// SignalR groups — disabled alongside the IConnectionMultiplexer registration above,
+// since it can't run without it.
+// builder.Services.AddHostedService<NotificationListener>();
 
 // ✅ Register health checks
 builder.Services.AddHealthChecks();
@@ -104,6 +117,10 @@ builder.Services.Configure<AzureEmailSettings>(
 //Configure Web URL Settings (frontend URLs used in emails, e.g. login/reset links)
 builder.Services.Configure<WebURLSettings>(
     builder.Configuration.GetSection("WebURLSettings"));
+
+//Configure Gemini Settings (used by AIService for Gemini API calls)
+builder.Services.Configure<GeminiSettings>(
+    builder.Configuration.GetSection("Gemini"));
 
 // Register MongoDB Client (Singleton - recommended by MongoDB)
 builder.Services.AddSingleton<IMongoClient>(sp =>
@@ -177,6 +194,28 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Rate limiting for public endpoints that call metered external APIs (e.g. Gemini chat)
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("ChatPolicy", httpContext =>
+        RateLimitPartition.GetSlidingWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 15,
+                Window = TimeSpan.FromMinutes(10),
+                SegmentsPerWindow = 5,
+                QueueLimit = 0
+            }));
+
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsync(
+            "Too many questions in a short time. Please wait a few minutes and try again.", token);
+    };
+});
+
 // Register all shared services (DataAccess, Services, Validators)
 builder.Services.AddSharedServices();
 
@@ -207,6 +246,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors("AllowAngular");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

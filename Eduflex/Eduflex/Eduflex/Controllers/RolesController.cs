@@ -1,5 +1,7 @@
 using Eduflex.Authorization;
+using Eduflex.DTOs.Permission;
 using Eduflex.DTOs.Role;
+using Eduflex.Mapping.Permission;
 using Eduflex.Mapping.Role;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +53,16 @@ namespace Eduflex.API.Controllers
             });
         }
 
+        [HttpGet("role-lookup")]
+        public Task<ActionResult<List<RoleSummaryDto>>> GetRolesLookup()
+        {
+            return HandleRequestAsync(_logger, "Error in GetRolesLookup endpoint", async () =>
+            {
+                var roles = await _roleService.GetAllRolesAsync();
+                return roles.Select(r => r.ToSummaryDto()).ToList();
+            });
+        }
+
         [HttpGet("permissions")]
         [RequirePermission(PermissionKey.RolesView)]
         public Task<ActionResult<List<PermissionDto>>> GetPermissionCatalog()
@@ -75,6 +87,17 @@ namespace Eduflex.API.Controllers
                 var userId = GetRequiredUserId();
 
                 return _roleService.CreateRoleAsync(createDto.ToModel(), userId);
+            });
+        }
+
+        [HttpPut("{id}")]
+        public Task<ActionResult<bool>> UpdateRole(string id, CreateRoleDto createDto)
+        {
+            return HandleUpdateAsync(_logger, "Error in UpdateRole endpoint", () =>
+            {
+                var userId = GetRequiredUserId();
+
+                return _roleService.UpdateRoleAsync(id, createDto.ToModel(), userId);
             });
         }
 

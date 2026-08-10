@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="col-md-6 text-md-end" *ngIf="!isStaffPortal">
-        <button class="btn btn-primary btn-lg" [disabled]="hasActiveApplication"
+        <button class="btn btn-primary btn-md" [disabled]="hasActiveApplication"
           [title]="hasActiveApplication ? 'Finish or wait on your current application before starting another.' : ''"
           (click)="onNewApplication()">
           <i class="fas fa-plus me-2"></i>New Application
@@ -19,12 +19,14 @@
 
     <p class="!text-muted mb-0" *ngIf="!isStaffPortal && !isLoading && applications.length > 0">
       You have {{ applications.length }} application{{ applications.length > 1 ? 's' : '' }}
-      &mdash; {{ inProgressApplicationsCount }} in progress<ng-container *ngIf="studyingApplicationsCount > 0">, {{ studyingApplicationsCount }} completed</ng-container>.
+      &mdash; {{ inProgressApplicationsCount }} in progress<ng-container *ngIf="studyingApplicationsCount > 0">, {{
+        studyingApplicationsCount }} completed</ng-container>.
     </p>
 
     <div class="alert alert-warning mt-3 mb-0" *ngIf="!isStaffPortal && hasActiveApplication">
       <i class="fas fa-triangle-exclamation me-2"></i>
-      You have an application in progress. It must be <strong>Rejected</strong>, or you must be enrolled and <strong>Studying</strong>, before you can start another.
+      You have an application in progress. It must be <strong>Rejected</strong>, or you must be enrolled and
+      <strong>Studying</strong>, before you can start another.
     </div>
   </div>
 
@@ -72,9 +74,8 @@
             <div *ngIf="filteredApplications.length === 0" class="text-center py-5 !text-muted">
               You haven't applied to anything yet.
             </div>
-            <app-data-table *ngIf="filteredApplications.length > 0"
-              [columns]="columns" [data]="filteredApplications" [rowActions]="rowActions"
-              (actionClick)="onTableAction($event)"
+            <app-data-table *ngIf="filteredApplications.length > 0" [columns]="columns" [data]="filteredApplications"
+              [rowActions]="rowActions" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>
           </div>

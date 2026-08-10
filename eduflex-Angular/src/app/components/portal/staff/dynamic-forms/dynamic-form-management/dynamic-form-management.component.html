@@ -3,10 +3,9 @@
     <div class="row align-items-center">
       <div class="col">
         <h3 class="mb-1">Dynamic Forms</h3>
-        <p class="text-muted mb-2">Question templates staff can request from students during an enrolment.</p>
       </div>
       <div class="col-auto" *ngIf="permissions.add">
-        <button type="button" class="btn btn-primary" (click)="createNew()">
+        <button type="button" class="btn btn-primary btn-sm" (click)="createNew()">
           <i class="fas fa-plus me-1"></i>New Form
         </button>
       </div>
@@ -23,14 +22,8 @@
 
     <div *ngIf="!isLoading" class="card border shadow-sm">
       <div class="card-body p-0">
-        <app-data-table
-          [columns]="columns"
-          [data]="templates"
-          [rowActions]="rowActions"
-          [totalCount]="templates.length"
-          [showSearch]="false"
-          (actionClick)="onTableAction($event)"
-          tableClass="table table-bordered table-hover mb-0">
+        <app-data-table [columns]="columns" [data]="templates" [rowActions]="rowActions" [totalCount]="templates.length"
+          [showSearch]="false" (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
         </app-data-table>
         <p *ngIf="!isLoading && templates.length === 0" class="text-center text-muted py-4 mb-0">
           No dynamic forms yet — click "New Form" to create one.

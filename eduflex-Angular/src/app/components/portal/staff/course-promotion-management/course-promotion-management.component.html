@@ -1,11 +1,11 @@
 <div class="promotion-portal">
-  <div class="container-fluid py-4">
+  <div class="container-fluid py-2">
     <div class="row align-items-center">
       <div class="col-md-6">
-        <h2 class="mb-2">Manage Course Promotions</h2>
+        <h3 class="mb-2">Manage Course Promotions</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-lg" *ngIf="permissions.add" (click)="openAddModal()">
+        <button class="btn btn-primary btn-md" *ngIf="permissions.add" (click)="openAddModal()">
           <i class="fas fa-plus me-2"></i>Add Course Promotion
         </button>
       </div>
@@ -23,22 +23,15 @@
         </div>
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
-         
+
           <div class="card-body p-0">
-            <app-data-table
-              [columns]="columns"
-              [data]="promotions"
-              [rowActions]="rowActions"
-              [pageNumber]="pager.pageNumber"
-              [pageSize]="pager.pageSize"
-              [totalCount]="pager.totalCount"
-              [showSearch]="true"
-              searchPlaceholder="Search course or university..."
-              (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)"
-              (actionClick)="onTableAction($event)"
-              tableClass="table table-bordered table-hover mb-0">
-              <select tableFilters class="form-select" style="max-width: 180px;" (change)="onFeaturedFilterChange($event)">
+            <app-data-table [columns]="columns" [data]="promotions" [rowActions]="rowActions"
+              [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
+              [showSearch]="true" searchPlaceholder="Search course or university..."
+              (searchChange)="onSearchChange($event)" (pageChange)="onPageChange($event)"
+              (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
+              <select tableFilters class="form-select" style="max-width: 180px;"
+                (change)="onFeaturedFilterChange($event)">
                 <option value="all">All</option>
                 <option value="true">Featured only</option>
                 <option value="false">Not featured</option>
@@ -79,13 +72,15 @@
 
           <div class="col-md-4">
             <label for="semester" class="form-label">Semester *</label>
-            <input id="semester" type="text" class="form-control" placeholder="Semester 2, 2026" formControlName="semester">
+            <input id="semester" type="text" class="form-control" placeholder="Semester 2, 2026"
+              formControlName="semester">
             <span class="field-error" *ngIf="isFieldInvalid('semester')">Semester is required</span>
           </div>
 
           <div class="col-md-4">
             <label for="scholarshipLabel" class="form-label">Scholarship *</label>
-            <input id="scholarshipLabel" type="text" class="form-control" placeholder="20% scholarship" formControlName="scholarshipLabel">
+            <input id="scholarshipLabel" type="text" class="form-control" placeholder="20% scholarship"
+              formControlName="scholarshipLabel">
             <span class="field-error" *ngIf="isFieldInvalid('scholarshipLabel')">Scholarship label is required</span>
           </div>
 
@@ -97,7 +92,8 @@
 
           <div class="col-md-6">
             <label for="location" class="form-label">Location *</label>
-            <input id="location" type="text" class="form-control" placeholder="Melbourne, VIC" formControlName="location">
+            <input id="location" type="text" class="form-control" placeholder="Melbourne, VIC"
+              formControlName="location">
             <span class="field-error" *ngIf="isFieldInvalid('location')">Location is required</span>
           </div>
 
@@ -109,7 +105,8 @@
 
           <div class="col-md-12">
             <label for="opportunities" class="form-label">Opportunities *</label>
-            <input id="opportunities" type="text" class="form-control" placeholder="Jul & Feb intake" formControlName="opportunities">
+            <input id="opportunities" type="text" class="form-control" placeholder="Jul & Feb intake"
+              formControlName="opportunities">
             <span class="field-error" *ngIf="isFieldInvalid('opportunities')">Opportunities is required</span>
           </div>
 
@@ -121,7 +118,8 @@
 
           <div class="col-md-8">
             <label for="websiteUrl" class="form-label">University website URL *</label>
-            <input id="websiteUrl" type="url" class="form-control" placeholder="https://www.unimelb.edu.au" formControlName="websiteUrl">
+            <input id="websiteUrl" type="url" class="form-control" placeholder="https://www.unimelb.edu.au"
+              formControlName="websiteUrl">
             <span class="field-error" *ngIf="isFieldInvalid('websiteUrl')">A valid website URL is required</span>
           </div>
 

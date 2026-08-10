@@ -1,9 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, FeedbackDto, CreateFeedbackDto, FeedbackFilterDto, SettingsDto } from '@services/api.services';
+import {
+  Client,
+  FeedbackDto,
+  CreateFeedbackDto,
+  FeedbackFilterDto,
+  SettingsDto,
+} from '@services/api.services';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
@@ -15,9 +25,15 @@ import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util'
 @Component({
   selector: 'app-feedback-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, ModalComponent, NotificationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DataTableComponent,
+    ModalComponent,
+    NotificationComponent,
+  ],
   templateUrl: './feedback-management.component.html',
-  styleUrls: ['./feedback-management.component.css']
+  styleUrls: ['./feedback-management.component.css'],
 })
 export class FeedbackManagementComponent implements OnInit {
   feedbacks: FeedbackDto[] = [];
@@ -38,40 +54,55 @@ export class FeedbackManagementComponent implements OnInit {
   feedbackForm: FormGroup;
 
   columns: DataTableColumn<FeedbackDto>[] = [
-    { field: 'photoUrl', title: 'Photo', className: 'text-center',
-      render: (value) => `<img src="${value}" alt="" class="feedback-thumb">` },
+    {
+      field: 'photoUrl',
+      title: 'Photo',
+      className: 'text-center',
+      render: (value) => `<img src="${value}" alt="" class="feedback-thumb">`,
+    },
     { field: 'name', title: 'Name' },
     { field: 'courseName', title: 'Course', className: 'text-center' },
     { field: 'comment', title: 'Comment', className: 'feedback-comment-cell' },
-    { field: 'createdAt', title: 'Date', className: 'text-center',
-      formatter: (value) => formatDateTime(value, 'mediumDate') },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'createdAt',
+      title: 'Date',
+      className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate'),
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<FeedbackDto>[] = [
-    { action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }
+    {
+      action: 'delete',
+      label: 'Delete',
+      icon: 'fa-trash',
+      cssClass: 'btn btn-sm btn-outline-danger',
+    },
   ];
 
   constructor(
     private fb: FormBuilder,
     private apiClient: Client,
     private notificationService: NotificationService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {
     this.feedbackForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(150)]],
       photoData: ['', [Validators.required]],
       photoContentType: ['image/jpeg'],
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
-      comment: ['', [Validators.required, Validators.maxLength(2000)]]
+      comment: ['', [Validators.required, Validators.maxLength(2000)]],
     });
   }
 
   ngOnInit(): void {
     this.loadFeedbacks();
     this.settingsService.getSettings().subscribe({
-      next: (settings: SettingsDto) => { this.settings = settings; },
-      error: () => {}
+      next: (settings: SettingsDto) => {
+        this.settings = settings;
+      },
+      error: () => {},
     });
   }
 
@@ -80,7 +111,7 @@ export class FeedbackManagementComponent implements OnInit {
     const filter = new FeedbackFilterDto({
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
-      searchTerm: this.pager.searchTerm || undefined
+      searchTerm: this.pager.searchTerm || undefined,
     });
     this.apiClient.searchFeedbacks(filter).subscribe({
       next: (result) => {
@@ -90,7 +121,7 @@ export class FeedbackManagementComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -139,9 +170,12 @@ export class FeedbackManagementComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the feedback. Please try again.');
+        this.errorMessage = extractApiErrorMessage(
+          err,
+          'Something went wrong saving the feedback. Please try again.',
+        );
         this.notificationService.error(this.errorMessage);
-      }
+      },
     });
   }
 
@@ -158,7 +192,7 @@ export class FeedbackManagementComponent implements OnInit {
       },
       error: () => {
         this.notificationService.error('Could not delete this feedback. Please try again.');
-      }
+      },
     });
   }
 
@@ -169,37 +203,39 @@ export class FeedbackManagementComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  const file = input.files && input.files[0];
-  if (!file) { return; }
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0];
+    if (!file) {
+      return;
+    }
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      const targetSize = 300;
-      const canvas = document.createElement('canvas');
-      canvas.width = targetSize;
-      canvas.height = targetSize;
-      const ctx = canvas.getContext('2d')!;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const targetSize = 300;
+        const canvas = document.createElement('canvas');
+        canvas.width = targetSize;
+        canvas.height = targetSize;
+        const ctx = canvas.getContext('2d')!;
 
-      const side = Math.min(img.width, img.height);
-      const sx = (img.width - side) / 2;
-      const sy = (img.height - side) / 2;
-      ctx.drawImage(img, sx, sy, side, side, 0, 0, targetSize, targetSize);
+        const side = Math.min(img.width, img.height);
+        const sx = (img.width - side) / 2;
+        const sy = (img.height - side) / 2;
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, targetSize, targetSize);
 
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-      const base64 = dataUrl.split(',')[1];
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        const base64 = dataUrl.split(',')[1];
 
-      this.photoPreview = dataUrl;
-      this.feedbackForm.patchValue({
-        photoData: base64,
-        photoContentType: 'image/jpeg'
-      });
-      this.feedbackForm.get('photoData')?.markAsTouched();
+        this.photoPreview = dataUrl;
+        this.feedbackForm.patchValue({
+          photoData: base64,
+          photoContentType: 'image/jpeg',
+        });
+        this.feedbackForm.get('photoData')?.markAsTouched();
+      };
+      img.src = reader.result as string;
     };
-    img.src = reader.result as string;
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
   }
 }

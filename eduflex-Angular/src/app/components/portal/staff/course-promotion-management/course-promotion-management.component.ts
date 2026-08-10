@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Client, CoursePromotionDto, CoursePromotionFilterDto, CreateCoursePromotionDto } from '@services/api.services';
+import {
+  Client,
+  CoursePromotionDto,
+  CoursePromotionFilterDto,
+  CreateCoursePromotionDto,
+} from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
@@ -15,7 +24,7 @@ import { NotificationService } from '@services/notification.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DataTableComponent],
   templateUrl: './course-promotion-management.component.html',
-  styleUrls: ['./course-promotion-management.component.css']
+  styleUrls: ['./course-promotion-management.component.css'],
 })
 export class CoursePromotionManagementComponent implements OnInit {
   promotions: CoursePromotionDto[] = [];
@@ -33,28 +42,48 @@ export class CoursePromotionManagementComponent implements OnInit {
   promotionForm: FormGroup;
 
   columns: DataTableColumn<CoursePromotionDto>[] = [
-    { field: 'courseName', title: 'Course / University',
+    {
+      field: 'courseName',
+      title: 'Course / University',
       render: (value, row) => `
         <div class="promo-course-name">${value}</div>
         <div class="promo-uni-name">${row.universityName}</div>
-      ` },
+      `,
+    },
     { field: 'semester', title: 'Semester' },
-    { field: 'scholarshipLabel', title: 'Scholarship',
-      render: (value) => `<span class="badge bg-warning text-dark">${value}</span>` },
+    {
+      field: 'scholarshipLabel',
+      title: 'Scholarship',
+      render: (value) => `<span class="badge bg-warning text-dark">${value}</span>`,
+    },
     { field: 'location', title: 'Location' },
     { field: 'tuition', title: 'Tuition' },
-    { field: 'expiryDate', title: 'Offer ends', className: 'text-center',
-      formatter: (value) => formatDateTime(value, 'mediumDate') },
-    { field: 'isFeatured', title: 'Featured', className: 'text-center',
-      render: (value) => value === 'Yes'
-        ? `<span class="badge bg-success">Yes</span>`
-        : `<span class="badge bg-secondary">No</span>` },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'expiryDate',
+      title: 'Offer ends',
+      className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'mediumDate'),
+    },
+    {
+      field: 'isFeatured',
+      title: 'Featured',
+      className: 'text-center',
+      render: (value) =>
+        value === 'Yes'
+          ? `<span class="badge bg-success">Yes</span>`
+          : `<span class="badge bg-secondary">No</span>`,
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<CoursePromotionDto>[] = [];
 
-  constructor(private fb: FormBuilder, private apiClient: Client, private authHelper: AuthHelperService, private notificationService: NotificationService) {
+  constructor(
+    private fb: FormBuilder,
+    private apiClient: Client,
+    private authHelper: AuthHelperService,
+    private notificationService: NotificationService,
+  ) {
     this.promotionForm = this.fb.group({
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
       universityName: ['', [Validators.required, Validators.maxLength(150)]],
@@ -67,14 +96,32 @@ export class CoursePromotionManagementComponent implements OnInit {
       note: ['', [Validators.maxLength(600)]],
       websiteUrl: ['', [Validators.required]],
       isFeatured: [true],
-      displayOrder: [0, [Validators.required, Validators.min(0)]]
+      displayOrder: [0, [Validators.required, Validators.min(0)]],
     });
 
     this.permissions = this.authHelper.hasCoursePromotionsPermission();
 
     this.rowActions = [
-      ...(this.permissions.edit ? [{ action: 'edit', label: 'Edit', icon: 'fa-edit', cssClass: 'btn btn-sm btn-outline-primary' }] : []),
-      ...(this.permissions.delete ? [{ action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }] : [])
+      ...(this.permissions.edit
+        ? [
+            {
+              action: 'edit',
+              label: 'Edit',
+              icon: 'fa-edit',
+              cssClass: 'btn btn-sm btn-outline-primary',
+            },
+          ]
+        : []),
+      ...(this.permissions.delete
+        ? [
+            {
+              action: 'delete',
+              label: 'Delete',
+              icon: 'fa-trash',
+              cssClass: 'btn btn-sm btn-outline-danger',
+            },
+          ]
+        : []),
     ];
   }
 
@@ -89,12 +136,13 @@ export class CoursePromotionManagementComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const isFeatured = this.isFeaturedFilter === 'all' ? undefined : this.isFeaturedFilter === 'true';
+    const isFeatured =
+      this.isFeaturedFilter === 'all' ? undefined : this.isFeaturedFilter === 'true';
     const filter = new CoursePromotionFilterDto({
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
       searchTerm: this.pager.searchTerm || undefined,
-      isFeatured
+      isFeatured,
     });
     this.apiClient.searchCoursePromotions(filter).subscribe({
       next: (result) => {
@@ -104,7 +152,7 @@ export class CoursePromotionManagementComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -150,7 +198,7 @@ export class CoursePromotionManagementComponent implements OnInit {
       note: promotion.note,
       websiteUrl: promotion.websiteUrl,
       isFeatured: promotion.isFeatured,
-      displayOrder: promotion.displayOrder
+      displayOrder: promotion.displayOrder,
     });
     this.errorMessage = '';
     this.isModalOpen = true;
@@ -163,7 +211,11 @@ export class CoursePromotionManagementComponent implements OnInit {
   onSubmit(): void {
     const requiredPermission = this.editingId ? this.permissions.edit : this.permissions.add;
     if (!requiredPermission) {
-      this.notificationService.error(this.editingId ? 'You do not have permission to edit course promotions.' : 'You do not have permission to add course promotions.');
+      this.notificationService.error(
+        this.editingId
+          ? 'You do not have permission to edit course promotions.'
+          : 'You do not have permission to add course promotions.',
+      );
       return;
     }
 
@@ -178,7 +230,7 @@ export class CoursePromotionManagementComponent implements OnInit {
     const value = this.promotionForm.value;
     const payload = new CreateCoursePromotionDto({
       ...value,
-      expiryDate: new Date(value.expiryDate)
+      expiryDate: new Date(value.expiryDate),
     });
 
     const request$ = this.editingId
@@ -190,13 +242,20 @@ export class CoursePromotionManagementComponent implements OnInit {
         this.isSubmitting = false;
         this.closeModal();
         this.loadPromotions();
-        this.notificationService.success(this.editingId ? 'Course promotion updated successfully.' : 'Course promotion created successfully.');
+        this.notificationService.success(
+          this.editingId
+            ? 'Course promotion updated successfully.'
+            : 'Course promotion created successfully.',
+        );
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong saving the course promotion. Please try again.');
+        this.errorMessage = extractApiErrorMessage(
+          err,
+          'Something went wrong saving the course promotion. Please try again.',
+        );
         this.notificationService.error(this.errorMessage);
-      }
+      },
     });
   }
 
@@ -206,7 +265,9 @@ export class CoursePromotionManagementComponent implements OnInit {
       return;
     }
 
-    const confirmed = window.confirm(`Delete the promotion for ${promotion.courseName} (${promotion.universityName})?`);
+    const confirmed = window.confirm(
+      `Delete the promotion for ${promotion.courseName} (${promotion.universityName})?`,
+    );
     if (!confirmed || !promotion.id) {
       return;
     }
@@ -218,7 +279,7 @@ export class CoursePromotionManagementComponent implements OnInit {
       },
       error: () => {
         this.notificationService.error('Could not delete this course promotion. Please try again.');
-      }
+      },
     });
   }
 

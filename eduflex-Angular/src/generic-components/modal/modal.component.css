@@ -38,12 +38,12 @@
   border: none;
   font-size: 1.5rem;
   line-height: 1;
-  color: var(--color-muted, #5C6B7A);
+  color: var(--color-muted, #5c6b7a);
   cursor: pointer;
   padding: 0.25rem;
 }
 .modal-close-generic:hover {
-  color: var(--color-ink, #1B2430);
+  color: var(--color-ink, #1b2430);
 }
 
 .modal-body-generic {
@@ -65,14 +65,13 @@
 }
 
 .confirm-overlay-generic {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(27, 36, 48, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  border-radius: var(--radius, 10px);
+  z-index: 1060;
 }
 
 .confirm-box-generic {
@@ -87,7 +86,7 @@
 
 .confirm-message-generic {
   margin: 0 0 1.25rem;
-  color: var(--color-ink, #1B2430);
+  color: var(--color-ink, #1b2430);
   font-weight: 500;
 }
 

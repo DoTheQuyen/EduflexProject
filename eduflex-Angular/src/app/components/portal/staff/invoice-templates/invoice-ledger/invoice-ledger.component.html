@@ -47,17 +47,21 @@
           <tbody>
             <tr *ngFor="let inv of invoices">
               <td class="fw-semibold">{{ inv.invoiceNo }}</td>
-              <td>{{ inv.recipientName }}<div class="text-muted small">{{ inv.recipientEmail }}</div></td>
+              <td>{{ inv.recipientName }}<div class="text-muted small">{{ inv.recipientEmail }}</div>
+              </td>
               <td>
-                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.category === 'Customer'" [class.badge-pill-accent-soft]="inv.category === 'Partner'">{{ inv.category }}</span>
+                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.category === 'Customer'"
+                  [class.badge-pill-accent-soft]="inv.category === 'Partner'">{{ inv.category }}</span>
               </td>
               <td class="text-end">{{ inv.total | number:'1.2-2' }}</td>
               <td class="text-center">
-                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Sent'" [class.badge-pill-success-soft]="inv.status === 'Paid'">{{ inv.status }}</span>
+                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Sent'"
+                  [class.badge-pill-success-soft]="inv.status === 'Paid'">{{ inv.status }}</span>
               </td>
               <td>{{ inv.sentAt | date:'dd/MM/yyyy' }}</td>
               <td class="text-center">
-                <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="inv.pdfUrl" (click)="download(inv)">
+                <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="inv.pdfUrl"
+                  (click)="download(inv)">
                   <i class="fas fa-file-pdf"></i>
                 </button>
               </td>

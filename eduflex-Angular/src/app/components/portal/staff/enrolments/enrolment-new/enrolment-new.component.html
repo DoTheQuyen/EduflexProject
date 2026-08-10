@@ -5,7 +5,6 @@
     </button>
     <h3 class="mb-1">New Enrolment</h3>
     <p class="text-muted" *ngIf="enquiryId">Converting from enquiry: <strong>{{ enquiryLabel }}</strong></p>
-    <p class="text-muted" *ngIf="!enquiryId">Creating an independent enrolment (not linked to an enquiry).</p>
 
     <div class="step-indicator">
       <div class="step-item" [class.active]="step === 1" [class.done]="step > 1">
@@ -22,19 +21,11 @@
       <div class="card border shadow-sm mb-3" *ngIf="canSearchStudents">
         <div class="card-header bg-white"><strong>Find Existing Student</strong></div>
         <div class="card-body">
-          <app-data-table
-            [columns]="searchColumns"
-            [data]="searchResults"
-            [rowActions]="searchRowActions"
-            [pageNumber]="pager.pageNumber"
-            [pageSize]="pager.pageSize"
-            [totalCount]="pager.totalCount"
-            [showSearch]="true"
-            searchPlaceholder="Search by name, email or mobile..."
-            (searchChange)="onSearchChange($event)"
-            (pageChange)="onPageChange($event)"
-            (actionClick)="onSearchTableAction($event)"
-            tableClass="table table-bordered table-hover mb-0">
+          <app-data-table [columns]="searchColumns" [data]="searchResults" [rowActions]="searchRowActions"
+            [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
+            [showSearch]="true" searchPlaceholder="Search by name, email or mobile..."
+            (searchChange)="onSearchChange($event)" (pageChange)="onPageChange($event)"
+            (actionClick)="onSearchTableAction($event)" tableClass="table table-bordered table-hover mb-0">
           </app-data-table>
           <p *ngIf="!isSearching && searchResults.length === 0" class="text-center text-muted py-3 mb-0">
             No matching students. Try a different search, or add a new student below.
@@ -102,7 +93,8 @@
             <span class="text-muted"> &middot; {{ selectedStudent.email }} &middot; {{ selectedStudent.mobile }}</span>
           </div>
           <div class="d-flex gap-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="canEditStudents" (click)="openEditStudentModal()">
+            <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="canEditStudents"
+              (click)="openEditStudentModal()">
               Edit
             </button>
             <button type="button" class="btn btn-sm btn-outline-secondary" (click)="changeStudent()">
@@ -136,24 +128,35 @@
 
               <div class="section-divider">Current address</div>
               <div class="form-check mb-2">
-                <input type="checkbox" class="form-check-input" id="sameAsHometown" formControlName="sameAsHometown" (change)="toggleSameAsHometown()">
+                <input type="checkbox" class="form-check-input" id="sameAsHometown" formControlName="sameAsHometown"
+                  (change)="toggleSameAsHometown()">
                 <label class="form-check-label" for="sameAsHometown">Same as student's registered address</label>
               </div>
               <div class="row g-3">
-                <div class="col-md-6"><label class="form-label">Street</label><input class="form-control" formControlName="currentStreet"></div>
-                <div class="col-md-6"><label class="form-label">Suburb</label><input class="form-control" formControlName="currentSuburb"></div>
-                <div class="col-md-4"><label class="form-label">City</label><input class="form-control" formControlName="currentCity"></div>
-                <div class="col-md-4"><label class="form-label">State</label><input class="form-control" formControlName="currentState"></div>
-                <div class="col-md-4"><label class="form-label">Postcode</label><input class="form-control" formControlName="currentPostcode"></div>
-                <div class="col-md-6"><label class="form-label">Country</label><input class="form-control" formControlName="currentCountry"></div>
+                <div class="col-md-6"><label class="form-label">Street</label><input class="form-control"
+                    formControlName="currentStreet"></div>
+                <div class="col-md-6"><label class="form-label">Suburb</label><input class="form-control"
+                    formControlName="currentSuburb"></div>
+                <div class="col-md-4"><label class="form-label">City</label><input class="form-control"
+                    formControlName="currentCity"></div>
+                <div class="col-md-4"><label class="form-label">State</label><input class="form-control"
+                    formControlName="currentState"></div>
+                <div class="col-md-4"><label class="form-label">Postcode</label><input class="form-control"
+                    formControlName="currentPostcode"></div>
+                <div class="col-md-6"><label class="form-label">Country</label><input class="form-control"
+                    formControlName="currentCountry"></div>
               </div>
 
               <div class="section-divider">Emergency contact</div>
               <div class="row g-3">
-                <div class="col-md-6"><label class="form-label">Name</label><input class="form-control" formControlName="emergencyName"></div>
-                <div class="col-md-6"><label class="form-label">Relationship</label><input class="form-control" formControlName="emergencyRelationship"></div>
-                <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" formControlName="emergencyPhone"></div>
-                <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" formControlName="emergencyEmail"></div>
+                <div class="col-md-6"><label class="form-label">Name</label><input class="form-control"
+                    formControlName="emergencyName"></div>
+                <div class="col-md-6"><label class="form-label">Relationship</label><input class="form-control"
+                    formControlName="emergencyRelationship"></div>
+                <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control"
+                    formControlName="emergencyPhone"></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input class="form-control"
+                    formControlName="emergencyEmail"></div>
               </div>
             </div>
           </div>
@@ -195,7 +198,9 @@
                     <option value="">Select...</option>
                     <option *ngFor="let m of selectedCourse?.studyModes" [value]="m">{{ m }}</option>
                   </select>
-                  <p class="text-muted small mb-0" *ngIf="selectedCourse && (selectedCourse.studyModes ?? []).length === 0">No study modes configured for this course.</p>
+                  <p class="text-muted small mb-0"
+                    *ngIf="selectedCourse && (selectedCourse.studyModes ?? []).length === 0">No study modes configured
+                    for this course.</p>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label">Campus</label>
@@ -203,7 +208,9 @@
                     <option value="">Select...</option>
                     <option *ngFor="let c of selectedCourse?.campuses" [value]="c">{{ c }}</option>
                   </select>
-                  <p class="text-muted small mb-0" *ngIf="selectedCourse && (selectedCourse.campuses ?? []).length === 0">No campuses configured for this course.</p>
+                  <p class="text-muted small mb-0"
+                    *ngIf="selectedCourse && (selectedCourse.campuses ?? []).length === 0">No campuses configured for
+                    this course.</p>
                 </div>
 
                 <div class="col-md-6">
@@ -222,7 +229,8 @@
               </div>
 
               <p class="text-muted small mt-3">
-                Creating this enrolment will link {{ selectedStudent.firstName }} {{ selectedStudent.lastName }}'s existing student account to this course.
+                Creating this enrolment will link {{ selectedStudent.firstName }} {{ selectedStudent.lastName }}'s
+                existing student account to this course.
               </p>
 
               <app-notification type="error" [message]="errorMessage"></app-notification>
@@ -232,7 +240,8 @@
                   <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
                   {{ isSubmitting ? 'Creating...' : 'Create Enrolment' }}
                 </button>
-                <button type="button" class="btn btn-outline-secondary" (click)="backToStep1()" [disabled]="isSubmitting">
+                <button type="button" class="btn btn-outline-secondary" (click)="backToStep1()"
+                  [disabled]="isSubmitting">
                   Back
                 </button>
               </div>
@@ -245,8 +254,7 @@
 </div>
 
 <!-- Edit Student Modal -->
-<app-modal *ngIf="isEditStudentModalOpen" title="Edit Student" [isSaving]="isSavingStudentEdit"
-  saveLabel="Save Changes"
+<app-modal *ngIf="isEditStudentModalOpen" title="Edit Student" [isSaving]="isSavingStudentEdit" saveLabel="Save Changes"
   (closeModal)="closeEditStudentModal()" (cancel)="closeEditStudentModal()" (save)="onSubmitEditStudent()">
   <form [formGroup]="editStudentForm">
     <app-student-details-form [formGroup]="editStudentForm"></app-student-details-form>

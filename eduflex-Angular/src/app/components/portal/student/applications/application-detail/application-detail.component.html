@@ -59,7 +59,8 @@
           <div class="card-body">
             <div class="stage-track" *ngIf="!enrolmentStopped">
               <div class="stage-row" *ngFor="let step of stageSteps; let i = index">
-                <span class="stage-dot" [class.done]="i < currentStageIndex" [class.current]="i === currentStageIndex"></span>
+                <span class="stage-dot" [class.done]="i < currentStageIndex"
+                  [class.current]="i === currentStageIndex"></span>
                 <span class="stage-label" [class.current]="i === currentStageIndex">{{ step.label }}</span>
               </div>
             </div>
@@ -69,7 +70,8 @@
               counsellor for next steps.
             </div>
 
-            <div class="course-app-summary small !text-muted mt-3" *ngIf="mySummary && mySummary.courseApplicationCount > 0">
+            <div class="course-app-summary small !text-muted mt-3"
+              *ngIf="mySummary && mySummary.courseApplicationCount > 0">
               {{ mySummary.courseApplicationCount }} course option{{ mySummary.courseApplicationCount > 1 ? 's' : '' }}
               being pursued on your behalf
               <ng-container *ngIf="mySummary.finalizedCourseApplicationName">

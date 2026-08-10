@@ -27,8 +27,7 @@
         <li class="nav-item">
           <button type="button" class="nav-link" [class.active]="activeTab === 'course'"
             [class.disabled]="!isCourseTabEnabled" [disabled]="!isCourseTabEnabled"
-            [title]="!isCourseTabEnabled ? 'Save the education partner info first' : ''"
-            (click)="switchTab('course')">
+            [title]="!isCourseTabEnabled ? 'Save the education partner info first' : ''" (click)="switchTab('course')">
             Courses
           </button>
         </li>
@@ -42,16 +41,13 @@
             <div class="row g-3">
               <div class="col-md-12">
                 <ng-container *ngIf="mode === 'edit'; else viewLogo">
-                  <app-file-uploader
-                    variant="avatar"
-                    label="Logo *"
-                    uploadCategory="image"
-                    [previewUrl]="logoPreviewUrl"
-                    (fileSelected)="onLogoSelected($event)"
+                  <app-file-uploader variant="avatar" label="Logo *" uploadCategory="image"
+                    [previewUrl]="logoPreviewUrl" (fileSelected)="onLogoSelected($event)"
                     (invalidFile)="errorMessage = $event">
                   </app-file-uploader>
                   <p class="text-muted small mt-1 mb-0" *ngIf="isUploadingLogo">Uploading logo...</p>
-                  <span class="field-error" *ngIf="logoMissing && partnerForm.get('logoUrl')?.touched">Logo is required</span>
+                  <span class="field-error" *ngIf="logoMissing && partnerForm.get('logoUrl')?.touched">Logo is
+                    required</span>
                 </ng-container>
                 <ng-template #viewLogo>
                   <label class="form-label d-block">Logo</label>
@@ -105,7 +101,8 @@
               <div class="col-md-12">
                 <label class="form-label">Short description *</label>
                 <textarea rows="3" class="form-control" formControlName="description"></textarea>
-                <span class="field-error" *ngIf="isFieldInvalid('description')">Description is required (max 300 characters)</span>
+                <span class="field-error" *ngIf="isFieldInvalid('description')">Description is required (max 300
+                  characters)</span>
               </div>
             </div>
 
@@ -113,12 +110,14 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Managed under partner</label>
-                <select class="form-select" formControlName="businessPartnerId" (change)="onBusinessPartnerChange()" *ngIf="mode === 'edit'">
+                <select class="form-select" formControlName="businessPartnerId" (change)="onBusinessPartnerChange()"
+                  *ngIf="mode === 'edit'">
                   <option [ngValue]="null">None (direct contract with Eduflex)</option>
                   <option *ngFor="let bp of businessPartners" [ngValue]="bp.id">{{ bp.name }}</option>
                 </select>
                 <div *ngIf="mode === 'view'">
-                  <a *ngIf="businessPartnerName" class="badge-pill badge-pill-accent-soft" [routerLink]="['/staff-portal/business-partners', partnerForm.value.businessPartnerId, 'edit']">
+                  <a *ngIf="businessPartnerName" class="badge-pill badge-pill-accent-soft"
+                    [routerLink]="['/staff-portal/business-partners', partnerForm.value.businessPartnerId, 'edit']">
                     {{ businessPartnerName }}
                   </a>
                   <span *ngIf="!businessPartnerName" class="badge-pill badge-pill-navy-soft">Direct contract</span>
@@ -127,8 +126,10 @@
 
               <div class="col-md-3">
                 <label class="form-label">Commission base rate (%) *</label>
-                <input type="number" min="0" max="100" step="0.1" class="form-control" formControlName="commissionBaseRate">
-                <span class="field-error" *ngIf="isFieldInvalid('commissionBaseRate')">Enter a rate between 0 and 100</span>
+                <input type="number" min="0" max="100" step="0.1" class="form-control"
+                  formControlName="commissionBaseRate">
+                <span class="field-error" *ngIf="isFieldInvalid('commissionBaseRate')">Enter a rate between 0 and
+                  100</span>
               </div>
 
               <div class="col-md-3">
@@ -151,12 +152,14 @@
                 <div class="d-flex gap-2 mb-2" *ngIf="mode === 'edit'">
                   <input #intakeInput type="text" class="form-control" placeholder="e.g. February 2026"
                     (keyup.enter)="$event.preventDefault(); addIntake(intakeInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addIntake(intakeInput)">Add intake</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addIntake(intakeInput)">Add
+                    intake</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of intakesArray.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="mode === 'edit'" (click)="removeIntake(i)" aria-label="Remove intake">&times;</button>
+                    <button type="button" *ngIf="mode === 'edit'" (click)="removeIntake(i)"
+                      aria-label="Remove intake">&times;</button>
                   </span>
                 </div>
                 <p class="text-muted small mb-0" *ngIf="intakesArray.length === 0">No intakes added yet.</p>
@@ -172,7 +175,8 @@
                 </button>
               </ng-container>
               <ng-container *ngIf="mode === 'edit'">
-                <button type="button" class="btn btn-outline-secondary" *ngIf="partnerId" [disabled]="isSaving" (click)="cancelEdit()">
+                <button type="button" class="btn btn-outline-secondary" *ngIf="partnerId" [disabled]="isSaving"
+                  (click)="cancelEdit()">
                   Cancel
                 </button>
                 <button type="submit" class="btn btn-primary" [disabled]="isSaving || isUploadingLogo">
@@ -213,7 +217,8 @@
                 <div class="col-md-3">
                   <label class="form-label">Total course tuition *</label>
                   <input type="number" min="1" class="form-control" formControlName="totalTuitionFee">
-                  <span class="field-error" *ngIf="isCourseFieldInvalid('totalTuitionFee')">Total course tuition is required</span>
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('totalTuitionFee')">Total course tuition is
+                    required</span>
                 </div>
 
                 <div class="col-md-3">
@@ -226,13 +231,16 @@
                 <div class="col-md-3">
                   <label class="form-label">Course duration (months)</label>
                   <input type="number" min="1" class="form-control" formControlName="courseDurationMonths">
-                  <span class="field-error" *ngIf="isCourseFieldInvalid('courseDurationMonths')">Must be greater than 0</span>
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('courseDurationMonths')">Must be greater than
+                    0</span>
                 </div>
 
                 <div class="col-md-3">
                   <label class="form-label">Commission base rate (%) *</label>
-                  <input type="number" min="0" max="100" step="0.1" class="form-control" formControlName="commissionBaseRate">
-                  <span class="field-error" *ngIf="isCourseFieldInvalid('commissionBaseRate')">Enter a rate between 0 and 100</span>
+                  <input type="number" min="0" max="100" step="0.1" class="form-control"
+                    formControlName="commissionBaseRate">
+                  <span class="field-error" *ngIf="isCourseFieldInvalid('commissionBaseRate')">Enter a rate between 0
+                    and 100</span>
                 </div>
 
                 <div class="col-md-12">
@@ -240,7 +248,8 @@
                   <div class="d-flex gap-2 mb-2">
                     <input #courseIntakeInput type="text" class="form-control" placeholder="e.g. February 2026"
                       (keyup.enter)="$event.preventDefault(); addCourseIntake(courseIntakeInput)">
-                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseIntake(courseIntakeInput)">Add</button>
+                    <button type="button" class="btn btn-outline-primary text-nowrap"
+                      (click)="addCourseIntake(courseIntakeInput)">Add</button>
                   </div>
                   <div class="intake-chips">
                     <span class="intake-chip" *ngFor="let intake of courseForm.value.intakes; let i = index">
@@ -258,15 +267,18 @@
                   <div class="d-flex gap-2 mb-2">
                     <input #studyModeInput type="text" class="form-control" placeholder="e.g. Full-time"
                       (keyup.enter)="$event.preventDefault(); addCourseStudyMode(studyModeInput)">
-                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseStudyMode(studyModeInput)">Add</button>
+                    <button type="button" class="btn btn-outline-primary text-nowrap"
+                      (click)="addCourseStudyMode(studyModeInput)">Add</button>
                   </div>
                   <div class="intake-chips">
                     <span class="intake-chip" *ngFor="let mode of courseForm.value.studyModes; let i = index">
                       {{ mode }}
-                      <button type="button" (click)="removeCourseStudyMode(i)" aria-label="Remove study mode">&times;</button>
+                      <button type="button" (click)="removeCourseStudyMode(i)"
+                        aria-label="Remove study mode">&times;</button>
                     </span>
                   </div>
-                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.studyModes ?? []).length === 0">No study modes added yet.</p>
+                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.studyModes ?? []).length === 0">No study
+                    modes added yet.</p>
                 </div>
 
                 <div class="col-md-6">
@@ -274,7 +286,8 @@
                   <div class="d-flex gap-2 mb-2">
                     <input #campusInput type="text" class="form-control" placeholder="e.g. Sydney CBD"
                       (keyup.enter)="$event.preventDefault(); addCourseCampus(campusInput)">
-                    <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addCourseCampus(campusInput)">Add</button>
+                    <button type="button" class="btn btn-outline-primary text-nowrap"
+                      (click)="addCourseCampus(campusInput)">Add</button>
                   </div>
                   <div class="intake-chips">
                     <span class="intake-chip" *ngFor="let campus of courseForm.value.campuses; let i = index">
@@ -282,14 +295,16 @@
                       <button type="button" (click)="removeCourseCampus(i)" aria-label="Remove campus">&times;</button>
                     </span>
                   </div>
-                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.campuses ?? []).length === 0">No campuses added yet.</p>
+                  <p class="text-muted small mb-0" *ngIf="(courseForm.value.campuses ?? []).length === 0">No campuses
+                    added yet.</p>
                 </div>
               </div>
 
               <p class="text-danger mt-3 mb-0" *ngIf="courseErrorMessage">{{ courseErrorMessage }}</p>
 
               <div class="text-end mt-3 d-flex justify-content-end gap-2">
-                <button type="button" class="btn btn-outline-secondary" [disabled]="isSavingCourse" (click)="closeCourseForm()">
+                <button type="button" class="btn btn-outline-secondary" [disabled]="isSavingCourse"
+                  (click)="closeCourseForm()">
                   Cancel
                 </button>
                 <button type="submit" class="btn btn-primary" [disabled]="isSavingCourse">

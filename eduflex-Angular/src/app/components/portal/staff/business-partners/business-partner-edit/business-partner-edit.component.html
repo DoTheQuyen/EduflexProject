@@ -51,8 +51,10 @@
 
             <div class="col-md-3">
               <label class="form-label">Commission base rate (%) *</label>
-              <input type="number" min="0" max="100" step="0.1" class="form-control" formControlName="commissionBaseRate">
-              <span class="field-error" *ngIf="isFieldInvalid('commissionBaseRate')">Enter a rate between 0 and 100</span>
+              <input type="number" min="0" max="100" step="0.1" class="form-control"
+                formControlName="commissionBaseRate">
+              <span class="field-error" *ngIf="isFieldInvalid('commissionBaseRate')">Enter a rate between 0 and
+                100</span>
             </div>
 
             <div class="col-md-3"></div>
@@ -80,18 +82,15 @@
             <div class="col-md-3">
               <label class="form-label">Contract end</label>
               <input type="date" class="form-control" formControlName="contractEndDate">
-              <span class="field-error" *ngIf="isFieldInvalid('contractEndDate')">End date must be on or after the start date</span>
+              <span class="field-error" *ngIf="isFieldInvalid('contractEndDate')">End date must be on or after the start
+                date</span>
             </div>
 
             <div class="col-md-6">
               <label class="form-label d-block">Contract file</label>
               <ng-container *ngIf="mode === 'edit'; else viewContractFile">
-                <app-file-uploader
-                  variant="dropzone"
-                  label="Upload contract (PDF, DOCX)"
-                  uploadCategory="contract"
-                  (fileSelected)="onContractFileSelected($event)"
-                  (invalidFile)="errorMessage = $event">
+                <app-file-uploader variant="dropzone" label="Upload contract (PDF, DOCX)" uploadCategory="contract"
+                  (fileSelected)="onContractFileSelected($event)" (invalidFile)="errorMessage = $event">
                 </app-file-uploader>
                 <p class="text-muted small mt-1 mb-0" *ngIf="isUploadingContract">Uploading contract...</p>
                 <p class="text-muted small mt-1 mb-0" *ngIf="contractFileNamePreview && !isUploadingContract">
@@ -99,7 +98,8 @@
                 </p>
               </ng-container>
               <ng-template #viewContractFile>
-                <a *ngIf="partnerForm.value.contractFileUrl" [href]="partnerForm.value.contractFileUrl" target="_blank" rel="noopener">
+                <a *ngIf="partnerForm.value.contractFileUrl" [href]="partnerForm.value.contractFileUrl" target="_blank"
+                  rel="noopener">
                   <i class="fas fa-file-arrow-down me-1"></i>{{ contractFileNamePreview || 'Download contract' }}
                 </a>
                 <p class="text-muted mb-0" *ngIf="!partnerForm.value.contractFileUrl">No contract file uploaded</p>
@@ -114,24 +114,28 @@
                 <div class="col-md-3">
                   <label class="form-label small">First name *</label>
                   <input type="text" class="form-control form-control-sm" formControlName="firstName">
-                  <span class="field-error" *ngIf="contact.get('firstName')?.invalid && contact.get('firstName')?.touched">Required</span>
+                  <span class="field-error"
+                    *ngIf="contact.get('firstName')?.invalid && contact.get('firstName')?.touched">Required</span>
                 </div>
                 <div class="col-md-3">
                   <label class="form-label small">Last name *</label>
                   <input type="text" class="form-control form-control-sm" formControlName="lastName">
-                  <span class="field-error" *ngIf="contact.get('lastName')?.invalid && contact.get('lastName')?.touched">Required</span>
+                  <span class="field-error"
+                    *ngIf="contact.get('lastName')?.invalid && contact.get('lastName')?.touched">Required</span>
                 </div>
                 <div class="col-md-3">
                   <label class="form-label small">Email *</label>
                   <input type="email" class="form-control form-control-sm" formControlName="email">
-                  <span class="field-error" *ngIf="contact.get('email')?.invalid && contact.get('email')?.touched">Valid email required</span>
+                  <span class="field-error" *ngIf="contact.get('email')?.invalid && contact.get('email')?.touched">Valid
+                    email required</span>
                 </div>
                 <div class="col-md-2">
                   <label class="form-label small">Contact no</label>
                   <input type="text" class="form-control form-control-sm" formControlName="contactNo">
                 </div>
                 <div class="col-md-1 d-flex align-items-end justify-content-end h-100" *ngIf="mode === 'edit'">
-                  <button type="button" class="btn btn-sm btn-outline-danger remove-contact-btn" (click)="removeContact(i)" aria-label="Remove contact">
+                  <button type="button" class="btn btn-sm btn-outline-danger remove-contact-btn"
+                    (click)="removeContact(i)" aria-label="Remove contact">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -139,7 +143,8 @@
             </div>
             <p class="text-muted small mb-0" *ngIf="contacts.length === 0">No contacts added yet.</p>
           </div>
-          <button type="button" class="btn btn-outline-primary btn-sm mt-2" *ngIf="mode === 'edit'" (click)="addContact()">
+          <button type="button" class="btn btn-outline-primary btn-sm mt-2" *ngIf="mode === 'edit'"
+            (click)="addContact()">
             <i class="fas fa-plus me-1"></i>Add contact
           </button>
 
@@ -152,7 +157,8 @@
               </button>
             </ng-container>
             <ng-container *ngIf="mode === 'edit'">
-              <button type="button" class="btn btn-outline-secondary" *ngIf="partnerId" [disabled]="isSaving" (click)="cancelEdit()">
+              <button type="button" class="btn btn-outline-secondary" *ngIf="partnerId" [disabled]="isSaving"
+                (click)="cancelEdit()">
                 Cancel
               </button>
               <button type="submit" class="btn btn-primary" [disabled]="isSaving || isUploadingContract">

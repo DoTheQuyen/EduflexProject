@@ -1,4 +1,103 @@
-.field-error {
-  color: var(--color-error);
-  font-size: 0.875rem;
+.modal-backdrop-generic {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.modal-panel-generic {
+  position: relative;
+  background: white;
+  border-radius: var(--radius, 10px);
+  width: 80vw;
+  max-width: 80vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header-generic {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--color-navy-900);
+  border-bottom: 1px solid var(--color-border);
+}
+.modal-title-generic {
+  margin: 0;
+  font-weight: 600;
+  color: white;
+}
+.modal-close-generic {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-muted, #5c6b7a);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+.modal-close-generic:hover {
+  color: var(--color-ink, #1b2430);
+}
+
+.modal-body-generic {
+  border: none;
+  margin: 0;
+  padding: 1.25rem;
+  min-inline-size: 0; /* fieldset defaults to min-content width, which breaks shrinking in flex/grid parents */
+}
+.modal-body-generic:disabled {
+  opacity: 0.6;
+}
+
+.modal-footer-generic {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.confirm-overlay-generic {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 36, 48, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1060;
+}
+
+.confirm-box-generic {
+  background: white;
+  border-radius: var(--radius, 10px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(22, 35, 58, 0.3));
+  padding: 1.5rem;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+}
+
+.confirm-message-generic {
+  margin: 0 0 1.25rem;
+  color: var(--color-ink, #1b2430);
+  font-weight: 500;
+}
+
+.confirm-actions-generic {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.modal-footer-generic .spinner-border {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-width: 0.15em;
 }

@@ -31,7 +31,8 @@
             <ng-container *ngIf="col.field === 'actions'; else defaultCell">
               <div class="row-actions">
                 <ng-container *ngFor="let ra of rowActions">
-                  <button *ngIf="!ra.isVisible || ra.isVisible(row)" [ngClass]="ra.cssClass || 'btn btn-sm btn-outline-primary'"
+                  <button *ngIf="!ra.isVisible || ra.isVisible(row)"
+                    [ngClass]="ra.cssClass || 'btn btn-sm btn-outline-primary'"
                     (click)="actionClick.emit({ action: ra.action, row })">
                     <i *ngIf="ra.icon" class="fas {{ ra.icon }} me-1"></i>{{ ra.label }}
                   </button>

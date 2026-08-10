@@ -9,8 +9,10 @@
       </div>
       <div class="card-body" *ngIf="showComposeForm">
         <div class="recipient-toggle">
-          <button type="button" class="chip" [class.active]="recipientType === 'EducationPartner'" (click)="setRecipientType('EducationPartner')">Education Partner</button>
-          <button type="button" class="chip" [class.active]="recipientType === 'BusinessPartner'" (click)="setRecipientType('BusinessPartner')">Business Partner</button>
+          <button type="button" class="chip" [class.active]="recipientType === 'EducationPartner'"
+            (click)="setRecipientType('EducationPartner')">Education Partner</button>
+          <button type="button" class="chip" [class.active]="recipientType === 'BusinessPartner'"
+            (click)="setRecipientType('BusinessPartner')">Business Partner</button>
         </div>
 
         <div class="mb-3">
@@ -20,16 +22,18 @@
 
         <div class="mb-3" *ngIf="generatedInvoices.length > 0">
           <label class="form-label">Attach invoice</label>
-          <select class="form-select" [(ngModel)]="selectedInvoiceId" [ngModelOptions]="{standalone: true}" (change)="onInvoiceSelected()">
+          <select class="form-select" [(ngModel)]="selectedInvoiceId" [ngModelOptions]="{standalone: true}"
+            (change)="onInvoiceSelected()">
             <option value="">None</option>
-            <option *ngFor="let inv of generatedInvoices" [value]="inv.id">{{ inv.invoiceNo }} — {{ inv.recipientName }}</option>
+            <option *ngFor="let inv of generatedInvoices" [value]="inv.id">{{ inv.invoiceNo }} — {{ inv.recipientName }}
+            </option>
           </select>
         </div>
 
         <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="templates.length > 0">
           <button type="button" class="btn btn-sm" *ngFor="let t of templates"
-                  [class.btn-primary]="selectedTemplateKey === t.key" [class.btn-outline-secondary]="selectedTemplateKey !== t.key"
-                  (click)="applyTemplate(t)">
+            [class.btn-primary]="selectedTemplateKey === t.key"
+            [class.btn-outline-secondary]="selectedTemplateKey !== t.key" (click)="applyTemplate(t)">
             {{ t.name }}
           </button>
         </div>
@@ -39,7 +43,8 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Message</label>
-          <textarea class="form-control" rows="7" [(ngModel)]="commBody" [ngModelOptions]="{standalone: true}"></textarea>
+          <textarea class="form-control" rows="7" [(ngModel)]="commBody"
+            [ngModelOptions]="{standalone: true}"></textarea>
         </div>
 
         <button type="button" class="btn btn-primary" [disabled]="isSending" (click)="sendEmail()">
@@ -57,7 +62,8 @@
       <div class="card-body">
         <div *ngFor="let c of record.communications" class="border-bottom pb-2 mb-2">
           <div class="d-flex justify-content-between text-muted small">
-            <span>{{ c.sentByName }} &rarr; <span class="history-tag">{{ c.recipientType }}</span> {{ c.toEmail }}</span>
+            <span>{{ c.sentByName }} &rarr; <span class="history-tag">{{ c.recipientType }}</span> {{ c.toEmail
+              }}</span>
             <span>{{ formatDate(c.sentAt) }}</span>
           </div>
           <div class="fw-semibold">{{ c.subject }}</div>

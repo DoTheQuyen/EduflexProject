@@ -36,10 +36,12 @@
               <h3 class="font-semibold !text-ink">{{ activeApplication.applicationType || 'Untitled application' }}</h3>
               <p class="mt-1 text-sm !text-muted">{{ activeApplication.description }}</p>
             </div>
-            <span class="badge" [ngClass]="statusBadgeClass(activeApplication.status)">{{ activeApplication.status }}</span>
+            <span class="badge" [ngClass]="statusBadgeClass(activeApplication.status)">{{ activeApplication.status
+              }}</span>
           </div>
           <p class="mt-4 text-xs !text-muted">Applied {{ formatDate(activeApplication.dateApplied) }}</p>
-          <a [routerLink]="['/student-portal/application', activeApplication.id]" class="btn btn-outline-primary btn-sm mt-4 !no-underline">Continue Application &rarr;</a>
+          <a [routerLink]="['/student-portal/application', activeApplication.id]"
+            class="btn btn-outline-primary btn-sm mt-4 !no-underline">Continue Application &rarr;</a>
         </ng-container>
         <ng-template #noActive>
           <div class="py-6 text-center">
@@ -54,7 +56,9 @@
       <!-- Rule reminder -->
       <div class="rounded-lg border border-border bg-white p-6 shadow-sm">
         <h3 class="font-semibold !text-ink">Application Rule</h3>
-        <p class="mt-2 text-sm !text-muted">You may hold one active application at a time. Once it's <strong>Rejected</strong>, or you're enrolled and <strong>Studying</strong>, you can start another.</p>
+        <p class="mt-2 text-sm !text-muted">You may hold one active application at a time. Once it's
+          <strong>Rejected</strong>, or you're enrolled and <strong>Studying</strong>, you can start another.
+        </p>
       </div>
     </div>
 
@@ -64,8 +68,10 @@
         <h3 class="font-semibold !text-ink">Recent Applications</h3>
         <a routerLink="/student-portal/application" class="text-sm !text-accent !no-underline">View all &rarr;</a>
       </div>
-      <div *ngIf="recentApplications.length === 0" class="px-5 py-6 text-sm !text-muted">You haven't applied to anything yet.</div>
-      <div *ngFor="let app of recentApplications" class="flex items-center justify-between gap-3 border-b border-border px-5 py-3 last:border-b-0">
+      <div *ngIf="recentApplications.length === 0" class="px-5 py-6 text-sm !text-muted">You haven't applied to anything
+        yet.</div>
+      <div *ngFor="let app of recentApplications"
+        class="flex items-center justify-between gap-3 border-b border-border px-5 py-3 last:border-b-0">
         <div>
           <p class="font-medium !text-ink">{{ app.applicationType || 'Untitled application' }}</p>
           <p class="text-xs !text-muted">{{ formatDate(app.dateApplied) }}</p>

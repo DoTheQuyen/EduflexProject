@@ -11,11 +11,16 @@
         <div class="field-panel h-100">
           <div class="field-panel__title">Student</div>
           <dl class="report-list">
-            <dt>Name</dt><dd>{{ enrolment.firstName }} {{ enrolment.middleName }} {{ enrolment.lastName }}</dd>
-            <dt>Email</dt><dd>{{ enrolment.email }}</dd>
-            <dt>Mobile</dt><dd>{{ enrolment.mobile }}</dd>
-            <dt>Nationality</dt><dd>{{ enrolment.nationality || '—' }}</dd>
-            <dt>Passport / ID no.</dt><dd>{{ enrolment.passportNumber || '—' }}</dd>
+            <dt>Name</dt>
+            <dd>{{ enrolment.firstName }} {{ enrolment.middleName }} {{ enrolment.lastName }}</dd>
+            <dt>Email</dt>
+            <dd>{{ enrolment.email }}</dd>
+            <dt>Mobile</dt>
+            <dd>{{ enrolment.mobile }}</dd>
+            <dt>Nationality</dt>
+            <dd>{{ enrolment.nationality || '—' }}</dd>
+            <dt>Passport / ID no.</dt>
+            <dd>{{ enrolment.passportNumber || '—' }}</dd>
           </dl>
         </div>
       </div>
@@ -24,11 +29,16 @@
         <div class="field-panel h-100">
           <div class="field-panel__title">Course &amp; university</div>
           <dl class="report-list">
-            <dt>University</dt><dd>{{ partner?.name || '—' }}</dd>
-            <dt>Course</dt><dd>{{ course?.courseName || '—' }}</dd>
-            <dt>Intake</dt><dd>{{ enrolment.intake || '—' }}</dd>
-            <dt>Study mode</dt><dd>{{ enrolment.studyMode || '—' }}</dd>
-            <dt>Campus</dt><dd>{{ enrolment.campus || '—' }}</dd>
+            <dt>University</dt>
+            <dd>{{ partner?.name || '—' }}</dd>
+            <dt>Course</dt>
+            <dd>{{ course?.courseName || '—' }}</dd>
+            <dt>Intake</dt>
+            <dd>{{ enrolment.intake || '—' }}</dd>
+            <dt>Study mode</dt>
+            <dd>{{ enrolment.studyMode || '—' }}</dd>
+            <dt>Campus</dt>
+            <dd>{{ enrolment.campus || '—' }}</dd>
           </dl>
         </div>
       </div>
@@ -39,9 +49,12 @@
         <div class="field-panel h-100">
           <div class="field-panel__title">Study dates</div>
           <dl class="report-list">
-            <dt>Commencing date</dt><dd>{{ formatDate(enrolment.commencementDate) }}</dd>
-            <dt>Actual commencement</dt><dd>{{ formatDate(enrolment.actualCommencementDate) }}</dd>
-            <dt>Expected completion</dt><dd>{{ formatDate(enrolment.expectedCompletionDate) }}</dd>
+            <dt>Commencing date</dt>
+            <dd>{{ formatDate(enrolment.commencementDate) }}</dd>
+            <dt>Actual commencement</dt>
+            <dd>{{ formatDate(enrolment.actualCommencementDate) }}</dd>
+            <dt>Expected completion</dt>
+            <dd>{{ formatDate(enrolment.expectedCompletionDate) }}</dd>
           </dl>
         </div>
       </div>
@@ -50,7 +63,9 @@
         <div class="field-panel h-100">
           <div class="field-panel__title">VISA</div>
           <dl class="report-list">
-            <dt>Outcome</dt><dd>{{ enrolment.status === 'VisaSuccess' ? 'Granted' : (enrolment.status === 'VisaFail' ? 'Refused' : '—') }}</dd>
+            <dt>Outcome</dt>
+            <dd>{{ enrolment.status === 'VisaSuccess' ? 'Granted' : (enrolment.status === 'VisaFail' ? 'Refused' : '—')
+              }}</dd>
             <dt>Grant letter</dt>
             <dd>
               <a *ngIf="visaDocument" [href]="visaDocument.url" target="_blank" rel="noopener">

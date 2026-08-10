@@ -1,7 +1,7 @@
 <div class="dynamic-form-edit-portal">
   <div class="container-fluid py-1">
     <button type="button" class="back-link" (click)="goBack()">
-      <span class="back-arrow">&larr;</span> Back to Dynamic Forms
+      <span class="back-arrow">&larr;</span> Back
     </button>
 
     <div *ngIf="isLoading" class="text-center py-5">
@@ -14,11 +14,11 @@
       <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
         <div>
           <h3 class="mb-1">{{ isEditMode ? 'Edit Form' : 'New Form' }}</h3>
-          <p class="text-muted mb-0">Full page, not a popup — question builder on the left, live preview on the right.</p>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary" (click)="goBack()" [disabled]="isSaving">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goBack()"
+            [disabled]="isSaving">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="isSaving">
             {{ isSaving ? 'Saving...' : 'Save Form' }}
           </button>
         </div>
@@ -31,7 +31,8 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label">Form name</label>
-                  <input type="text" class="form-control" [(ngModel)]="name" placeholder="e.g. Student Declaration Form" />
+                  <input type="text" class="form-control" [(ngModel)]="name"
+                    placeholder="e.g. Student Declaration Form" />
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Bind to Enrolment step</label>
@@ -41,7 +42,8 @@
                   </select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Description <span class="text-muted small">(shown to staff, not printed)</span></label>
+                  <label class="form-label">Description <span class="text-muted small">(shown to staff, not
+                      printed)</span></label>
                   <textarea class="form-control" rows="2" [(ngModel)]="description"></textarea>
                 </div>
                 <div class="col-12">
@@ -50,7 +52,8 @@
                       [checked]="status === 'Active'" (change)="status = status === 'Active' ? 'Inactive' : 'Active'">
                     <label class="form-check-label" for="statusToggle">
                       {{ status === 'Active' ? 'Active' : 'Inactive' }}
-                      <span class="text-muted small d-block">Inactive forms can't be requested, but past responses stay visible.</span>
+                      <span class="text-muted small d-block">Inactive forms can't be requested, but past responses stay
+                        visible.</span>
                     </label>
                   </div>
                 </div>
@@ -62,9 +65,13 @@
             <div class="question-card-head">
               <span class="question-num">QUESTION {{ i + 1 }}<span *ngIf="q.isRequired"> · REQUIRED</span></span>
               <div class="question-tools">
-                <button type="button" class="btn btn-sm btn-link" title="Move up" [disabled]="i === 0" (click)="moveQuestion(i, -1)"><i class="fas fa-arrow-up"></i></button>
-                <button type="button" class="btn btn-sm btn-link" title="Move down" [disabled]="i === questions.length - 1" (click)="moveQuestion(i, 1)"><i class="fas fa-arrow-down"></i></button>
-                <button type="button" class="btn btn-sm btn-link text-danger" title="Delete" (click)="removeQuestion(i)"><i class="fas fa-times"></i></button>
+                <button type="button" class="btn btn-sm btn-link" title="Move up" [disabled]="i === 0"
+                  (click)="moveQuestion(i, -1)"><i class="fas fa-arrow-up"></i></button>
+                <button type="button" class="btn btn-sm btn-link" title="Move down"
+                  [disabled]="i === questions.length - 1" (click)="moveQuestion(i, 1)"><i
+                    class="fas fa-arrow-down"></i></button>
+                <button type="button" class="btn btn-sm btn-link text-danger" title="Delete"
+                  (click)="removeQuestion(i)"><i class="fas fa-times"></i></button>
               </div>
             </div>
 
@@ -73,7 +80,8 @@
             </div>
 
             <div class="mb-2">
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="q.helpText" placeholder="Hint text shown under the question (optional)" />
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="q.helpText"
+                placeholder="Hint text shown under the question (optional)" />
             </div>
 
             <div class="row g-2 align-items-center">
@@ -101,17 +109,22 @@
 
             <div class="option-list" *ngIf="needsOptions(q.answerType)">
               <div class="option-row" *ngFor="let opt of q.options; let oi = index; trackBy: trackByIndex">
-                <input type="text" class="form-control form-control-sm" [(ngModel)]="q.options[oi]" placeholder="Option text" />
-                <button type="button" class="btn btn-sm btn-link text-danger" (click)="removeOption(q, oi)">&times;</button>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="q.options[oi]"
+                  placeholder="Option text" />
+                <button type="button" class="btn btn-sm btn-link text-danger"
+                  (click)="removeOption(q, oi)">&times;</button>
               </div>
-              <button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="addOption(q)">+ Add option</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="addOption(q)">+ Add
+                option</button>
 
               <div class="layout-choice">
                 <span class="layout-choice-label">Options layout</span>
                 <div class="btn-group btn-group-sm" role="group">
-                  <button type="button" class="btn" [class.btn-primary]="!q.optionsHorizontal" [class.btn-outline-secondary]="q.optionsHorizontal"
+                  <button type="button" class="btn" [class.btn-primary]="!q.optionsHorizontal"
+                    [class.btn-outline-secondary]="q.optionsHorizontal"
                     (click)="q.optionsHorizontal = false">Vertical</button>
-                  <button type="button" class="btn" [class.btn-primary]="q.optionsHorizontal" [class.btn-outline-secondary]="!q.optionsHorizontal"
+                  <button type="button" class="btn" [class.btn-primary]="q.optionsHorizontal"
+                    [class.btn-outline-secondary]="!q.optionsHorizontal"
                     (click)="q.optionsHorizontal = true">Horizontal</button>
                 </div>
               </div>
@@ -128,11 +141,8 @@
             <span>Live print preview</span>
             <span class="text-muted small">updates as you edit</span>
           </div>
-          <app-form-print-preview
-            [formName]="name || 'Untitled form'"
-            [description]="description"
-            [questions]="questions"
-            mode="blank">
+          <app-form-print-preview [formName]="name || 'Untitled form'" [description]="description"
+            [questions]="questions" mode="blank">
           </app-form-print-preview>
         </div>
       </div>

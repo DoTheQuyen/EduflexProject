@@ -7,13 +7,14 @@
         </p>
       </div>
       <div class="col-auto d-flex gap-2">
-        <button type="button" class="btn btn-outline-secondary" (click)="openLedger()">
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="openLedger()">
           <i class="fas fa-list me-1"></i>Sent Invoices
         </button>
-        <button type="button" class="btn btn-outline-primary" *ngIf="permissions.add" (click)="sendCustomInvoice()">
+        <button type="button" class="btn btn-outline-primary btn-sm" *ngIf="permissions.add"
+          (click)="sendCustomInvoice()">
           <i class="fas fa-paper-plane me-1"></i>Send Custom Invoice
         </button>
-        <button type="button" class="btn btn-primary" *ngIf="permissions.add" (click)="createNew()">
+        <button type="button" class="btn btn-primary btn-sm" *ngIf="permissions.add" (click)="createNew()">
           <i class="fas fa-plus me-1"></i>New Template
         </button>
       </div>
@@ -50,7 +51,8 @@
       <p class="mb-3">{{ confirmDialog.message }}</p>
       <div class="d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-outline-secondary" (click)="cancelConfirm()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="proceedConfirm()">{{ confirmDialog.confirmLabel }}</button>
+        <button type="button" class="btn btn-primary" (click)="proceedConfirm()">{{ confirmDialog.confirmLabel
+          }}</button>
       </div>
     </div>
   </div>

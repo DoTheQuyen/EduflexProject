@@ -5,7 +5,11 @@ import { EmailTemplateService } from '@services/email-template.service';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { EmailTemplate, emailTemplateStatusBadgeClass } from '@app/models/enrolment';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 
@@ -14,7 +18,7 @@ import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
   standalone: true,
   imports: [CommonModule, DataTableComponent],
   templateUrl: './email-template-management.component.html',
-  styleUrls: ['./email-template-management.component.css']
+  styleUrls: ['./email-template-management.component.css'],
 })
 export class EmailTemplateManagementComponent implements OnInit {
   templates: EmailTemplate[] = [];
@@ -25,31 +29,48 @@ export class EmailTemplateManagementComponent implements OnInit {
     { field: 'name', title: 'Template name' },
     { field: 'key', title: 'Key' },
     { field: 'subject', title: 'Subject' },
-    { field: 'systemBadge', title: 'Type', className: 'text-center',
-      render: (_value, row: EmailTemplate) => row.isSystemDefault
-        ? '<span class="badge-pill badge-pill-navy-soft">System</span>'
-        : '<span class="badge-pill badge-pill-muted-soft">Custom</span>' },
-    // Named 'statusBadge' rather than 'status' to avoid the data-table's built-in
-    // status-column special-casing (hardcoded to Application-module status strings) —
-    // renders our own badge-pill markup instead, matching the Dynamic Forms module.
-    { field: 'statusBadge', title: 'Status', className: 'text-center',
-      render: (_value, row: EmailTemplate) => `<span class="badge-pill ${this.statusBadgeClass(row)}">${row.isActive ? 'Active' : 'Inactive'}</span>` },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'systemBadge',
+      title: 'Type',
+      className: 'text-center',
+      render: (_value, row: EmailTemplate) =>
+        row.isSystemDefault
+          ? '<span class="badge-pill badge-pill-navy-soft">System</span>'
+          : '<span class="badge-pill badge-pill-muted-soft">Custom</span>',
+    },
+    {
+      field: 'statusBadge',
+      title: 'Status',
+      className: 'text-center',
+      render: (_value, row: EmailTemplate) =>
+        `<span class="badge-pill ${this.statusBadgeClass(row)}">${row.isActive ? 'Active' : 'Inactive'}</span>`,
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   rowActions: DataTableRowAction<EmailTemplate>[] = [
     { action: 'edit', label: 'Edit', icon: 'fa-pen', cssClass: 'btn btn-sm btn-outline-primary' },
-    { action: 'deactivate', label: 'Deactivate', icon: 'fa-power-off', cssClass: 'btn btn-sm btn-outline-secondary',
-      isVisible: (row) => row.isActive },
-    { action: 'activate', label: 'Reactivate', icon: 'fa-rotate-left', cssClass: 'btn btn-sm btn-outline-success',
-      isVisible: (row) => !row.isActive }
+    {
+      action: 'deactivate',
+      label: 'Deactivate',
+      icon: 'fa-power-off',
+      cssClass: 'btn btn-sm btn-outline-secondary',
+      isVisible: (row) => row.isActive,
+    },
+    {
+      action: 'activate',
+      label: 'Reactivate',
+      icon: 'fa-rotate-left',
+      cssClass: 'btn btn-sm btn-outline-success',
+      isVisible: (row) => !row.isActive,
+    },
   ];
 
   constructor(
     private templateService: EmailTemplateService,
     private authHelper: AuthHelperService,
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
   ) {
     this.permissions = this.authHelper.hasEmailTemplatesPermission();
   }
@@ -65,7 +86,9 @@ export class EmailTemplateManagementComponent implements OnInit {
         this.templates = templates;
         this.isLoading = false;
       },
-      error: () => { this.isLoading = false; }
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
@@ -94,12 +117,16 @@ export class EmailTemplateManagementComponent implements OnInit {
   private setStatus(template: EmailTemplate, isActive: boolean): void {
     this.templateService.setStatus(template.id, isActive).subscribe({
       next: () => {
-        this.notificationService.success(isActive ? 'Template reactivated.' : 'Template deactivated.');
+        this.notificationService.success(
+          isActive ? 'Template reactivated.' : 'Template deactivated.',
+        );
         this.loadTemplates();
       },
       error: (err) => {
-        this.notificationService.error(extractHttpErrorMessage(err, 'Could not update this template\'s status.'));
-      }
+        this.notificationService.error(
+          extractHttpErrorMessage(err, "Could not update this template's status."),
+        );
+      },
     });
   }
 }

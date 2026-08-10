@@ -5,14 +5,33 @@
         <h3 class="mb-2">Manage Users</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-md" (click)="openModal()">
+        <button class="btn btn-primary btn-sm" (click)="openModal()">
           <i class="fas fa-plus me-2"></i>Add User
         </button>
       </div>
     </div>
   </div>
 
+
+
   <div class="container-fluid">
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'Staffs'"
+          (click)="switchTab('Staffs')">Staffs</button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'Student'"
+          (click)="switchTab('Student')">Students</button>
+      </li>
+      <!-- <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'Customer'"
+          (click)="switchTab('Customer')">Customers</button>
+      </li> -->
+
+    </ul>
+
     <div class="row">
       <div class="col-12">
         <div *ngIf="isLoading" class="text-center py-5">
@@ -24,24 +43,17 @@
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
           <div class="card-body p-0">
-                      <app-data-table
-              [columns]="columns"
-              [data]="users"
-              [rowActions]="rowActions"
-              [pageNumber]="pager.pageNumber"
-              [pageSize]="pager.pageSize"
-              [totalCount]="pager.totalCount"
-              [showSearch]="true"
-              searchPlaceholder="Search name or email..."
-              (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)"
-              (actionClick)="onTableAction($event)"
+            <app-data-table [columns]="columns" [data]="users" [rowActions]="rowActions" [pageNumber]="pager.pageNumber"
+              [pageSize]="pager.pageSize" [totalCount]="pager.totalCount" [showSearch]="true"
+              searchPlaceholder="Search name or email..." (searchChange)="onSearchChange($event)"
+              (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
               <select tableFilters class="form-select" style="max-width: 180px;" (change)="onRoleFilterChange($event)">
                 <option value="">All roles</option>
-                <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                <option *ngFor="let role of visibleRoles" [value]="role.id">{{ role.name }}</option>
               </select>
-              <select tableFilters class="form-select" style="max-width: 150px;" (change)="onActiveFilterChange($event)">
+              <select tableFilters class="form-select" style="max-width: 150px;"
+                (change)="onActiveFilterChange($event)">
                 <option value="all">All statuses</option>
                 <option value="true">Active only</option>
                 <option value="false">Inactive only</option>
@@ -60,8 +72,8 @@
 <!-- Add User Modal -->
 <!-- Add/Edit User Modal -->
 <app-modal *ngIf="isModalOpen" [title]="editingId ? 'Edit User' : 'Add User'" [isSaving]="isSubmitting"
-  [saveLabel]="editingId ? 'Save Changes' : 'Save User'"
-  (closeModal)="closeModal()" (cancel)="closeModal()" (save)="onSubmit()">
+  [saveLabel]="editingId ? 'Save Changes' : 'Save User'" (closeModal)="closeModal()" (cancel)="closeModal()"
+  (save)="onSubmit()">
   <form [formGroup]="userForm">
     <div class="mb-3">
       <label for="email" class="form-label">Email *</label>

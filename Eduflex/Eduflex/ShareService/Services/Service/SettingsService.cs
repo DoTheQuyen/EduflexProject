@@ -63,6 +63,14 @@ namespace ShareService.Services
             ValidateUploadLimit(settings.ImageUpload, "Image");
             ValidateUploadLimit(settings.ContractUpload, "Contract");
             ValidateUploadLimit(settings.EnrolmentUpload, "Enrolment");
+            if (string.IsNullOrWhiteSpace(settings.ChatSystemPrompt))
+            {
+                throw new ArgumentException("ChatSystemPrompt cannot be empty");
+            }
+            if (string.IsNullOrWhiteSpace(settings.ChatApiUrl))
+            {
+                throw new ArgumentException("ChatApiUrl cannot be empty");
+            }
 
             var updated = await _settingsDataAccess.UpsertSettingsAsync(settings);
             _logger.LogInformation("Settings updated by {UserId}", userId);

@@ -1,7 +1,6 @@
 <div class="settings-page">
   <div class="container-fluid py-4">
     <h2 class="mb-0">App Settings</h2>
-    <p class="text-muted small mb-0">Config values previously hardcoded in appsettings.json — now editable here.</p>
   </div>
 
   <div class="container-fluid">
@@ -33,12 +32,14 @@
               <div class="col-md-6">
                 <label class="form-label">Feedback carousel — default count *</label>
                 <input type="number" class="form-control" formControlName="feedbackDefaultLatestCount">
-                <span class="field-error" *ngIf="isFieldInvalid('feedbackDefaultLatestCount')">Enter a number greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid('feedbackDefaultLatestCount')">Enter a number greater
+                  than 0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Course promotions carousel — default count *</label>
                 <input type="number" class="form-control" formControlName="coursePromotionDefaultLatestCount">
-                <span class="field-error" *ngIf="isFieldInvalid('coursePromotionDefaultLatestCount')">Enter a number greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid('coursePromotionDefaultLatestCount')">Enter a number
+                  greater than 0</span>
               </div>
             </div>
 
@@ -47,7 +48,8 @@
               <div class="col-md-6">
                 <label class="form-label">Max applications per student *</label>
                 <input type="number" class="form-control" formControlName="maxApplicationsPerStudent">
-                <span class="field-error" *ngIf="isFieldInvalid('maxApplicationsPerStudent')">Enter a number greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid('maxApplicationsPerStudent')">Enter a number greater
+                  than 0</span>
                 <p class="text-muted small mt-1 mb-0">
                   System-wide ceiling on how many concurrent course applications a student's enrolment can hold.
                   Staff can grant an individual student fewer than this from the Enrolment Form step, but never more.
@@ -58,29 +60,34 @@
 
           <div formGroupName="documentUpload" *ngIf="activeTab === 'documents'">
             <h6 class="form-section-title">Application form uploads — default</h6>
-            <p class="text-muted small">Applies to every application document slot except "Other Supporting Documents" (passport, IELTS, certificate, qualification, genuine student statement, financial evidence).</p>
+            <p class="text-muted small">Applies to every application document slot except "Other Supporting Documents"
+              (passport, IELTS, certificate, qualification, genuine student statement, financial evidence).</p>
             <div class="row g-3" formGroupName="default">
               <div class="col-md-6">
                 <label class="form-label">Max file size (MB) *</label>
                 <input type="number" step="0.1" class="form-control" formControlName="maxSizeMB">
-                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'default', 'maxSizeMB'])">Enter a size greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'default', 'maxSizeMB'])">Enter a
+                  size greater than 0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Max files *</label>
                 <input type="number" class="form-control" formControlName="maxFileCount">
-                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'default', 'maxFileCount'])">Enter a count greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'default', 'maxFileCount'])">Enter a
+                  count greater than 0</span>
               </div>
               <div class="col-md-12">
                 <label class="form-label">Allowed file extensions *</label>
                 <div class="d-flex gap-2 mb-2" *ngIf="permissions.edit">
                   <input #defaultExtInput type="text" class="form-control" placeholder="e.g. .pdf"
                     (keyup.enter)="$event.preventDefault(); addExtension(defaultExtensions, defaultExtInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addExtension(defaultExtensions, defaultExtInput)">Add</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap"
+                    (click)="addExtension(defaultExtensions, defaultExtInput)">Add</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of defaultExtensions.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(defaultExtensions, i)" aria-label="Remove extension">&times;</button>
+                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(defaultExtensions, i)"
+                      aria-label="Remove extension">&times;</button>
                   </span>
                 </div>
                 <p class="text-muted small mb-0" *ngIf="defaultExtensions.length === 0">No extensions added yet.</p>
@@ -88,29 +95,34 @@
             </div>
 
             <h6 class="form-section-title mt-4">Application form uploads — other supporting documents</h6>
-            <p class="text-muted small">Applies only to the "Other Supporting Documents" slot, which allows multiple files.</p>
+            <p class="text-muted small">Applies only to the "Other Supporting Documents" slot, which allows multiple
+              files.</p>
             <div class="row g-3" formGroupName="other">
               <div class="col-md-6">
                 <label class="form-label">Max file size (MB) *</label>
                 <input type="number" step="0.1" class="form-control" formControlName="maxSizeMB">
-                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'other', 'maxSizeMB'])">Enter a size greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'other', 'maxSizeMB'])">Enter a size
+                  greater than 0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Max files *</label>
                 <input type="number" class="form-control" formControlName="maxFileCount">
-                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'other', 'maxFileCount'])">Enter a count greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['documentUpload', 'other', 'maxFileCount'])">Enter a
+                  count greater than 0</span>
               </div>
               <div class="col-md-12">
                 <label class="form-label">Allowed file extensions *</label>
                 <div class="d-flex gap-2 mb-2" *ngIf="permissions.edit">
                   <input #otherExtInput type="text" class="form-control" placeholder="e.g. .pdf"
                     (keyup.enter)="$event.preventDefault(); addExtension(otherExtensions, otherExtInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addExtension(otherExtensions, otherExtInput)">Add</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap"
+                    (click)="addExtension(otherExtensions, otherExtInput)">Add</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of otherExtensions.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(otherExtensions, i)" aria-label="Remove extension">&times;</button>
+                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(otherExtensions, i)"
+                      aria-label="Remove extension">&times;</button>
                   </span>
                 </div>
                 <p class="text-muted small mb-0" *ngIf="otherExtensions.length === 0">No extensions added yet.</p>
@@ -125,24 +137,28 @@
               <div class="col-md-6">
                 <label class="form-label">Max file size (MB) *</label>
                 <input type="number" step="0.1" class="form-control" formControlName="maxSizeMB">
-                <span class="field-error" *ngIf="isFieldInvalid(['imageUpload', 'maxSizeMB'])">Enter a size greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['imageUpload', 'maxSizeMB'])">Enter a size greater than
+                  0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Max files *</label>
                 <input type="number" class="form-control" formControlName="maxFileCount">
-                <span class="field-error" *ngIf="isFieldInvalid(['imageUpload', 'maxFileCount'])">Enter a count greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['imageUpload', 'maxFileCount'])">Enter a count greater
+                  than 0</span>
               </div>
               <div class="col-md-12">
                 <label class="form-label">Allowed file extensions *</label>
                 <div class="d-flex gap-2 mb-2" *ngIf="permissions.edit">
                   <input #imageExtInput type="text" class="form-control" placeholder="e.g. .png"
                     (keyup.enter)="$event.preventDefault(); addExtension(imageExtensions, imageExtInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addExtension(imageExtensions, imageExtInput)">Add</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap"
+                    (click)="addExtension(imageExtensions, imageExtInput)">Add</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of imageExtensions.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(imageExtensions, i)" aria-label="Remove extension">&times;</button>
+                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(imageExtensions, i)"
+                      aria-label="Remove extension">&times;</button>
                   </span>
                 </div>
                 <p class="text-muted small mb-0" *ngIf="imageExtensions.length === 0">No extensions added yet.</p>
@@ -157,24 +173,28 @@
               <div class="col-md-6">
                 <label class="form-label">Max file size (MB) *</label>
                 <input type="number" step="0.1" class="form-control" formControlName="maxSizeMB">
-                <span class="field-error" *ngIf="isFieldInvalid(['contractUpload', 'maxSizeMB'])">Enter a size greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['contractUpload', 'maxSizeMB'])">Enter a size greater
+                  than 0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Max files *</label>
                 <input type="number" class="form-control" formControlName="maxFileCount">
-                <span class="field-error" *ngIf="isFieldInvalid(['contractUpload', 'maxFileCount'])">Enter a count greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['contractUpload', 'maxFileCount'])">Enter a count
+                  greater than 0</span>
               </div>
               <div class="col-md-12">
                 <label class="form-label">Allowed file extensions *</label>
                 <div class="d-flex gap-2 mb-2" *ngIf="permissions.edit">
                   <input #contractExtInput type="text" class="form-control" placeholder="e.g. .pdf"
                     (keyup.enter)="$event.preventDefault(); addExtension(contractExtensions, contractExtInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addExtension(contractExtensions, contractExtInput)">Add</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap"
+                    (click)="addExtension(contractExtensions, contractExtInput)">Add</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of contractExtensions.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(contractExtensions, i)" aria-label="Remove extension">&times;</button>
+                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(contractExtensions, i)"
+                      aria-label="Remove extension">&times;</button>
                   </span>
                 </div>
                 <p class="text-muted small mb-0" *ngIf="contractExtensions.length === 0">No extensions added yet.</p>
@@ -184,42 +204,75 @@
 
           <div formGroupName="enrolmentUpload" *ngIf="activeTab === 'enrolment'">
             <h6 class="form-section-title">Enrolment document uploads</h6>
-            <p class="text-muted small">Applies to enrolment documents and visa-process step attachments. Leave extensions empty to allow any file type.</p>
+            <p class="text-muted small">Applies to enrolment documents and visa-process step attachments. Leave
+              extensions empty to allow any file type.</p>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Max file size (MB) *</label>
                 <input type="number" step="0.1" class="form-control" formControlName="maxSizeMB">
-                <span class="field-error" *ngIf="isFieldInvalid(['enrolmentUpload', 'maxSizeMB'])">Enter a size greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['enrolmentUpload', 'maxSizeMB'])">Enter a size greater
+                  than 0</span>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Max files *</label>
                 <input type="number" class="form-control" formControlName="maxFileCount">
-                <span class="field-error" *ngIf="isFieldInvalid(['enrolmentUpload', 'maxFileCount'])">Enter a count greater than 0</span>
+                <span class="field-error" *ngIf="isFieldInvalid(['enrolmentUpload', 'maxFileCount'])">Enter a count
+                  greater than 0</span>
               </div>
               <div class="col-md-12">
                 <label class="form-label">Allowed file extensions (optional)</label>
                 <div class="d-flex gap-2 mb-2" *ngIf="permissions.edit">
                   <input #enrolmentExtInput type="text" class="form-control" placeholder="e.g. .pdf"
                     (keyup.enter)="$event.preventDefault(); addExtension(enrolmentExtensions, enrolmentExtInput)">
-                  <button type="button" class="btn btn-outline-primary text-nowrap" (click)="addExtension(enrolmentExtensions, enrolmentExtInput)">Add</button>
+                  <button type="button" class="btn btn-outline-primary text-nowrap"
+                    (click)="addExtension(enrolmentExtensions, enrolmentExtInput)">Add</button>
                 </div>
                 <div class="intake-chips">
                   <span class="intake-chip" *ngFor="let control of enrolmentExtensions.controls; let i = index">
                     {{ control.value }}
-                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(enrolmentExtensions, i)" aria-label="Remove extension">&times;</button>
+                    <button type="button" *ngIf="permissions.edit" (click)="removeExtension(enrolmentExtensions, i)"
+                      aria-label="Remove extension">&times;</button>
                   </span>
                 </div>
-                <p class="text-muted small mb-0" *ngIf="enrolmentExtensions.length === 0">No extensions added — any file type is allowed.</p>
+                <p class="text-muted small mb-0" *ngIf="enrolmentExtensions.length === 0">No extensions added — any file
+                  type is allowed.</p>
               </div>
             </div>
           </div>
 
+          <ng-container *ngIf="activeTab === 'chat'">
+            <h6 class="form-section-title">Visa Q&amp;A chat widget</h6>
+            <p class="text-muted small">Controls the public chat widget's AI behaviour. Changes apply immediately —
+              no redeploy needed.</p>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label class="form-label">System prompt *</label>
+                <textarea rows="10" class="form-control" formControlName="chatSystemPrompt"></textarea>
+                <span class="field-error" *ngIf="isFieldInvalid('chatSystemPrompt')">System prompt cannot be
+                  empty</span>
+                <p class="text-muted small mt-1 mb-0">
+                  Instructions given to the AI before every question — controls its tone, topic boundaries, and
+                  formatting.
+                </p>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">API URL *</label>
+                <input type="text" class="form-control" formControlName="chatApiUrl">
+                <span class="field-error" *ngIf="isFieldInvalid('chatApiUrl')">API URL cannot be empty</span>
+                <p class="text-muted small mt-1 mb-0">
+                  Use <code>{{ '{model}' }}</code> as a placeholder — it's substituted with the configured Gemini
+                  model at request time. The API key is kept separately outside this form.
+                </p>
+              </div>
+            </div>
+          </ng-container>
+
           <p class="text-danger mt-3 mb-0" *ngIf="errorMessage">{{ errorMessage }}</p>
 
           <div class="text-end mt-4" *ngIf="permissions.edit">
-            <button type="button" class="btn btn-primary" [disabled]="isSaving" (click)="saveSection(activeTab)">
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="isSaving" (click)="saveSection(activeTab)">
               <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
-                           {{ isSaving ? 'Saving...' : 'Save this section' }}
+              {{ isSaving ? 'Saving...' : 'Save this section' }}
             </button>
           </div>
         </div>

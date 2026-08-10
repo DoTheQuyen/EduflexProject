@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
-import { BehaviorSubject } from 'rxjs';
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  HubConnectionState,
+  LogLevel,
+} from '@microsoft/signalr';
+import { BehaviorSubject, interval, Subscription } from 'rxjs';
 import { AuthHelperService } from './auth-helper.service';
 import { Client } from './api.services';
 import { environment } from '../environments/environment';
@@ -27,7 +32,17 @@ export class RealtimeNotificationService {
   private unreadCountSubject = new BehaviorSubject<number>(0);
   unreadCount$ = this.unreadCountSubject.asObservable();
 
-  constructor(private authHelper: AuthHelperService, private client: Client) {}
+  // Redis pub/sub is disabled on the backend for now (see NotificationPublisher/Program.cs),
+  // so the SignalR push below never actually receives anything — this interval is what
+  // keeps the list current instead. Drop this once live push is restored, or keep it as a
+  // belt-and-braces fallback; either is fine.
+  private pollSubscription?: Subscription;
+  private readonly pollIntervalMs = 15000;
+
+  constructor(
+    private authHelper: AuthHelperService,
+    private client: Client,
+  ) {}
 
   connect(): void {
     // The backend rejects every notifications/hub call with 403 until the user
@@ -44,10 +59,11 @@ export class RealtimeNotificationService {
     // Load whatever's already outstanding first — this is what makes notifications
     // survive a refresh or "nobody was online when it happened", unlike the live push alone.
     this.loadBacklog();
+    this.startPolling();
 
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${environment.apiClientUrl}/hubs/notifications`, {
-        accessTokenFactory: () => this.authHelper.getAuthToken() ?? ''
+        accessTokenFactory: () => this.authHelper.getAuthToken() ?? '',
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
@@ -55,47 +71,60 @@ export class RealtimeNotificationService {
 
     this.hubConnection.on('ReceiveNotification', (message: RealtimeNotificationMessage) => {
       const current = this.notificationsSubject.value;
-      if (current.some(n => n.id === message.id)) {
+      if (current.some((n) => n.id === message.id)) {
         return; // already present (e.g. raced with the initial backlog fetch)
       }
       this.updateList([message, ...current]);
     });
 
-    this.hubConnection.start().catch(err => console.error('Notification hub connection failed', err));
+    this.hubConnection
+      .start()
+      .catch((err) => console.error('Notification hub connection failed', err));
   }
 
   disconnect(): void {
     this.hubConnection?.stop();
     this.hubConnection = undefined;
+    this.stopPolling();
   }
 
   // Removes one notification from this user's own list — clearing it doesn't affect
   // anyone else with the same role, since it's tracked per-user server-side.
   clear(id: string): void {
     this.client.clear(id).subscribe({
-      next: () => this.updateList(this.notificationsSubject.value.filter(n => n.id !== id)),
-      error: err => console.error('Failed to clear notification', err)
+      next: () => this.updateList(this.notificationsSubject.value.filter((n) => n.id !== id)),
+      error: (err) => console.error('Failed to clear notification', err),
     });
+  }
+
+  private startPolling(): void {
+    this.stopPolling(); // guard against a duplicate interval if connect() is ever called twice
+    this.pollSubscription = interval(this.pollIntervalMs).subscribe(() => this.loadBacklog());
+  }
+
+  private stopPolling(): void {
+    this.pollSubscription?.unsubscribe();
+    this.pollSubscription = undefined;
   }
 
   private loadBacklog(): void {
     this.client.notifications().subscribe({
-      next: dtos => {
+      next: (dtos) => {
         // TODO(department-migration): drop the `as any` once `nswag run` has been
         // re-run against the updated backend — NotificationDto doesn't declare
         // targetType/targetDepartmentId yet because api.services.ts hasn't been
         // regenerated, even though the server already sends them.
-        const mapped: RealtimeNotificationMessage[] = dtos.map(dto => ({
+        const mapped: RealtimeNotificationMessage[] = dtos.map((dto) => ({
           id: dto.id ?? '',
           module: dto.module ?? '',
           entityId: dto.entityId ?? '',
           summary: dto.summary ?? '',
           targetType: (dto as any).targetType ?? '',
-          targetDepartmentId: (dto as any).targetDepartmentId ?? undefined
+          targetDepartmentId: (dto as any).targetDepartmentId ?? undefined,
         }));
         this.updateList(mapped);
       },
-      error: err => console.error('Failed to load notifications', err)
+      error: (err) => console.error('Failed to load notifications', err),
     });
   }
 

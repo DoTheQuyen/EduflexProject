@@ -1,10 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client, EnquiryDto, EnquiryFilterDto, EnquiryEnums, EnquiryStatusDto } from '@services/api.services';
+import {
+  Client,
+  EnquiryDto,
+  EnquiryFilterDto,
+  EnquiryEnums,
+  EnquiryStatusDto,
+} from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
-import { DataTableColumn, DataTableAction, DataTableRowAction } from '@generic/data-table/data-table.models';
+import {
+  DataTableColumn,
+  DataTableAction,
+  DataTableRowAction,
+} from '@generic/data-table/data-table.models';
 import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
@@ -17,7 +27,7 @@ type EnquiryTab = 'New' | 'MIR' | 'Responded' | 'Converted';
   standalone: true,
   imports: [CommonModule, DataTableComponent, NotificationComponent],
   templateUrl: './enquiry-management.component.html',
-  styleUrls: ['./enquiry-management.component.css']
+  styleUrls: ['./enquiry-management.component.css'],
 })
 export class EnquiryManagementComponent implements OnInit {
   enquiries: EnquiryDto[] = [];
@@ -30,23 +40,39 @@ export class EnquiryManagementComponent implements OnInit {
   permissions!: ModulePermissions;
 
   newColumns: DataTableColumn<EnquiryDto>[] = [
-    { field: 'firstName', title: 'Name', render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim() },
+    {
+      field: 'firstName',
+      title: 'Name',
+      render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
+    },
     { field: 'email', title: 'Email' },
     { field: 'mobile', title: 'Mobile' },
     { field: 'subject', title: 'Subject' },
-    { field: 'createdAt', title: 'Received', className: 'text-center',
-      formatter: (value) => formatDateTime(value, 'dd/MM/yyyy HH:mm') },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    {
+      field: 'createdAt',
+      title: 'Received',
+      className: 'text-center',
+      formatter: (value) => formatDateTime(value, 'dd/MM/yyyy HH:mm'),
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   respondedColumns: DataTableColumn<EnquiryDto>[] = [
-    { field: 'firstName', title: 'Name', render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim() },
+    {
+      field: 'firstName',
+      title: 'Name',
+      render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
+    },
     { field: 'subject', title: 'Subject' },
     { field: 'updatedBy', title: 'Responded By' },
-    { field: 'updatedAt', title: 'Responded At', className: 'text-center',
-      formatter: (value) => value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '' },
+    {
+      field: 'updatedAt',
+      title: 'Responded At',
+      className: 'text-center',
+      formatter: (value) => (value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : ''),
+    },
     { field: 'response', title: 'Response', formatter: (value) => this.truncateResponse(value) },
-    { field: 'actions', title: 'Actions', className: 'text-center' }
+    { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
   constructor(
@@ -54,12 +80,17 @@ export class EnquiryManagementComponent implements OnInit {
     private authHelper: AuthHelperService,
     private notificationService: NotificationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.permissions = this.authHelper.hasEnquiryPermission();
 
     const savedTab = this.route.snapshot.queryParamMap.get('tab') as EnquiryTab | null;
-    if (savedTab === 'New' || savedTab === 'MIR' || savedTab === 'Responded' || savedTab === 'Converted') {
+    if (
+      savedTab === 'New' ||
+      savedTab === 'MIR' ||
+      savedTab === 'Responded' ||
+      savedTab === 'Converted'
+    ) {
       this.activeTab = savedTab;
     }
   }
@@ -72,8 +103,15 @@ export class EnquiryManagementComponent implements OnInit {
     return [
       { action: 'view', label: 'View', icon: 'fa-eye', cssClass: 'btn btn-sm btn-outline-primary' },
       ...(this.activeTab === 'New' && this.permissions.delete
-        ? [{ action: 'delete', label: 'Delete', icon: 'fa-trash', cssClass: 'btn btn-sm btn-outline-danger' }]
-        : [])
+        ? [
+            {
+              action: 'delete',
+              label: 'Delete',
+              icon: 'fa-trash',
+              cssClass: 'btn btn-sm btn-outline-danger',
+            },
+          ]
+        : []),
     ];
   }
 
@@ -84,8 +122,10 @@ export class EnquiryManagementComponent implements OnInit {
 
   loadStatuses(): void {
     this.apiClient.enquiryStatuses().subscribe({
-      next: (statuses) => { this.statusOptions = statuses; },
-      error: () => {}
+      next: (statuses) => {
+        this.statusOptions = statuses;
+      },
+      error: () => {},
     });
   }
 
@@ -99,10 +139,14 @@ export class EnquiryManagementComponent implements OnInit {
 
   private statusesForTab(tab: EnquiryTab): EnquiryEnums[] {
     switch (tab) {
-      case 'New': return [EnquiryEnums.New];
-      case 'MIR': return [EnquiryEnums.MIR];
-      case 'Responded': return [EnquiryEnums.Responded];
-      case 'Converted': return [EnquiryEnums.Converted];
+      case 'New':
+        return [EnquiryEnums.New];
+      case 'MIR':
+        return [EnquiryEnums.MIR];
+      case 'Responded':
+        return [EnquiryEnums.Responded];
+      case 'Converted':
+        return [EnquiryEnums.Converted];
     }
   }
 
@@ -122,7 +166,7 @@ export class EnquiryManagementComponent implements OnInit {
       pageNumber: this.pager.pageNumber,
       pageSize: this.pager.pageSize,
       searchTerm: this.pager.searchTerm || undefined,
-      statuses: this.statusesForTab(this.activeTab)
+      statuses: this.statusesForTab(this.activeTab),
     });
     this.apiClient.searchEnquiries(filter).subscribe({
       next: (result) => {
@@ -130,7 +174,9 @@ export class EnquiryManagementComponent implements OnInit {
         this.pager.totalCount = result.totalCount ?? 0;
         this.isLoading = false;
       },
-      error: () => { this.isLoading = false; }
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
@@ -150,7 +196,9 @@ export class EnquiryManagementComponent implements OnInit {
       return;
     }
 
-    const confirmed = window.confirm(`Delete the enquiry from ${enquiry.firstName} ${enquiry.lastName}?`);
+    const confirmed = window.confirm(
+      `Delete the enquiry from ${enquiry.firstName} ${enquiry.lastName}?`,
+    );
     if (!confirmed || !enquiry.id) {
       return;
     }
@@ -162,13 +210,15 @@ export class EnquiryManagementComponent implements OnInit {
       },
       error: () => {
         this.notificationService.error('Could not delete this enquiry. Please try again.');
-      }
+      },
     });
   }
 
   onTableAction(event: DataTableAction<EnquiryDto>): void {
     if (event.action === 'view') {
-      this.router.navigate(['/staff-portal/enquiries', event.row.id], { queryParams: { tab: this.activeTab } });
+      this.router.navigate(['/staff-portal/enquiries', event.row.id], {
+        queryParams: { tab: this.activeTab },
+      });
     } else if (event.action === 'delete') {
       this.onDelete(event.row);
     }

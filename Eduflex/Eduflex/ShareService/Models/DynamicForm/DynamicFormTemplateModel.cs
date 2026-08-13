@@ -20,9 +20,13 @@ namespace ShareService.Models.DynamicForm
         [BsonElement("status")]
         public string Status { get; set; } = TemplateStatus.Active.ToString();
 
-        // One of VisaProcessStepKeys.Ordered (see ShareService.Models.Enrolment), or null
-        // when the template isn't bound to a step — still requestable ad hoc from the
-        // Enrolment Forms tab, it just has no step marker on the VISA Process tab.
+        // Free-form, not validated against a fixed list (see
+        // DynamicFormTemplateModelValidator) — a template is shared across modules, and
+        // each has its own valid step keys: Enrolment's fixed VisaProcessStepKeys.Ordered,
+        // or a Migration Case's own VisaProcessTemplate steps. Null means the template
+        // isn't bound to a step — still requestable ad hoc, it just has no step marker
+        // on the Process tab and its exported PDF lands in the generic "DynamicForm"
+        // document category instead of replacing a specific step's evidence file.
         [BsonElement("boundStepKey")]
         public string? BoundStepKey { get; set; }
 

@@ -6,6 +6,7 @@ namespace Eduflex.DTOs.StudentPaymentPlan
         public string EnrolmentId { get; set; } = string.Empty;
         public string StudentName { get; set; } = string.Empty;
         public string? CourseName { get; set; }
+        public string FeeType { get; set; } = string.Empty;
         public string Label { get; set; } = string.Empty;
         public int InstalmentNumber { get; set; }
         public int TotalInstalments { get; set; }
@@ -21,6 +22,7 @@ namespace Eduflex.DTOs.StudentPaymentPlan
     {
         public string StudentName { get; set; } = string.Empty;
         public string? CourseName { get; set; }
+        public string FeeType { get; set; } = "Tuition";
         public decimal TotalAmount { get; set; }
         public int InstalmentCount { get; set; }
         public DateTime FirstDueDate { get; set; }
@@ -31,6 +33,7 @@ namespace Eduflex.DTOs.StudentPaymentPlan
     {
         public string StudentName { get; set; } = string.Empty;
         public string? CourseName { get; set; }
+        public string FeeType { get; set; } = "Tuition";
         public string Label { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public DateTime DueDate { get; set; }

@@ -79,6 +79,10 @@ namespace ShareService.Models.Accounts
     public class AccountTimelineEntryModel
     {
         public string EntryId { get; set; } = string.Empty;
+        // One of StudentFeeTypes for a Student account entry (Tuition/ServiceFee/
+        // VisaExtension/Visa485/PartnerVisa/Other), or the literal "Commission" for a
+        // Partner account entry — there's only one fee type on that side today.
+        public string FeeType { get; set; } = string.Empty;
         public string Label { get; set; } = string.Empty;
         public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }

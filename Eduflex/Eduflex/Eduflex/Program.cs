@@ -122,6 +122,10 @@ builder.Services.Configure<WebURLSettings>(
 builder.Services.Configure<GeminiSettings>(
     builder.Configuration.GetSection("Gemini"));
 
+//Configure Groq Settings (fallback provider for ChatService when Gemini is rate-limited)
+builder.Services.Configure<GroqSettings>(
+    builder.Configuration.GetSection("Groq"));
+
 // Register MongoDB Client (Singleton - recommended by MongoDB)
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {

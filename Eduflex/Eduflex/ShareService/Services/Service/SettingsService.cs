@@ -71,6 +71,10 @@ namespace ShareService.Services
             {
                 throw new ArgumentException("ChatApiUrl cannot be empty");
             }
+            if (string.IsNullOrWhiteSpace(settings.ChatGroqApiUrl))
+            {
+                throw new ArgumentException("ChatGroqApiUrl cannot be empty");
+            }
 
             var updated = await _settingsDataAccess.UpsertSettingsAsync(settings);
             _logger.LogInformation("Settings updated by {UserId}", userId);

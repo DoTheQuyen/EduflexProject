@@ -21,10 +21,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        // Lightweight, non-permission-gated directory — any authenticated staff member
-        // needs this to know what's requestable from an Enrolment's Forms tab / VISA
-        // step, same reasoning as DepartmentsController.GetDepartmentsDirectory. The
-        // gated GetById/Create/Update/SetStatus below are the admin management screen.
+       
         [HttpGet]
         public Task<ActionResult<List<DynamicFormTemplateDto>>> GetAll()
         {

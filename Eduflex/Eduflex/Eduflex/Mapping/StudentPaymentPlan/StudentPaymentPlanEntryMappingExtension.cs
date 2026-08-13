@@ -13,6 +13,7 @@ namespace Eduflex.Mapping.StudentPaymentPlan
                 EnrolmentId = model.EnrolmentId,
                 StudentName = model.StudentName,
                 CourseName = model.CourseName,
+                FeeType = model.FeeType,
                 Label = model.Label,
                 InstalmentNumber = model.InstalmentNumber,
                 TotalInstalments = model.TotalInstalments,

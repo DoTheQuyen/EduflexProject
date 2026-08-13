@@ -17,6 +17,9 @@ using ShareService.Models.Feedback;
 using ShareService.Models.Invoice;
 using ShareService.Models.Role;
 using ShareService.Models.Student;
+using ShareService.Models.MigrationCase;
+using ShareService.Models.Task;
+using ShareService.Models.VisaProcess;
 using ShareService.Services;
 using ShareService.Services.Interface;
 using ShareService.Services.Interface.Integration;
@@ -36,6 +39,8 @@ using ShareService.Validations.Feedback;
 using ShareService.Validations.Invoice;
 using ShareService.Validations.Role;
 using ShareService.Validations.Student;
+using ShareService.Validations.Task;
+using ShareService.Validations.VisaProcess;
 
 namespace ShareService.Inject
 {
@@ -71,6 +76,10 @@ namespace ShareService.Inject
             services.AddScoped<IInvoice, Invoice>();
             services.AddScoped<IStudentPaymentPlanEntry, StudentPaymentPlanEntry>();
             services.AddScoped<IChatQuestion, ChatQuestion>();
+            services.AddScoped<ITaskItem, TaskItem>();
+            services.AddScoped<IVisaProcessTemplate, VisaProcessTemplate>();
+            services.AddScoped<IPractitionerTag, PractitionerTag>();
+            services.AddScoped<IMigrationCase, MigrationCase>();
 
 
             #endregion
@@ -104,6 +113,11 @@ namespace ShareService.Inject
             services.AddScoped<IStudentPaymentPlanService, StudentPaymentPlanService>();
             services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<ITaskItemService, TaskItemService>();
+            services.AddScoped<IVisaProcessTemplateService, VisaProcessTemplateService>();
+            services.AddScoped<IPractitionerTagService, PractitionerTagService>();
+            services.AddScoped<IMigrationCaseService, MigrationCaseService>();
 
 
             #endregion
@@ -129,6 +143,9 @@ namespace ShareService.Inject
             services.AddScoped<IValidator<DepartmentModel>, DepartmentModelValidator>();
             services.AddScoped<IValidator<DynamicFormTemplateModel>, DynamicFormTemplateModelValidator>();
             services.AddScoped<IValidator<InvoiceTemplateModel>, InvoiceTemplateModelValidator>();
+            services.AddScoped<IValidator<TaskItemModel>, TaskItemModelValidator>();
+            services.AddScoped<IValidator<VisaProcessTemplateModel>, VisaProcessTemplateModelValidator>();
+            services.AddScoped<IValidator<PractitionerTagModel>, PractitionerTagModelValidator>();
 
             #endregion
 

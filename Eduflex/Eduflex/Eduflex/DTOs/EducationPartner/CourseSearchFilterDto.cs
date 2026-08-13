@@ -8,5 +8,8 @@ namespace Eduflex.DTOs.EducationPartner
         public string? UniName { get; set; }
         public string? Country { get; set; }
         public string? Intake { get; set; }
+        public string? Campus { get; set; }
+        public string? StudyMode { get; set; }
+        public decimal? MaxTuition { get; set; }
     }
 }

@@ -14,7 +14,10 @@ namespace Eduflex.Mapping.EducationPartner
                 CourseName = dto.CourseName,
                 UniName = dto.UniName,
                 Country = dto.Country,
-                Intake = dto.Intake
+                Intake = dto.Intake,
+                Campus = dto.Campus,
+                StudyMode = dto.StudyMode,
+                MaxTuition = dto.MaxTuition
             };
         }
 
@@ -60,7 +63,11 @@ namespace Eduflex.Mapping.EducationPartner
                 Id = result.Course.Id,
                 CourseName = result.Course.CourseName,
                 Intakes = result.Course.Intakes,
+                StudyModes = result.Course.StudyModes,
+                Campuses = result.Course.Campuses,
+                CourseDurationMonths = result.Course.CourseDurationMonths,
                 TuitionFee = result.Course.TuitionFee,
+                TotalTuitionFee = result.Course.TotalTuitionFee,
                 TuitionCurrency = result.Course.TuitionCurrency,
                 EducationPartnerId = result.Partner.Id,
                 UniName = result.Partner.Name,

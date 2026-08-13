@@ -22,10 +22,6 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        // Lightweight, non-permission-gated directory — used by pickers elsewhere (parent
-        // department dropdown, staff-to-department assignment, the Users list department
-        // badges) that need id/name lookups without requiring DepartmentsView. The gated
-        // GetDepartmentById/SearchDepartments below are the staff-management screens.
         [HttpGet]
         public Task<ActionResult<List<DepartmentDto>>> GetDepartmentsDirectory()
         {

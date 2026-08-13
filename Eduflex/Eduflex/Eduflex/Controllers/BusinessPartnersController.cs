@@ -24,9 +24,6 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        // Lightweight, non-permission-gated listing — used by the Education Partner
-        // "Managed under partner" picker. GetBusinessPartnerById/SearchBusinessPartners
-        // below are staff-management screens gated behind BusinessPartnersView.
         [HttpGet]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<List<BusinessPartnerDto>>> GetBusinessPartnersDirectory()
@@ -76,8 +73,7 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        // Wrapped in a DTO rather than returned as a bare string — same NSwag
-        // Accept:text/plain / StringOutputFormatter reasoning as CreateEducationPartner.
+       
         [HttpPost]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<CreateBusinessPartnerResultDto>> CreateBusinessPartner(CreateBusinessPartnerDto createDto)

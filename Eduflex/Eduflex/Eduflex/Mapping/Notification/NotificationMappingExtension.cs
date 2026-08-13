@@ -18,5 +18,14 @@ namespace Eduflex.Mapping.Notification
                 CreatedAt = model.CreatedAt
             };
         }
+
+        public static DashboardSummaryDto ToDto(this DashboardSummaryModel model)
+        {
+            return new DashboardSummaryDto
+            {
+                Notifications = model.Notifications.Select(n => n.ToDto()).ToList(),
+                Counts = model.Counts
+            };
+        }
     }
 }

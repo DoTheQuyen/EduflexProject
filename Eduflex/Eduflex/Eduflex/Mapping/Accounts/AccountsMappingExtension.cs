@@ -59,6 +59,7 @@ namespace Eduflex.Mapping.Accounts
             return new AccountTimelineEntryDto
             {
                 EntryId = model.EntryId,
+                FeeType = model.FeeType,
                 Label = model.Label,
                 DueDate = model.DueDate,
                 Amount = model.Amount,

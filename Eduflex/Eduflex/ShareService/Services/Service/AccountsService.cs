@@ -353,7 +353,7 @@ namespace ShareService.Services
                 var first = entries.First();
 
                 var timelineEntries = entries.Select(e => BuildTimelineEntry(
-                    e.Id, e.Label, e.DueDate, e.Amount, e.Status, e.SkipReason, e.LinkedInvoiceId, invoiceById)).ToList();
+                    e.Id, e.FeeType, e.Label, e.DueDate, e.Amount, e.Status, e.SkipReason, e.LinkedInvoiceId, invoiceById)).ToList();
 
                 var contractTotal = entries.Sum(e => e.Amount);
                 var received = timelineEntries.Where(e => e.LinkedInvoiceStatus == InvoiceStatuses.Paid).Sum(e => e.Amount);
@@ -383,7 +383,7 @@ namespace ShareService.Services
                 var context = await BuildPartnerContextAsync(new List<ShareService.Models.Financial.FinancialRecordModel> { record });
 
                 var timelineEntries = record.InvoicePlan.Select((e, i) => BuildTimelineEntry(
-                    e.Id, $"Claim {i + 1} of {record.InvoicePlan.Count}", e.ClaimDate, 0m, e.Status, e.SkipReason, e.LinkedInvoiceId, invoiceById)).ToList();
+                    e.Id, "Commission", $"Claim {i + 1} of {record.InvoicePlan.Count}", e.ClaimDate, 0m, e.Status, e.SkipReason, e.LinkedInvoiceId, invoiceById)).ToList();
 
                 var contractTotal = record.ExpectedCommission + record.ExtraCommissionAdjustments.Sum(a => a.Amount);
                 var received = invoices.Where(i => i.Status == InvoiceStatuses.Paid).Sum(i => i.Total);
@@ -407,7 +407,7 @@ namespace ShareService.Services
         }
 
         private static AccountTimelineEntryModel BuildTimelineEntry(
-            string entryId, string label, DateTime dueDate, decimal fallbackAmount, string status, string? skipReason,
+            string entryId, string feeType, string label, DateTime dueDate, decimal fallbackAmount, string status, string? skipReason,
             string? linkedInvoiceId, Dictionary<string, InvoiceModel> invoiceById)
         {
             InvoiceModel? invoice = null;
@@ -416,6 +416,7 @@ namespace ShareService.Services
             return new AccountTimelineEntryModel
             {
                 EntryId = entryId,
+                FeeType = feeType,
                 Label = label,
                 DueDate = dueDate,
                 Amount = invoice?.Total ?? fallbackAmount,

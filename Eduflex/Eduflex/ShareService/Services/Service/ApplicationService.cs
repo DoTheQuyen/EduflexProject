@@ -130,6 +130,21 @@ namespace ShareService.Services
             }
         }
 
+        // Auth: requires ApplicationsView permission (staff-only), org-wide — backs the
+        // staff-portal Applications list. Unlike GetApplicationsByUserId (which looks up
+        // the caller's own Student record and is scoped to it), staff aren't Students,
+        // so this returns every application system-wide with no ownership filter.
+        public async Task<PagedResult<ApplicationModel>> GetAllApplicationsAsync(PaginationQuery query, string actingUserId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(actingUserId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            return await _applicationDataAccess.GetAllApplicationsAsync(query);
+        }
+
         // Auth: requires ApplicationsView permission (staff-only), no ownership check — staff
         // can view any application. Backs the "View application" link on the Student Details
         // page and the Enrolment history panel's "From application" link.
@@ -333,6 +348,17 @@ namespace ShareService.Services
         private bool isAValidStatus(string status)
         {
             return status == "Pending" || status == "Approved" || status == "Rejected" || status == "Studying";
+        }
+
+        public async Task<int> CountPendingApplicationsAsync(string userId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            return await _applicationDataAccess.CountApplicationsByStatusAsync("Pending");
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ShareService.Services
         }
 
         public async Task<List<StudentPaymentPlanEntryModel>> GeneratePlanAsync(
-            string enrolmentId, string studentName, string? courseName,
+            string enrolmentId, string studentName, string? courseName, string feeType,
             decimal totalAmount, int instalmentCount, DateTime firstDueDate, int intervalMonths, string actingUserId)
         {
             await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "set up payment plans");
@@ -51,10 +51,14 @@ namespace ShareService.Services
                 throw new ArgumentException("A payment plan needs at least one instalment.");
             }
 
-            var existing = await _dataAccess.GetByEnrolmentIdAsync(enrolmentId);
+            // Scoped per fee type, not per enrolment — a student can have a Tuition plan
+            // and, later, a separate Visa485 plan without the second generate call being
+            // blocked by the first plan's existence.
+            var existing = (await _dataAccess.GetByEnrolmentIdAsync(enrolmentId))
+                .Where(e => e.FeeType == feeType).ToList();
             if (existing.Count > 0)
             {
-                throw new ArgumentException("This enrolment already has a payment plan — add or edit instalments individually instead of regenerating.");
+                throw new ArgumentException($"This enrolment already has a {feeType} payment plan — add or edit instalments individually instead of regenerating.");
             }
 
             // Split evenly in cents, then push whatever's left over (from rounding) onto
@@ -72,6 +76,7 @@ namespace ShareService.Services
                     EnrolmentId = enrolmentId,
                     StudentName = studentName,
                     CourseName = courseName,
+                    FeeType = feeType,
                     Label = $"Instalment {i} of {instalmentCount}",
                     InstalmentNumber = i,
                     TotalInstalments = instalmentCount,
@@ -89,13 +94,14 @@ namespace ShareService.Services
         }
 
         public async Task<StudentPaymentPlanEntryModel> AddManualEntryAsync(
-            string enrolmentId, string studentName, string? courseName, string label,
+            string enrolmentId, string studentName, string? courseName, string feeType, string label,
             decimal amount, DateTime dueDate, string actingUserId)
         {
             await RequirePermissionAsync(actingUserId, PermissionKey.EnrolmentsEdit, "add payment plan instalments");
 
-            var existing = await _dataAccess.GetByEnrolmentIdAsync(enrolmentId);
-            var nextNumber = existing.Count + 1;
+            var existingOfType = (await _dataAccess.GetByEnrolmentIdAsync(enrolmentId))
+                .Where(e => e.FeeType == feeType).ToList();
+            var nextNumber = existingOfType.Count + 1;
             var actingUserName = await ResolveUserNameAsync(actingUserId);
 
             var entry = new StudentPaymentPlanEntryModel
@@ -103,6 +109,7 @@ namespace ShareService.Services
                 EnrolmentId = enrolmentId,
                 StudentName = studentName,
                 CourseName = courseName,
+                FeeType = feeType,
                 Label = label,
                 InstalmentNumber = nextNumber,
                 TotalInstalments = nextNumber,
@@ -116,11 +123,11 @@ namespace ShareService.Services
 
             await _dataAccess.CreateAsync(entry);
 
-            // TotalInstalments on the earlier entries is now stale (this addition makes
-            // the plan one entry longer) — kept as a display snapshot rather than a live
-            // count, same trade-off InvoiceModel makes for its other snapshot fields;
-            // Account Timeline recomputes "N of M" from the full list length, not this
-            // field, when it needs an accurate count.
+            // TotalInstalments on earlier entries of the same fee type is now stale —
+            // kept as a display snapshot rather than a live count, same trade-off
+            // InvoiceModel makes for its other snapshot fields; Account Timeline
+            // recomputes "N of M" from the full list length when it needs an accurate
+            // count.
             return entry;
         }
 

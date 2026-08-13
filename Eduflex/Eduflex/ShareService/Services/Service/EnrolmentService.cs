@@ -1112,7 +1112,7 @@ namespace ShareService.Services
             var existing = await GetOwnedEnrolmentAsync(id, actingUserId);
             var response = FindFormResponse(existing, responseId);
 
-            ValidateAnswerLengths(response, answers);
+            response.ValidateAnswerLengths(answers);
 
             var actingUserName = await ResolveUserNameAsync(actingUserId);
             response.Answers = answers;
@@ -1194,7 +1194,7 @@ namespace ShareService.Services
             var existing = await GetOwnedEnrolmentForStudentAsync(id, studentUserId);
             var response = FindEditableStudentResponse(existing, responseId);
 
-            ValidateAnswerLengths(response, answers);
+            response.ValidateAnswerLengths(answers);
 
             response.Answers = answers;
             response.Status = ResponseStatus.Draft.ToString();
@@ -1212,8 +1212,8 @@ namespace ShareService.Services
             var existing = await GetOwnedEnrolmentForStudentAsync(id, studentUserId);
             var response = FindEditableStudentResponse(existing, responseId);
 
-            ValidateRequiredAnswers(response, answers);
-            ValidateAnswerLengths(response, answers);
+            response.ValidateRequiredAnswers(answers);
+            response.ValidateAnswerLengths(answers);
 
             response.Answers = answers;
             response.Status = ResponseStatus.Responded.ToString();
@@ -1236,48 +1236,6 @@ namespace ShareService.Services
             }
 
             return saved;
-        }
-
-        private static void ValidateRequiredAnswers(EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
-        {
-            var missing = response.QuestionsSnapshot
-                .Where(q => q.IsRequired)
-                .Where(q =>
-                {
-                    var answer = answers.FirstOrDefault(a => a.QuestionId == q.Id);
-                    if (answer == null) return true;
-
-                    var isSelectType = q.AnswerType == AnswerType.SingleSelect.ToString() || q.AnswerType == AnswerType.MultiSelect.ToString();
-                    return isSelectType ? answer.SelectedOptions.Count == 0 : string.IsNullOrWhiteSpace(answer.TextValue);
-                })
-                .Select(q => q.QuestionText)
-                .ToList();
-
-            if (missing.Count > 0)
-            {
-                throw new ArgumentException($"Please answer the following required question(s): {string.Join("; ", missing)}");
-            }
-        }
-
-        // Applied to every write path (draft save, submit, staff edit) — the client-side
-        // textarea maxlength is a UX nicety, this is the actual enforcement.
-        private static void ValidateAnswerLengths(EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
-        {
-            var overLimit = new List<string>();
-            foreach (var question in response.QuestionsSnapshot.Where(q => q.AnswerType == AnswerType.RichText.ToString()))
-            {
-                var answer = answers.FirstOrDefault(a => a.QuestionId == question.Id);
-                var limit = question.MaxLength ?? DynamicFormLimits.RichTextAnswerMaxLength;
-                if (answer?.TextValue != null && answer.TextValue.Length > limit)
-                {
-                    overLimit.Add($"{question.QuestionText} (max {limit} characters)");
-                }
-            }
-
-            if (overLimit.Count > 0)
-            {
-                throw new ArgumentException($"The following answer(s) exceed their character limit: {string.Join("; ", overLimit)}");
-            }
         }
 
         // Steps whose bound form is that step's single canonical evidence file — mirrors

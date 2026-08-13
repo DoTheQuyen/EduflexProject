@@ -42,6 +42,24 @@ public class ApplicationsController : BaseApiController
         });
     }
 
+    [HttpGet("all")]
+    public Task<ActionResult<PagedResult<ApplicationDto>>> GetAllApplications([FromQuery] PaginationQuery query)
+    {
+        return HandleRequestAsync(_logger, "Error in GetAllApplications endpoint", async () =>
+        {
+            var actingUserId = GetRequiredUserId();
+
+            var result = await _applicationService.GetAllApplicationsAsync(query, actingUserId);
+            return new PagedResult<ApplicationDto>
+            {
+                Items = result.Items.Select(a => a.ToDto()).ToList(),
+                TotalCount = result.TotalCount,
+                PageNumber = result.PageNumber,
+                PageSize = result.PageSize
+            };
+        });
+    }
+
     [HttpGet("by-student/{studentId}")]
     public Task<ActionResult<List<ApplicationDto>>> GetApplicationsForStudent(string studentId)
     {

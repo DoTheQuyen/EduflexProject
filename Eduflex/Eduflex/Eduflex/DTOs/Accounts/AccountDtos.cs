@@ -43,6 +43,7 @@ namespace Eduflex.DTOs.Accounts
     public class AccountTimelineEntryDto
     {
         public string EntryId { get; set; } = string.Empty;
+        public string FeeType { get; set; } = string.Empty;
         public string Label { get; set; } = string.Empty;
         public DateTime DueDate { get; set; }
         public decimal Amount { get; set; }

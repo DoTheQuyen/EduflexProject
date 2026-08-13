@@ -21,7 +21,8 @@ namespace Eduflex.Mapping.Settings
                 ContractUpload = model.ContractUpload.ToDto(),
                 EnrolmentUpload = model.EnrolmentUpload.ToDto(),
                 ChatSystemPrompt = model.ChatSystemPrompt,
-                ChatApiUrl = model.ChatApiUrl
+                ChatApiUrl = model.ChatApiUrl,
+                ChatGroqApiUrl = model.ChatGroqApiUrl
             };
         }
 
@@ -51,7 +52,8 @@ namespace Eduflex.Mapping.Settings
                 ContractUpload = dto.ContractUpload.ToModel(),
                 EnrolmentUpload = dto.EnrolmentUpload.ToModel(),
                 ChatSystemPrompt = dto.ChatSystemPrompt,
-                ChatApiUrl = dto.ChatApiUrl
+                ChatApiUrl = dto.ChatApiUrl,
+                ChatGroqApiUrl = dto.ChatGroqApiUrl
             };
         }
 

@@ -30,12 +30,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        // Lightweight, non-permission-gated listing for students filling out the
-        // application form. Returns the public-safe EducationPartnerDirectoryDto —
-        // deliberately never resolves/exposes BusinessPartnerName, CommissionBaseRate,
-        // Abn or Acn to this read path. GetEducationPartnerById/SearchEducationPartners
-        // below are staff-management screens gated behind EducationPartnersView, which
-        // students don't hold, so this is a separate read path rather than relaxing those.
+       
         [HttpGet]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<List<EducationPartnerDirectoryDto>>> GetEducationPartnersDirectory()
@@ -114,12 +109,7 @@ namespace Eduflex.API.Controllers
             return matches.FirstOrDefault()?.Name;
         }
 
-        // Returns the created partner's Id (not the usual bool) — the frontend needs it
-        // immediately to unlock the Courses tab on the same page without a re-fetch.
-        // Wrapped in a DTO rather than returned as a bare string: NSwag's generated client
-        // always sends "Accept: text/plain", and for a bare string ASP.NET Core's built-in
-        // StringOutputFormatter claims that header and writes the value unquoted, which then
-        // fails the client's JSON.parse() despite the request succeeding with 200 OK.
+      
         [HttpPost]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<CreateEducationPartnerResultDto>> CreateEducationPartner(CreateEducationPartnerDto createDto)

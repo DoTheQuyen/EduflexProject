@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using ShareService.DataAccess.Interface;
 using ShareService.Models.Chat;
 using ShareService.Models.Setting;
+using ShareService.Models.Settings;
 using ShareService.Services.Interface;
 using ShareService.Services.Interface.Integration;
 
@@ -14,14 +15,16 @@ namespace ShareService.Services.Service.Integration
     {
         private readonly HttpClient _httpClient;
         private readonly GeminiSettings _settings;
+        private readonly GroqSettings _groqSettings;
         private readonly IChatQuestion _chatQuestionDataAccess;
         private readonly ISettingsService _settingsService;
         private readonly ILogger<ChatService> _logger;
 
-        public ChatService(HttpClient httpClient, IOptions<GeminiSettings> settings, IChatQuestion chatQuestionDataAccess, ISettingsService settingsService, ILogger<ChatService> logger)
+        public ChatService(HttpClient httpClient, IOptions<GeminiSettings> settings, IOptions<GroqSettings> groqSettings, IChatQuestion chatQuestionDataAccess, ISettingsService settingsService, ILogger<ChatService> logger)
         {
             _httpClient = httpClient;
             _settings = settings.Value;
+            _groqSettings = groqSettings.Value;
             _chatQuestionDataAccess = chatQuestionDataAccess;
             _settingsService = settingsService;
             _logger = logger;
@@ -50,10 +53,18 @@ namespace ShareService.Services.Service.Integration
                 return recent.Answer;
             }
 
-            var answer = await AskGeminiAsync(question);
+            var appSettings = await _settingsService.GetSettingsAsync();
+
+            var answer = await AskGeminiAsync(question, appSettings);
             if (answer == null)
             {
-                // Rate-limited by Gemini — tell the student, but don't log/cache this as a real
+                _logger.LogInformation("Gemini unavailable, falling back to Groq for question: {Question}", question);
+                answer = await AskGroqAsync(question, appSettings);
+            }
+
+            if (answer == null)
+            {
+                // Both providers exhausted — tell the student, but don't log/cache this as a real
                 // answer, or the placeholder would keep getting served for days after the limit clears.
                 return "We're getting a lot of questions right now - please wait a moment and try again.";
             }
@@ -69,10 +80,8 @@ namespace ShareService.Services.Service.Integration
             return answer;
         }
 
-        private async Task<string?> AskGeminiAsync(string question)
+        private async Task<string?> AskGeminiAsync(string question, SettingsModel appSettings)
         {
-            var appSettings = await _settingsService.GetSettingsAsync();
-
             var requestBody = new
             {
                 systemInstruction = new { parts = new[] { new { text = appSettings.ChatSystemPrompt } } },
@@ -106,8 +115,54 @@ namespace ShareService.Services.Service.Integration
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error asking Gemini for question: {Question}", question);
-                throw new Exception("Error getting an answer. Please try again.", ex);
+                _logger.LogError(ex, "Error asking Gemini for question: {Question} — falling back to next provider", question);
+                return null;
+            }
+        }
+
+        private async Task<string?> AskGroqAsync(string question, SettingsModel appSettings)
+        {
+            var requestBody = new
+            {
+                model = _groqSettings.Model,
+                messages = new object[]
+                {
+                    new { role = "system", content = appSettings.ChatSystemPrompt },
+                    new { role = "user", content = question }
+                }
+            };
+
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Post, appSettings.ChatGroqApiUrl)
+                {
+                    Content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
+                };
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _groqSettings.ApiKey);
+
+                using var response = await _httpClient.SendAsync(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    _logger.LogWarning("Groq API rate limit hit for question: {Question}", question);
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                using var document = JsonDocument.Parse(json);
+
+                return document.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString() ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error asking Groq for question: {Question}", question);
+                return null;
             }
         }
 

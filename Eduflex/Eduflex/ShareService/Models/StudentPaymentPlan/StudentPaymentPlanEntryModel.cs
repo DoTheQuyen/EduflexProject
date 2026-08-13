@@ -16,6 +16,19 @@ namespace ShareService.Models.StudentPaymentPlan
         public const string Skipped = "Skipped";
     }
 
+    // What the fee is actually for — without this, a student with both a tuition plan
+    // and a visa-485 fee would have both piled into one undifferentiated timeline with
+    // no way to tell them apart (see Account Timeline's "why it's here" columns).
+    public static class StudentFeeTypes
+    {
+        public const string Tuition = "Tuition";
+        public const string ServiceFee = "ServiceFee";
+        public const string VisaExtension = "VisaExtension";
+        public const string Visa485 = "Visa485";
+        public const string PartnerVisa = "PartnerVisa";
+        public const string Other = "Other";
+    }
+
     // Top-level ledger of every student tuition/fee instalment, one document per
     // instalment — flat and indexable by EnrolmentId/DueDate/Status, unlike
     // InvoicePlanEntryModel which is embedded inside FinancialRecordModel. That
@@ -41,6 +54,11 @@ namespace ShareService.Models.StudentPaymentPlan
 
         [BsonElement("courseName")]
         public string? CourseName { get; set; }
+
+        // One of StudentFeeTypes — lets a student's timeline separate tuition
+        // instalments from visa-485/extension/partner-visa fees instead of mixing them.
+        [BsonElement("feeType")]
+        public string FeeType { get; set; } = StudentFeeTypes.Tuition;
 
         // Short display label, e.g. "Term 2" — instalments aren't tied to a course
         // intake calendar the way commission claims are, so there's no equivalent to

@@ -39,7 +39,7 @@ namespace Eduflex.API.Controllers
             {
                 var userId = GetRequiredUserId();
                 var entries = await _service.GeneratePlanAsync(
-                    enrolmentId, generateDto.StudentName, generateDto.CourseName,
+                    enrolmentId, generateDto.StudentName, generateDto.CourseName, generateDto.FeeType,
                     generateDto.TotalAmount, generateDto.InstalmentCount, generateDto.FirstDueDate, generateDto.IntervalMonths, userId);
                 return entries.Select(e => e.ToDto()).ToList();
             });
@@ -52,7 +52,7 @@ namespace Eduflex.API.Controllers
             {
                 var userId = GetRequiredUserId();
                 var entry = await _service.AddManualEntryAsync(
-                    enrolmentId, addDto.StudentName, addDto.CourseName, addDto.Label, addDto.Amount, addDto.DueDate, userId);
+                    enrolmentId, addDto.StudentName, addDto.CourseName, addDto.FeeType, addDto.Label, addDto.Amount, addDto.DueDate, userId);
                 return entry.ToDto();
             });
         }

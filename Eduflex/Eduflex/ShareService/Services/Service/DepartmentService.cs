@@ -83,6 +83,13 @@ namespace ShareService.Services
             }
         }
 
+        // Auth: none — see interface doc comment.
+        public async Task<List<DepartmentModel>> GetDepartmentsManagedByUserAsync(string userId)
+        {
+            var all = await _departmentDataAccess.GetAllAsync();
+            return all.Where(d => d.HeadUserId == userId).ToList();
+        }
+
         // Auth: requires DepartmentsView permission (staff detail page).
         public async Task<DepartmentModel?> GetDepartmentByIdAsync(string id, string userId)
         {

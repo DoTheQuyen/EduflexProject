@@ -20,11 +20,6 @@ namespace Eduflex.API.Controllers
             _emailTemplateService = emailTemplateService;
             _logger = logger;
         }
-
-        // Lightweight, non-permission-gated directory — any authenticated staff member
-        // needs this to populate a template picker when composing an enrolment/finance
-        // email, same reasoning as DynamicFormTemplatesController.GetAll. The gated
-        // GetById/Create/Update/SetStatus below are the admin management screen.
         [HttpGet]
         public Task<ActionResult<List<EmailTemplateDto>>> GetAll()
         {

@@ -13,11 +13,11 @@ namespace ShareService.Services.Interface
         // is fixed once agreed, so there's no recurring need to reconcile a regenerated
         // plan against invoiced/skipped entries.
         Task<List<StudentPaymentPlanEntryModel>> GeneratePlanAsync(
-            string enrolmentId, string studentName, string? courseName,
+            string enrolmentId, string studentName, string? courseName, string feeType,
             decimal totalAmount, int instalmentCount, DateTime firstDueDate, int intervalMonths, string actingUserId);
 
         Task<StudentPaymentPlanEntryModel> AddManualEntryAsync(
-            string enrolmentId, string studentName, string? courseName, string label,
+            string enrolmentId, string studentName, string? courseName, string feeType, string label,
             decimal amount, DateTime dueDate, string actingUserId);
 
         Task<StudentPaymentPlanEntryModel> UpdateEntryDateAsync(string entryId, DateTime dueDate, string actingUserId);

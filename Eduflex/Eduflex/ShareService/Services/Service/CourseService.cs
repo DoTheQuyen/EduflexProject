@@ -152,6 +152,21 @@ namespace ShareService.Services
                 joined = joined.Where(x => x.Course.Intakes.Any(i => i.Contains(filter.Intake, StringComparison.OrdinalIgnoreCase)));
             }
 
+            if (!string.IsNullOrWhiteSpace(filter.Campus))
+            {
+                joined = joined.Where(x => x.Course.Campuses.Any(c => c.Contains(filter.Campus, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.StudyMode))
+            {
+                joined = joined.Where(x => x.Course.StudyModes.Any(m => m.Contains(filter.StudyMode, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            if (filter.MaxTuition.HasValue)
+            {
+                joined = joined.Where(x => x.Course.TuitionFee <= filter.MaxTuition.Value);
+            }
+
             var ordered = joined.OrderByDescending(x => x.Course.TuitionFee).ToList();
 
             var totalCount = ordered.Count;

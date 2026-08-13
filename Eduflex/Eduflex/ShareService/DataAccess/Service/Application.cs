@@ -57,6 +57,26 @@ namespace ShareService.DataAccess
             };
         }
 
+        public async Task<PagedResult<ApplicationModel>> GetAllApplicationsAsync(PaginationQuery query)
+        {
+            var totalCount = await _applicationsCollection.CountDocumentsAsync(FilterDefinition<ApplicationModel>.Empty);
+
+            var items = await _applicationsCollection
+                .Find(FilterDefinition<ApplicationModel>.Empty)
+                .SortByDescending(a => a.DateApplied)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Limit(query.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<ApplicationModel>
+            {
+                Items = items,
+                TotalCount = (int)totalCount,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            };
+        }
+
         public async Task<ApplicationModel?> GetApplicationByIdAsync(string id)
         {
             return await _applicationsCollection
@@ -99,6 +119,13 @@ namespace ShareService.DataAccess
             else
                 await _studentsCollection.InsertOneAsync(session, student);
             return student;
+        }
+
+        public async Task<int> CountApplicationsByStatusAsync(string status)
+        {
+            var filter = Builders<ApplicationModel>.Filter.Eq(a => a.Status, status);
+            var count = await _applicationsCollection.CountDocumentsAsync(filter);
+            return (int)count;
         }
     }
 }

@@ -97,6 +97,52 @@ namespace ShareService.Mapping
             return sb.ToString();
         }
 
+        // Shared by EnrolmentService (student submit) and MigrationCaseService (staff
+        // submit-on-behalf-of) — both write paths validate required questions the same way,
+        // this used to be duplicated as a private method on EnrolmentService alone.
+        public static void ValidateRequiredAnswers(this EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
+        {
+            var missing = response.QuestionsSnapshot
+                .Where(q => q.IsRequired)
+                .Where(q =>
+                {
+                    var answer = answers.FirstOrDefault(a => a.QuestionId == q.Id);
+                    if (answer == null) return true;
+
+                    var isSelectType = q.AnswerType == AnswerType.SingleSelect.ToString() || q.AnswerType == AnswerType.MultiSelect.ToString();
+                    return isSelectType ? answer.SelectedOptions.Count == 0 : string.IsNullOrWhiteSpace(answer.TextValue);
+                })
+                .Select(q => q.QuestionText)
+                .ToList();
+
+            if (missing.Count > 0)
+            {
+                throw new ArgumentException($"Please answer the following required question(s): {string.Join("; ", missing)}");
+            }
+        }
+
+        // Applied to every write path (draft save, submit, staff edit) — the client-side
+        // textarea maxlength is a UX nicety, this is the actual enforcement. Shared for the
+        // same reason as ValidateRequiredAnswers above.
+        public static void ValidateAnswerLengths(this EnrolmentFormResponseModel response, List<FormAnswerModel> answers)
+        {
+            var overLimit = new List<string>();
+            foreach (var question in response.QuestionsSnapshot.Where(q => q.AnswerType == AnswerType.RichText.ToString()))
+            {
+                var answer = answers.FirstOrDefault(a => a.QuestionId == question.Id);
+                var limit = question.MaxLength ?? DynamicFormLimits.RichTextAnswerMaxLength;
+                if (answer?.TextValue != null && answer.TextValue.Length > limit)
+                {
+                    overLimit.Add($"{question.QuestionText} (max {limit} characters)");
+                }
+            }
+
+            if (overLimit.Count > 0)
+            {
+                throw new ArgumentException($"The following answer(s) exceed their character limit: {string.Join("; ", overLimit)}");
+            }
+        }
+
         private static string RenderAnswerHtml(FormQuestionModel question, FormAnswerModel? answer)
         {
             if (answer == null)

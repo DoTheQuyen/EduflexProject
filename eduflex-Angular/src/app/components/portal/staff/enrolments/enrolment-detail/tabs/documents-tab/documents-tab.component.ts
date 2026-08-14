@@ -71,7 +71,7 @@ export class DocumentsTabComponent implements OnChanges {
   }
 
   downloadInvoice(invoice: InvoiceRecordDto): void {
-    this.apiClient.downloadLink2(invoice.id!).subscribe({
+    this.apiClient.downloadLink(invoice.id!).subscribe({
       next: (result) => { window.open(result.url, '_blank', 'noopener'); },
       error: () => { this.notificationService.error('Could not resolve the download link.'); }
     });

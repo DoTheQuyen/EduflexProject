@@ -30,9 +30,9 @@ export class InvoiceLedgerComponent implements OnInit {
 
   load(): void {
     this.isLoading = true;
-    this.client.invoices(this.categoryFilter || undefined, this.statusFilter || undefined).subscribe({
-      next: (invoices) => {
-        this.invoices = invoices;
+    this.client.invoices(this.categoryFilter || undefined, this.statusFilter || undefined, undefined, undefined).subscribe({
+      next: (result) => {
+        this.invoices = result.items ?? [];
         this.isLoading = false;
       },
       error: () => { this.isLoading = false; }
@@ -40,7 +40,7 @@ export class InvoiceLedgerComponent implements OnInit {
   }
 
   download(invoice: InvoiceRecordDto): void {
-    this.client.downloadLink2(invoice.id!).subscribe({
+    this.client.downloadLink(invoice.id!).subscribe({
       next: (result) => { window.open(result.url, '_blank', 'noopener'); },
       error: () => { this.notificationService.error('Could not resolve the download link.'); }
     });

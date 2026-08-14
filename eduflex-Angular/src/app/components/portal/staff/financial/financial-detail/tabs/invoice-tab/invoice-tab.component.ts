@@ -359,7 +359,7 @@ export class InvoiceTabComponent implements OnChanges {
   }
 
   openDownloadLink(invoice: FinanceInvoice): void {
-    this.apiClient.downloadLink2(invoice.id).subscribe({
+    this.apiClient.downloadLink(invoice.id).subscribe({
       next: (result) => { window.open(result.url, '_blank', 'noopener'); },
       error: () => { this.notificationService.error('Could not resolve the download link.'); }
     });

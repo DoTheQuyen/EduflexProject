@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Client, AskQuestionDto } from '@services/content.services';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
+import { finalize, timeout } from 'rxjs/operators';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -95,18 +96,26 @@ export class ChatWidgetComponent implements AfterViewChecked {
 
     const payload = new AskQuestionDto({ question });
 
-    this.apiClient.ask(payload).subscribe({
-      next: (result) => {
-        this.messages.push({ role: 'assistant', text: result.answer ?? '' });
-        this.isSending = false;
-        this.shouldScrollToBottom = true;
-      },
-      error: (err) => {
-        this.errorMessage = extractApiErrorMessage(err, this.translate.instant('CHAT.GENERIC_ERROR'));
-        this.isSending = false;
-        this.shouldScrollToBottom = true;
-      },
-    });
+    this.apiClient
+      .ask(payload)
+      .pipe(
+        timeout(30000),
+        finalize(() => {
+          this.isSending = false;
+          this.shouldScrollToBottom = true;
+        }),
+      )
+      .subscribe({
+        next: (result) => {
+          this.messages.push({ role: 'assistant', text: result.answer ?? '' });
+        },
+        error: (err) => {
+          this.errorMessage = extractApiErrorMessage(
+            err,
+            this.translate.instant('CHAT.GENERIC_ERROR'),
+          );
+        },
+      });
   }
 
   private todayKey(): string {

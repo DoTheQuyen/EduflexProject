@@ -4,8 +4,8 @@ on:
   push:
     branches: [dev]
     paths:
-      - 'eduflex-Angular/**'
-      - '.github/workflows/frontend-deploy.yml'
+      - "eduflex-Angular/**"
+      - ".github/workflows/frontend-deploy.yml"
 
 jobs:
   build-and-deploy:
@@ -17,11 +17,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         working-directory: eduflex-Angular
         run: npm ci --legacy-peer-deps
+
+      - name: Generate build info
+        working-directory: eduflex-Angular
+        env:
+          BUILD_SHA: ${{ github.sha }}
+        run: node scripts/generate-build-info.js
 
       - name: Build for production
         working-directory: eduflex-Angular

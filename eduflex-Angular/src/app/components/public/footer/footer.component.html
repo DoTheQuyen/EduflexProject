@@ -10,13 +10,8 @@
         </div>
         <p class="footer-tagline">{{ 'FOOTER.TAGLINE' | translate }}</p>
         <div class="footer-social">
-          <a
-            *ngFor="let link of socialLinks"
-            [href]="link.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="link.label"
-          >
+          <a *ngFor="let link of socialLinks" [href]="link.url" target="_blank" rel="noopener noreferrer"
+            [attr.aria-label]="link.label">
             <i [class]="link.icon"></i>
           </a>
         </div>
@@ -45,6 +40,9 @@
   <div class="footer-bottom">
     <div class="footer-container">
       <p class="footer-copy">{{ 'FOOTER.COPYRIGHT' | translate: { year: currentYear } }}</p>
+      <p class="footer-version" [title]="'v' + buildVersion">
+        {{ buildDate ? ('Updated ' + (buildDate | date:'d MMM y')) : 'Local build' }}
+      </p>
     </div>
   </div>
 </footer>

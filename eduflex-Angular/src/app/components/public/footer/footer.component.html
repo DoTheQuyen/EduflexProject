@@ -40,7 +40,9 @@
   <div class="footer-bottom">
     <div class="footer-container">
       <p class="footer-copy">{{ 'FOOTER.COPYRIGHT' | translate: { year: currentYear } }}</p>
-      <p class="footer-version" [title]="buildDate">v{{ buildVersion }}</p>
+      <p class="footer-version" [title]="'v' + buildVersion">
+        {{ buildDate ? ('Updated ' + (buildDate | date:'d MMM y')) : 'Local build' }}
+      </p>
     </div>
   </div>
 </footer>

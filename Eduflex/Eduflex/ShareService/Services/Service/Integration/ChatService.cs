@@ -138,7 +138,7 @@ namespace ShareService.Services.Service.Integration
                 {
                     Content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
                 };
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _groqSettings.ApiKey);
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _groqSettings.GroqApiKey);
 
                 using var response = await _httpClient.SendAsync(request);
 

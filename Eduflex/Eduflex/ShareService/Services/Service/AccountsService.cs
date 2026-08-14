@@ -3,22 +3,12 @@ using ShareService.DataAccess.Interface;
 using ShareService.Enums;
 using ShareService.Enums.Permissions;
 using ShareService.Models.Accounts;
-// NB: ShareService.Models.Financial is deliberately NOT imported here — same reason as
-// InvoiceService.cs: it declares its own InvoiceModel (the legacy embedded one), which
-// would make every InvoiceModel reference in this file ambiguous. FinancialRecordModel/
-// InvoicePlanEntryModel are fully-qualified below instead.
 using ShareService.Models.Invoice;
 using ShareService.Models.StudentPaymentPlan;
 using ShareService.Services.Interface;
 
 namespace ShareService.Services
 {
-    // Reads across StudentPaymentPlanEntries, FinancialRecord.InvoicePlan, and the
-    // Invoice ledger to answer three different questions about the same underlying
-    // data: what needs action now (Action Queue), what does the whole portfolio look
-    // like (Accounts), and what's the full history of one account (Account Timeline).
-    // See ShareService.Models.Accounts.AccountModels for the "account" granularity
-    // this settles on (one Student = one Enrolment; one Partner = one FinancialRecord).
     public class AccountsService : IAccountsService
     {
         private readonly IStudentPaymentPlanEntry _studentPlanDataAccess;

@@ -37,6 +37,7 @@ export class EmailTemplateManagementComponent implements OnInit {
         row.isSystemDefault
           ? '<span class="badge-pill badge-pill-navy-soft">System</span>'
           : '<span class="badge-pill badge-pill-muted-soft">Custom</span>',
+      hideOnLaptop: true,
     },
     {
       field: 'statusBadge',

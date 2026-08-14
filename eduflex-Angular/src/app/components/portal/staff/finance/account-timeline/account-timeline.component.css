@@ -1,0 +1,80 @@
+.back-link {
+  background: none;
+  border: none;
+  color: var(--color-navy-700);
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+.back-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.qstat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.qstat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.qstat-value-date {
+  font-size: 1.15rem;
+}
+.qstat-sub {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+.qstat-alert {
+  border-color: var(--color-error) !important;
+}
+
+/* Year-grouped schedule — current year open, future years collapsed to a summary
+   line, so a multi-year plan doesn't dump every instalment on screen at once. */
+.yr {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+}
+.yr summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.yr summary::-webkit-details-marker {
+  display: none;
+}
+.yr summary::before {
+  content: "\25B8";
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  transition: transform 0.12s;
+}
+.yr[open] summary::before {
+  transform: rotate(90deg);
+}
+.yr summary .yr-meta {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  font-weight: 500;
+  margin-left: auto;
+  padding-right: 0.5rem;
+}
+.yr > .table-responsive {
+  border-top: 1px solid var(--color-border);
+}

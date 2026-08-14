@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnrolmentService } from '@services/enrolment.service';
-import { Enrolment, EnrolmentStatus, EnrolmentStatusOption } from '../../../../../models/enrolment';
+import { Enrolment, EnrolmentStatus, EnrolmentStatusOption, ENROLMENT_STATUS_LABELS, enrolmentStatusBadgeClass } from '../../../../../models/enrolment';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
 import {
@@ -40,9 +40,19 @@ export class EnrolmentManagementComponent implements OnInit {
       title: 'Student',
       render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
     },
-    { field: 'email', title: 'Email' },
-    { field: 'mobile', title: 'Mobile' },
-    { field: 'status', title: 'Status', className: 'text-center' },
+    { field: 'email', title: 'Email', hideOnLaptop: true },
+    { field: 'mobile', title: 'Mobile', hideOnTablet: true },
+    // Named 'statusBadge' rather than 'status' to avoid the data-table's built-in
+    // status-column special-casing (hardcoded to Application-module status strings,
+    // which fell back to a uniform gray badge for every Enrolment status) — renders
+    // our own color-coded badge-pill markup instead, matching enrolment-detail's header pill.
+    {
+      field: 'statusBadge',
+      title: 'Status',
+      className: 'text-center',
+      render: (_value, row: Enrolment) =>
+        `<span class="badge-pill ${enrolmentStatusBadgeClass(row.status)}">${ENROLMENT_STATUS_LABELS[row.status]}</span>`,
+    },
     { field: 'ownerName', title: 'Owner' },
     {
       field: 'createdAt',
@@ -121,6 +131,11 @@ export class EnrolmentManagementComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadEnrolments();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadEnrolments();
   }
 

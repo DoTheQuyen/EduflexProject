@@ -32,12 +32,6 @@ export class BusinessPartnerManagementComponent implements OnInit {
     { field: 'email', title: 'Email' },
     { field: 'phoneNumber', title: 'Phone' },
     {
-      field: 'commissionBaseRate',
-      title: 'Commission Rate',
-      className: 'text-end',
-      render: (value) => `${Number(value ?? 0)}%`,
-    },
-    {
       field: 'contractEndDate',
       title: 'Contract Status',
       className: 'text-center',
@@ -105,6 +99,11 @@ export class BusinessPartnerManagementComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadPartners();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadPartners();
   }
 

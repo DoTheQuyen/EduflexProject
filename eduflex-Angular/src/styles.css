@@ -1,8 +1,9 @@
 /* Tailwind v4 — theme + utilities only. Preflight (Tailwind's reset) is
    intentionally skipped so it doesn't fight Bootstrap's own reset, since
    this app loads both (see angular.json "styles"). */
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import 'primeicons/primeicons.css';
 
 /* DaisyUI — prefixed so its classes (d-btn, d-card, ...) never collide with
    Bootstrap's identically-named classes (.btn, .card, ...), which this app
@@ -10,37 +11,37 @@
    theme is enabled — DaisyUI's stock themes are turned off so components
    never render in DaisyUI's default palette. */
 @plugin "daisyui" {
-  prefix: "d-";
+  prefix: 'd-';
   themes: false;
 }
 
 @plugin "daisyui/theme" {
-  name: "eduflex";
+  name: 'eduflex';
   default: true;
   color-scheme: light;
 
-  --color-base-100: #FFFFFF;
-  --color-base-200: #F5F6F7;
-  --color-base-300: #DCE0E4;
-  --color-base-content: #1B2430;
+  --color-base-100: #ffffff;
+  --color-base-200: #f5f6f7;
+  --color-base-300: #dce0e4;
+  --color-base-content: #1b2430;
 
-  --color-primary: #16233A;
-  --color-primary-content: #FFFFFF;
-  --color-secondary: #2E4258;
-  --color-secondary-content: #FFFFFF;
-  --color-accent: #B8862F;
-  --color-accent-content: #FFFFFF;
-  --color-neutral: #5C6B7A;
-  --color-neutral-content: #FFFFFF;
+  --color-primary: #16233a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #2e4258;
+  --color-secondary-content: #ffffff;
+  --color-accent: #b8862f;
+  --color-accent-content: #ffffff;
+  --color-neutral: #5c6b7a;
+  --color-neutral-content: #ffffff;
 
-  --color-info: #2E4258;
-  --color-info-content: #FFFFFF;
-  --color-success: #1F7A5C;
-  --color-success-content: #FFFFFF;
-  --color-warning: #B8862F;
-  --color-warning-content: #1B2430;
-  --color-error: #B3413A;
-  --color-error-content: #FFFFFF;
+  --color-info: #2e4258;
+  --color-info-content: #ffffff;
+  --color-success: #1f7a5c;
+  --color-success-content: #ffffff;
+  --color-warning: #b8862f;
+  --color-warning-content: #1b2430;
+  --color-error: #b3413a;
+  --color-error-content: #ffffff;
 
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
@@ -52,25 +53,25 @@
    public site (ext) and the portal (int). Also usable directly as Tailwind
    utilities, e.g. bg-navy-900, text-accent, border-error. ===== */
 @theme {
-  --color-navy-900: #16233A;
-  --color-navy-700: #2E4258;
-  --color-accent: #B8862F;
-  --color-accent-dark: color-mix(in srgb, #B8862F 80%, black);
-  --color-accent-light: #D9B876;
-  --color-success: #1F7A5C;
-  --color-success-dark: color-mix(in srgb, #1F7A5C 80%, black);
-  --color-error: #B3413A;
-  --color-error-dark: color-mix(in srgb, #B3413A 80%, black);
+  --color-navy-900: #16233a;
+  --color-navy-700: #2e4258;
+  --color-accent: #b8862f;
+  --color-accent-dark: color-mix(in srgb, #b8862f 80%, black);
+  --color-accent-light: #d9b876;
+  --color-success: #1f7a5c;
+  --color-success-dark: color-mix(in srgb, #1f7a5c 80%, black);
+  --color-error: #b3413a;
+  --color-error-dark: color-mix(in srgb, #b3413a 80%, black);
   /* Deliberately a stronger, more saturated orange than --color-accent (a muted
      brass) — reserved for "needs your attention now" highlights, e.g. the
      Requested Forms card, where the softer brass reads too calm. */
-  --color-highlight: #D2530C;
-  --color-highlight-dark: color-mix(in srgb, #D2530C 80%, black);
-  --color-ink: #1B2430;
-  --color-muted: #5C6B7A;
-  --color-muted-on-dark: #C7CEDA;
-  --color-surface: #F5F6F7;
-  --color-border: #DCE0E4;
+  --color-highlight: #d2530c;
+  --color-highlight-dark: color-mix(in srgb, #d2530c 80%, black);
+  --color-ink: #1b2430;
+  --color-muted: #5c6b7a;
+  --color-muted-on-dark: #c7ceda;
+  --color-surface: #f5f6f7;
+  --color-border: #dce0e4;
 }
 
 /* Non-color shared tokens — plain custom properties, not part of Tailwind's
@@ -79,14 +80,24 @@
   --radius: 0.5rem;
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow-md: 0 4px 12px rgba(22, 35, 58, 0.3);
-  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-body: Arial, sans-serif;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* This reset is unlayered, which under CSS Cascade Layers rules means it
+   unconditionally beats ANY layered style regardless of specificity — including
+   every PrimeNG component's own padding/margin (they render inside the "primeng"
+   layer). Wrapping it in its own low-priority layer (see providePrimeNG's
+   cssLayer.order in app.config.ts) lets PrimeNG's normal specificity-based
+   cascade work again, instead of every component needing its own manual
+   !important patch. Bootstrap is still unlayered and separate from this — see
+   the ::ng-deep overrides in data-table.component.css for that piece. */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 }
 
 body {

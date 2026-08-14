@@ -45,8 +45,8 @@ export class EnquiryManagementComponent implements OnInit {
       title: 'Name',
       render: (_value, row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
     },
-    { field: 'email', title: 'Email' },
-    { field: 'mobile', title: 'Mobile' },
+    { field: 'email', title: 'Email', hideOnLaptop: true },
+    { field: 'mobile', title: 'Mobile', hideOnLaptop: true },
     { field: 'subject', title: 'Subject' },
     {
       field: 'createdAt',
@@ -187,6 +187,11 @@ export class EnquiryManagementComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadEnquiries();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadEnquiries();
   }
 

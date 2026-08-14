@@ -170,7 +170,26 @@ export const routes: Routes = [
         path: 'financial-records',
         loadComponent: () => import('./components/portal/staff/financial/financial-record-management/financial-record-management.component').then(m => m.FinancialRecordManagementComponent),
         canActivate: [AuthGuard],
-        data: { breadcrumb: 'Finance' }
+        data: { breadcrumb: 'Commission Records' }
+      },
+      {
+        // Action Queue is now the default tab on the Accounts page rather than its own
+        // screen — redirect so old links/bookmarks still land somewhere sensible.
+        path: 'finance/queue',
+        redirectTo: 'finance/accounts',
+        pathMatch: 'full'
+      },
+      {
+        path: 'finance/accounts',
+        loadComponent: () => import('./components/portal/staff/finance/accounts/accounts.component').then(m => m.AccountsComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager'], breadcrumb: 'Accounts' }
+      },
+      {
+        path: 'finance/accounts/timeline',
+        loadComponent: () => import('./components/portal/staff/finance/account-timeline/account-timeline.component').then(m => m.AccountTimelineComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager'], breadcrumb: 'Account Timeline' }
       },
       {
         path: 'financial-records/:id',
@@ -201,6 +220,37 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/department-management/department-management.component').then(m => m.DepartmentManagementComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin', 'Manager'], breadcrumb: 'Departments' }
+      },
+      {
+        // My Tasks — every role (assigner/assignee access is the same for everyone);
+        // TaskManagementComponent itself checks TasksView and shows a permission error
+        // if missing, same pattern as every other permission-gated-but-not-role-gated
+        // page in this app.
+        path: 'my-tasks',
+        loadComponent: () => import('./components/portal/staff/tasks/task-management/task-management.component').then(m => m.TaskManagementComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'My Tasks' }
+      },
+      {
+        // All Tasks — Manager/Admin only (department-scoped server-side too, see
+        // TaskItemService.SearchAllTasksAsync).
+        path: 'tasks',
+        loadComponent: () => import('./components/portal/staff/tasks/all-tasks-management/all-tasks-management.component').then(m => m.AllTasksManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin', 'Manager'], breadcrumb: 'All Tasks' }
+      },
+      {
+        // Must come before 'tasks/:id' — see the routing note further down this file.
+        path: 'tasks/new',
+        loadComponent: () => import('./components/portal/staff/tasks/task-new/task-new.component').then(m => m.TaskNewComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'New Task' }
+      },
+      {
+        path: 'tasks/:id',
+        loadComponent: () => import('./components/portal/staff/tasks/task-detail/task-detail.component').then(m => m.TaskDetailComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Task Detail' }
       },
       {
         path: 'applications/:id',
@@ -261,6 +311,45 @@ export const routes: Routes = [
         loadComponent: () => import('./components/portal/staff/dynamic-forms/dynamic-form-edit/dynamic-form-edit.component').then(m => m.DynamicFormEditComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['Admin'], breadcrumb: 'Edit Form' }
+      },
+      {
+        // Permission-key gated (via the component's own hasMigrationCasesPermission()
+        // check), not role-name gated — same shape as the 'enrolments' route above, since
+        // MigrationCasesView is seeded to Staff/Manager/Admin, not Admin-only.
+        path: 'migration-cases',
+        loadComponent: () => import('./components/portal/staff/migration-cases/migration-case-management/migration-case-management.component').then(m => m.MigrationCaseManagementComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Migration Cases' }
+      },
+      {
+        path: 'migration-cases/:id',
+        loadComponent: () => import('./components/portal/staff/migration-cases/migration-case-detail/migration-case-detail.component').then(m => m.MigrationCaseDetailComponent),
+        canActivate: [AuthGuard],
+        data: { breadcrumb: 'Case Detail' }
+      },
+      {
+        path: 'visa-process-templates',
+        loadComponent: () => import('./components/portal/staff/visa-process-templates/visa-process-template-management/visa-process-template-management.component').then(m => m.VisaProcessTemplateManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'VISA Process Templates' }
+      },
+      {
+        path: 'visa-process-templates/new',
+        loadComponent: () => import('./components/portal/staff/visa-process-templates/visa-process-template-edit/visa-process-template-edit.component').then(m => m.VisaProcessTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'New Template' }
+      },
+      {
+        path: 'visa-process-templates/:id',
+        loadComponent: () => import('./components/portal/staff/visa-process-templates/visa-process-template-edit/visa-process-template-edit.component').then(m => m.VisaProcessTemplateEditComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Edit Template' }
+      },
+      {
+        path: 'practitioner-tags',
+        loadComponent: () => import('./components/portal/staff/practitioner-tags/practitioner-tag-management/practitioner-tag-management.component').then(m => m.PractitionerTagManagementComponent),
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: ['Admin'], breadcrumb: 'Practitioner Tags' }
       },
       {
         path: 'email-templates',

@@ -1,0 +1,88 @@
+<div class="task-new-page">
+  <div class="container-fluid py-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <button type="button" class="back-link" (click)="cancel()">
+          <span class="back-arrow">&larr;</span> Back
+        </button>
+        <h2 class="mb-0">New Task</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div *ngIf="!permissions.add" class="alert alert-danger">You do not have permission to create tasks.</div>
+
+    <div *ngIf="permissions.add" class="card border shadow-sm">
+      <div class="card-body">
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+          <h6 class="form-section-title">Task details</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Task name *</label>
+              <input type="text" class="form-control" formControlName="name">
+              <span class="field-error" *ngIf="isFieldInvalid('name')">Task name is required</span>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Assignee *</label>
+              <select class="form-select" formControlName="assigneeUserId">
+                <option value="" disabled>Select a staff member</option>
+                <option *ngFor="let staff of staffOptions" [value]="staff.id">
+                  {{ staff.firstName }} {{ staff.lastName }} ({{ staff.roleName }})
+                </option>
+              </select>
+              <span class="field-error" *ngIf="isFieldInvalid('assigneeUserId')">An assignee is required</span>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Due date/time *</label>
+              <input type="datetime-local" class="form-control" formControlName="dueDateTime">
+              <span class="field-error" *ngIf="isFieldInvalid('dueDateTime')">A due date/time is required</span>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="4" formControlName="description"></textarea>
+            </div>
+          </div>
+
+          <h6 class="form-section-title mt-4">Link to a record (optional)</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <ng-container *ngFor="let type of linkTypes">
+              <div *ngIf="canLink(type)" class="link-picker-chip">
+                <span class="text-muted small">{{ type }}:</span>
+                <ng-container *ngIf="selectedLinks[type]; else noLink">
+                  <span>{{ selectedLinks[type]!.label }}</span>
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0" *ngIf="lockedLinkType !== type" (click)="removeLink(type)">Remove</button>
+                </ng-container>
+                <ng-template #noLink>
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="openPicker(type)">Link {{ type }}</button>
+                </ng-template>
+              </div>
+            </ng-container>
+          </div>
+
+          <p class="text-danger mt-3 mb-0" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+          <div class="text-end mt-4 d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
+              {{ isSaving ? 'Saving...' : 'Create Task' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <app-record-picker
+    *ngIf="activePickerType"
+    [title]="linkConfigs[activePickerType].title"
+    [columns]="linkConfigs[activePickerType].columns"
+    [searchFn]="linkConfigs[activePickerType].searchFn"
+    (picked)="onPicked($event)"
+    (closeModal)="onPickerClosed()"
+  ></app-record-picker>
+</div>

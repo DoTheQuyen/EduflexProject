@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab === 'active'" (click)="switchTab('active')">
+        Active
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab === 'completed'" (click)="switchTab('completed')">
+        Completed
+      </button>
+    </li>
+  </ul>
+
+  <button *ngIf="showAddButton" type="button" class="btn btn-primary btn-sm" (click)="onAddClick()">
+    <i class="fas fa-plus me-1"></i>New Task
+  </button>
+</div>
+
+<div class="card border shadow-sm">
+  <div class="card-body p-0">
+    <app-data-table
+      [columns]="columns"
+      [data]="tasks"
+      [rowActions]="rowActions"
+      [pageNumber]="pageNumber"
+      [pageSize]="pageSize"
+      [totalCount]="totalCount"
+      [showSearch]="true"
+      searchPlaceholder="Search tasks..."
+      tableClass="table table-bordered table-hover mb-0"
+      (search)="onSearch($event)"
+      (refresh)="onRefresh()"
+      (pageChange)="onPageChange($event)"
+      (actionClick)="onTableAction($event)"
+    ></app-data-table>
+    <p *ngIf="!tasks.length" class="text-center text-muted py-4 mb-0">No tasks found.</p>
+  </div>
+</div>

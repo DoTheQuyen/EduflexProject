@@ -23,6 +23,7 @@ import { ModalComponent } from '@generic/modal/modal.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
+import { Button } from 'primeng/button';
 
 type UserRoleTab = 'Student' | 'Customer' | 'Staffs';
 
@@ -35,6 +36,7 @@ type UserRoleTab = 'Student' | 'Customer' | 'Staffs';
     DataTableComponent,
     ModalComponent,
     NotificationComponent,
+    Button,
   ],
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
@@ -61,17 +63,25 @@ export class UserManagementComponent implements OnInit {
   userForm: FormGroup;
 
   columns: DataTableColumn<UserSummaryDto>[] = [
-    { field: 'email', title: 'Email' },
+    { field: 'email', title: 'Email', minWidth: '220px' },
     { field: 'firstName', title: 'First Name' },
     { field: 'lastName', title: 'Last Name' },
-    { field: 'roleName', title: 'Role' },
+    { field: 'roleName', title: 'Role', hideOnMobile: true },
     {
       field: 'departments',
       title: 'Departments',
       render: (_value, row) => this.renderDepartmentBadges(row),
+      minWidth: '280px',
+      hideOnLaptop: true,
     },
-    { field: 'isActive', title: 'Active', formatter: (value) => (value ? 'Yes' : 'No') },
-    { field: 'actions', title: 'Actions', className: 'text-center' },
+    {
+      field: 'isActive',
+      title: 'Active',
+      formatter: (value) => (value ? 'Yes' : 'No'),
+      minWidth: '90px',
+      hideOnMobile: true,
+    },
+    { field: 'actions', title: 'Actions', className: 'text-center', minWidth: '160px' },
   ];
 
   rowActions: DataTableRowAction<UserSummaryDto>[] = [];
@@ -162,6 +172,13 @@ export class UserManagementComponent implements OnInit {
   onActiveFilterChange(event: Event): void {
     this.activeFilter = (event.target as HTMLSelectElement).value;
     this.pager.goToPage(1);
+    this.loadUsers();
+  }
+
+  onRefresh(): void {
+    this.roleFilter = '';
+    this.activeFilter = 'all';
+    this.pager.search('');
     this.loadUsers();
   }
 

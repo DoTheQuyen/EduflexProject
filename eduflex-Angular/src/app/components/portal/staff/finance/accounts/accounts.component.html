@@ -1,0 +1,157 @@
+<div class="accounts-portal">
+  <div class="container-fluid py-1">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+      <div>
+        <h3 class="mb-1">Accounts</h3>
+        <p class="text-muted mb-0">Every student and partner with a payment relationship.</p>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'queue'" (click)="switchTab('queue')">
+          Action Queue
+        </button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'all'" (click)="switchTab('all')">
+          All Accounts
+        </button>
+      </li>
+    </ul>
+
+    <!-- ===== ACTION QUEUE TAB ===== -->
+    <ng-container *ngIf="activeTab === 'queue'">
+      <div *ngIf="queueLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+
+      <ng-container *ngIf="!queueLoading && queueResult">
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="card border shadow-sm h-100">
+              <div class="card-body">
+                <div class="qstat-label">Needs action now</div>
+                <div class="qstat-value">{{ queueResult.items.length }}</div>
+                <div class="qstat-sub">of {{ queueResult.totalAccounts }} accounts</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card border shadow-sm h-100 qstat-alert">
+              <div class="card-body">
+                <div class="qstat-label text-danger">Overdue</div>
+                <div class="qstat-value text-danger">{{ queueResult.overdueAmount | number:'1.2-2' }}</div>
+                <div class="qstat-sub">{{ queueResult.overdueCount }} account{{ queueResult.overdueCount === 1 ? '' : 's' }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card border shadow-sm h-100">
+              <div class="card-body">
+                <div class="qstat-label">Due to invoice &mdash; {{ windowDays }} days</div>
+                <div class="qstat-value">{{ queueResult.dueToInvoiceAmount | number:'1.2-2' }}</div>
+                <div class="qstat-sub">{{ queueResult.dueToInvoiceCount }} claim{{ queueResult.dueToInvoiceCount === 1 ? '' : 's' }} not yet sent</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card border shadow-sm h-100">
+              <div class="card-body">
+                <div class="qstat-label">Total accounts</div>
+                <div class="qstat-value">{{ queueResult.totalAccounts }}</div>
+                <div class="qstat-sub">across the whole portfolio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border shadow-sm">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Work the queue</strong>
+            <span class="text-muted small">sorted by urgency</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Why it's here</th>
+                  <th>Schedule position</th>
+                  <th class="text-end">Amount</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of queueResult.items">
+                  <td>
+                    <div class="fw-semibold">{{ item.name }}</div>
+                    <div class="text-muted small" *ngIf="item.subLabel">{{ item.subLabel }}</div>
+                  </td>
+                  <td><span class="badge-pill badge-pill-navy-soft">{{ typeLabel(item.accountType) }}</span></td>
+                  <td><span class="badge-pill" [ngClass]="reasonBadgeClass(item)">{{ reasonLabel(item) }}</span></td>
+                  <td>{{ item.scheduleLabel }}</td>
+                  <td class="text-end">{{ item.amount | number:'1.2-2' }}</td>
+                  <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" (click)="openQueueItem(item)">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p *ngIf="queueResult.items.length === 0" class="text-center text-muted py-4 mb-0">
+              Nothing needs action in the next {{ windowDays }} days.
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ===== ALL ACCOUNTS TAB ===== -->
+    <ng-container *ngIf="activeTab === 'all'">
+      <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
+        <div class="input-group input-group-sm" style="max-width:320px">
+          <input class="form-control" placeholder="Search name, course, partner..."
+            [(ngModel)]="search" (keyup.enter)="onFilterChange()">
+          <button type="button" class="btn btn-outline-secondary" (click)="onFilterChange()">Search</button>
+        </div>
+        <select class="form-select form-select-sm w-auto" [(ngModel)]="accountType" (ngModelChange)="onFilterChange()">
+          <option value="">All types</option>
+          <option value="Student">Students</option>
+          <option value="BusinessPartner">Business partners</option>
+          <option value="EducationPartner">Education partners</option>
+        </select>
+        <select class="form-select form-select-sm w-auto" [(ngModel)]="status" (ngModelChange)="onFilterChange()">
+          <option value="">All statuses</option>
+          <option value="Overdue">Overdue</option>
+          <option value="AtRisk">At risk</option>
+          <option value="OnTrack">On track</option>
+          <option value="Complete">Complete</option>
+        </select>
+        <p-button label="Refresh" icon="fas fa-arrows-rotate" size="small" severity="secondary" [outlined]="true"
+          styleClass="ms-auto" (onClick)="onRefresh()" />
+      </div>
+
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+
+      <div *ngIf="!isLoading" class="card border shadow-sm">
+        <div class="card-body p-0">
+          <app-data-table
+            [columns]="columns"
+            [data]="accounts"
+            [rowActions]="rowActions"
+            [pageNumber]="pager.pageNumber"
+            [pageSize]="pager.pageSize"
+            [totalCount]="pager.totalCount"
+            (pageChange)="onPageChange($event)"
+            (actionClick)="onTableAction($event)"
+            tableClass="table table-hover mb-0">
+          </app-data-table>
+          <p *ngIf="accounts.length === 0" class="text-center text-muted py-4 mb-0">No accounts match these filters.</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

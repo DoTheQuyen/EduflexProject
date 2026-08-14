@@ -1,0 +1,124 @@
+/* Matches enrolment-detail.component.css's page/back-link/timeline conventions, plus
+   business-partner-edit.component.css's form-section-title/field-error, so this page
+   reads as part of the same system rather than a one-off Bootstrap form. */
+.task-detail-page {
+  min-height: 100vh;
+  background-color: white;
+  padding-bottom: 2rem;
+}
+
+.task-detail-page h3 {
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: var(--color-navy-700);
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.back-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.form-section-title {
+  color: var(--color-navy-900);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.link-picker-chip {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Timeline — same dotted-line treatment as the Enrolment/Financial Audit Trail tab. */
+.audit-timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.audit-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.audit-item {
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.audit-item::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 0.15rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-navy-700);
+}
+
+/* Native datetime-local widgets don't inherit Bootstrap's .form-control sizing well —
+   the built-in calendar/clock icon has its own default padding that clashes with it. */
+input[type='datetime-local'].form-control {
+  padding-right: 0.5rem;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* badge-pill-navy-soft is styled for a <span> elsewhere — reset the <a> defaults
+   (underline, browser link color) so a clickable linked-record badge still looks like
+   a badge, not a hyperlink, while still being obviously clickable via the pointer cursor. */
+.linked-record-link,
+.linked-record-link:hover {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.linked-record-link:hover {
+  filter: brightness(0.95);
+}

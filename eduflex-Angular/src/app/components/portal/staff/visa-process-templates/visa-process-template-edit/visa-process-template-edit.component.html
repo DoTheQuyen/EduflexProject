@@ -1,0 +1,248 @@
+<div class="visa-process-template-edit-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">{{ isEditMode ? 'Edit Process Template' : 'New Process Template' }}</h3>
+          <!-- <p class="text-muted small mb-0">Not yet applied to any enrolment — this screen authors the template only.</p> -->
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goBack()"
+            [disabled]="isSaving">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="isSaving">
+            {{ isSaving ? 'Saving...' : 'Save Template' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="card border shadow-sm mb-3">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Template name</label>
+              <input type="text" class="form-control" [(ngModel)]="name" placeholder="e.g. Australia — Standard" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Country</label>
+              <input type="text" class="form-control" [(ngModel)]="country" placeholder="e.g. AU" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Category</label>
+              <input type="text" class="form-control" [(ngModel)]="category"
+                placeholder="e.g. Student, GraduateWork485, Partner" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="description"></textarea>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="statusToggle"
+                  [checked]="status === 'Active'" (change)="status = status === 'Active' ? 'Inactive' : 'Active'">
+                <label class="form-check-label" for="statusToggle">
+                  {{ status === 'Active' ? 'Active' : 'Inactive' }}
+                  <span class="text-muted small d-block">Inactive templates can't be applied, but stay editable.</span>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="defaultToggle"
+                  [(ngModel)]="isDefaultForCountry">
+                <label class="form-check-label" for="defaultToggle">
+                  Default for this Country + Category
+                  <span class="text-muted small d-block">Only one template can be default per Country+Category — saving
+                    this clears the flag on any other.</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-card" *ngFor="let step of steps; let i = index; trackBy: trackByIndex">
+        <div class="step-card-head">
+          <span class="step-num">STEP {{ i + 1 }}<span *ngIf="!step.enabled"> · DISABLED</span></span>
+          <div class="step-tools">
+            <button type="button" class="btn btn-sm btn-link" title="Move up" [disabled]="i === 0"
+              (click)="moveStep(i, -1)"><i class="fas fa-arrow-up"></i></button>
+            <button type="button" class="btn btn-sm btn-link" title="Move down" [disabled]="i === steps.length - 1"
+              (click)="moveStep(i, 1)"><i class="fas fa-arrow-down"></i></button>
+            <button type="button" class="btn btn-sm btn-link text-danger" title="Delete" (click)="removeStep(i)"><i
+                class="fas fa-times"></i></button>
+          </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-md-3">
+            <label class="form-label small text-muted mb-1">Key</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="step.key"
+              placeholder="e.g. ApplyOffer" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small text-muted mb-1">Label</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="step.label"
+              placeholder="e.g. Apply for Offer" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small text-muted mb-1">Phase</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="step.phase"
+              placeholder="e.g. Application" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small text-muted mb-1">Practitioner tag</label>
+            <select class="form-select form-select-sm" [(ngModel)]="step.practitionerTagId">
+              <option [ngValue]="null">No tag</option>
+              <option *ngFor="let tag of activeTags(step.practitionerTagId)" [ngValue]="tag.id">{{ tag.name }}</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label small text-muted mb-1">Description</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="step.description" />
+          </div>
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [id]="'enabled-' + i" [(ngModel)]="step.enabled">
+              <label class="form-check-label small" [for]="'enabled-' + i">Enabled</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [id]="'reopen-' + i" [(ngModel)]="step.canReopen">
+              <label class="form-check-label small" [for]="'reopen-' + i">Can be reopened once complete</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fields -->
+        <div class="step-subsection">
+          <div class="step-subsection-title">Fields ({{ step.fields.length }})</div>
+          <div class="field-row" *ngFor="let field of step.fields; let fi = index; trackBy: trackByIndex">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="field.fieldKey"
+              placeholder="Field key" />
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="field.label" placeholder="Label" />
+            <select class="form-select form-select-sm" [(ngModel)]="field.inputType">
+              <option *ngFor="let t of fieldInputTypes" [value]="t">{{ t }}</option>
+            </select>
+            <div class="form-check form-check-sm">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="field.isRequired">
+              <label class="form-check-label small">Req.</label>
+            </div>
+            <button type="button" class="btn btn-sm btn-link text-danger"
+              (click)="removeField(step, fi)">&times;</button>
+
+            <div class="option-list" *ngIf="needsOptions(field.inputType)">
+              <div class="option-row" *ngFor="let opt of field.options; let oi = index; trackBy: trackByIndex">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="field.options[oi]"
+                  placeholder="Option text" />
+                <button type="button" class="btn btn-sm btn-link text-danger"
+                  (click)="removeFieldOption(field, oi)">&times;</button>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFieldOption(field)">+ Add
+                option</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addField(step)">+ Add field</button>
+        </div>
+
+        <!-- Required evidence -->
+        <div class="step-subsection">
+          <div class="step-subsection-title">Required evidence categories</div>
+          <div class="chip-row">
+            <span class="evidence-chip" *ngFor="let cat of step.requiredEvidenceCategories; let ci = index">
+              {{ cat }}
+              <button type="button" class="chip-remove" (click)="removeEvidenceCategory(step, ci)">&times;</button>
+            </span>
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <input type="text" class="form-control form-control-sm" style="max-width:220px"
+              [(ngModel)]="newEvidenceCategoryInput[i]" placeholder="e.g. CoE"
+              (keyup.enter)="addEvidenceCategory(step, i)" />
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addEvidenceCategory(step, i)">+
+              Add</button>
+          </div>
+        </div>
+
+        <!-- Preconditions -->
+        <div class="step-subsection">
+          <div class="step-subsection-title">Preconditions ({{ step.preconditions.length }})</div>
+          <div class="precondition-row" *ngFor="let p of step.preconditions; let pi = index; trackBy: trackByIndex">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-3">
+                <select class="form-select form-select-sm" [(ngModel)]="p.type">
+                  <option *ngFor="let t of preconditionTypes" [value]="t">{{ t }}</option>
+                </select>
+              </div>
+              <div class="col-md-3" *ngIf="p.type === 'PriorStepFieldNotEmpty'">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="p.sourceStepKey"
+                  placeholder="Source step key" />
+              </div>
+              <div class="col-md-3" *ngIf="p.type === 'PriorStepFieldNotEmpty' || p.type === 'FieldValueIn'">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="p.fieldKey"
+                  placeholder="Field key" />
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="p.detail"
+                  placeholder="Human-readable explanation" />
+              </div>
+              <div class="col-md-auto">
+                <button type="button" class="btn btn-sm btn-link text-danger"
+                  (click)="removePrecondition(step, pi)">&times;</button>
+              </div>
+            </div>
+            <div class="chip-row mt-2" *ngIf="p.type === 'FieldValueIn'">
+              <span class="evidence-chip" *ngFor="let v of p.allowedValues; let vi = index">
+                {{ v }}
+                <button type="button" class="chip-remove" (click)="removeAllowedValue(p, vi)">&times;</button>
+              </span>
+              <input type="text" class="form-control form-control-sm d-inline-block" style="max-width:160px"
+                [ngModel]="newAllowedValueInput[allowedValueKey(i, pi)]"
+                (ngModelChange)="newAllowedValueInput[allowedValueKey(i, pi)] = $event" placeholder="Allowed value"
+                (keyup.enter)="addAllowedValue(p, allowedValueKey(i, pi))" />
+              <button type="button" class="btn btn-sm btn-outline-secondary"
+                (click)="addAllowedValue(p, allowedValueKey(i, pi))">+ Add</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addPrecondition(step)">+ Add
+            precondition</button>
+        </div>
+
+        <!-- Hints -->
+        <div class="step-subsection">
+          <div class="step-subsection-title">Hints &amp; instructions from senior staff ({{ step.hints.length }})</div>
+          <div class="hint-card" *ngFor="let h of step.hints" [class.pinned]="h.pinned">
+            <div class="hint-card-head">
+              <span class="hint-author">
+                <i class="fas fa-star pin-star" *ngIf="h.pinned"></i>
+                {{ h.authorName || 'Unknown' }}
+              </span>
+              <button type="button" class="btn btn-sm btn-link" (click)="togglePinned(h)">
+                {{ h.pinned ? 'Unpin' : 'Pin' }}
+              </button>
+            </div>
+            <div class="hint-text">{{ h.text }}</div>
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="newHintTextInput[i]"
+              placeholder="Share a tip for staff working this step…" (keyup.enter)="addHint(step, i)" />
+            <button type="button" class="btn btn-sm btn-primary" (click)="addHint(step, i)">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-outline-primary w-100 add-step-btn" (click)="addStep()">
+        <i class="fas fa-plus me-1"></i>Add step
+      </button>
+    </div>
+  </div>
+</div>

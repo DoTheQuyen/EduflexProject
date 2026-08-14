@@ -12,13 +12,14 @@ import { FinanceTabComponent, ClaimInvoiceRequest } from './tabs/finance-tab/fin
 import { InvoiceTabComponent } from './tabs/invoice-tab/invoice-tab.component';
 import { FinancialCommunicationTabComponent } from './tabs/communication-tab/communication-tab.component';
 import { FinancialAuditTabComponent } from './tabs/audit-tab/audit-tab.component';
+import { FinancialTasksTabComponent } from './tabs/tasks-tab/tasks-tab.component';
 
-type FinancialTab = 'summary' | 'finance' | 'invoice' | 'communication' | 'audit';
+type FinancialTab = 'summary' | 'finance' | 'invoice' | 'communication' | 'audit' | 'tasks';
 
 @Component({
   selector: 'app-financial-detail',
   standalone: true,
-  imports: [CommonModule, SummaryTabComponent, FinanceTabComponent, InvoiceTabComponent, FinancialCommunicationTabComponent, FinancialAuditTabComponent],
+  imports: [CommonModule, SummaryTabComponent, FinanceTabComponent, InvoiceTabComponent, FinancialCommunicationTabComponent, FinancialAuditTabComponent, FinancialTasksTabComponent],
   templateUrl: './financial-detail.component.html',
   styleUrls: ['./financial-detail.component.css']
 })

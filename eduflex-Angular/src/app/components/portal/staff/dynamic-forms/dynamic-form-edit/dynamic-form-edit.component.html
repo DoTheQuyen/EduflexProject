@@ -35,11 +35,14 @@
                     placeholder="e.g. Student Declaration Form" />
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label">Bind to Enrolment step</label>
-                  <select class="form-select" [(ngModel)]="boundStepKey">
-                    <option value="">— Not bound (ad hoc) —</option>
+                  <label class="form-label">Bind to step <span class="text-muted small">(optional)</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="boundStepKey" list="boundStepKeyOptions"
+                    placeholder="Not bound (ad hoc)" />
+                  <datalist id="boundStepKeyOptions">
                     <option *ngFor="let key of stepOrder" [value]="key">{{ stepLabels[key] }}</option>
-                  </select>
+                  </datalist>
+                  <p class="text-muted small mt-1 mb-0">Matches an Enrolment VISA step key or a Migration Case
+                    process step key — leave blank for an ad hoc form.</p>
                 </div>
                 <div class="col-12">
                   <label class="form-label">Description <span class="text-muted small">(shown to staff, not

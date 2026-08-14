@@ -1,0 +1,74 @@
+<div class="migration-case-management-portal">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="mb-1">Migration Cases</h3>
+        <p class="text-muted small mb-0">Real cases running on your VISA Process Templates — any category.</p>
+      </div>
+      <div class="col-auto" *ngIf="permissions.add">
+        <button type="button" class="btn btn-primary btn-sm" (click)="openStartPanel()" *ngIf="!showStartPanel">
+          <i class="fas fa-plus me-1"></i>Start Case
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="card border shadow-sm mb-3" *ngIf="showStartPanel">
+      <div class="card-body">
+        <h5 class="mb-3">Start a new case</h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Template</label>
+            <select class="form-select" [(ngModel)]="newCaseTemplateId">
+              <option *ngFor="let t of activeTemplates" [value]="t.id">{{ t.name }} — {{ t.country }}/{{ t.category }}</option>
+            </select>
+            <p class="text-muted small mt-1" *ngIf="activeTemplates.length === 0">Loading active templates…</p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Primary contact name</label>
+            <input type="text" class="form-control" [(ngModel)]="newCaseContactName" placeholder="e.g. Nguyen Thi Phuong" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Contact email</label>
+            <input type="email" class="form-control" [(ngModel)]="newCaseContactEmail" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Contact mobile</label>
+            <input type="text" class="form-control" [(ngModel)]="newCaseContactMobile" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="newCaseNotes"></textarea>
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button type="button" class="btn btn-primary btn-sm" (click)="startCase()" [disabled]="isCreating">
+            {{ isCreating ? 'Starting...' : 'Start Case' }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeStartPanel()" [disabled]="isCreating">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading cases...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="card border shadow-sm">
+      <div class="card-body p-0">
+        <app-data-table [columns]="columns" [data]="cases" [pageNumber]="pageNumber" [pageSize]="pageSize"
+          [totalCount]="totalCount" [showSearch]="true" searchPlaceholder="Search by case # or contact name..."
+          (pageChange)="onPageChange($event)" (search)="onSearch($event)" (refresh)="onRefresh()"
+          (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
+        </app-data-table>
+        <p *ngIf="!isLoading && cases.length === 0" class="text-center text-muted py-4 mb-0">
+          No cases yet — click "Start Case" to begin one from a template.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

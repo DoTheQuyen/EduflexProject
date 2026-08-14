@@ -126,6 +126,31 @@
   font-size: 0.78rem;
 }
 
+/* Compact inline progress bar — used wherever a table cell or summary card shows a
+   received/contracted or paid/total ratio (Accounts, Account Timeline). */
+.acct-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.acct-progress-track {
+  width: 64px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-surface);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.acct-progress-fill {
+  height: 100%;
+  background: var(--color-navy-700);
+  border-radius: 3px;
+}
+.acct-progress span {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
 /* === Tabs === */
 .nav-tabs {
   border-bottom: 2px solid var(--color-border);

@@ -6,7 +6,7 @@ import { DynamicFormTemplateService } from '@services/dynamic-form-template.serv
 import { NotificationService } from '@services/notification.service';
 import { FormPrintPreviewComponent } from '@generic/form-print-preview/form-print-preview.component';
 import { AnswerType, ANSWER_TYPE_LABELS, FormQuestion, RICH_TEXT_MAX_LENGTH, TemplateStatus, newQuestion } from '@app/models/dynamic-form';
-import { VISA_STEP_ORDER, VISA_STEP_LABELS, VisaStepKey } from '@app/models/enrolment';
+import { VISA_STEP_ORDER, VISA_STEP_LABELS } from '@app/models/enrolment';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 
 const ANSWER_TYPES: AnswerType[] = ['RichText', 'YesNo', 'SingleSelect', 'MultiSelect'];
@@ -21,6 +21,8 @@ const ANSWER_TYPES: AnswerType[] = ['RichText', 'YesNo', 'SingleSelect', 'MultiS
 export class DynamicFormEditComponent implements OnInit {
   readonly answerTypes = ANSWER_TYPES;
   readonly answerTypeLabels = ANSWER_TYPE_LABELS;
+  // Enrolment's fixed step keys, offered as datalist suggestions only — see
+  // models/dynamic-form.ts's comment on why boundStepKey isn't restricted to this list.
   readonly stepOrder = VISA_STEP_ORDER;
   readonly stepLabels = VISA_STEP_LABELS;
   readonly defaultRichTextMaxLength = RICH_TEXT_MAX_LENGTH;
@@ -33,7 +35,7 @@ export class DynamicFormEditComponent implements OnInit {
   name = '';
   description = '';
   status: TemplateStatus = 'Active';
-  boundStepKey: VisaStepKey | '' = '';
+  boundStepKey = '';
   questions: FormQuestion[] = [newQuestion(0)];
 
   constructor(

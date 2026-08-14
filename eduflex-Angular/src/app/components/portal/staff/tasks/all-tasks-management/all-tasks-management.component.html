@@ -1,0 +1,20 @@
+<div class="all-tasks-page">
+  <div class="container-fluid py-1">
+    <div class="row align-items-center mb-3">
+      <div class="col">
+        <h3 class="mb-2">All Tasks</h3>
+        <p class="text-muted mb-0">Tasks belonging to the department(s) you manage.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <app-task-list
+      *ngIf="permissions.viewAll"
+      mode="all"
+      [showAddButton]="permissions.add"
+      (viewTask)="onViewTask($event)"
+      (addTask)="onAddTask()"
+    ></app-task-list>
+  </div>
+</div>

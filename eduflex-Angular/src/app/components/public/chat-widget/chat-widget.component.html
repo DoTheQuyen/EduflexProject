@@ -1,28 +1,47 @@
 <div class="chat-widget">
     <button type="button" class="chat-toggle-btn" (click)="toggleOpen()"
-        [attr.aria-label]="isOpen ? 'Close chat' : 'Open chat'">
-        <span *ngIf="!isOpen">💬</span>
-        <span *ngIf="isOpen">&times;</span>
+        [attr.aria-label]="(isOpen ? 'CHAT.TOGGLE_CLOSE_ARIA' : 'CHAT.TOGGLE_OPEN_ARIA') | translate">
+        <svg *ngIf="!isOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+            <path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8l-4 4V6a1 1 0 0 1 1-1z" />
+            <circle cx="8" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
+            <circle cx="12" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
+            <circle cx="16" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
+        </svg>
+        <svg *ngIf="isOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" width="20" height="20">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
     </button>
 
     <div class="chat-panel" *ngIf="isOpen">
         <div class="chat-header">
-            <h3>Visa Q&amp;A AI Assistant</h3>
-            <p class="chat-subtitle">General information only — not migration advice.</p>
+            <h3>{{ 'CHAT.HEADER_TITLE' | translate }}</h3>
+            <p class="chat-subtitle">{{ 'CHAT.HEADER_SUBTITLE' | translate }}</p>
         </div>
 
         <div class="chat-messages">
             <div class="chat-empty" *ngIf="messages.length === 0">
-                <p>Ask a general question about student visas, or try one below:</p>
+                <p>{{ 'CHAT.EMPTY_PROMPT' | translate }}</p>
                 <div class="chat-faq-list">
-                    <button type="button" class="chat-faq-btn" *ngFor="let q of faqQuestions" (click)="askFaq(q)">
+                    <button type="button" class="chat-faq-btn" *ngFor="let q of faqQuestions" (click)="askFaq(q)"
+                        [disabled]="isLimitReached">
                         {{ q }}
                     </button>
                 </div>
             </div>
 
             <div class="chat-message" [ngClass]="msg.role" *ngFor="let msg of messages">
-                <div class="chat-bubble">{{ msg.text }}</div>
+                <div class="chat-message-content">
+                    <div class="chat-bubble">{{ msg.text }}</div>
+                    <div class="chat-footer" *ngIf="msg.role === 'assistant'">
+                        <span class="chat-disclaimer">{{ 'CHAT.DISCLAIMER' | translate }}</span>
+                        <span class="chat-signature">{{ 'CHAT.SIGNATURE_PREFIX' | translate }} <a
+                                href="javascript:void(0)" (click)="contactStaff.emit()">{{ 'CHAT.CONTACT_STAFF' |
+                                translate }}</a> {{ 'CHAT.SIGNATURE_SUFFIX' | translate }}</span>
+                    </div>
+                </div>
             </div>
 
             <div class="chat-message assistant" *ngIf="isSending">
@@ -39,10 +58,12 @@
         <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
         <form class="chat-input-row" (ngSubmit)="sendQuestion()">
-            <input type="text" [(ngModel)]="currentQuestion" name="question" placeholder="Type your question..."
-                maxlength="500" [disabled]="isSending || isLimitReached">
+            <input type="text" [(ngModel)]="currentQuestion" name="question"
+                [placeholder]="'CHAT.INPUT_PLACEHOLDER' | translate" maxlength="500"
+                [disabled]="isSending || isLimitReached">
             <button type="submit" class="btn-primary"
-                [disabled]="isSending || !currentQuestion.trim() || isLimitReached">Send</button>
+                [disabled]="isSending || !currentQuestion.trim() || isLimitReached">{{ 'CHAT.SEND' | translate
+                }}</button>
         </form>
     </div>
 </div>

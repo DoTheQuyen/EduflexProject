@@ -1,0 +1,176 @@
+<div class="task-detail-page">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="back()">
+      <span class="back-arrow">&larr;</span> Back
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="task && !isLoading">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <h3 class="mb-1">{{ task.name }}</h3>
+          <span class="badge-pill" [ngClass]="statusBadgeClass(task.status)">{{ statusLabels[task.status] }}</span>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-primary btn-sm" *ngIf="canEditDetails && mode === 'view'" (click)="enterEditMode()">Edit</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="canRespond" (click)="openReassignModal()">Reassign</button>
+          <button type="button" class="btn btn-success btn-sm" *ngIf="canRespond && task.status !== 'Completed'" [disabled]="isChangingStatus" (click)="markComplete()">Mark Complete</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="canRespond && task.status === 'Completed'" [disabled]="isChangingStatus" (click)="reopenTask()">Reopen</button>
+        </div>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+      <!-- View mode -->
+      <div *ngIf="mode === 'view'" class="card border shadow-sm mb-3">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-sm-3 text-muted">Assigner</div>
+            <div class="col-sm-9">{{ userDirectory.getName(task.assignerUserId) }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-sm-3 text-muted">Assignee</div>
+            <div class="col-sm-9">{{ userDirectory.getName(task.assigneeUserId) }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-sm-3 text-muted">Due</div>
+            <div class="col-sm-9">{{ task.dueDateTime | date: 'medium' }}</div>
+          </div>
+          <div class="row mb-2" *ngIf="task.description">
+            <div class="col-sm-3 text-muted">Description</div>
+            <div class="col-sm-9" style="white-space: pre-wrap;">{{ task.description }}</div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-muted">Linked records</div>
+            <div class="col-sm-9 d-flex flex-wrap gap-2">
+              <span *ngFor="let type of linkTypes">
+                <a *ngIf="selectedLinks[type]" class="badge-pill badge-pill-navy-soft linked-record-link"
+                   [routerLink]="linkedRecordRoute(type, selectedLinks[type]!.id)">{{ type }}: {{ selectedLinks[type]!.label }}</a>
+              </span>
+              <span *ngIf="!selectedLinks['Enrolment'] && !selectedLinks['Enquiry'] && !selectedLinks['Application'] && !selectedLinks['FinancialRecord']" class="text-muted">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit mode (assigner only, not completed) -->
+      <form *ngIf="mode === 'edit'" [formGroup]="editForm" (ngSubmit)="saveEdit()" class="card border shadow-sm mb-3">
+        <div class="card-body">
+          <h6 class="form-section-title">Task details</h6>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Task name *</label>
+              <input type="text" class="form-control" formControlName="name">
+              <span class="field-error" *ngIf="isFieldInvalid('name')">Task name is required</span>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Due date/time *</label>
+              <input type="datetime-local" class="form-control" formControlName="dueDateTime">
+              <span class="field-error" *ngIf="isFieldInvalid('dueDateTime')">A due date/time is required</span>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" rows="4" formControlName="description"></textarea>
+            </div>
+          </div>
+
+          <h6 class="form-section-title mt-4">Link to a record (optional)</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <ng-container *ngFor="let type of linkTypes">
+              <div *ngIf="canLink(type)" class="link-picker-chip">
+                <span class="text-muted small">{{ type }}:</span>
+                <ng-container *ngIf="selectedLinks[type]; else noLink">
+                  <span>{{ selectedLinks[type]!.label }}</span>
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="removeLink(type)">Remove</button>
+                </ng-container>
+                <ng-template #noLink>
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="openPicker(type)">Link {{ type }}</button>
+                </ng-template>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="text-end mt-4 d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="cancelEdit()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
+              {{ isSaving ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Timeline -->
+      <div class="card border shadow-sm mb-3">
+        <div class="card-header bg-white"><strong>Timeline</strong></div>
+        <div class="card-body">
+          <div class="mb-3" *ngIf="canRespond">
+            <textarea class="form-control mb-2" rows="2" placeholder="Add a note..." [(ngModel)]="noteContent" [ngModelOptions]="{standalone: true}"></textarea>
+            <button type="button" class="btn btn-sm btn-primary" [disabled]="isAddingNote || !noteContent.trim()" (click)="addNote()">
+              {{ isAddingNote ? 'Posting...' : 'Add Note' }}
+            </button>
+          </div>
+
+          <div class="audit-timeline">
+            <div class="audit-item" *ngFor="let note of reversedNotes">
+              <div class="d-flex justify-content-between">
+                <strong [class.text-muted]="note.type !== 'Note'" [class.fst-italic]="note.type !== 'Note'">
+                  {{ note.createdByName }}
+                </strong>
+                <span class="text-muted small">{{ note.createdAt | date: 'medium' }}</span>
+              </div>
+              <div [class.fst-italic]="note.type !== 'Note'" [class.text-muted]="note.type !== 'Note'">{{ note.content }}</div>
+            </div>
+          </div>
+          <p *ngIf="!task.notes.length" class="text-muted text-center py-3 mb-0">No activity yet.</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <app-modal
+    *ngIf="showReassignModal"
+    title="Reassign Task"
+    size="sm"
+    [showSave]="false"
+    [showUpdate]="true"
+    updateLabel="Reassign"
+    [isSaving]="isReassigning"
+    [saveDisabled]="reassignForm.invalid"
+    (update)="confirmReassign()"
+    (cancel)="showReassignModal = false"
+    (closeModal)="showReassignModal = false"
+  >
+    <form [formGroup]="reassignForm">
+      <div class="mb-3">
+        <label class="form-label">New assignee *</label>
+        <select class="form-select" formControlName="newAssigneeUserId">
+          <option value="" disabled>Select a staff member</option>
+          <option *ngFor="let staff of staffOptions" [value]="staff.id">
+            {{ staff.firstName }} {{ staff.lastName }} ({{ staff.roleName }})
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Note *</label>
+        <textarea class="form-control" rows="3" formControlName="note" placeholder="Why is this being reassigned?"></textarea>
+      </div>
+    </form>
+  </app-modal>
+
+  <app-record-picker
+    *ngIf="activePickerType"
+    [title]="linkConfigs[activePickerType].title"
+    [columns]="linkConfigs[activePickerType].columns"
+    [searchFn]="linkConfigs[activePickerType].searchFn"
+    (picked)="onPicked($event)"
+    (closeModal)="onPickerClosed()"
+  ></app-record-picker>
+</div>

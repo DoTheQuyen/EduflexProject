@@ -1,9 +1,0 @@
-<div class="toast-container">
-  <app-notification
-    *ngFor="let toast of notificationService.toasts"
-    [type]="toast.type"
-    [message]="toast.message"
-    [dismissible]="true"
-    (dismissed)="notificationService.dismiss(toast.id)">
-  </app-notification>
-</div>

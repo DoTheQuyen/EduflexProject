@@ -1,31 +1,15 @@
 import { Injectable } from '@angular/core';
-
-export interface Toast {
-  id: number;
-  type: 'success' | 'error' | 'warning' | 'info';
-  message: string;
-}
+import { MessageService } from 'primeng/api';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  toasts: Toast[] = [];
-  private nextId = 0;
+  constructor(private messageService: MessageService) {}
 
   success(message: string): void {
-    this.show('success', message);
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: message, life: 4000 });
   }
 
   error(message: string): void {
-    this.show('error', message);
-  }
-
-  private show(type: Toast['type'], message: string): void {
-    const id = this.nextId++;
-    this.toasts = [...this.toasts, { id, type, message }];
-    setTimeout(() => this.dismiss(id), 4000);
-  }
-
-  dismiss(id: number): void {
-    this.toasts = this.toasts.filter(t => t.id !== id);
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: message, life: 4000 });
   }
 }

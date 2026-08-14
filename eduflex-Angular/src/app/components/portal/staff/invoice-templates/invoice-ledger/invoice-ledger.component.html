@@ -11,17 +11,22 @@
       </div>
     </div>
 
-    <div class="d-flex gap-2 mb-3">
-      <select class="form-select form-select-sm w-auto" [(ngModel)]="categoryFilter" (ngModelChange)="load()">
+    <div class="d-flex gap-2 mb-3 align-items-center">
+      <select class="form-select form-select-sm w-auto" [(ngModel)]="categoryFilter" (ngModelChange)="onFilterChange()">
         <option value="">All categories</option>
         <option value="Customer">Customer</option>
         <option value="Partner">Partner</option>
+        <option value="Custom">Custom</option>
       </select>
-      <select class="form-select form-select-sm w-auto" [(ngModel)]="statusFilter" (ngModelChange)="load()">
+      <select class="form-select form-select-sm w-auto" [(ngModel)]="statusFilter" (ngModelChange)="onFilterChange()">
         <option value="">All statuses</option>
         <option value="Sent">Sent</option>
         <option value="Paid">Paid</option>
+        <option value="Failed">Failed</option>
+        <option value="Cancelled">Cancelled</option>
       </select>
+      <p-button label="Refresh" icon="fas fa-arrows-rotate" size="small" severity="secondary" [outlined]="true"
+        styleClass="ms-auto" (onClick)="onRefresh()" />
     </div>
 
     <div *ngIf="isLoading" class="text-center py-5">
@@ -31,43 +36,18 @@
     </div>
 
     <div *ngIf="!isLoading" class="card border shadow-sm">
-      <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Invoice No.</th>
-              <th>Recipient</th>
-              <th>Category</th>
-              <th class="text-end">Total</th>
-              <th class="text-center">Status</th>
-              <th>Sent</th>
-              <th class="text-center">PDF</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let inv of invoices">
-              <td class="fw-semibold">{{ inv.invoiceNo }}</td>
-              <td>{{ inv.recipientName }}<div class="text-muted small">{{ inv.recipientEmail }}</div>
-              </td>
-              <td>
-                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.category === 'Customer'"
-                  [class.badge-pill-accent-soft]="inv.category === 'Partner'">{{ inv.category }}</span>
-              </td>
-              <td class="text-end">{{ inv.total | number:'1.2-2' }}</td>
-              <td class="text-center">
-                <span class="badge-pill" [class.badge-pill-navy-soft]="inv.status === 'Sent'"
-                  [class.badge-pill-success-soft]="inv.status === 'Paid'">{{ inv.status }}</span>
-              </td>
-              <td>{{ inv.sentAt | date:'dd/MM/yyyy' }}</td>
-              <td class="text-center">
-                <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="inv.pdfUrl"
-                  (click)="download(inv)">
-                  <i class="fas fa-file-pdf"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="card-body p-0">
+        <app-data-table
+          [columns]="columns"
+          [data]="invoices"
+          [rowActions]="rowActions"
+          [pageNumber]="pager.pageNumber"
+          [pageSize]="pager.pageSize"
+          [totalCount]="pager.totalCount"
+          (pageChange)="onPageChange($event)"
+          (actionClick)="onTableAction($event)"
+          tableClass="table table-hover mb-0">
+        </app-data-table>
         <p *ngIf="invoices.length === 0" class="text-center text-muted py-4 mb-0">No invoices sent yet.</p>
       </div>
     </div>

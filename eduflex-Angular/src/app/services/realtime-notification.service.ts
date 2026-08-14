@@ -32,6 +32,13 @@ export class RealtimeNotificationService {
   private unreadCountSubject = new BehaviorSubject<number>(0);
   unreadCount$ = this.unreadCountSubject.asObservable();
 
+  // Open/actionable record counts per module (Enquiry/Application/Enrolment/Finance) —
+  // comes back on the same GET /api/Notifications/summary call as the notification list
+  // below, so the sidebar/dashboard badges and the notification bell always refresh
+  // together on the same 15s poll instead of firing separate requests.
+  private moduleCountsSubject = new BehaviorSubject<Record<string, number>>({});
+  moduleCounts$ = this.moduleCountsSubject.asObservable();
+
   // Redis pub/sub is disabled on the backend for now (see NotificationPublisher/Program.cs),
   // so the SignalR push below never actually receives anything — this interval is what
   // keeps the list current instead. Drop this once live push is restored, or keep it as a
@@ -108,23 +115,20 @@ export class RealtimeNotificationService {
   }
 
   private loadBacklog(): void {
-    this.client.notifications().subscribe({
-      next: (dtos) => {
-        // TODO(department-migration): drop the `as any` once `nswag run` has been
-        // re-run against the updated backend — NotificationDto doesn't declare
-        // targetType/targetDepartmentId yet because api.services.ts hasn't been
-        // regenerated, even though the server already sends them.
-        const mapped: RealtimeNotificationMessage[] = dtos.map((dto) => ({
+    this.client.summary2().subscribe({
+      next: (result) => {
+        const mapped: RealtimeNotificationMessage[] = (result.notifications ?? []).map((dto) => ({
           id: dto.id ?? '',
           module: dto.module ?? '',
           entityId: dto.entityId ?? '',
           summary: dto.summary ?? '',
-          targetType: (dto as any).targetType ?? '',
-          targetDepartmentId: (dto as any).targetDepartmentId ?? undefined,
+          targetType: dto.targetType ?? '',
+          targetDepartmentId: dto.targetDepartmentId ?? undefined,
         }));
         this.updateList(mapped);
+        this.moduleCountsSubject.next(result.counts ?? {});
       },
-      error: (err) => console.error('Failed to load notifications', err),
+      error: (err) => console.error('Failed to load dashboard summary', err),
     });
   }
 

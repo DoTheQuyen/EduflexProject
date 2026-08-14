@@ -7,3 +7,6 @@ mongodump/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Generated at build time (see eduflex-Angular/scripts/generate-build-info.js)
+eduflex-Angular/src/app/environments/build-info.ts

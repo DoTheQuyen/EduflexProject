@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "start:spa": "ng serve",
+    "prebuild": "node scripts/generate-build-info.js",
     "build": "ng build",
     "start:ssr": "ng build && node dist/eduflex-Angular/server/server.mjs",
     "build:ssr": "ng build",

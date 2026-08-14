@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { buildInfo } from '../../../environments/build-info';
 
 interface FooterSocialLink {
   label: string;
@@ -14,15 +15,17 @@ interface FooterSocialLink {
   standalone: true,
   imports: [CommonModule, RouterModule, TranslatePipe],
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent {
   currentYear: number = new Date().getFullYear();
+  buildVersion: string = buildInfo.version;
+  buildDate: string = buildInfo.buildDate;
 
   socialLinks: FooterSocialLink[] = [
     { label: 'Facebook', icon: 'fab fa-facebook-f', url: '' },
     { label: 'Instagram', icon: 'fab fa-instagram', url: '' },
     { label: 'LinkedIn', icon: 'fab fa-linkedin-in', url: '' },
-    { label: 'YouTube', icon: 'fab fa-youtube', url: '' }
+    { label: 'YouTube', icon: 'fab fa-youtube', url: '' },
   ];
 }

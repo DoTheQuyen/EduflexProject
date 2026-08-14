@@ -73,7 +73,9 @@
   border-radius: 50%;
   background: var(--color-navy-700);
   color: var(--color-surface);
-  transition: background 0.3s ease, color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 .footer-social a:hover {
@@ -134,6 +136,14 @@
   margin: 0;
   font-size: 0.8rem;
   color: var(--color-muted-on-dark);
+  text-align: center;
+}
+
+.footer-version {
+  margin: 0.3rem 0 0;
+  font-size: 0.7rem;
+  color: var(--color-muted-on-dark);
+  opacity: 0.6;
   text-align: center;
 }
 

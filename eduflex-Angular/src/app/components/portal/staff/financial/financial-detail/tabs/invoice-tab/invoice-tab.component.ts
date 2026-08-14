@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Client, InvoiceTemplateDto, ConfirmInvoicePaymentDto } from '@services/api.services';
@@ -45,6 +45,11 @@ export class InvoiceTabComponent implements OnChanges {
   // in the Finance tab's invoice request calendar — prefills the claim item below and, on
   // send, flags which InvoicePlan entry this invoice fulfils (see activePlanEntryId).
   @Input() pendingClaim: ClaimInvoiceRequest | null = null;
+  // The parent (FinancialDetailComponent) reloads the whole FinancialRecord on this —
+  // send/resend/cancel/confirm-payment all mutate state other tabs read (the Finance
+  // tab's claim-schedule status and received/outstanding totals, the Communication
+  // tab's invoice picker), not just this tab's own local invoice list.
+  @Output() changed = new EventEmitter<void>();
 
   invoiceToOption: InvoiceToOption | null = null;
   invoices: FinanceInvoice[] = [];
@@ -271,6 +276,7 @@ export class InvoiceTabComponent implements OnChanges {
           this.notificationService.success(`Invoice sent to ${this.invoiceToOption?.name}.`);
         }
         this.loadInvoices();
+        this.changed.emit();
       },
       error: (err) => {
         this.isSendingInvoice = false;
@@ -316,6 +322,7 @@ export class InvoiceTabComponent implements OnChanges {
         this.closeResendDialog();
         this.notificationService.success(`Invoice ${invoice.invoiceNo} resent to ${invoice.recipientEmail}.`);
         this.loadInvoices();
+        this.changed.emit();
       },
       error: (err) => {
         this.isResending = false;
@@ -346,6 +353,7 @@ export class InvoiceTabComponent implements OnChanges {
         this.closeCancelDialog();
         this.notificationService.success(`Invoice ${invoice.invoiceNo} cancelled — it no longer counts toward income.`);
         this.loadInvoices();
+        this.changed.emit();
       },
       error: (err) => {
         this.isCancelling = false;
@@ -396,6 +404,7 @@ export class InvoiceTabComponent implements OnChanges {
         this.showPaymentUploaderFor = null;
         this.notificationService.success('Payment confirmed.');
         this.loadInvoices();
+        this.changed.emit();
       },
       error: (err) => {
         this.isConfirmingPayment = false;

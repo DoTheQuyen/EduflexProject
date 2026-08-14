@@ -1,16 +1,15 @@
 <div class="country-select">
-    <input [id]="id" type="text" class="form-control" autocomplete="off" role="combobox" aria-autocomplete="list"
-        [attr.aria-expanded]="open" [placeholder]="placeholder" [value]="query" [disabled]="disabled"
-        (input)="onInput($event)" (focus)="onFocus()" (blur)="onBlur()" (keydown)="onKeydown($event)">
-
-    <ul class="country-options" role="listbox" *ngIf="open && filteredCountries.length">
-        <li *ngFor="let c of filteredCountries; let i = index" role="option" [attr.aria-selected]="c === committedValue"
-            [class.highlighted]="i === highlightedIndex" (mousedown)="onOptionMouseDown($event, c)">
-            {{ c }}
-        </li>
-    </ul>
-
-    <ul class="country-options" *ngIf="open && query.trim() && !filteredCountries.length">
-        <li class="no-match">No matching country</li>
-    </ul>
+  <p-autocomplete
+    [inputId]="id"
+    [ngModel]="value"
+    (ngModelChange)="onModelChange($event)"
+    [suggestions]="suggestions"
+    (completeMethod)="search($event)"
+    [dropdown]="true"
+    [forceSelection]="true"
+    [disabled]="disabled"
+    [placeholder]="placeholder"
+    (onBlur)="onBlur()"
+    styleClass="w-100"
+  />
 </div>

@@ -135,6 +135,11 @@ export class FeedbackManagementComponent implements OnInit {
     this.loadFeedbacks();
   }
 
+  onRefresh(): void {
+    this.pager.search('');
+    this.loadFeedbacks();
+  }
+
   isFieldInvalid(fieldName: string): boolean {
     const control = this.feedbackForm.get(fieldName);
     return control ? control.invalid && control.touched : false;

@@ -1,0 +1,25 @@
+/* Column-render markup ([innerHTML] via app-data-table) is styled via the shared
+   .acct-progress-* classes in theme.css, not here — component-scoped styles can't
+   reach into the injected HTML without a broad ::ng-deep escape hatch. */
+
+.qstat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.qstat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.qstat-sub {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+.qstat-alert {
+  border-color: var(--color-error) !important;
+}

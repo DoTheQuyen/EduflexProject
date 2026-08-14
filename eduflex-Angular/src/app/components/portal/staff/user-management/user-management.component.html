@@ -5,9 +5,7 @@
         <h3 class="mb-2">Manage Users</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-sm" (click)="openModal()">
-          <i class="fas fa-plus me-2"></i>Add User
-        </button>
+        <p-button label="Add User" icon="fas fa-plus" size="small" (onClick)="openModal()" />
       </div>
     </div>
   </div>
@@ -45,14 +43,15 @@
           <div class="card-body p-0">
             <app-data-table [columns]="columns" [data]="users" [rowActions]="rowActions" [pageNumber]="pager.pageNumber"
               [pageSize]="pager.pageSize" [totalCount]="pager.totalCount" [showSearch]="true"
-              searchPlaceholder="Search name or email..." (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
+              searchPlaceholder="Search name or email..." (search)="onSearchChange($event)"
+              (refresh)="onRefresh()" (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
-              <select tableFilters class="form-select" style="max-width: 180px;" (change)="onRoleFilterChange($event)">
+              <select tableFilters class="form-select" style="max-width: 180px;" [value]="roleFilter"
+                (change)="onRoleFilterChange($event)">
                 <option value="">All roles</option>
                 <option *ngFor="let role of visibleRoles" [value]="role.id">{{ role.name }}</option>
               </select>
-              <select tableFilters class="form-select" style="max-width: 150px;"
+              <select tableFilters class="form-select" style="max-width: 150px;" [value]="activeFilter"
                 (change)="onActiveFilterChange($event)">
                 <option value="all">All statuses</option>
                 <option value="true">Active only</option>

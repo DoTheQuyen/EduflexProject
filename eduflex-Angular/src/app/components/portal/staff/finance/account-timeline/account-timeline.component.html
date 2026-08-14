@@ -1,0 +1,103 @@
+<div class="account-timeline-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back to Accounts
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+
+    <div *ngIf="notFound && !isLoading" class="text-center text-muted py-5">
+      No payment schedule found for this account.
+    </div>
+
+    <ng-container *ngIf="!isLoading && timeline">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <span class="badge-pill badge-pill-navy-soft mb-2 d-inline-block">{{ typeLabel(timeline.accountType) }}</span>
+          <h3 class="mb-1">{{ timeline.name }}</h3>
+          <p class="text-muted mb-0" *ngIf="timeline.subLabel">{{ timeline.subLabel }}</p>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="card border shadow-sm h-100">
+            <div class="card-body">
+              <div class="qstat-label">Contract total</div>
+              <div class="qstat-value">{{ timeline.contractTotal | number:'1.2-2' }}</div>
+              <div class="qstat-sub">{{ timeline.entries.length }} entries</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="card border shadow-sm h-100">
+            <div class="card-body">
+              <div class="qstat-label">Received</div>
+              <div class="qstat-value">{{ timeline.received | number:'1.2-2' }}</div>
+              <div class="acct-progress mt-1">
+                <div class="acct-progress-track"><div class="acct-progress-fill" [style.width.%]="receivedPercent()"></div></div>
+                <span>{{ receivedPercent() }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="card border shadow-sm h-100" [class.qstat-alert]="timeline.outstanding > 0">
+            <div class="card-body">
+              <div class="qstat-label" [class.text-danger]="timeline.outstanding > 0">Outstanding</div>
+              <div class="qstat-value" [class.text-danger]="timeline.outstanding > 0">{{ timeline.outstanding | number:'1.2-2' }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="card border shadow-sm h-100">
+            <div class="card-body">
+              <div class="qstat-label">Next due</div>
+              <div class="qstat-value qstat-value-date">{{ timeline.nextDueDate ? (timeline.nextDueDate | date:'d MMM y') : '—' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border shadow-sm">
+        <div class="card-header bg-white"><strong>Schedule</strong></div>
+        <div class="card-body">
+          <details class="yr" *ngFor="let group of yearGroups" [open]="group.isCurrent">
+            <summary>
+              {{ group.year }}
+              <span class="yr-meta">{{ group.entries.length }} entr{{ group.entries.length === 1 ? 'y' : 'ies' }} &middot; {{ group.total | number:'1.2-2' }}</span>
+            </summary>
+            <div class="table-responsive">
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr *ngFor="let entry of group.entries">
+                    <td>
+                      {{ entry.label }}
+                      <span class="badge-pill badge-pill-muted-soft ms-1"
+                        *ngIf="entry.feeType && entry.feeType !== 'Tuition' && entry.feeType !== 'Commission'">
+                        {{ feeTypeLabel(entry.feeType) }}
+                      </span>
+                    </td>
+                    <td>{{ entry.dueDate | date:'d MMM y' }}</td>
+                    <td class="text-end">{{ entry.amount | number:'1.2-2' }}</td>
+                    <td class="text-center"><span class="badge-pill" [ngClass]="scheduleBadgeClass(entry.scheduleStatus)">{{ entry.scheduleStatus }}</span></td>
+                    <td class="text-center">
+                      <span *ngIf="entry.linkedInvoiceStatus" class="badge-pill" [ngClass]="invoiceBadgeClass(entry.linkedInvoiceStatus)">
+                        {{ entry.linkedInvoiceStatus }}
+                      </span>
+                      <span *ngIf="!entry.linkedInvoiceStatus" class="text-muted small">
+                        {{ entry.scheduleStatus === 'Skipped' ? (entry.skipReason || 'Skipped') : 'Not yet invoiced' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

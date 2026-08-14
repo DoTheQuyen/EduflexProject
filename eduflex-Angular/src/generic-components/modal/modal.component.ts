@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-type PendingAction = 'close' | 'save' | 'update' | 'cancel' | 'delete' | null;
+import { Dialog } from 'primeng/dialog';
+import { Button } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Dialog, Button],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
@@ -33,53 +34,49 @@ export class ModalComponent {
   @Output() cancel = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();
 
-  pendingAction: PendingAction = null;
+  constructor(private confirmationService: ConfirmationService) {}
 
-  get pendingMessage(): string {
-    switch (this.pendingAction) {
-      case 'close': return 'Are you sure you want to close this dialog?';
-      case 'save': return `Are you sure you want to ${this.saveLabel.toLowerCase()}?`;
-      case 'update': return `Are you sure you want to ${this.updateLabel.toLowerCase()}?`;
-      case 'cancel': return `Are you sure you want to ${this.cancelLabel.toLowerCase()}?`;
-      case 'delete': return `Are you sure you want to ${this.deleteLabel.toLowerCase()}?`;
-      default: return '';
+  get dialogWidth(): string {
+    switch (this.size) {
+      case 'sm': return '30vw';
+      case 'lg': return '70vw';
+      default: return '50vw';
     }
   }
 
   onCloseClick(): void {
-    if (!this.isSaving) {
-      this.pendingAction = 'close';
-    }
+    if (this.isSaving) return;
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to close this dialog?',
+      accept: () => this.closeModal.emit(),
+    });
   }
 
   onSaveClick(): void {
-    this.pendingAction = 'save';
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${this.saveLabel.toLowerCase()}?`,
+      accept: () => this.save.emit(),
+    });
   }
 
   onUpdateClick(): void {
-    this.pendingAction = 'update';
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${this.updateLabel.toLowerCase()}?`,
+      accept: () => this.update.emit(),
+    });
   }
 
   onCancelClick(): void {
-    this.pendingAction = 'cancel';
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${this.cancelLabel.toLowerCase()}?`,
+      accept: () => this.cancel.emit(),
+    });
   }
 
   onDeleteClick(): void {
-    this.pendingAction = 'delete';
-  }
-
-  confirmPendingAction(): void {
-    switch (this.pendingAction) {
-      case 'close': this.closeModal.emit(); break;
-      case 'save': this.save.emit(); break;
-      case 'update': this.update.emit(); break;
-      case 'cancel': this.cancel.emit(); break;
-      case 'delete': this.delete.emit(); break;
-    }
-    this.pendingAction = null;
-  }
-
-  cancelPendingAction(): void {
-    this.pendingAction = null;
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${this.deleteLabel.toLowerCase()}?`,
+      accept: () => this.delete.emit(),
+    });
   }
 }

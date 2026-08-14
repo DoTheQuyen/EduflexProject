@@ -50,6 +50,18 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'staff-portal/tasks/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/migration-cases/:id',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'staff-portal/visa-process-templates/:id',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'staff-portal/email-templates/:id',
     renderMode: RenderMode.Client
   },

@@ -13,12 +13,28 @@ import { environment } from './environments/environment';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideQuillConfig } from 'ngx-quill/config';
 import { LanguageService } from './services/language.service';
+import { providePrimeNG } from 'primeng/config';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { EduflexPreset } from './prime-preset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: EduflexPreset,
+        options: {
+          cssLayer: {
+            name: 'primeng',
+            order: 'base, theme, primeng, utilities',
+          },
+        },
+      },
+    }),
+    ConfirmationService,
+    MessageService,
     provideQuillConfig({}),
     { provide: APPLICATION_API_BASE_URL, useValue: environment.apiClientUrl },
     { provide: CONTENT_API_BASE_URL, useValue: environment.apiClientUrl },
@@ -26,11 +42,11 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       loader: provideTranslateHttpLoader({ prefix: '/assets/language/', suffix: '.json' }),
       fallbackLang: 'en',
-      lang: 'en'
+      lang: 'en',
     }),
     provideAppInitializer(() => {
       const languageService = inject(LanguageService);
       return firstValueFrom(languageService.init());
-    })
-  ]
+    }),
+  ],
 };

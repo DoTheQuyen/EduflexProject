@@ -21,7 +21,7 @@
         <div class="text-end">
           <div class="text-muted small mb-1">
             Owned by <strong>{{ enrolment.ownerName }}</strong>
-            <button *ngIf="permissions.reassign" type="button" class="btn btn-sm btn-outline-secondary ms-2"
+            <button *ngIf="permissions.reassign || (isOwner && permissions.edit)" type="button" class="btn btn-sm btn-outline-secondary ms-2"
               (click)="openReassignModal()">Reassign</button>
           </div>
           <button *ngIf="canFinalize" type="button" class="btn btn-sm btn-outline-primary me-2"
@@ -46,6 +46,8 @@
             (click)="switchTab('communication')">Communication</button></li>
         <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'audit'"
             (click)="switchTab('audit')">Audit Trail</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'tasks'"
+            (click)="switchTab('tasks')">Tasks</button></li>
       </ul>
 
       <!-- All four tabs stay instantiated ([hidden] rather than *ngIf) so switching tabs
@@ -68,6 +70,7 @@
       </app-communication-tab>
 
       <app-audit-tab [hidden]="activeTab !== 'audit'" [enrolment]="enrolment"></app-audit-tab>
+      <app-enrolment-tasks-tab [hidden]="activeTab !== 'tasks'" [enrolment]="enrolment"></app-enrolment-tasks-tab>
     </div>
   </div>
 

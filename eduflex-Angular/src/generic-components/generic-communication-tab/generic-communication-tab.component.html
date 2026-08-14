@@ -1,0 +1,86 @@
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card border shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Messages</strong>
+        <button *ngIf="canCompose" type="button" class="btn btn-sm btn-primary" (click)="toggleCompose()">
+          {{ showComposeForm ? 'Close' : '+ Compose' }}
+        </button>
+      </div>
+      <div class="card-body" *ngIf="showComposeForm">
+        <div class="recipient-toggle" *ngIf="recipientOptions.length > 0">
+          <button type="button" class="chip" *ngFor="let option of recipientOptions"
+            [class.active]="recipientType === option.value" (click)="setRecipientType(option.value)">
+            {{ option.label }}
+          </button>
+        </div>
+
+        <div class="partner-info-strip" *ngIf="selectedRecipientOption?.helpText">
+          {{ selectedRecipientOption?.helpText }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">To</label>
+          <input class="form-control" [(ngModel)]="toEmail" [ngModelOptions]="{standalone: true}">
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3" *ngIf="templates.length > 0">
+          <button type="button" class="btn btn-sm" *ngFor="let t of templates"
+            [class.btn-primary]="selectedTemplateKey === t.key"
+            [class.btn-outline-secondary]="selectedTemplateKey !== t.key" (click)="applyTemplate(t)">
+            {{ t.name }}
+          </button>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Subject</label>
+          <input class="form-control" [(ngModel)]="subject" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Message</label>
+          <textarea class="form-control" rows="7" [(ngModel)]="body" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+
+        <div class="mb-3" *ngIf="documents.length > 0">
+          <label class="form-label">Attach documents</label>
+          <div class="attach-list">
+            <label class="attach-row" *ngFor="let doc of documents">
+              <input type="checkbox" [checked]="isAttachmentSelected(doc.id)" (change)="toggleAttachment(doc.id)">
+              <span class="name">{{ doc.fileName }}</span>
+              <span class="src">{{ doc.categoryLabel }}</span>
+            </label>
+          </div>
+          <div class="attach-summary" *ngIf="selectedAttachmentIds.length > 0">
+            <span>{{ selectedAttachmentIds.length }} selected — sent as expiring download links, not raw
+              attachments.</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" [disabled]="isSending || !canSend" (click)="sendEmail()">
+          {{ isSending ? 'Sending...' : 'Send email' }}
+        </button>
+      </div>
+      <div class="card-body" *ngIf="!showComposeForm">
+        <p class="text-muted small mb-0">{{ composeIntro }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card border shadow-sm h-100">
+      <div class="card-header bg-white"><strong>Sent history</strong></div>
+      <div class="card-body">
+        <div *ngFor="let c of communications" class="border-bottom pb-2 mb-2">
+          <div class="d-flex justify-content-between text-muted small">
+            <span>{{ c.sentByName }} &rarr; <span class="history-tag">{{ c.recipientType }}</span> {{ c.toEmail
+              }}</span>
+            <span>{{ formatDate(c.sentAt) }}</span>
+          </div>
+          <div class="fw-semibold">{{ c.subject }}</div>
+          <div class="text-muted small">{{ c.body.length > 140 ? (c.body.substring(0,140) + '…') : c.body }}</div>
+          <div class="text-muted small" *ngIf="c.attachedDocumentIds.length > 0">{{ c.attachedDocumentIds.length }}
+            document(s) attached</div>
+        </div>
+        <p *ngIf="communications.length === 0" class="text-muted text-center py-3 mb-0">No emails sent yet.</p>
+      </div>
+    </div>
+  </div>
+</div>

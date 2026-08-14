@@ -1,24 +1,27 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Client, InvoiceRecordDto } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
-import { FileUploaderComponent } from '@generic/file-uploader/file-uploader.component';
-import { DocumentUploaderZoneComponent, UploaderZoneFile } from '@generic/document-uploader-zone/document-uploader-zone.component';
+import { GenericDocumentsTabComponent, DocumentCategoryDef, GenericDocument } from '@generic/generic-documents-tab/generic-documents-tab.component';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 import { formatDateTime } from '@app/shared/utils/date-time.util';
-import { Enrolment, EnrolmentDocument, DocumentCategory, DOCUMENT_CATEGORY_LABELS, documentCategoryLabel } from '../../../../../../../models/enrolment';
+import { Enrolment, DocumentCategory, DOCUMENT_CATEGORY_LABELS } from '../../../../../../../models/enrolment';
 
 const DOCUMENT_STEP_CATEGORIES: DocumentCategory[] = [
   'GS', 'UniOffer', 'CoE', 'PaymentReceipt', 'VisaDraft', 'Insurance', 'VisaPaymentReceipt', 'VisaGranted'
 ];
 
+// Enrolment-specific wrapper around the fully generic app-generic-documents-tab — supplies
+// Enrolment's fixed category list + wires upload/rename/delete to EnrolmentService, and
+// composes the invoice list (an Enrolment-only concept — Migration Case has no invoicing)
+// alongside it. See documents-tab.component.html's own comment for why invoices ended up
+// as a separate section rather than merged into "Other documents" the way they used to be.
 @Component({
   selector: 'app-documents-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, FileUploaderComponent, DocumentUploaderZoneComponent],
+  imports: [CommonModule, GenericDocumentsTabComponent],
   templateUrl: './documents-tab.component.html',
   styleUrls: ['./documents-tab.component.css']
 })
@@ -28,23 +31,13 @@ export class DocumentsTabComponent implements OnChanges {
   @Input({ required: true }) permissions!: ModulePermissions;
   @Output() changed = new EventEmitter<void>();
 
-  readonly documentStepCategories = DOCUMENT_STEP_CATEGORIES;
-  readonly documentCategoryLabels = DOCUMENT_CATEGORY_LABELS;
+  readonly categories: DocumentCategoryDef[] = DOCUMENT_STEP_CATEGORIES.map((key) => ({
+    key, label: DOCUMENT_CATEGORY_LABELS[key]
+  }));
 
   isUploading = false;
-  renamingDocumentId: string | null = null;
-  renameValue = '';
-
-  // Invoices sent to the student for this enrolment — shown alongside "Other documents"
-  // (in the grid slot next to VISA Granted) since staff think of "everything sent to or
-  // collected from this student" as one list, not two separate places to check.
   invoices: InvoiceRecordDto[] = [];
   private lastLoadedEnrolmentId: string | undefined;
-
-  // Precomputed per input change instead of called straight from the template — see the
-  // same note in step-evidence-section.component.ts: a method call there hands the child
-  // a new array every change-detection pass, which never lets change detection settle.
-  filesByCategoryMap: Record<string, UploaderZoneFile[]> = {};
 
   constructor(
     private apiClient: Client,
@@ -54,14 +47,6 @@ export class DocumentsTabComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['enrolment'] || !this.enrolment) return;
-
-    // Always rebuilt when the enrolment reference changes (a document was added/renamed/
-    // deleted), unlike the invoice fetch below which only needs the id.
-    this.filesByCategoryMap = {};
-    for (const category of this.documentStepCategories) {
-      this.filesByCategoryMap[category] = this.filesByCategory(category);
-    }
-
     if (this.enrolment.id === this.lastLoadedEnrolmentId) return;
     this.lastLoadedEnrolmentId = this.enrolment.id;
     this.apiClient.byEnrolmentAll(this.enrolment.id).subscribe({
@@ -70,42 +55,23 @@ export class DocumentsTabComponent implements OnChanges {
     });
   }
 
-  downloadInvoice(invoice: InvoiceRecordDto): void {
-    this.apiClient.downloadLink(invoice.id!).subscribe({
-      next: (result) => { window.open(result.url, '_blank', 'noopener'); },
-      error: () => { this.notificationService.error('Could not resolve the download link.'); }
-    });
+  get documents(): GenericDocument[] {
+    return this.enrolment.documents;
+  }
+
+  get canManage(): boolean {
+    return this.isOwner && this.permissions.edit;
   }
 
   formatDate(value: string | undefined): string {
     return value ? formatDateTime(value, 'dd/MM/yyyy HH:mm') : '';
   }
 
-  documentsByCategory(category: DocumentCategory): EnrolmentDocument[] {
-    return this.enrolment.documents.filter(d => d.category === category);
-  }
-
-  // Read-only view onto the same category groups the VISA Process tab's step-evidence
-  // zones edit — notes are shown (disabled) here for visibility, but this tab never
-  // uploads/edits them directly, that stays the step tab's job. Called from ngOnChanges
-  // into filesByCategoryMap, never bound directly in the template.
-  private filesByCategory(category: DocumentCategory): UploaderZoneFile[] {
-    return this.documentsByCategory(category).map(d => ({
-      id: d.id, fileName: d.fileName, url: d.url, note: d.note,
-      uploadedByName: d.uploadedByName, uploadedAt: d.uploadedAt
-    }));
-  }
-
-  // Catches true 'Other' uploads plus the per-step "Other" buckets (ApplyOfferOther/
-  // CoeOther/VisaOther) — anything whose category isn't one of the named step sections
-  // above falls in here, so a new step-scoped "other" category never goes missing from
-  // both places by mistake.
-  get otherDocuments(): EnrolmentDocument[] {
-    return this.enrolment.documents.filter(d => !d.category || !this.documentStepCategories.includes(d.category as DocumentCategory));
-  }
-
-  categoryLabel(category?: string): string {
-    return documentCategoryLabel(category);
+  downloadInvoice(invoice: InvoiceRecordDto): void {
+    this.apiClient.downloadLink(invoice.id!).subscribe({
+      next: (result) => { window.open(result.url, '_blank', 'noopener'); },
+      error: () => { this.notificationService.error('Could not resolve the download link.'); }
+    });
   }
 
   onFileSelected(file: File): void {
@@ -137,31 +103,17 @@ export class DocumentsTabComponent implements OnChanges {
     });
   }
 
-  startRename(doc: EnrolmentDocument): void {
-    this.renamingDocumentId = doc.id;
-    this.renameValue = doc.fileName;
-  }
-
-  confirmRename(doc: EnrolmentDocument): void {
-    if (!this.renameValue.trim()) return;
-    this.enrolmentService.renameDocument(this.enrolment.id, doc.id, this.renameValue.trim(), doc.note).subscribe({
-      next: () => {
-        this.renamingDocumentId = null;
-        this.changed.emit();
-      },
+  onRename(event: { documentId: string; newFileName: string; note?: string }): void {
+    this.enrolmentService.renameDocument(this.enrolment.id, event.documentId, event.newFileName, event.note).subscribe({
+      next: () => this.changed.emit(),
       error: (err) => {
         this.notificationService.error(extractHttpErrorMessage(err, 'Could not rename this document.'));
       }
     });
   }
 
-  cancelRename(): void {
-    this.renamingDocumentId = null;
-  }
-
-  deleteDocument(doc: EnrolmentDocument): void {
-    if (!window.confirm(`Delete "${doc.fileName}"?`)) return;
-    this.enrolmentService.deleteDocument(this.enrolment.id, doc.id).subscribe({
+  onDelete(documentId: string): void {
+    this.enrolmentService.deleteDocument(this.enrolment.id, documentId).subscribe({
       next: () => {
         this.notificationService.success('Document deleted.');
         this.changed.emit();

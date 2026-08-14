@@ -1,5 +1,9 @@
+/* p-table's own [scrollable] mode now owns horizontal/vertical scrolling (sticky
+   header, scrollbars docked to a fixed-height viewport instead of trailing behind
+   every row) — this wrapper just guards against it ever exceeding its parent's
+   width, it's no longer the active scroll container. */
 .table-responsive {
-  overflow-x: auto;
+  max-width: 100%;
 }
 
 /* Toolbar (search + filters row) */
@@ -28,51 +32,81 @@
   box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.15);
 }
 
-/* Table */
-.table-responsive table {
-  font-size: 0.9rem;
-  margin-bottom: 0;
+/* The prime-preset.ts padding tokens for headerCell/bodyCell are correct but silently
+   lose to Bootstrap's own unlayered th/td padding reset (same root cause as the
+   gridlines bug — unlayered CSS always beats layered CSS regardless of specificity).
+   Overriding directly here instead, on equal (unlayered) footing with Bootstrap. */
+::ng-deep .p-datatable-thead > tr > th {
+  padding: 0.85rem 1rem !important;
+}
+/* A bold border under the whole header row for definition, distinct from the
+   thin, uniform gridlines used elsewhere in the table. */
+::ng-deep .p-datatable-thead > tr {
+  border-bottom: 2px solid var(--color-navy-900);
+}
+::ng-deep .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem !important;
 }
 
-.table-responsive thead th {
-  background-color: var(--color-navy-900);
-  color: #fff;
-  font-weight: 600;
-  border-bottom: none;
-  padding: 0.75rem 1rem;
-  white-space: nowrap;
+/* PrimeNG's table cells default to non-wrapping text with no fixed column widths —
+   long values (e.g. a comment) push their column wider instead of wrapping, which
+   visually runs into neighboring columns. This reaches into p-table's own rendered
+   DOM (::ng-deep), since there's no design token for text-wrapping behavior.
+   word-break: normal (not break-word) so it only wraps at spaces — break-word was
+   splitting names mid-letter ("Rodrigu"/"ez") in narrow columns. overflow-wrap is
+   the fallback for the rare single token that's wider than the column itself. */
+::ng-deep .p-datatable-tbody > tr > td {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
-.table-responsive thead th:first-child {
-  border-top-left-radius: 8px;
+/* Keep rendered cell content inside its column. Deliberately no max-height/overflow
+   here: capping it put a tiny scrollbar inside every dense cell, which looked worse
+   than a tall row. Column width is handled by minWidth + priority instead. */
+::ng-deep .p-datatable-tbody > tr > td > * {
+  max-width: 100%;
 }
 
-.table-responsive thead th:last-child {
-  border-top-right-radius: 8px;
-}
-
-.table-responsive tbody td {
-  padding: 0.65rem 1rem;
-  vertical-align: middle;
-}
-
-.table-responsive tbody tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.015);
-}
-
-.table-responsive tbody tr:hover {
-  background-color: rgba(12, 78, 131, 0.05);
-}
-
-/* Row action buttons */
+/* Row action buttons — a grid instead of flex-wrap so 3+ buttons land in even
+   rows/columns (e.g. a clean 2x2) instead of wrapping unevenly (3 then 1 alone).
+   Each button sized to its own content via auto-fit rather than a fixed count, so
+   this still looks right whether a table has 2 actions or 5. */
 .row-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   gap: 0.4rem;
+  justify-items: stretch;
+}
+.row-actions > * {
   justify-content: center;
-  flex-wrap: wrap;
 }
 
-/* Alignment helpers */
+/* Responsive column hiding — set hideOnLaptop / hideOnTablet / hideOnMobile per
+   column in the consumer's `columns` array so the table keeps fitting instead of
+   forcing a sideways scroll. A column that sets none is always shown, so any table
+   that hasn't opted in behaves exactly as it did before. These are max-width rules,
+   so each tier automatically covers every smaller one.
+   !important because Bootstrap's own unlayered table rules would otherwise win. */
+@media (max-width: 1599.98px) {
+  :host ::ng-deep .col-hide-laptop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  :host ::ng-deep .col-hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  :host ::ng-deep .col-hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Alignment helpers (still used via col.className) */
 .text-center {
   text-align: center !important;
 }
@@ -81,22 +115,4 @@
 }
 .text-start {
   text-align: left !important;
-}
-
-/* Pager */
-.data-table-pager {
-  padding-top: 0.75rem;
-}
-
-.data-table-pager .page-link {
-  color: var(--color-navy-900);
-  border-color: var(--color-border);
-}
-
-.data-table-pager .page-item.disabled .page-link {
-  color: var(--color-muted);
-}
-
-.data-table-pager .page-link:hover {
-  background-color: rgba(12, 78, 131, 0.08);
 }

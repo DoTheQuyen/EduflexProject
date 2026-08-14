@@ -153,9 +153,13 @@ export class FinanceTabComponent implements OnChanges {
     return months.length > 0 ? months.join(', ') : '—';
   }
 
+  // Was totalCommission / every claim ever created (including already-Invoiced/Paid
+  // and Skipped ones) — so adding a manual claim after some claims were already
+  // fulfilled suggested the full commission again instead of what's actually left.
+  // Now: what's still outstanding, split across only the claims still open to invoice.
   get suggestedClaimAmount(): number {
-    const count = this.record.invoicePlan.length || 1;
-    return this.totalCommission / count;
+    const openCount = this.record.invoicePlan.filter(e => e.status === 'Planned').length || 1;
+    return this.outstanding / openCount;
   }
 
   claimLabel(entry: InvoicePlanEntry): string {

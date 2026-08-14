@@ -52,7 +52,7 @@ export class DepartmentManagementComponent implements OnInit {
 
   columns: DataTableColumn<Department>[] = [
     { field: 'name', title: 'Name' },
-    { field: 'description', title: 'Description' },
+    { field: 'description', title: 'Description', hideOnLaptop: true },
     {
       field: 'parentDepartmentId',
       title: 'Parent',
@@ -167,6 +167,11 @@ export class DepartmentManagementComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadDepartments();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadDepartments();
   }
 

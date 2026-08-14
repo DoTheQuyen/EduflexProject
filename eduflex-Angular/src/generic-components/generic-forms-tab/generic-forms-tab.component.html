@@ -1,0 +1,140 @@
+<div class="forms-tab">
+  <div class="forms-tab-head">
+    <p class="text-muted mb-0" *ngIf="sortedResponses.length === 0">No forms have been requested yet.</p>
+    <div class="ms-auto" *ngIf="canManage">
+      <button type="button" class="btn btn-primary btn-sm" [disabled]="busy" (click)="openRequestPicker()">
+        <i class="fas fa-paper-plane me-1"></i>Request a form
+      </button>
+    </div>
+  </div>
+
+  <div class="scope-tabs" *ngIf="sortedResponses.length > 0">
+    <button type="button" class="scope-tab" [class.active]="scope === 'active'" (click)="switchScope('active')">
+      Active <span class="scope-count">{{ activeResponses.length }}</span>
+    </button>
+    <button type="button" class="scope-tab" [class.active]="scope === 'archived'" (click)="switchScope('archived')">
+      Archived <span class="scope-count">{{ archivedResponses.length }}</span>
+    </button>
+  </div>
+
+  <div class="subtab-bar" *ngIf="visibleResponses.length > 0">
+    <button type="button" class="subtab-btn" *ngFor="let r of visibleResponses"
+      [class.active]="r.id === selectedResponseId" (click)="selectResponse(r.id)">
+      {{ r.formName }}
+      <span class="badge-pill" [ngClass]="statusBadgeClass(r)">{{ r.status }}</span>
+    </button>
+  </div>
+
+  <p class="text-muted small" *ngIf="sortedResponses.length > 0 && visibleResponses.length === 0">
+    {{ scope === 'active' ? 'No active form requests.' : 'No archived form requests.' }}
+  </p>
+
+  <ng-container *ngIf="currentResponse as response">
+    <div class="response-layout">
+      <div class="response-main">
+        <div *ngIf="editingResponseId !== response.id">
+          <app-form-print-preview [formName]="response.formName" [questions]="response.questionsSnapshot"
+            [answers]="response.answers" [submittedAt]="response.submittedAt" [studentName]="contactName"
+            [studentEmail]="contactEmail" [studentPhone]="contactMobile" mode="filled">
+          </app-form-print-preview>
+        </div>
+
+        <div class="card border shadow-sm" *ngIf="editingResponseId === response.id">
+          <div class="card-body">
+            <h6 class="mb-3">Editing answers</h6>
+            <app-form-answer-editor [questions]="response.questionsSnapshot"
+              [answers]="editAnswers"></app-form-answer-editor>
+            <div class="d-flex gap-2 mt-3">
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelEditResponse()"
+                [disabled]="busy">Cancel</button>
+              <button type="button" class="btn btn-primary" (click)="saveEditResponse(false)" [disabled]="busy">
+                {{ allowStaffSubmit ? 'Save draft' : (busy ? 'Saving...' : 'Save changes') }}
+              </button>
+              <button type="button" class="btn btn-success" *ngIf="allowStaffSubmit"
+                (click)="saveEditResponse(true)" [disabled]="busy">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="response-side">
+        <div class="side-card">
+          <h6>Request details</h6>
+          <div class="meta-line"><span>Status</span><span class="badge-pill" [ngClass]="statusBadgeClass(response)">{{
+              response.status }}</span></div>
+          <div class="meta-line"><span>Requested</span><strong>{{ formatDate(response.requestedAt) }} · {{
+              response.requestedByName }}</strong></div>
+          <div class="meta-line" *ngIf="response.submittedAt"><span>Submitted</span><strong>{{
+              formatDate(response.submittedAt) }}</strong></div>
+          <div class="meta-line" *ngIf="response.withdrawnAt"><span>Withdrawn</span><strong>{{
+              formatDate(response.withdrawnAt) }}</strong></div>
+          <div class="meta-line" *ngIf="response.boundStepKey"><span>Bound step</span><strong>{{ response.boundStepKey
+              }}</strong></div>
+        </div>
+
+        <div class="side-card" *ngIf="canManage">
+          <h6>Staff actions</h6>
+          <div class="d-flex flex-column gap-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="response.exportedDocumentId"
+              [disabled]="busy" (click)="openLatestDocument(response)">
+              View saved PDF (in Documents)
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="busy"
+              (click)="exportResponsePdf(response)">
+              Export PDF
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="editingResponseId !== response.id"
+              [disabled]="busy" (click)="startEditResponse(response)">
+              Edit response
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="response.status === 'Responded'"
+              [disabled]="busy" (click)="askReopen(response)">
+              Allow edit
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm"
+              *ngIf="response.status === 'Requesting' || response.status === 'Draft'" [disabled]="busy"
+              (click)="askWithdraw(response)">
+              Withdraw request
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" *ngIf="response.status === 'Withdrawn'"
+              [disabled]="busy" (click)="askArchive(response)">
+              Archive
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="busy"
+              (click)="openStatusOverride(response)">
+              Change status
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <app-modal *ngIf="pendingConfirm" [title]="confirmTitle" saveLabel="Confirm" [isSaving]="busy"
+    (closeModal)="cancelConfirm()" (cancel)="cancelConfirm()" (save)="runConfirm()">
+    <p class="mb-0">{{ confirmMessage }}</p>
+  </app-modal>
+
+  <app-modal *ngIf="statusOverrideResponse" title="Change form status" saveLabel="Save" [isSaving]="busy"
+    [saveDisabled]="!statusOverrideValue" (closeModal)="cancelStatusOverride()" (cancel)="cancelStatusOverride()"
+    (save)="saveStatusOverride()">
+    <label class="form-label">Status</label>
+    <select class="form-select" [(ngModel)]="statusOverrideValue" [ngModelOptions]="{standalone: true}">
+      <option *ngFor="let s of allStatuses" [value]="s">{{ s }}</option>
+    </select>
+    <p class="text-muted small mt-2 mb-0">Manual override — doesn't validate or regenerate the PDF. Prefer
+      Withdraw/Archive/Allow-edit where they apply; use this to fix a form stuck in the wrong status.</p>
+  </app-modal>
+
+  <app-modal *ngIf="showRequestPicker" title="Request a form" saveLabel="Request" [isSaving]="busy"
+    [saveDisabled]="!templateIdToRequest" (closeModal)="showRequestPicker = false" (cancel)="showRequestPicker = false"
+    (save)="submitRequest()">
+    <label class="form-label">Form</label>
+    <select class="form-select" [(ngModel)]="templateIdToRequest" [ngModelOptions]="{standalone: true}">
+      <option value="">Select a form...</option>
+      <option *ngFor="let t of activeTemplates" [value]="t.id">{{ t.name }}</option>
+    </select>
+  </app-modal>
+</div>

@@ -10,6 +10,16 @@ export interface ModulePermissions {
   reassign?: boolean;
 }
 
+// Tasks has no delete key (tasks are completed/reopened, never deleted) and adds
+// viewAll — the Manager/Admin-only key for the department-scoped All Tasks page — so it
+// doesn't fit the standard ModulePermissions shape.
+export interface TaskPermissions {
+  view: boolean;
+  add: boolean;
+  edit: boolean;
+  viewAll: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -184,6 +194,34 @@ export class AuthHelperService {
     };
   }
 
+  // TODO: switch these string literals to PermissionKey.MigrationCases* once `nswag run`
+  // has been re-run against the updated backend. Full View/Add/Edit/Delete/Reassign set,
+  // same shape as hasEnrolmentsPermission — a MigrationCase is an operational sibling of
+  // Enrolment, not an admin config screen.
+  hasMigrationCasesPermission(): ModulePermissions {
+    return {
+      view: this.hasPermission('MigrationCasesView'),
+      add: this.hasPermission('MigrationCasesAdd'),
+      edit: this.hasPermission('MigrationCasesEdit'),
+      delete: this.hasPermission('MigrationCasesDelete'),
+      reassign: this.hasPermission('MigrationCasesReassign')
+    };
+  }
+
+  // TODO: switch to PermissionKey.VisaProcessTemplatesEdit once `nswag run` has been
+  // re-run against the updated backend. Single flat key, same shape as
+  // hasDynamicFormsPermission — gates both the VISA Process Templates screen and the
+  // Practitioner Tags screen (see docs/09-visa-process-config-module-design.md §C.9).
+  hasVisaProcessTemplatesPermission(): ModulePermissions {
+    const canEdit = this.hasPermission('VisaProcessTemplatesEdit');
+    return {
+      view: canEdit,
+      add: canEdit,
+      edit: canEdit,
+      delete: canEdit
+    };
+  }
+
   // TODO: switch to PermissionKey.EmailTemplatesEdit once `nswag run` has been re-run
   // against the updated backend. Single flat key, same shape as hasDynamicFormsPermission —
   // Email Templates management is admin-only, no separate Add/Delete keys.
@@ -207,6 +245,17 @@ export class AuthHelperService {
       add: canEdit,
       edit: canEdit,
       delete: canEdit
+    };
+  }
+
+  // TODO: switch these string literals to PermissionKey.Tasks* once `nswag run` has
+  // been re-run against the updated backend — same TODO shape as hasDepartmentsPermission.
+  hasTasksPermission(): TaskPermissions {
+    return {
+      view: this.hasPermission('TasksView'),
+      add: this.hasPermission('TasksAdd'),
+      edit: this.hasPermission('TasksEdit'),
+      viewAll: this.hasPermission('TasksViewAll')
     };
   }
 }

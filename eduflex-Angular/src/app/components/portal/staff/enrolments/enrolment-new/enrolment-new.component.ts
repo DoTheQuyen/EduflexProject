@@ -51,6 +51,12 @@ export class EnrolmentNewComponent implements OnInit {
   enquiryId: string | null = null;
   enquiryLabel = '';
 
+  // Set when arriving from Course Search's shortlist ("Start enrolment"), so step 2
+  // can be prefilled with the partner/course the staff member already picked once
+  // the student side of the form is done.
+  private prefillPartnerId: string | null = null;
+  private prefillCourseId: string | null = null;
+
   canSearchStudents = false;
   canCreateStudents = false;
   canEditStudents = false;
@@ -146,6 +152,9 @@ export class EnrolmentNewComponent implements OnInit {
   ngOnInit(): void {
     this.loadPartners();
 
+    this.prefillPartnerId = this.route.snapshot.queryParamMap.get('educationPartnerId');
+    this.prefillCourseId = this.route.snapshot.queryParamMap.get('courseId');
+
     this.enquiryId = this.route.snapshot.queryParamMap.get('enquiryId');
     if (this.enquiryId) {
       this.prefillFromEnquiry(this.enquiryId);
@@ -180,6 +189,11 @@ export class EnrolmentNewComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadStudentResults();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadStudentResults();
   }
 
@@ -445,6 +459,22 @@ export class EnrolmentNewComponent implements OnInit {
     this.duplicateWarning = null;
     this.step = 2;
     this.toggleSameAsHometown();
+    this.applyPrefill();
+  }
+
+  private applyPrefill(): void {
+    if (!this.prefillPartnerId) return;
+
+    this.form.patchValue({ educationPartnerId: this.prefillPartnerId });
+    this.apiClient.byPartner(this.prefillPartnerId).subscribe({
+      next: (courses) => {
+        this.courses = courses;
+        if (this.prefillCourseId && courses.some((c) => c.id === this.prefillCourseId)) {
+          this.form.patchValue({ courseId: this.prefillCourseId });
+        }
+      },
+      error: () => {},
+    });
   }
 
   backToStep1(): void {

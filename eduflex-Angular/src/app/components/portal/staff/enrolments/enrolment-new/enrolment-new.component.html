@@ -24,7 +24,7 @@
           <app-data-table [columns]="searchColumns" [data]="searchResults" [rowActions]="searchRowActions"
             [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
             [showSearch]="true" searchPlaceholder="Search by name, email or mobile..."
-            (searchChange)="onSearchChange($event)" (pageChange)="onPageChange($event)"
+            (search)="onSearchChange($event)" (refresh)="onRefresh()" (pageChange)="onPageChange($event)"
             (actionClick)="onSearchTableAction($event)" tableClass="table table-bordered table-hover mb-0">
           </app-data-table>
           <p *ngIf="!isSearching && searchResults.length === 0" class="text-center text-muted py-3 mb-0">

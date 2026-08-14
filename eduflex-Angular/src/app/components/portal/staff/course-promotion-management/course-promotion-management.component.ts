@@ -18,11 +18,12 @@ import { TablePagerState } from '@generic/data-table/table-pager-state';
 import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 import { NotificationService } from '@services/notification.service';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-course-promotion-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTableComponent],
+  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, Button],
   templateUrl: './course-promotion-management.component.html',
   styleUrls: ['./course-promotion-management.component.css'],
 })
@@ -56,13 +57,14 @@ export class CoursePromotionManagementComponent implements OnInit {
       title: 'Scholarship',
       render: (value) => `<span class="badge bg-warning text-dark">${value}</span>`,
     },
-    { field: 'location', title: 'Location' },
+    { field: 'location', title: 'Location', hideOnTablet: true },
     { field: 'tuition', title: 'Tuition' },
     {
       field: 'expiryDate',
       title: 'Offer ends',
       className: 'text-center',
       formatter: (value) => formatDateTime(value, 'mediumDate'),
+      hideOnLaptop: true,
     },
     {
       field: 'isFeatured',
@@ -72,6 +74,7 @@ export class CoursePromotionManagementComponent implements OnInit {
         value === 'Yes'
           ? `<span class="badge bg-success">Yes</span>`
           : `<span class="badge bg-secondary">No</span>`,
+      hideOnLaptop: true,
     },
     { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
@@ -169,6 +172,12 @@ export class CoursePromotionManagementComponent implements OnInit {
   onFeaturedFilterChange(event: Event): void {
     this.isFeaturedFilter = (event.target as HTMLSelectElement).value;
     this.pager.goToPage(1);
+    this.loadPromotions();
+  }
+
+  onRefresh(): void {
+    this.isFeaturedFilter = 'all';
+    this.pager.search('');
     this.loadPromotions();
   }
 

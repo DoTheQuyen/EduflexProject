@@ -1,5 +1,3 @@
-<div class="app-notification" [ngClass]="'app-notification-' + type" *ngIf="message">
-  <i class="fas" [ngClass]="iconClass"></i>
-  <span>{{ message }}</span>
-  <button *ngIf="dismissible" type="button" class="app-notification-close" (click)="dismissed.emit()" aria-label="Dismiss">&times;</button>
-</div>
+<p-message *ngIf="message" [severity]="severity" [closable]="dismissible" (onClose)="dismissed.emit()">
+  {{ message }}
+</p-message>

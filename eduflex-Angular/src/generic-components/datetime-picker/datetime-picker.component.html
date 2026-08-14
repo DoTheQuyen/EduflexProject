@@ -1,12 +1,16 @@
 <div class="mb-0">
   <label *ngIf="label" class="form-label">{{ label }}<span *ngIf="required" class="text-danger"> *</span></label>
-  <input
-    [type]="inputType"
-    class="form-control"
-    [value]="value"
-    [min]="min"
-    [max]="max"
+  <p-datepicker
+    [ngModel]="dateValue"
+    (ngModelChange)="onModelChange($event)"
+    [showTime]="showTime"
+    [timeOnly]="timeOnly"
+    [dateFormat]="dateFormat"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
     [disabled]="disabled"
-    (input)="onInput($event)"
-    (blur)="onBlur()">
+    [showIcon]="true"
+    (onBlur)="onBlur()"
+    styleClass="w-100"
+  />
 </div>

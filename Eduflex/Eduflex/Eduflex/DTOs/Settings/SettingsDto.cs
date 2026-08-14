@@ -12,5 +12,6 @@ namespace Eduflex.DTOs.Settings
         public string ChatSystemPrompt { get; set; } = string.Empty;
         public string ChatApiUrl { get; set; } = string.Empty;
         public string ChatGroqApiUrl { get; set; } = string.Empty;
+        public string ChatOpenRouterApiUrl { get; set; } = string.Empty;
     }
 }

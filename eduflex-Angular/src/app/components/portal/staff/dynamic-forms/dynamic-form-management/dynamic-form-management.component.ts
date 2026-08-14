@@ -39,6 +39,7 @@ export class DynamicFormManagementComponent implements OnInit {
       title: 'Questions',
       className: 'text-center',
       formatter: (_value, row: DynamicFormTemplate) => row.questions.length,
+      hideOnLaptop: true,
     },
     // Named 'statusBadge' rather than 'status' to avoid the data-table's built-in
     // status-column special-casing (hardcoded to Application-module status strings) —

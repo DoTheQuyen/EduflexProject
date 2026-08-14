@@ -5,9 +5,12 @@ import {
   AfterViewChecked,
   Inject,
   PLATFORM_ID,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Client, AskQuestionDto } from '@services/content.services';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -19,12 +22,13 @@ interface ChatMessage {
 @Component({
   selector: 'app-chat-widget',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './chat-widget.component.html',
   styleUrls: ['./chat-widget.component.css'],
 })
 export class ChatWidgetComponent implements AfterViewChecked {
   @ViewChild('messagesEnd') messagesEnd?: ElementRef<HTMLDivElement>;
+  @Output() contactStaff = new EventEmitter<void>();
 
   isOpen = false;
   isSending = false;
@@ -37,15 +41,18 @@ export class ChatWidgetComponent implements AfterViewChecked {
   questionsAskedToday = 0;
   private shouldScrollToBottom = false;
 
-  faqQuestions: string[] = [
-    'What is the difference between a 189 and 190 visa?',
-    'How long does a 485 Temporary Graduate visa last?',
-    'What is a 491 visa?',
-    'Do I need an IELTS score for a skilled visa?',
-  ];
+  get faqQuestions(): string[] {
+    return [
+      this.translate.instant('CHAT.FAQ1'),
+      this.translate.instant('CHAT.FAQ2'),
+      this.translate.instant('CHAT.FAQ3'),
+      this.translate.instant('CHAT.FAQ4'),
+    ];
+  }
 
   constructor(
     private apiClient: Client,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) platformId: Object,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -75,7 +82,7 @@ export class ChatWidgetComponent implements AfterViewChecked {
     }
 
     if (this.isLimitReached) {
-      this.errorMessage = `You've reached today's limit of ${this.dailyLimit} questions. Please try again tomorrow.`;
+      this.errorMessage = this.translate.instant('CHAT.LIMIT_REACHED', { limit: this.dailyLimit });
       return;
     }
 
@@ -95,7 +102,7 @@ export class ChatWidgetComponent implements AfterViewChecked {
         this.shouldScrollToBottom = true;
       },
       error: (err) => {
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong. Please try again.');
+        this.errorMessage = extractApiErrorMessage(err, this.translate.instant('CHAT.GENERIC_ERROR'));
         this.isSending = false;
         this.shouldScrollToBottom = true;
       },

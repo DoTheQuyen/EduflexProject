@@ -1,6 +1,6 @@
 <nav
   class="sidebar-nav-3d fixed inset-y-0 left-0 z-[1000] flex h-screen flex-col overflow-y-auto font-sans text-white transition-[width] duration-300 ease-in-out"
-  [class.w-64]="!isCollapsed" [class.w-16]="isCollapsed">
+  [class.w-56]="!isCollapsed" [class.w-16]="isCollapsed">
 
   <!-- Brand -->
   <div class="flex items-center gap-3 border-b border-white/10 px-3 py-2" [class.justify-center]="isCollapsed">
@@ -9,7 +9,7 @@
   </div>
 
   <!-- Toggle + section label, same row -->
-  <div class="flex items-center gap-2 px-3 py-2" [class.justify-center]="isCollapsed">
+  <div class="flex items-center gap-1 px-1 py-1" [class.justify-center]="isCollapsed">
     <button type="button" class="d-btn d-btn-ghost d-btn-sm text-white/90 hover:bg-white/10 hover:text-white"
       (click)="onToggleClick()" aria-label="Toggle sidebar">
       <i class="fas text-sm" [class.fa-angles-left]="!isCollapsed" [class.fa-angles-right]="isCollapsed"></i>
@@ -20,28 +20,36 @@
   </div>
 
   <!-- Menu -->
-  <ul class="flex w-full flex-1 flex-col gap-1 p-1">
+  <ul class="flex w-full flex-1 flex-col gap-1 p-1" *ngIf="(moduleCounts$ | async) as counts">
     <li *ngFor="let item of menuItems">
 
       <!-- Leaf item -->
       <a *ngIf="!item.children" [routerLink]="item.route" routerLinkActive #rla="routerLinkActive"
         [routerLinkActiveOptions]="{ exact: false }"
-        class="flex items-center gap-2 rounded-lg border-0 border-l-2 border-solid p-1 py-1 text-md no-underline! transition-colors"
+        class="flex items-center gap-1 rounded-lg border-0 border-l-2 border-solid px-2 py-1 text-md no-underline! transition-colors"
         [ngClass]="rla.isActive
-          ? 'border-success bg-success/15 font-medium text-white!'
+          ? 'border-accent bg-accent/15 font-medium text-white!'
           : 'border-transparent font-normal text-white/90! hover:bg-white/10 hover:text-white!'"
         [class.justify-center]="isCollapsed">
-        <i class="fas fa-{{item.icon}} w-4 text-center text-[13px]"
-          [ngClass]="rla.isActive ? 'text-success' : 'text-white/90'"></i>
-        <span *ngIf="!isCollapsed">{{ item.title }}</span>
+        <span class="relative inline-flex shrink-0">
+          <i class="fas fa-{{item.icon}} w-4 text-center text-[13px]"
+            [ngClass]="rla.isActive ? 'text-accent' : 'text-white/90'"></i>
+          <span *ngIf="isCollapsed && itemCount(item, counts) > 0" class="sidebar-badge-dot"></span>
+        </span>
+        <span *ngIf="!isCollapsed" class="flex-1">{{ item.title }}</span>
+        <span *ngIf="!isCollapsed && itemCount(item, counts) > 0" class="sidebar-badge">{{ itemCount(item, counts) > 9 ? '9+' : itemCount(item, counts) }}</span>
       </a>
 
       <!-- Group header -->
       <button *ngIf="item.children" type="button"
-        class="flex w-full appearance-none items-center gap-2 rounded-lg border-0 border-l-2 border-solid border-transparent bg-transparent p-1 py-1 text-md font-normal text-white/90! transition-colors hover:bg-white/10 hover:text-white! focus:outline-none"
+        class="flex w-full appearance-none items-center gap-1 rounded-lg border-0 border-l-2 border-solid border-transparent bg-transparent px-2  text-md font-normal text-white/90! transition-colors hover:bg-white/10 hover:text-white! focus:outline-none"
         [class.justify-center]="isCollapsed" (click)="onGroupHeaderClick(item)">
-        <i class="fas fa-{{item.icon}} w-4 text-center text-[13px] text-white/90"></i>
+        <span class="relative inline-flex shrink-0">
+          <i class="fas fa-{{item.icon}} w-4 text-center text-[13px] text-white/90"></i>
+          <span *ngIf="isCollapsed && itemCount(item, counts) > 0" class="sidebar-badge-dot"></span>
+        </span>
         <span *ngIf="!isCollapsed" class="flex-1 text-left">{{ item.title }}</span>
+        <span *ngIf="!isCollapsed && itemCount(item, counts) > 0" class="sidebar-badge">{{ itemCount(item, counts) > 9 ? '9+' : itemCount(item, counts) }}</span>
         <i *ngIf="!isCollapsed" class="fas text-[11px] text-white/50" [class.fa-chevron-down]="item.expanded"
           [class.fa-chevron-right]="!item.expanded"></i>
       </button>
@@ -52,14 +60,15 @@
         <li *ngFor="let child of item.children">
           <a [routerLink]="child.route" routerLinkActive #crla="routerLinkActive"
             [routerLinkActiveOptions]="{ exact: false }"
-            class="flex items-center gap-2 rounded-lg border-0 border-l-2 border-solid p-1 py-1 text-md no-underline! transition-colors"
+            class="flex items-center gap-1 rounded-lg border-0 border-l-2 border-solid px-1 py-1 text-md no-underline! transition-colors"
             [ngClass]="crla.isActive
-              ? 'border-success bg-success/15 font-medium text-white!'
+              ? 'border-accent bg-accent/15 font-medium text-white!'
               : 'border-transparent font-normal text-white/90! hover:bg-white/10 hover:text-white!'"
             [class.justify-center]="isCollapsed">
             <i class="fas fa-{{child.icon}} w-4 text-center text-[13px]"
-              [ngClass]="crla.isActive ? 'text-success' : 'text-white/90'"></i>
-            <span *ngIf="!isCollapsed">{{ child.title }}</span>
+              [ngClass]="crla.isActive ? 'text-accent' : 'text-white/90'"></i>
+            <span *ngIf="!isCollapsed" class="flex-1">{{ child.title }}</span>
+            <span *ngIf="!isCollapsed && itemCount(child, counts) > 0" class="sidebar-badge">{{ itemCount(child, counts) > 9 ? '9+' : itemCount(child, counts) }}</span>
           </a>
         </li>
       </ul>

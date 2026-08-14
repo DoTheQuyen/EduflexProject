@@ -1,12 +1,1 @@
-<div class="card border shadow-sm">
-  <div class="card-header bg-white"><strong>Activity log</strong></div>
-  <div class="card-body">
-    <div class="audit-timeline">
-      <div class="audit-item" *ngFor="let a of enrolment.auditTrail">
-        <div class="audit-when">{{ formatDate(a.performedAt) }}</div>
-        <div class="audit-desc"><strong>{{ a.performedByName }}</strong> — {{ a.description }}</div>
-      </div>
-    </div>
-    <p *ngIf="enrolment.auditTrail.length === 0" class="text-muted text-center py-3 mb-0">No activity recorded yet.</p>
-  </div>
-</div>
+<app-generic-audit-tab [entries]="enrolment.auditTrail"></app-generic-audit-tab>

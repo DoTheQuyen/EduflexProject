@@ -26,6 +26,14 @@
           Course Search
         </button>
       </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'shortlist'"
+          (click)="switchTab('shortlist')">
+          Shortlist
+          <span class="badge-pill badge-pill-accent tab-count-badge" *ngIf="shortlist.length">{{ shortlist.length
+            }}</span>
+        </button>
+      </li>
     </ul>
 
     <!-- Uni tab -->
@@ -102,8 +110,26 @@
               <input type="text" class="form-control" [(ngModel)]="searchFilters.intake"
                 (keyup.enter)="onSearchSubmit()">
             </div>
+            <div class="col-md-3">
+              <label class="form-label">Campus</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.campus"
+                (keyup.enter)="onSearchSubmit()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Study mode</label>
+              <input type="text" class="form-control" [(ngModel)]="searchFilters.studyMode"
+                (keyup.enter)="onSearchSubmit()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Max annual tuition</label>
+              <input type="number" min="0" class="form-control" [(ngModel)]="searchFilters.maxTuition"
+                (keyup.enter)="onSearchSubmit()">
+            </div>
           </div>
           <div class="text-end mt-3">
+            <button type="button" class="btn btn-outline-secondary me-2" [disabled]="isSearching" (click)="onRefresh()">
+              <i class="fas fa-arrows-rotate me-1"></i>Refresh
+            </button>
             <button type="button" class="btn btn-primary" [disabled]="isSearching" (click)="onSearchSubmit()">
               <i class="fas fa-search me-1"></i>Search
             </button>
@@ -119,7 +145,8 @@
 
       <div class="card border shadow-sm" *ngIf="!isSearching">
         <div class="card-body p-0">
-          <app-data-table [columns]="searchColumns" [data]="searchResults" [rowActions]="[]"
+          <app-data-table [columns]="searchColumns" [data]="searchResults" [rowActions]="searchRowActions"
+            (actionClick)="onSearchTableAction($event)"
             [pageNumber]="searchPager.pageNumber" [pageSize]="searchPager.pageSize"
             [totalCount]="searchPager.totalCount" (pageChange)="onSearchPageChange($event)"
             tableClass="table table-bordered table-hover mb-0">
@@ -127,6 +154,92 @@
           <div class="empty-state" *ngIf="hasSearched && searchResults.length === 0">
             <i class="fas fa-magnifying-glass"></i>
             <p class="mb-0">No courses match your search.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shortlist tab -->
+    <div *ngIf="activeTab === 'shortlist'">
+      <div class="empty-state" *ngIf="shortlist.length === 0">
+        <i class="fas fa-layer-group"></i>
+        <p class="mb-1 fw-semibold">Your shortlist is empty</p>
+        <p class="text-muted small mb-0">Add courses from Education Partner or Course Search to compare them here,
+          side by side.</p>
+      </div>
+
+      <div class="card border shadow-sm" *ngIf="shortlist.length">
+        <div class="card-body">
+          <div class="compare-toolbar">
+            <span class="fw-semibold">Comparing {{ shortlist.length }} of {{ shortlistMax }}</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearShortlist()">Clear
+              all</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered compare-table">
+              <thead>
+                <tr>
+                  <th class="compare-row-label"></th>
+                  <th *ngFor="let item of shortlist" class="compare-col-head">
+                    <button type="button" class="compare-remove" (click)="removeFromShortlist(item.courseId)"
+                      title="Remove from shortlist">&times;</button>
+                    <div class="compare-course-name">{{ item.courseName }}</div>
+                    <span class="course-level-tag">{{ courseLevel(item.courseName) }}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="compare-row-label">University</th>
+                  <td *ngFor="let item of shortlist">{{ item.uniName }}</td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Campus</th>
+                  <td *ngFor="let item of shortlist">{{ item.campuses.length ? item.campuses.join(', ') : '—' }}</td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Country</th>
+                  <td *ngFor="let item of shortlist">{{ item.country || '—' }}</td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Intakes</th>
+                  <td *ngFor="let item of shortlist">{{ item.intakes.length ? item.intakes.join(', ') : '—' }}</td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Study mode</th>
+                  <td *ngFor="let item of shortlist">{{ item.studyModes.length ? item.studyModes.join(', ') : '—' }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Duration</th>
+                  <td *ngFor="let item of shortlist" [class.compare-best]="isBestDuration(item)">
+                    {{ item.courseDurationMonths ? item.courseDurationMonths + ' months' : '—' }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Tuition (p.a.)</th>
+                  <td *ngFor="let item of shortlist" class="compare-tuition"
+                    [class.compare-best]="isBestTuition(item)">
+                    {{ item.tuitionCurrency }} {{ item.tuitionFee | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label">Total tuition</th>
+                  <td *ngFor="let item of shortlist" class="compare-tuition">{{ item.tuitionCurrency }}
+                    {{ item.totalTuitionFee | number }}</td>
+                </tr>
+                <tr>
+                  <th class="compare-row-label"></th>
+                  <td *ngFor="let item of shortlist">
+                    <a class="btn btn-sm btn-primary w-100" routerLink="/staff-portal/enrolments/new"
+                      [queryParams]="enrolmentQueryParams(item)">
+                      Start enrolment <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -151,10 +264,8 @@
         title="View">
         <i class="fas fa-eye"></i>
       </a>
-      <button type="button" class="btn btn-sm btn-outline-danger" *ngIf="permissions.delete"
-        (click)="onDeletePartner(partner)" title="Delete">
-        <i class="fas fa-trash"></i>
-      </button>
+      <p-button *ngIf="permissions.delete" icon="fas fa-trash" size="small" severity="danger" [outlined]="true"
+        (onClick)="onDeletePartner(partner)" title="Delete" />
     </div>
   </div>
 
@@ -170,20 +281,37 @@
         </div>
       </div>
 
-      <span class="partner-type-badge badge-pill badge-pill-navy-soft">{{ partner.partnerType }}</span>
+      <!-- <span class="partner-type-badge badge-pill badge-pill-navy-soft">{{ partner.partnerType }}</span>
       <a *ngIf="partner.businessPartnerName" class="badge-pill badge-pill-accent-soft managed-under-badge"
         [routerLink]="['/staff-portal/business-partners', partner.businessPartnerId, 'edit']"
         (click)="$event.stopPropagation()">
         Managed under {{ partner.businessPartnerName }}
       </a>
       <span *ngIf="!partner.businessPartnerName" class="badge-pill badge-pill-navy-soft managed-under-badge">Direct
-        contract</span>
+        contract</span> -->
 
-      <ul class="partner-meta-list">
-        <li><i class="fas fa-location-dot"></i>{{ partner.location }}, {{ partner.country }}</li>
-        <li *ngIf="partner.email"><i class="fas fa-envelope"></i>{{ partner.email }}</li>
-        <li *ngIf="partner.phoneNumber"><i class="fas fa-phone"></i>{{ partner.phoneNumber }}</li>
-      </ul>
+      <div class="partner-stat-row">
+        <div class="partner-stat-tile">
+          <span class="partner-stat-num">{{ getPartnerCampuses(partner).length }}</span>
+          <span class="partner-stat-label">Campuses</span>
+        </div>
+        <div class="partner-stat-tile">
+          <span class="partner-stat-num">{{ partner.intakes?.length || 0 }}</span>
+          <span class="partner-stat-label">Intakes</span>
+        </div>
+        <div class="partner-stat-tile">
+          <span class="partner-stat-num">{{ partner.courses?.length || 0 }}</span>
+          <span class="partner-stat-label">Courses</span>
+        </div>
+      </div>
+
+      <div class="partner-info-campuses" *ngIf="getPartnerCampuses(partner).length">
+        <span class="partner-info-label">Campuses</span>
+        <div class="intake-badges">
+          <span class="campus-badge badge-pill badge-pill-navy-soft" *ngFor="let campus of getPartnerCampuses(partner)">{{
+            campus }}</span>
+        </div>
+      </div>
 
       <div class="partner-info-intakes">
         <span class="partner-info-label">Intakes</span>
@@ -193,30 +321,68 @@
         </div>
       </div>
 
+      <ul class="partner-meta-list">
+        <li><i class="fas fa-location-dot"></i><span>{{ partner.location }}, {{ partner.country }}</span></li>
+      </ul>
+
       <p class="partner-info-description">{{ partner.description }}</p>
+
+      <details class="partner-contact-disclosure" *ngIf="partner.email || partner.phoneNumber">
+        <summary>Contact details</summary>
+        <ul class="partner-meta-list">
+          <li *ngIf="partner.email"><i class="fas fa-envelope"></i><span>{{ partner.email }}</span></li>
+          <li *ngIf="partner.phoneNumber"><i class="fas fa-phone"></i><span>{{ partner.phoneNumber }}</span></li>
+        </ul>
+      </details>
     </div>
 
     <div class="partner-courses-col">
       <div class="partner-courses-header">
         <span class="fw-semibold">Courses</span>
-        <a *ngIf="permissions.add" class="btn btn-sm btn-primary"
+        <div class="partner-level-breakdown" *ngIf="partner.courses?.length">
+          <span class="level-chip" *ngFor="let entry of getLevelBreakdown(partner)">{{ entry.count }} {{ entry.level
+            }}</span>
+        </div>
+        <a *ngIf="permissions.add" class="btn btn-sm btn-primary ms-auto"
           [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']" [queryParams]="{ tab: 'course' }">
           <i class="fas fa-plus me-1"></i>Add Course
         </a>
       </div>
 
+      <div class="partner-course-search" *ngIf="partner.courses?.length">
+        <i class="fas fa-magnifying-glass"></i>
+        <input type="text" placeholder="Filter this partner's courses (name, campus, intake)…"
+          [ngModel]="getCourseFilter(partner.id)" (ngModelChange)="setCourseFilter(partner.id, $event)">
+      </div>
+
       <table class="table table-sm table-hover partner-courses-table mb-0" *ngIf="partner.courses?.length">
         <thead>
           <tr>
+            <th></th>
             <th>Course</th>
+            <th>Campus</th>
             <th>Intakes</th>
             <th class="text-end">Tuition (p.a.)</th>
             <th class="text-end">Total Tuition</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let course of partner.courses">
-            <td class="fw-medium">{{ course.courseName }}</td>
+          <tr *ngFor="let course of getFilteredCourses(partner)">
+            <td>
+              <button type="button" class="btn btn-sm shortlist-toggle-btn"
+                [ngClass]="isShortlisted(course.id) ? 'btn-primary' : 'btn-outline-secondary'"
+                [disabled]="!isShortlisted(course.id) && shortlist.length >= shortlistMax"
+                (click)="toggleShortlistFromPartner(partner, course)">
+                <i class="fas" [ngClass]="isShortlisted(course.id) ? 'fa-check' : 'fa-plus'"></i>
+              </button>
+            </td>
+            <td class="fw-medium">
+              {{ course.courseName }}
+              <span class="course-level-tag">{{ courseLevel(course.courseName) }}</span>
+            </td>
+            <td>
+              <span class="campus-pill" *ngFor="let campus of course.campuses">{{ campus }}</span>
+            </td>
             <td class="text-muted">{{ (course.intakes ?? []).join(', ') }}</td>
             <td class="text-end">
               <span class="tuition-currency">{{ course.tuitionCurrency }}</span>
@@ -229,6 +395,11 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="empty-state empty-state-sm" *ngIf="partner.courses?.length && getFilteredCourses(partner).length === 0">
+        <i class="fas fa-magnifying-glass"></i>
+        <p class="mb-0">No courses match your filter.</p>
+      </div>
 
       <div class="empty-state empty-state-sm" *ngIf="!partner.courses?.length">
         <i class="fas fa-book-open"></i>

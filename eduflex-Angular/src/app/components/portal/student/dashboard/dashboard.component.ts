@@ -10,6 +10,16 @@ import { formatDateTime } from '@app/shared/utils/date-time.util';
 // enrolled them), a new application is allowed again.
 const BLOCKS_NEW_APPLICATION_STATUSES = ['Pending', 'Approved'];
 
+// Steps in the normal application lifecycle, in order — used to render a progress
+// stepper for whichever application is currently active. 'Rejected' is a dead end so it
+// isn't part of this happy-path sequence; the stepper simply isn't shown for it.
+const APPLICATION_JOURNEY_STEPS = ['Pending', 'Approved', 'Studying'];
+const APPLICATION_JOURNEY_LABELS: Record<string, string> = {
+  Pending: 'Submitted',
+  Approved: 'Approved',
+  Studying: 'Enrolled',
+};
+
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
@@ -54,6 +64,29 @@ export class StudentDashboardComponent implements OnInit {
 
   get rejectedCount(): number {
     return this.applications.filter(a => a.status === 'Rejected').length;
+  }
+
+  get greeting(): string {
+    const hour = this.today.getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  // Steps to render for the active application's progress stepper, each flagged with
+  // whether it's already been reached. Empty when there's no active application or it's
+  // off the happy path (e.g. Rejected), so the template can just *ngIf on the length.
+  get journeySteps(): { label: string; reached: boolean; current: boolean }[] {
+    const status = this.activeApplication?.status;
+    if (!status || !APPLICATION_JOURNEY_STEPS.includes(status)) {
+      return [];
+    }
+    const currentIndex = APPLICATION_JOURNEY_STEPS.indexOf(status);
+    return APPLICATION_JOURNEY_STEPS.map((step, i) => ({
+      label: APPLICATION_JOURNEY_LABELS[step],
+      reached: i <= currentIndex,
+      current: i === currentIndex,
+    }));
   }
 
   get recentApplications(): ApplicationDto[] {

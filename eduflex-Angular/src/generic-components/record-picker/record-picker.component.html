@@ -1,0 +1,25 @@
+<app-modal
+  [title]="title"
+  size="lg"
+  [showSave]="false"
+  [showUpdate]="false"
+  [showDelete]="false"
+  cancelLabel="Close"
+  (cancel)="onClose()"
+  (closeModal)="onClose()"
+>
+  <app-data-table
+    [columns]="columns"
+    [data]="results"
+    [rowActions]="rowActions"
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    [totalCount]="totalCount"
+    [showSearch]="true"
+    [searchPlaceholder]="searchPlaceholder"
+    (search)="onSearch($event)"
+    (refresh)="onRefresh()"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onTableAction($event)"
+  ></app-data-table>
+</app-modal>

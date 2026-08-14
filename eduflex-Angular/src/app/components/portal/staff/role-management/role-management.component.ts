@@ -21,6 +21,7 @@ import { NotificationComponent } from '@generic/notification/notification.compon
 import { NotificationService } from '@services/notification.service';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
+import { Button } from 'primeng/button';
 
 interface ModuleGroup {
   moduleName: string;
@@ -52,6 +53,7 @@ const ROLE_TYPE_DESCRIPTIONS: Record<string, string> = {
     DataTableComponent,
     ModalComponent,
     NotificationComponent,
+    Button,
   ],
   templateUrl: './role-management.component.html',
   styleUrls: ['./role-management.component.css'],
@@ -161,6 +163,11 @@ export class RoleManagementComponent implements OnInit {
 
   onSearchChange(term: string): void {
     this.pager.search(term);
+    this.loadRoles();
+  }
+
+  onRefresh(): void {
+    this.pager.search('');
     this.loadRoles();
   }
 

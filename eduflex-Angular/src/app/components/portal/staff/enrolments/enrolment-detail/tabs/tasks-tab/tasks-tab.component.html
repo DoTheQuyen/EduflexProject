@@ -1,0 +1,8 @@
+<app-task-list
+  mode="linked"
+  linkedRecordType="Enrolment"
+  [linkedRecordId]="enrolment.id"
+  [showAddButton]="canAdd"
+  (viewTask)="onViewTask($event)"
+  (addTask)="onAddTask()"
+></app-task-list>

@@ -14042,6 +14042,10 @@
           "chatGroqApiUrl": {
             "type": "string",
             "nullable": true
+          },
+          "chatOpenRouterApiUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14781,6 +14785,10 @@
             "nullable": true
           },
           "chatGroqApiUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatOpenRouterApiUrl": {
             "type": "string",
             "nullable": true
           }

@@ -1,5 +1,3 @@
-import { VisaStepKey } from './enrolment';
-
 export type AnswerType = 'RichText' | 'YesNo' | 'SingleSelect' | 'MultiSelect';
 
 // Shared with the backend's DynamicFormLimits.RichTextAnswerMaxLength (ShareService/
@@ -39,12 +37,19 @@ export interface FormQuestion {
   optionsHorizontal?: boolean;
 }
 
+// boundStepKey is a plain string, not a fixed union — a form template is a shared,
+// module-agnostic catalog entry (see EnrolmentFormResponseModel's reuse directly on
+// MigrationCaseModel.FormResponses), and each module's step keys come from a different
+// source: Enrolment's are the fixed VISA_STEP_ORDER, a Migration Case's are whatever its
+// own VisaProcessTemplate defines. The Enrolment admin UI still offers VISA_STEP_ORDER as
+// autocomplete suggestions (see dynamic-form-edit.component.html), it just no longer
+// restricts the value to that list.
 export interface DynamicFormTemplate {
   id: string;
   name: string;
   description?: string;
   status: TemplateStatus;
-  boundStepKey?: VisaStepKey;
+  boundStepKey?: string;
   questions: FormQuestion[];
 }
 
@@ -52,7 +57,7 @@ export interface SaveDynamicFormTemplateRequest {
   name: string;
   description?: string;
   status: TemplateStatus;
-  boundStepKey?: VisaStepKey | null;
+  boundStepKey?: string | null;
   questions: FormQuestion[];
 }
 
@@ -62,12 +67,15 @@ export interface FormAnswer {
   selectedOptions: string[];
 }
 
+// Mirrors ShareService.Models.Enrolment.EnrolmentFormResponseModel — reused directly for
+// Migration Case's form responses too (MigrationCaseDto.FormResponses), same shape,
+// nothing Enrolment-specific in it beyond the name.
 export interface EnrolmentFormResponse {
   id: string;
   formTemplateId: string;
   formName: string;
   questionsSnapshot: FormQuestion[];
-  boundStepKey?: VisaStepKey;
+  boundStepKey?: string;
   status: FormResponseStatus;
   answers: FormAnswer[];
   requestedByName: string;

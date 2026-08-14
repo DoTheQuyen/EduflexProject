@@ -1,9 +1,17 @@
 .sidebar-nav-3d {
-  background: linear-gradient(135deg, var(--color-navy-700) 0%, color-mix(in srgb, var(--color-navy-700) 50%, var(--color-muted)) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-navy-700) 0%,
+    color-mix(in srgb, var(--color-navy-700) 50%, var(--color-muted)) 100%
+  );
   box-shadow:
     2px 0 8px rgba(0, 0, 0, 0.08),
     inset 1px 0 0 rgba(255, 255, 255, 0.18),
     inset -3px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav-3d ul ul {
+  padding-left: 1.5rem !important;
 }
 
 .logo {
@@ -12,5 +20,32 @@
   object-fit: contain;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--color-error);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sidebar-badge-dot {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--color-error);
+  border: 1.5px solid var(--color-navy-700);
 }

@@ -31,12 +31,17 @@ export class StudentManagementComponent implements OnInit {
   permissions!: ModulePermissions;
 
   columns: DataTableColumn<StudentAccountDto>[] = [
-    { field: 'email', title: 'Email' },
-    { field: 'firstName', title: 'First Name' },
-    { field: 'lastName', title: 'Last Name' },
+    { field: 'email', title: 'Email', hideOnTablet: true },
+    { field: 'firstName', title: 'First Name', className: 'text-center' },
+    { field: 'lastName', title: 'Last Name', className: 'text-center' },
     { field: 'mobile', title: 'Mobile' },
-    { field: 'passportNumber', title: 'Passport No.' },
-    { field: 'isActive', title: 'Active', formatter: (value) => (value ? 'Yes' : 'No') },
+    { field: 'passportNumber', title: 'Passport No.', hideOnLaptop: true },
+    {
+      field: 'isActive',
+      title: 'Active',
+      className: 'text-center',
+      formatter: (value) => (value ? 'Yes' : 'No'),
+    },
     { field: 'actions', title: 'Actions', className: 'text-center' },
   ];
 
@@ -128,6 +133,12 @@ export class StudentManagementComponent implements OnInit {
   onActiveFilterChange(event: Event): void {
     this.activeFilter = (event.target as HTMLSelectElement).value;
     this.pager.goToPage(1);
+    this.loadStudents();
+  }
+
+  onRefresh(): void {
+    this.activeFilter = 'all';
+    this.pager.search('');
     this.loadStudents();
   }
 

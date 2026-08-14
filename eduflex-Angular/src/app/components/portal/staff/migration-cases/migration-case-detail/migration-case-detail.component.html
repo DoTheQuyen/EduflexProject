@@ -1,0 +1,277 @@
+<div class="migration-case-detail-portal">
+  <div class="container-fluid py-1">
+    <button type="button" class="back-link" (click)="goBack()">
+      <span class="back-arrow">&larr;</span> Back
+    </button>
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isLoading && migrationCase as c">
+      <div class="case-header">
+        <div>
+          <h3 class="mb-1">{{ c.primaryContactName }}</h3>
+          <p class="mb-0 text-muted-on-dark">{{ c.templateName }} &middot; {{ c.country }}/{{ c.category }}</p>
+        </div>
+        <div class="case-header-meta">
+          <div><span class="hm-label">Case</span><span class="hm-value">{{ c.caseReference }}</span></div>
+          <div><span class="hm-label">Status</span><span class="badge-pill {{ caseBadge() }}">{{ c.status }}</span></div>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'customer'"
+            (click)="switchTab('customer')">Customer Info</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'process'"
+            (click)="switchTab('process')">Process</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'documents'"
+            (click)="switchTab('documents')">Documents</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'communication'"
+            (click)="switchTab('communication')">Communication</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'forms'"
+            (click)="switchTab('forms')">Forms</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'tasks'"
+            (click)="switchTab('tasks')">Tasks</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'audit'"
+            (click)="switchTab('audit')">Audit Trail</button></li>
+      </ul>
+
+      <!-- ===================== Customer Info tab ===================== -->
+      <div [hidden]="activeTab !== 'customer'" class="card border shadow-sm">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Full name</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.primaryContactName" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Middle name</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.middleName" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Date of birth</label>
+              <input type="date" class="form-control" [(ngModel)]="customerForm.dateOfBirth" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="customerForm.primaryContactEmail" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mobile</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.primaryContactMobile" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Gender</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.gender" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nationality</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.nationality" [disabled]="!canManage" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Passport number</label>
+              <input type="text" class="form-control" [(ngModel)]="customerForm.passportNumber" [disabled]="!canManage" />
+            </div>
+          </div>
+
+          <h6 class="mt-4 mb-2">Hometown address</h6>
+          <div class="row g-2" *ngIf="customerForm.hometownAddress as addr">
+            <div class="col-md-4"><input type="text" class="form-control form-control-sm" placeholder="Street" [(ngModel)]="addr.street" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="Suburb" [(ngModel)]="addr.suburb" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="City" [(ngModel)]="addr.city" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="State" [(ngModel)]="addr.state" [disabled]="!canManage" /></div>
+            <div class="col-md-1"><input type="text" class="form-control form-control-sm" placeholder="Country" [(ngModel)]="addr.country" [disabled]="!canManage" /></div>
+            <div class="col-md-1"><input type="text" class="form-control form-control-sm" placeholder="Postcode" [(ngModel)]="addr.postalCode" [disabled]="!canManage" /></div>
+          </div>
+
+          <h6 class="mt-4 mb-2">Current address</h6>
+          <div class="row g-2" *ngIf="customerForm.currentAddress as addr">
+            <div class="col-md-4"><input type="text" class="form-control form-control-sm" placeholder="Street" [(ngModel)]="addr.street" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="Suburb" [(ngModel)]="addr.suburb" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="City" [(ngModel)]="addr.city" [disabled]="!canManage" /></div>
+            <div class="col-md-2"><input type="text" class="form-control form-control-sm" placeholder="State" [(ngModel)]="addr.state" [disabled]="!canManage" /></div>
+            <div class="col-md-1"><input type="text" class="form-control form-control-sm" placeholder="Country" [(ngModel)]="addr.country" [disabled]="!canManage" /></div>
+            <div class="col-md-1"><input type="text" class="form-control form-control-sm" placeholder="Postcode" [(ngModel)]="addr.postalCode" [disabled]="!canManage" /></div>
+          </div>
+
+          <h6 class="mt-4 mb-2">Emergency contact</h6>
+          <div class="row g-2" *ngIf="customerForm.emergencyContact as ec">
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm" placeholder="Name" [(ngModel)]="ec.name" [disabled]="!canManage" /></div>
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm" placeholder="Relationship" [(ngModel)]="ec.relationship" [disabled]="!canManage" /></div>
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm" placeholder="Phone" [(ngModel)]="ec.phone" [disabled]="!canManage" /></div>
+            <div class="col-md-3"><input type="text" class="form-control form-control-sm" placeholder="Email" [(ngModel)]="ec.email" [disabled]="!canManage" /></div>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-sm mt-4" (click)="saveCustomerInfo()" [disabled]="isSavingCustomer || !canManage">
+            {{ isSavingCustomer ? 'Saving...' : 'Save customer info' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- ===================== Process tab ===================== -->
+      <div [hidden]="activeTab !== 'process'">
+        <div class="legend">
+          <span><span class="status-dot complete"></span> Complete</span>
+          <span><span class="status-dot current"></span> Draft</span>
+          <span><span class="status-dot locked"></span> Locked</span>
+        </div>
+
+        <div class="phase-block" *ngFor="let phase of phases">
+          <div class="phase-label">{{ phase }}</div>
+
+          <div class="step-card" *ngFor="let step of stepsForPhase(phase)" [class.locked]="step.status === 'Locked'">
+            <div class="step-card-head" (click)="toggleStep(step)">
+              <span class="status-dot" [class.complete]="step.status === 'Complete'"
+                [class.current]="step.status === 'Draft'" [class.locked]="step.status === 'Locked'"></span>
+              <div class="step-card-title">
+                <div class="st-name">
+                  {{ step.label }}
+                  <span class="badge-pill {{ stepBadge(step) }}">{{ step.status }}</span>
+                </div>
+                <div class="st-desc" *ngIf="step.description">{{ step.description }}</div>
+              </div>
+            </div>
+
+            <div class="step-card-body" *ngIf="openSteps[step.key]">
+              <div class="field-grid" *ngIf="step.fieldsSnapshot.length">
+                <div class="field-item" *ngFor="let f of step.fieldsSnapshot">
+                  <label>{{ f.label }}<span *ngIf="f.isRequired"> *</span></label>
+
+                  <select *ngIf="f.inputType === 'Select'" class="form-select form-select-sm"
+                    [(ngModel)]="drafts[step.key][f.fieldKey]" [disabled]="!canEditStep(step)">
+                    <option value=""></option>
+                    <option *ngFor="let opt of f.options" [value]="opt">{{ opt }}</option>
+                  </select>
+
+                  <select *ngIf="f.inputType === 'YesNo'" class="form-select form-select-sm"
+                    [(ngModel)]="drafts[step.key][f.fieldKey]" [disabled]="!canEditStep(step)">
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+
+                  <input *ngIf="f.inputType === 'Date'" type="date" class="form-control form-control-sm"
+                    [(ngModel)]="drafts[step.key][f.fieldKey]" [disabled]="!canEditStep(step)" />
+
+                  <input *ngIf="f.inputType === 'Number'" type="number" class="form-control form-control-sm"
+                    [(ngModel)]="drafts[step.key][f.fieldKey]" [disabled]="!canEditStep(step)" />
+
+                  <input *ngIf="f.inputType === 'Text'" type="text" class="form-control form-control-sm"
+                    [(ngModel)]="drafts[step.key][f.fieldKey]" [disabled]="!canEditStep(step)" />
+                </div>
+              </div>
+
+              <div class="evidence-block" *ngFor="let category of step.requiredEvidenceCategoriesSnapshot">
+                <app-document-uploader-zone
+                  [files]="evidenceFor(category)"
+                  [label]="category"
+                  emptyText="No files uploaded yet"
+                  uploadLabel="Upload file"
+                  [canUpload]="canEditStep(step)"
+                  [isUploading]="!!isUploadingEvidence[category]"
+                  (fileSelected)="onEvidenceFileSelected(category, $event)">
+                </app-document-uploader-zone>
+              </div>
+
+              <button type="button" class="tips-toggle" *ngIf="step.hintsSnapshot.length" (click)="toggleTips(step)">
+                <i class="fas fa-lightbulb me-1"></i>Tips from the team ({{ step.hintsSnapshot.length }})
+              </button>
+              <div class="tips-panel" *ngIf="openTips[step.key]">
+                <div class="hint-card" *ngFor="let h of step.hintsSnapshot" [class.pinned]="h.pinned">
+                  <div class="hint-card-head">
+                    <span class="hint-author">
+                      <i class="fas fa-star pin-star" *ngIf="h.pinned"></i>{{ h.authorName || 'Unknown' }}
+                    </span>
+                  </div>
+                  <div class="hint-text">{{ h.text }}</div>
+                </div>
+              </div>
+
+              <div class="step-actions" *ngIf="canEditStep(step)">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="saveDraft(step)"
+                  [disabled]="isSavingStep[step.key]">Save draft</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="completeStep(step)"
+                  [disabled]="isSavingStep[step.key]" *ngIf="step.status !== 'Complete'">Mark complete</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="reopenStep(step)"
+                  *ngIf="step.status === 'Complete' && step.canReopen">Reopen</button>
+              </div>
+              <div class="step-meta" *ngIf="step.status === 'Complete'">
+                Completed by {{ step.completedByName }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== Documents tab ===================== -->
+      <div [hidden]="activeTab !== 'documents'">
+        <app-generic-documents-tab
+          [documents]="c.documents"
+          [categories]="documentCategories"
+          [canManage]="canManage"
+          [isUploading]="isUploadingDocument"
+          introText="Every evidence file uploaded through the Process tab, grouped by category, plus anything uploaded manually below."
+          (fileSelected)="onDocumentFileSelected($event)"
+          (rename)="onDocumentRename($event)"
+          (deleteDocument)="onDocumentDelete($event)">
+        </app-generic-documents-tab>
+      </div>
+
+      <!-- ===================== Communication tab ===================== -->
+      <div [hidden]="activeTab !== 'communication'">
+        <app-generic-communication-tab
+          [communications]="c.communications"
+          [recipientOptions]="communicationRecipientOptions"
+          [documents]="communicationAttachableDocuments"
+          [templates]="templates"
+          [canCompose]="canManage"
+          [isSending]="isSendingCommunication"
+          composeIntro="Compose a message to the primary contact or another party on this case."
+          (send)="onSendCommunication($event)">
+        </app-generic-communication-tab>
+      </div>
+
+      <!-- ===================== Forms tab ===================== -->
+      <div [hidden]="activeTab !== 'forms'">
+        <app-generic-forms-tab
+          [responses]="c.formResponses"
+          [activeTemplates]="activeFormTemplates"
+          [canManage]="canManage"
+          [allowStaffSubmit]="true"
+          [contactName]="c.primaryContactName"
+          [contactEmail]="c.primaryContactEmail ?? ''"
+          [contactMobile]="c.primaryContactMobile ?? ''"
+          [busy]="isFormsBusy"
+          (requestForm)="onRequestMigrationForm($event)"
+          (saveAnswers)="onSaveFormAnswers($event)"
+          (withdraw)="onWithdrawForm($event)"
+          (archive)="onArchiveForm($event)"
+          (reopen)="onReopenForm($event)"
+          (setStatus)="onSetFormStatus($event)"
+          (exportPdf)="onExportFormPdf($event)"
+          (openDocument)="onOpenFormDocument($event)">
+        </app-generic-forms-tab>
+      </div>
+
+      <!-- ===================== Tasks tab ===================== -->
+      <div [hidden]="activeTab !== 'tasks'">
+        <app-task-list
+          mode="linked"
+          linkedRecordType="MigrationCase"
+          [linkedRecordId]="c.id"
+          [showAddButton]="permissions.add"
+          (viewTask)="onViewTask($event)"
+          (addTask)="onAddTask()">
+        </app-task-list>
+      </div>
+
+      <!-- ===================== Audit Trail tab ===================== -->
+      <div [hidden]="activeTab !== 'audit'">
+        <app-generic-audit-tab [entries]="c.auditTrail"></app-generic-audit-tab>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -9,11 +9,9 @@
         </div>
       </div>
       <div class="col-md-6 text-md-end" *ngIf="!isStaffPortal">
-        <button class="btn btn-primary btn-md" [disabled]="hasActiveApplication"
+        <p-button label="New Application" icon="fas fa-plus" [disabled]="hasActiveApplication"
           [title]="hasActiveApplication ? 'Finish or wait on your current application before starting another.' : ''"
-          (click)="onNewApplication()">
-          <i class="fas fa-plus me-2"></i>New Application
-        </button>
+          (onClick)="onNewApplication()" />
       </div>
     </div>
 
@@ -44,7 +42,7 @@
 
         <!-- Applications Table -->
         <div *ngIf="!isLoading" class="card border shadow-sm">
-          <div class="card-header bg-white py-3">
+          <div class="card-header bg-white py-2">
             <div class="row align-items-center">
               <div class="col-md-6">
                 <h5 class="card-title mb-0">My Applications</h5>
@@ -55,16 +53,18 @@
                     <span class="input-group-text bg-transparent">
                       <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" class="form-control" placeholder="Search applications..."
+                    <input type="text" class="form-control" placeholder="Search applications..." [value]="searchTerm"
                       (input)="onSearchChange($event)">
                   </div>
-                  <select class="form-select" style="width: auto;" (change)="onStatusFilterChange($event)">
+                  <select class="form-select" style="width: auto;" [value]="statusFilter"
+                    (change)="onStatusFilterChange($event)">
                     <option value="all">All Status</option>
                     <option value="Pending">Pending</option>
                     <option value="Approved">Approved</option>
                     <option value="Rejected">Rejected</option>
                     <option value="Studying">Studying</option>
                   </select>
+                  <p-button icon="fas fa-arrows-rotate" severity="secondary" [outlined]="true" title="Refresh" (onClick)="onRefresh()" />
                 </div>
               </div>
             </div>

@@ -26,8 +26,8 @@
           <div class="card-body p-0">
             <app-data-table [columns]="columns" [data]="departments" [rowActions]="rowActions"
               [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
-              [showSearch]="true" searchPlaceholder="Search department name..." (searchChange)="onSearchChange($event)"
-              (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
+              [showSearch]="true" searchPlaceholder="Search department name..." (search)="onSearchChange($event)"
+              (refresh)="onRefresh()" (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">
             </app-data-table>
             <p *ngIf="!isLoading && departments.length === 0" class="text-center text-muted py-4 mb-0">

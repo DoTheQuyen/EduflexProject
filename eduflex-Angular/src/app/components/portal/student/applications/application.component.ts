@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { DataTableComponent } from '@generic/data-table/data-table.component';
+import { Button } from 'primeng/button';
 import {
   DataTableColumn,
   DataTableAction,
@@ -25,7 +26,7 @@ const BLOCKS_NEW_APPLICATION_STATUSES = ['Pending', 'Approved'];
 @Component({
   selector: 'app-student-portal',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, DataTableComponent],
+  imports: [CommonModule, RouterModule, FormsModule, DataTableComponent, Button],
   templateUrl: './application.component.html',
 })
 export class ApplicationComponent implements OnInit {
@@ -143,6 +144,13 @@ export class ApplicationComponent implements OnInit {
   onStatusFilterChange(event: any): void {
     this.statusFilter = event.target.value;
     this.filterApplications();
+  }
+
+  onRefresh(): void {
+    this.searchTerm = '';
+    this.statusFilter = 'all';
+    this.isLoading = true;
+    this.loadStudentApplications();
   }
 
   onTableAction(event: DataTableAction<ApplicationDto>): void {

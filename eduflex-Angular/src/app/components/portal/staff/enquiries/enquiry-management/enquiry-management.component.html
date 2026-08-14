@@ -43,7 +43,8 @@
               [totalCount]="pager.totalCount"
               [showSearch]="true"
               searchPlaceholder="Search name or email..."
-              (searchChange)="onSearchChange($event)"
+              (search)="onSearchChange($event)"
+              (refresh)="onRefresh()"
               (pageChange)="onPageChange($event)"
               (actionClick)="onTableAction($event)"
               tableClass="table table-bordered table-hover mb-0">

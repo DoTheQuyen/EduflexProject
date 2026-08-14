@@ -26,6 +26,7 @@
         <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'invoice'" (click)="switchTab('invoice')">Invoice</button></li>
         <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'communication'" (click)="switchTab('communication')">Communication</button></li>
         <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'audit'" (click)="switchTab('audit')">Audit Trail</button></li>
+        <li class="nav-item"><button type="button" class="nav-link" [class.active]="activeTab === 'tasks'" (click)="switchTab('tasks')">Tasks</button></li>
       </ul>
 
       <!-- All five tabs stay instantiated ([hidden] rather than *ngIf), matching the
@@ -47,6 +48,7 @@
       </app-financial-communication-tab>
 
       <app-financial-audit-tab [hidden]="activeTab !== 'audit'" [record]="record"></app-financial-audit-tab>
+      <app-financial-tasks-tab [hidden]="activeTab !== 'tasks'" [record]="record"></app-financial-tasks-tab>
     </div>
   </div>
 </div>

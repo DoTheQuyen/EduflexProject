@@ -1,0 +1,78 @@
+/* Matches business-partner-edit.component.css's page/back-link/section-title/
+   field-error conventions, so this page reads as part of the same system rather than
+   a one-off Bootstrap form. */
+.task-new-page {
+  min-height: 100vh;
+  background-color: white;
+  padding-bottom: 2rem;
+}
+
+.task-new-page h2 {
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: var(--color-navy-700);
+  padding: 0;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  display: block;
+}
+
+.back-arrow {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.form-section-title {
+  color: var(--color-navy-900);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.link-picker-chip {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Native datetime-local widgets don't inherit Bootstrap's .form-control sizing well —
+   the built-in calendar/clock icon has its own default padding that clashes with it. */
+input[type='datetime-local'].form-control {
+  padding-right: 0.5rem;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}

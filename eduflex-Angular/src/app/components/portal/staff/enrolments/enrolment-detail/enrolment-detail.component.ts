@@ -15,13 +15,14 @@ import { DocumentsTabComponent } from './tabs/documents-tab/documents-tab.compon
 import { FormsTabComponent } from './tabs/forms-tab/forms-tab.component';
 import { CommunicationTabComponent } from './tabs/communication-tab/communication-tab.component';
 import { AuditTabComponent } from './tabs/audit-tab/audit-tab.component';
+import { EnrolmentTasksTabComponent } from './tabs/tasks-tab/tasks-tab.component';
 
-type EnrolmentTab = 'visa' | 'documents' | 'forms' | 'communication' | 'audit';
+type EnrolmentTab = 'visa' | 'documents' | 'forms' | 'communication' | 'audit' | 'tasks';
 
 @Component({
   selector: 'app-enrolment-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent, VisaProcessTabComponent, DocumentsTabComponent, FormsTabComponent, CommunicationTabComponent, AuditTabComponent],
+  imports: [CommonModule, FormsModule, ModalComponent, VisaProcessTabComponent, DocumentsTabComponent, FormsTabComponent, CommunicationTabComponent, AuditTabComponent, EnrolmentTasksTabComponent],
   templateUrl: './enrolment-detail.component.html',
   styleUrls: ['./enrolment-detail.component.css']
 })
@@ -161,7 +162,7 @@ export class EnrolmentDetailComponent implements OnInit {
   // ----- Reassign -----
 
   openReassignModal(): void {
-    if (!this.permissions.reassign) {
+    if (!this.permissions.reassign && !(this.isOwner && this.permissions.edit)) {
       this.notificationService.error('You do not have permission to reassign enrolments.');
       return;
     }

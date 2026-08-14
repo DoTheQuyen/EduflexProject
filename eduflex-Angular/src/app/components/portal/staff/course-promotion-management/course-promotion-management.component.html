@@ -5,9 +5,7 @@
         <h3 class="mb-2">Manage Course Promotions</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary btn-md" *ngIf="permissions.add" (click)="openAddModal()">
-          <i class="fas fa-plus me-2"></i>Add Course Promotion
-        </button>
+        <p-button *ngIf="permissions.add" label="Add Course Promotion" icon="fas fa-plus" (onClick)="openAddModal()" />
       </div>
     </div>
   </div>
@@ -28,9 +26,9 @@
             <app-data-table [columns]="columns" [data]="promotions" [rowActions]="rowActions"
               [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
               [showSearch]="true" searchPlaceholder="Search course or university..."
-              (searchChange)="onSearchChange($event)" (pageChange)="onPageChange($event)"
+              (search)="onSearchChange($event)" (refresh)="onRefresh()" (pageChange)="onPageChange($event)"
               (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
-              <select tableFilters class="form-select" style="max-width: 180px;"
+              <select tableFilters class="form-select" style="max-width: 180px;" [value]="isFeaturedFilter"
                 (change)="onFeaturedFilterChange($event)">
                 <option value="all">All</option>
                 <option value="true">Featured only</option>
@@ -140,10 +138,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Saving...' : 'Save Course Promotion' }}
-        </button>
+        <p-button label="Cancel" severity="secondary" (onClick)="closeModal()" />
+        <p-button type="submit" [label]="isSubmitting ? 'Saving...' : 'Save Course Promotion'" [loading]="isSubmitting" [disabled]="isSubmitting" />
       </div>
     </form>
   </div>

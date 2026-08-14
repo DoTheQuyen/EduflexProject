@@ -1,18 +1,18 @@
-import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { TableModule } from 'primeng/table';
+import type { TableLazyLoadEvent } from 'primeng/table';
 
 import { DataTableColumn, DataTableAction, DataTableRowAction } from './data-table.models';
 
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TableModule],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css'],
 })
-export class DataTableComponent<T> implements OnDestroy {
+export class DataTableComponent<T> {
   @Input() columns: DataTableColumn<T>[] = [];
   @Input() data: T[] = [];
   @Input() tableClass: string = 'table table-bordered table-hover mb-0';
@@ -27,45 +27,79 @@ export class DataTableComponent<T> implements OnDestroy {
 
   @Input() showSearch = false;
   @Input() searchPlaceholder = 'Search...';
-  @Output() searchChange = new EventEmitter<string>();
+  @Output() search = new EventEmitter<string>();
+  @Output() refresh = new EventEmitter<void>();
 
   @Output() actionClick = new EventEmitter<DataTableAction<T>>();
+  // order: 1 = ascending, -1 = descending (PrimeNG's own SortMeta convention).
+  @Output() sortChange = new EventEmitter<{ field: string; order: number }>();
 
-  private searchInput$ = new Subject<string>();
-  private searchSub: Subscription;
+  private sortField: string | null = null;
+  private sortOrder = 1;
 
-  constructor() {
-    this.searchSub = this.searchInput$
-      .pipe(debounceTime(400), distinctUntilChanged())
-      .subscribe((term) => this.searchChange.emit(term));
+  @ViewChild('searchInputEl') searchInputEl?: ElementRef<HTMLInputElement>;
+
+  onSearchClick(): void {
+    this.search.emit(this.searchInputEl?.nativeElement.value ?? '');
   }
 
-  ngOnDestroy(): void {
-    this.searchSub.unsubscribe();
-  }
-
-  onSearchInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchInput$.next(value);
-  }
-
-  get totalPages(): number {
-    return this.pageSize === 0 ? 0 : Math.ceil(this.totalCount / this.pageSize);
-  }
-
-  get rangeStart(): number {
-    return this.totalCount === 0 ? 0 : (this.pageNumber - 1) * this.pageSize + 1;
-  }
-
-  get rangeEnd(): number {
-    return Math.min(this.pageNumber * this.pageSize, this.totalCount);
-  }
-
-  goToPage(page: number): void {
-    if (page < 1 || page > this.totalPages || page === this.pageNumber) {
-      return;
+  onRefreshClick(): void {
+    if (this.searchInputEl) {
+      this.searchInputEl.nativeElement.value = '';
     }
-    this.pageChange.emit(page);
+    this.refresh.emit();
+  }
+
+  get first(): number {
+    return (this.pageNumber - 1) * this.pageSize;
+  }
+
+  // The table only ever has the current page's rows loaded (server-side paging), so
+  // this sorts what's currently on screen — not the full underlying dataset. That's
+  // the deliberate tradeoff for working, zero-backend-change sorting; a consumer that
+  // wants true full-dataset sorting can still listen to (sortChange) and refetch.
+  get sortedData(): T[] {
+    if (!this.sortField) return this.data;
+    const field = this.sortField;
+    const order = this.sortOrder;
+    return [...this.data].sort((a, b) => {
+      const va = this.getCellData(a, field);
+      const vb = this.getCellData(b, field);
+      if (va === vb) return 0;
+      return va > vb ? order : -order;
+    });
+  }
+
+  onLazyLoad(event: TableLazyLoadEvent): void {
+    const rows = event.rows ?? this.pageSize;
+    const first = event.first ?? 0;
+    const page = rows === 0 ? 1 : Math.floor(first / rows) + 1;
+    if (page !== this.pageNumber) {
+      this.pageChange.emit(page);
+    }
+
+    if (typeof event.sortField === 'string' && event.sortOrder != null) {
+      this.sortField = event.sortField;
+      this.sortOrder = event.sortOrder;
+      this.sortChange.emit({ field: event.sortField, order: event.sortOrder });
+    }
+  }
+
+  // Pairs with the @media rules in data-table.component.css. Widest net wins, since
+  // each tier's max-width already covers every smaller one.
+  hideClass(col: DataTableColumn<T>): string {
+    if (col.hideOnLaptop) return 'col-hide-laptop';
+    if (col.hideOnTablet) return 'col-hide-tablet';
+    if (col.hideOnMobile) return 'col-hide-mobile';
+    return '';
+  }
+
+  isSortable(col: DataTableColumn<T>): boolean {
+    return col.sortable !== false && col.field !== 'actions';
+  }
+
+  fieldName(col: DataTableColumn<T>): string {
+    return String(col.field);
   }
 
   // Nested field accessor

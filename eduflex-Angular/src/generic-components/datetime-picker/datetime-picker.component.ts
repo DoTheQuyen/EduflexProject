@@ -1,13 +1,14 @@
 import { Component, Input, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { DatePicker } from 'primeng/datepicker';
 
 type PickerMode = 'datetime' | 'date' | 'time';
 
 @Component({
   selector: 'app-datetime-picker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, DatePicker],
   templateUrl: './datetime-picker.component.html',
   providers: [
     {
@@ -24,22 +25,34 @@ export class DateTimePickerComponent implements ControlValueAccessor {
   @Input() min?: string;
   @Input() max?: string;
 
-  value = '';
+  dateValue: Date | null = null;
   disabled = false;
 
   private onChange: (value: string | null) => void = () => {};
   private onTouched: () => void = () => {};
 
-  get inputType(): string {
-    switch (this.mode) {
-      case 'date': return 'date';
-      case 'time': return 'time';
-      default: return 'datetime-local';
-    }
+  get showTime(): boolean {
+    return this.mode === 'datetime';
+  }
+
+  get timeOnly(): boolean {
+    return this.mode === 'time';
+  }
+
+  get dateFormat(): string {
+    return 'yy-mm-dd';
+  }
+
+  get minDate(): Date | undefined {
+    return this.min ? this.toDate(this.min) ?? undefined : undefined;
+  }
+
+  get maxDate(): Date | undefined {
+    return this.max ? this.toDate(this.max) ?? undefined : undefined;
   }
 
   writeValue(value: Date | string | null): void {
-    this.value = this.toInputString(value);
+    this.dateValue = this.toDate(value);
   }
 
   registerOnChange(fn: (value: string | null) => void): void {
@@ -54,27 +67,30 @@ export class DateTimePickerComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onInput(event: Event): void {
-    const raw = (event.target as HTMLInputElement).value;
-    this.value = raw;
-    this.onChange(raw || null);
+  onModelChange(value: Date | null): void {
+    this.dateValue = value;
+    this.onChange(this.toOutputString(value));
   }
 
   onBlur(): void {
     this.onTouched();
   }
 
-  private toInputString(value: Date | string | null | undefined): string {
-    if (!value) return '';
+  private toDate(value: Date | string | null | undefined): Date | null {
+    if (!value) return null;
     const date = value instanceof Date ? value : new Date(value);
-    if (isNaN(date.getTime())) return '';
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  private toOutputString(value: Date | null): string | null {
+    if (!value || isNaN(value.getTime())) return null;
 
     const pad = (n: number) => String(n).padStart(2, '0');
-    const y = date.getFullYear();
-    const mo = pad(date.getMonth() + 1);
-    const d = pad(date.getDate());
-    const h = pad(date.getHours());
-    const mi = pad(date.getMinutes());
+    const y = value.getFullYear();
+    const mo = pad(value.getMonth() + 1);
+    const d = pad(value.getDate());
+    const h = pad(value.getHours());
+    const mi = pad(value.getMinutes());
 
     switch (this.mode) {
       case 'date': return `${y}-${mo}-${d}`;

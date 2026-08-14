@@ -2,7 +2,7 @@
   <!-- Welcome banner -->
   <div class="mb-6 rounded-lg bg-gradient-to-br from-navy-900 to-navy-700 px-6 py-8 text-white">
     <p class="text-sm font-medium text-white/70">{{ today | date: 'EEEE, MMMM d, y' }}</p>
-    <h2 class="mt-1 text-lg font-bold">Welcome back, {{ userInfo?.firstName }}</h2>
+    <h2 class="mt-1 text-lg font-bold">{{ greeting }}, {{ userInfo?.firstName }}</h2>
     <p class="mt-1 text-white/80">Student Portal &middot; track your study-abroad applications here.</p>
   </div>
 
@@ -13,17 +13,32 @@
   <ng-container *ngIf="!isLoading">
     <!-- Stat tiles -->
     <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <div class="rounded-lg border border-border bg-white p-5 shadow-sm">
-        <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Total Applications</p>
-        <p class="mt-1 text-2xl font-bold !text-ink">{{ applications.length }}</p>
+      <div class="flex items-center gap-3 rounded-lg border border-border bg-white p-5 shadow-sm">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy-900/10 text-navy-900">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Total Applications</p>
+          <p class="mt-1 text-2xl font-bold !text-ink">{{ applications.length }}</p>
+        </div>
       </div>
-      <div class="rounded-lg border border-border bg-white p-5 shadow-sm">
-        <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Approved</p>
-        <p class="mt-1 text-2xl font-bold text-success">{{ approvedCount }}</p>
+      <div class="flex items-center gap-3 rounded-lg border border-border bg-white p-5 shadow-sm">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-success/10 text-success">
+          <i class="fas fa-circle-check"></i>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Approved</p>
+          <p class="mt-1 text-2xl font-bold text-success">{{ approvedCount }}</p>
+        </div>
       </div>
-      <div class="rounded-lg border border-border bg-white p-5 shadow-sm">
-        <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Rejected</p>
-        <p class="mt-1 text-2xl font-bold text-error">{{ rejectedCount }}</p>
+      <div class="flex items-center gap-3 rounded-lg border border-border bg-white p-5 shadow-sm">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-error/10 text-error">
+          <i class="fas fa-circle-xmark"></i>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide !text-muted">Rejected</p>
+          <p class="mt-1 text-2xl font-bold text-error">{{ rejectedCount }}</p>
+        </div>
       </div>
     </div>
 
@@ -39,6 +54,22 @@
             <span class="badge" [ngClass]="statusBadgeClass(activeApplication.status)">{{ activeApplication.status
               }}</span>
           </div>
+
+          <!-- Progress stepper -->
+          <div *ngIf="journeySteps.length" class="mt-5 flex items-center">
+            <ng-container *ngFor="let step of journeySteps; let last = last; let i = index">
+              <div class="flex flex-col items-center gap-1">
+                <div class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
+                  [ngClass]="step.reached ? 'bg-success text-white' : 'bg-surface !text-muted border border-border'">
+                  <i *ngIf="step.reached && !step.current" class="fas fa-check text-[10px]"></i>
+                  <span *ngIf="!step.reached || step.current">{{ i + 1 }}</span>
+                </div>
+                <span class="text-[11px] font-medium" [ngClass]="step.reached ? '!text-ink' : '!text-muted'">{{ step.label }}</span>
+              </div>
+              <div *ngIf="!last" class="mx-2 mb-4 h-0.5 flex-1" [ngClass]="step.reached ? 'bg-success' : 'bg-border'"></div>
+            </ng-container>
+          </div>
+
           <p class="mt-4 text-xs !text-muted">Applied {{ formatDate(activeApplication.dateApplied) }}</p>
           <a [routerLink]="['/student-portal/application', activeApplication.id]"
             class="btn btn-outline-primary btn-sm mt-4 !no-underline">Continue Application &rarr;</a>
@@ -53,12 +84,35 @@
         </ng-template>
       </div>
 
-      <!-- Rule reminder -->
-      <div class="rounded-lg border border-border bg-white p-6 shadow-sm">
-        <h3 class="font-semibold !text-ink">Application Rule</h3>
-        <p class="mt-2 text-sm !text-muted">You may hold one active application at a time. Once it's
-          <strong>Rejected</strong>, or you're enrolled and <strong>Studying</strong>, you can start another.
-        </p>
+      <!-- Quick links + rule reminder -->
+      <div class="flex flex-col gap-4">
+        <div class="rounded-lg border border-border bg-white p-6 shadow-sm">
+          <h3 class="mb-3 font-semibold !text-ink">Quick Links</h3>
+          <div class="flex flex-col gap-2">
+            <a routerLink="/student-portal/application"
+              class="flex items-center gap-3 rounded-lg px-2 py-2 !text-ink !no-underline hover:bg-surface">
+              <i class="fas fa-clipboard-list w-4 text-center !text-muted"></i>
+              <span class="text-sm">My Applications</span>
+            </a>
+            <a routerLink="/my-courses"
+              class="flex items-center gap-3 rounded-lg px-2 py-2 !text-ink !no-underline hover:bg-surface">
+              <i class="fas fa-book w-4 text-center !text-muted"></i>
+              <span class="text-sm">My Courses</span>
+            </a>
+            <a routerLink="/student-portal/profile"
+              class="flex items-center gap-3 rounded-lg px-2 py-2 !text-ink !no-underline hover:bg-surface">
+              <i class="fas fa-person w-4 text-center !text-muted"></i>
+              <span class="text-sm">My Profile</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-border bg-white p-6 shadow-sm">
+          <h3 class="font-semibold !text-ink">Good to know</h3>
+          <p class="mt-2 text-sm !text-muted">You may hold one active application at a time. Once it's
+            <strong>Rejected</strong>, or you're enrolled and <strong>Studying</strong>, you can start another.
+          </p>
+        </div>
       </div>
     </div>
 

@@ -1,23 +1,46 @@
 <div class="data-table-toolbar d-flex flex-wrap align-items-center gap-2 mb-3" *ngIf="showSearch">
-  <div class="input-group" style="max-width: 320px;">
+  <div class="input-group" style="max-width: 360px;">
     <span class="input-group-text bg-transparent"><i class="fas fa-search text-muted"></i></span>
-    <input type="text" class="form-control" [placeholder]="searchPlaceholder" (input)="onSearchInput($event)">
+    <input #searchInputEl type="text" class="form-control" [placeholder]="searchPlaceholder"
+      (keydown.enter)="onSearchClick()">
+    <button type="button" class="btn btn-outline-secondary" (click)="onSearchClick()">Search</button>
   </div>
   <ng-content select="[tableFilters]"></ng-content>
+  <button type="button" class="btn btn-outline-secondary ms-auto" (click)="onRefreshClick()">
+    <i class="fas fa-arrows-rotate"></i> Refresh
+  </button>
 </div>
 
 <div class="table-responsive">
-  <table [class]="tableClass">
-    <thead>
+  <p-table
+    [value]="sortedData"
+    [lazy]="true"
+    [paginator]="totalCount > pageSize"
+    [rows]="pageSize"
+    [first]="first"
+    [totalRecords]="totalCount"
+    (onLazyLoad)="onLazyLoad($event)"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+    [showGridlines]="true"
+    [resizableColumns]="true"
+    [stripedRows]="true"
+    [scrollable]="true"
+  >
+    <ng-template #header>
       <tr>
-        <th *ngFor="let col of columns" [ngClass]="col.className">
+        <th *ngFor="let col of columns" [ngClass]="[col.className || '', hideClass(col)]"
+          [style.min-width]="col.minWidth || '120px'" pResizableColumn
+          [pSortableColumn]="isSortable(col) ? fieldName(col) : undefined">
           {{ col.title }}
+          <p-sortIcon *ngIf="isSortable(col)" [field]="fieldName(col)" />
         </th>
       </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of data">
-        <td *ngFor="let col of columns" [ngClass]="col.className">
+    </ng-template>
+
+    <ng-template #body let-row>
+      <tr>
+        <td *ngFor="let col of columns" [ngClass]="[col.className || '', hideClass(col)]">
 
           <!-- Status column -->
           <ng-container *ngIf="col.field === 'status'; else notStatus">
@@ -49,25 +72,6 @@
 
         </td>
       </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="data-table-pager d-flex justify-content-between align-items-center" *ngIf="totalCount > 0">
-  <span class="text-muted small">
-    Showing {{ rangeStart }}&ndash;{{ rangeEnd }} of {{ totalCount }}
-  </span>
-  <nav aria-label="Table pagination">
-    <ul class="pagination pagination-sm mb-0">
-      <li class="page-item" [class.disabled]="pageNumber === 1">
-        <button type="button" class="page-link" (click)="goToPage(pageNumber - 1)">Previous</button>
-      </li>
-      <li class="page-item disabled">
-        <span class="page-link">Page {{ pageNumber }} of {{ totalPages }}</span>
-      </li>
-      <li class="page-item" [class.disabled]="pageNumber === totalPages">
-        <button type="button" class="page-link" (click)="goToPage(pageNumber + 1)">Next</button>
-      </li>
-    </ul>
-  </nav>
+    </ng-template>
+  </p-table>
 </div>

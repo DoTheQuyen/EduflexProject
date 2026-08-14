@@ -9,16 +9,18 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--color-navy-900);
   color: white;
   border: none;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
 }
 
 .chat-toggle-btn:hover {
-  background: var(--color-accent-dark);
+  background: var(--color-navy-700);
 }
 
 .chat-panel {
@@ -107,8 +109,17 @@
   justify-content: flex-end;
 }
 
-.chat-bubble {
+.chat-message-content {
+  display: flex;
+  flex-direction: column;
   max-width: 85%;
+}
+
+.chat-message.user .chat-message-content {
+  align-items: flex-end;
+}
+
+.chat-bubble {
   padding: 0.6rem 0.85rem;
   border-radius: var(--radius);
   font-size: 0.85rem;
@@ -124,6 +135,30 @@
 .chat-message.assistant .chat-bubble {
   background: var(--color-surface);
   color: var(--color-ink);
+}
+
+.chat-footer {
+  margin-top: 0.3rem;
+  padding: 0 0.15rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+.chat-disclaimer {
+  display: block;
+}
+
+.chat-signature {
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.chat-signature a {
+  color: var(--color-accent-dark);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .chat-typing {

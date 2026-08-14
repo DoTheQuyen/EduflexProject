@@ -1,39 +1,28 @@
-<div class="modal-backdrop-generic">
-  <div class="modal-panel-generic" [ngClass]="'modal-' + size" (click)="$event.stopPropagation()">
-
+<p-dialog
+  [visible]="true"
+  [modal]="true"
+  [style]="{ width: dialogWidth }"
+  [closable]="false"
+  [closeOnEscape]="false"
+  [dismissableMask]="false"
+>
+  <ng-template #header>
     <div class="modal-header-generic">
       <h5 class="modal-title-generic">{{ title }}</h5>
-      <button type="button" class="modal-close-generic" (click)="onCloseClick()" aria-label="Close">&times;</button>
+      <button type="button" class="modal-close-generic" [disabled]="isSaving" (click)="onCloseClick()" aria-label="Close">&times;</button>
     </div>
+  </ng-template>
 
-    <fieldset [disabled]="isSaving" class="modal-body-generic">
-      <ng-content></ng-content>
-    </fieldset>
+  <fieldset [disabled]="isSaving" class="modal-body-generic">
+    <ng-content></ng-content>
+  </fieldset>
 
+  <ng-template #footer>
     <div class="modal-footer-generic">
-      <button *ngIf="showDelete" type="button" class="btn btn-outline-danger" [disabled]="isSaving" (click)="onDeleteClick()">
-        <i class="fas fa-trash me-1"></i>{{ deleteLabel }}
-      </button>
-      <button *ngIf="showCancel" type="button" class="btn btn-outline-secondary" [disabled]="isSaving" (click)="onCancelClick()">
-        {{ cancelLabel }}
-      </button>
-      <button *ngIf="showUpdate" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="onUpdateClick()">
-        <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>{{ isSaving ? savingLabel : updateLabel }}
-      </button>
-      <button *ngIf="showSave" type="button" class="btn btn-primary" [disabled]="isSaving || saveDisabled" (click)="onSaveClick()">
-        <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>{{ isSaving ? savingLabel : saveLabel }}
-      </button>
+      <p-button *ngIf="showDelete" [label]="deleteLabel" icon="fas fa-trash" severity="danger" [outlined]="true" [disabled]="isSaving" (onClick)="onDeleteClick()" />
+      <p-button *ngIf="showCancel" [label]="cancelLabel" severity="secondary" [disabled]="isSaving" (onClick)="onCancelClick()" />
+      <p-button *ngIf="showUpdate" [label]="isSaving ? savingLabel : updateLabel" [loading]="isSaving" [disabled]="saveDisabled" (onClick)="onUpdateClick()" />
+      <p-button *ngIf="showSave" [label]="isSaving ? savingLabel : saveLabel" [loading]="isSaving" [disabled]="saveDisabled" (onClick)="onSaveClick()" />
     </div>
-
-    <div class="confirm-overlay-generic" *ngIf="pendingAction">
-      <div class="confirm-box-generic">
-        <p class="confirm-message-generic">{{ pendingMessage }}</p>
-        <div class="confirm-actions-generic">
-          <button type="button" class="btn btn-outline-secondary" (click)="cancelPendingAction()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="confirmPendingAction()">OK</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
+  </ng-template>
+</p-dialog>

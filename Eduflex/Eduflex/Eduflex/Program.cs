@@ -126,6 +126,10 @@ builder.Services.Configure<GeminiSettings>(
 builder.Services.Configure<GroqSettings>(
     builder.Configuration.GetSection("Groq"));
 
+//Configure OpenRouter Settings (second fallback provider when both Gemini and Groq are unavailable)
+builder.Services.Configure<OpenRouterSettings>(
+    builder.Configuration.GetSection("OpenRouter"));
+
 // Register MongoDB Client (Singleton - recommended by MongoDB)
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {

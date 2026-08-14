@@ -82,6 +82,11 @@ namespace ShareService.Models.Settings
         // (secret store) is sent as a Bearer header separately, never stored in this document.
         [BsonElement("chatGroqApiUrl")]
         public string ChatGroqApiUrl { get; set; } = "https://api.groq.com/openai/v1/chat/completions";
+
+        // OpenRouter fallback endpoint (used when both Gemini and Groq are unavailable).
+        // OpenRouterSettings.OpenRouterApiKey (secret store) is sent as a Bearer header separately.
+        [BsonElement("chatOpenRouterApiUrl")]
+        public string ChatOpenRouterApiUrl { get; set; } = "https://openrouter.ai/api/v1/chat/completions";
     }
 
     public class DocumentUploadSettings

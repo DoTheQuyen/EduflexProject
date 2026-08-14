@@ -20145,6 +20145,7 @@ export class SettingsDto implements ISettingsDto {
     chatSystemPrompt?: string | undefined;
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
+    chatOpenRouterApiUrl?: string | undefined;
 
     constructor(data?: ISettingsDto) {
         if (data) {
@@ -20167,6 +20168,7 @@ export class SettingsDto implements ISettingsDto {
             this.chatSystemPrompt = _data["chatSystemPrompt"];
             this.chatApiUrl = _data["chatApiUrl"];
             this.chatGroqApiUrl = _data["chatGroqApiUrl"];
+            this.chatOpenRouterApiUrl = _data["chatOpenRouterApiUrl"];
         }
     }
 
@@ -20189,6 +20191,7 @@ export class SettingsDto implements ISettingsDto {
         data["chatSystemPrompt"] = this.chatSystemPrompt;
         data["chatApiUrl"] = this.chatApiUrl;
         data["chatGroqApiUrl"] = this.chatGroqApiUrl;
+        data["chatOpenRouterApiUrl"] = this.chatOpenRouterApiUrl;
         return data;
     }
 }
@@ -20204,6 +20207,7 @@ export interface ISettingsDto {
     chatSystemPrompt?: string | undefined;
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
+    chatOpenRouterApiUrl?: string | undefined;
 }
 
 export class SkipPlanEntryDto implements ISkipPlanEntryDto {
@@ -21453,6 +21457,7 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
     chatSystemPrompt?: string | undefined;
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
+    chatOpenRouterApiUrl?: string | undefined;
 
     constructor(data?: IUpdateSettingsDto) {
         if (data) {
@@ -21475,6 +21480,7 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
             this.chatSystemPrompt = _data["chatSystemPrompt"];
             this.chatApiUrl = _data["chatApiUrl"];
             this.chatGroqApiUrl = _data["chatGroqApiUrl"];
+            this.chatOpenRouterApiUrl = _data["chatOpenRouterApiUrl"];
         }
     }
 
@@ -21497,6 +21503,7 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
         data["chatSystemPrompt"] = this.chatSystemPrompt;
         data["chatApiUrl"] = this.chatApiUrl;
         data["chatGroqApiUrl"] = this.chatGroqApiUrl;
+        data["chatOpenRouterApiUrl"] = this.chatOpenRouterApiUrl;
         return data;
     }
 }
@@ -21512,6 +21519,7 @@ export interface IUpdateSettingsDto {
     chatSystemPrompt?: string | undefined;
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
+    chatOpenRouterApiUrl?: string | undefined;
 }
 
 export class UpdateStudentDto implements IUpdateStudentDto {

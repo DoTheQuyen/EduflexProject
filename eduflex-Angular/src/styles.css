@@ -72,6 +72,38 @@
   --color-muted-on-dark: #c7ceda;
   --color-surface: #f5f6f7;
   --color-border: #dce0e4;
+
+  /* ===== Slate — the public site's page palette, everything below the
+     masthead. The navy/brass tokens above are now scoped to the masthead
+     only (navbar + home hero), which keeps the existing brand entrance
+     intact while the content below reads lighter and less heavy.
+     Deliberately a soft, desaturated blue-grey: navy-900 was rejected as
+     too dark for large surfaces. ===== */
+  --color-slate-900: #26313d; /* body ink on light surfaces */
+  --color-slate-700: #33455c; /* deep accent — links, emphasis, stat figures */
+  --color-slate-500: #4a6483; /* primary accent — buttons, rules, active dots */
+  --color-slate-300: #8fa6be; /* light accent — gradients, pastel CTA panel */
+  --color-slate-100: #e2e9f0; /* tinted chrome — portal sidebar ground (lower) */
+  --color-slate-50: #eef2f7; /* tinted chrome — portal sidebar ground (upper) */
+  --color-slate-muted: #64748b; /* secondary text */
+  --color-slate-surface: #f6f8fa; /* page ground */
+  --color-slate-surface-deep: #ebf0f5; /* alternating band ground */
+  --color-slate-border: #dce3ea;
+  --color-slate-hairline: #c1cfdc;
+
+  /* ===== Type — three families, no more =====
+     Declared inside @theme rather than :root so Tailwind's own font-sans /
+     font-mono / font-display utilities resolve to these stacks. Left in :root
+     they were invisible to Tailwind, and a `font-sans` in a template quietly
+     fell back to Tailwind's default system stack — a fourth family nobody
+     chose. Adding a face means adding it here, which is the point.
+       display — Playfair, headings and pull quotes
+       sans    — Arial, all running text and UI
+       mono    — IBM Plex Mono, eyebrows, figures and pills
+     (Material Icons and Font Awesome are icon fonts, not text faces.) */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
 /* Non-color shared tokens — plain custom properties, not part of Tailwind's
@@ -80,8 +112,21 @@
   --radius: 0.5rem;
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow-md: 0 4px 12px rgba(22, 35, 58, 0.3);
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: Arial, sans-serif;
+  /* Alias. The three faces are defined in @theme above; component CSS refers
+     to running text as --font-body, so this keeps that name working without a
+     second stack existing. */
+  --font-body: var(--font-sans);
+
+  /* Slate surface effects — softer and cooler than --shadow-md (which is
+     tuned for navy) so cards on the light slate ground don't look bruised. */
+  --shadow-card: 0 1px 2px rgba(38, 49, 61, 0.05), 0 8px 22px rgba(38, 49, 61, 0.07);
+  --shadow-lift: 0 12px 28px rgba(38, 49, 61, 0.13);
+  /* The portal sidebar's raised-brass formula, retuned for slate: a top
+     highlight plus an inner bottom shadow so a filled control reads as a
+     physical, slightly domed surface rather than a flat rectangle. */
+  --shine-slate: linear-gradient(150deg, var(--color-slate-500) 0%, var(--color-slate-700) 100%);
+  --shadow-raised: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(30, 45, 65, 0.2),
+    0 4px 10px rgba(30, 45, 65, 0.22);
 }
 
 /* This reset is unlayered, which under CSS Cascade Layers rules means it

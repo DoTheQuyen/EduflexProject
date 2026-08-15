@@ -53,6 +53,7 @@ namespace ShareService.Inject
             //services.AddScoped<IMongoDbContext, MongoDbContext>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAuthentication, Authentication>();
+            services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
             services.AddScoped<IRole, Role>();
             services.AddScoped<IPermissionCatalog, PermissionCatalog>();
             services.AddScoped<IModuleCatalog, ModuleCatalog>();
@@ -80,6 +81,7 @@ namespace ShareService.Inject
             services.AddScoped<IVisaProcessTemplate, VisaProcessTemplate>();
             services.AddScoped<IPractitionerTag, PractitionerTag>();
             services.AddScoped<IMigrationCase, MigrationCase>();
+
 
 
             #endregion

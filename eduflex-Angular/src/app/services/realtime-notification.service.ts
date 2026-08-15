@@ -39,12 +39,11 @@ export class RealtimeNotificationService {
   private moduleCountsSubject = new BehaviorSubject<Record<string, number>>({});
   moduleCounts$ = this.moduleCountsSubject.asObservable();
 
-  // Redis pub/sub is disabled on the backend for now (see NotificationPublisher/Program.cs),
-  // so the SignalR push below never actually receives anything — this interval is what
-  // keeps the list current instead. Drop this once live push is restored, or keep it as a
-  // belt-and-braces fallback; either is fine.
+  // Live push (SignalR) is the primary mechanism now — NotificationPublisher pushes
+  // straight into the hub with no Redis hop. This interval is just a backstop for a
+  // socket that silently dropped without the client noticing (sleep/wake, WiFi handoff).
   private pollSubscription?: Subscription;
-  private readonly pollIntervalMs = 15000;
+  private readonly pollIntervalMs = 120000; // fallback only — live push is real now, this just catches a dropped socket
 
   constructor(
     private authHelper: AuthHelperService,
@@ -70,7 +69,7 @@ export class RealtimeNotificationService {
 
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${environment.apiClientUrl}/hubs/notifications`, {
-        accessTokenFactory: () => this.authHelper.getAuthToken() ?? '',
+        withCredentials: true,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)

@@ -1,17 +1,23 @@
+/* Light sidebar. The dark ground read too heavy beside the new light content
+   pages — and simply lightening it wasn't an option, because the old light
+   active pill converges with a lighter ground (2.0–2.4:1) and stops reading as
+   selected. So the polarity is inverted throughout: pale ground, dark text,
+   and an active row that is now the darkest thing in the column. */
 .sidebar-nav-3d {
-  background: linear-gradient(
-    135deg,
-    var(--color-navy-700) 0%,
-    color-mix(in srgb, var(--color-navy-700) 50%, var(--color-muted)) 100%
-  );
-  box-shadow:
-    2px 0 8px rgba(0, 0, 0, 0.08),
-    inset 1px 0 0 rgba(255, 255, 255, 0.18),
-    inset -3px 0 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, var(--color-slate-50) 0%, var(--color-slate-100) 100%);
+  color: var(--color-slate-900);
+  border-right: 1px solid var(--color-slate-hairline);
+  box-shadow: 2px 0 14px rgba(38, 49, 61, 0.07);
 }
 
 .sidebar-nav-3d ul ul {
-  padding-left: 1.5rem !important;
+  padding-left: 1rem !important;
+}
+
+/* Divider under the brand. Was border-white/10 in the template, which is
+   invisible on a pale ground. */
+.sidebar-brand-divider {
+  border-bottom: 1px solid var(--color-slate-hairline);
 }
 
 .logo {
@@ -20,7 +26,115 @@
   object-fit: contain;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* A white disc on a near-white ground needs an edge to exist at all. */
+  border: 1px solid var(--color-slate-border);
+  box-shadow: 0 2px 6px rgba(38, 49, 61, 0.12);
+}
+
+/* slate-muted is tuned for white content pages; on this tinted ground it only
+   reaches 3.9–4.2:1, so nav text uses slate-700 (8.0–8.7:1) instead. The label
+   still reads as secondary through its size, weight and tracking rather than
+   through a colour that can't carry the contrast. */
+.sidebar-portal-label {
+  color: var(--color-slate-700);
+}
+
+/* Resting icon tile — a soft tint rather than the old debossed dark well,
+   which only made sense sunk into a dark surface. */
+.sidebar-icon-badge {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--color-slate-500) 12%, transparent);
+  color: var(--color-slate-700);
+}
+
+/* Idle row. Colour and hover live here rather than as text-white/90 utilities
+   in the template, so the whole light/dark polarity is decided in one place. */
+.sidebar-item-idle {
+  color: var(--color-slate-700) !important;
+}
+
+.sidebar-item-idle:hover {
+  background: color-mix(in srgb, var(--color-slate-500) 10%, transparent);
+  color: var(--color-slate-900) !important;
+}
+
+/* Active row — now the darkest element in the column, so it separates from the
+   pale ground (5.0:1) instead of competing with it. White label on it is
+   6.1:1, and the raised highlight/shadow pair is kept from the old pill. */
+.sidebar-item-active {
+  background: var(--shine-slate);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 5px rgba(20, 30, 45, 0.25),
+    0 4px 10px rgba(38, 49, 61, 0.28);
+  color: #fff !important;
+}
+
+.sidebar-item-active .sidebar-icon-badge {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.sidebar-group-chevron {
+  color: var(--color-slate-muted);
+}
+
+.sidebar-nav-item {
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.sidebar-nav-item:hover {
+  transform: translateX(3px);
+}
+
+.sidebar-nav-item:focus-visible,
+.sidebar-group-header:focus-visible,
+.sidebar-collapse-btn:focus-visible {
+  /* accent-light is a pale slate — near-invisible on this ground now. */
+  outline: 2px solid var(--color-slate-700);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-nav-item,
+  .sidebar-nav-item:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Collapse toggle — filled slate with a white chevron, matching the active row
+   rather than the old light-pill-on-dark treatment. */
+.sidebar-collapse-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--shine-slate);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 2px 6px rgba(38, 49, 61, 0.28);
+}
+
+.sidebar-collapse-btn:hover {
+  filter: brightness(1.1);
 }
 
 .sidebar-badge {
@@ -37,6 +151,7 @@
   font-size: 0.65rem;
   font-weight: 700;
   line-height: 1;
+  box-shadow: 0 1px 2px rgba(38, 49, 61, 0.3);
 }
 
 .sidebar-badge-dot {
@@ -47,5 +162,6 @@
   height: 0.5rem;
   border-radius: 999px;
   background: var(--color-error);
-  border: 1.5px solid var(--color-navy-700);
+  /* Cut-out ring: matches the ground it sits on, which is now pale. */
+  border: 1.5px solid var(--color-slate-50);
 }

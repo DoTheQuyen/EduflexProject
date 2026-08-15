@@ -3,13 +3,151 @@
    (int). Colors come from the unified brand tokens defined in styles.css. */
 
 /* === Buttons === */
+/* Section eyebrow. Slate is the page palette below the masthead; the one
+   place that still needs brass is the home hero, which overrides this via
+   .hero-eyebrow (it has to use !important to beat the one below). */
 .eyebrow {
-  font-size: 0.9rem;
-  font-weight: 900;
-  letter-spacing: 0.09em;
+  font-family: var(--font-mono);
+  font-size: 1.125rem; /* 0.75rem x 1.5 */
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--color-slate-700) !important;
+}
+
+/* ===== Shared public-site patterns =====
+   These were each duplicated across two to four component stylesheets. They
+   live here so a change to the card rule or the arrow lands everywhere at
+   once. Components still set their own size/padding/margin — those genuinely
+   differ per context — and win on specificity, because Angular's emulated
+   encapsulation adds an attribute selector to component rules. */
+
+/* Ruled card: white surface, hairline border, accent rule along the top.
+   Used by the feedback wall and carousel, About, and the handbook. */
+.card-ruled {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid var(--color-slate-border);
+  border-top: 3px solid var(--color-slate-500);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* Carousel previous/next control. */
+.carousel-arrow {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--color-slate-border);
+  background: white;
+  color: var(--color-slate-700);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.carousel-arrow:hover:not(:disabled) {
+  background: var(--color-slate-500);
+  border-color: var(--color-slate-500);
+  color: white;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* On narrow screens the track is swiped directly, so the arrows are redundant. */
+@media (max-width: 768px) {
+  .carousel-arrow {
+    display: none;
+  }
+}
+
+/* Raised initials avatar, for people with no photo. Sizing is set by the
+   caller so it can match whatever photo dimensions sit beside it. */
+.avatar-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--shine-slate);
+  box-shadow: var(--shadow-raised);
+  color: white;
+  font-family: var(--font-mono);
   font-weight: 600;
-  color: var(--color-accent-dark) !important;
+  font-size: 0.82rem;
+}
+
+/* Inline "read more"/"show less" text toggle. */
+.link-more {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-slate-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-more:hover {
+  color: var(--color-slate-900);
+}
+
+/* Raised icon tile — the portal sidebar's icon treatment, reused on the
+   public site's feature and mission cards. box-sizing is content-box so the
+   width/height stay the icon's own size and the padding forms the tile. */
+.icon-tile {
+  box-sizing: content-box;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0.62rem;
+  border-radius: var(--radius);
+  background: var(--shine-slate);
+  box-shadow: var(--shadow-raised);
+  color: #fff;
+}
+
+/* Pastel closing-CTA panel. */
+.panel-cta {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  border-radius: 14px;
+  padding: 2.75rem 3rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-slate-300) 55%, white) 0%,
+    var(--color-slate-300) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Light catching the panel's top-left corner. */
+.panel-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 100% at 15% 0%, rgba(255, 255, 255, 0.4), transparent 65%);
+  pointer-events: none;
+}
+
+/* Lifts the content above that overlay. */
+.panel-cta > * {
+  position: relative;
 }
 
 .btn {
@@ -17,23 +155,31 @@
   font-weight: 500;
   transition: all 0.2s ease;
 }
+/* Slate directly rather than via the navy tokens. Inside the portal those
+   already resolve to slate, so nothing changes there — but on the public site
+   they still resolved to navy, which left stray navy buttons (the chat send
+   button, for one) in an otherwise slate interface. */
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700));
+  background: var(--shine-slate);
   border: none;
   color: white;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(20, 30, 45, 0.28),
+    0 3px 8px rgba(20, 30, 45, 0.25);
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--color-navy-700), var(--color-navy-900));
+  filter: brightness(1.1);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 .btn-outline-primary {
-  border: 1px solid var(--color-navy-900);
-  color: var(--color-navy-900);
+  border: 1.5px solid var(--color-slate-500);
+  color: var(--color-slate-700);
   background: transparent;
 }
 .btn-outline-primary:hover {
-  background: var(--color-navy-900);
+  background: var(--color-slate-700);
+  border-color: var(--color-slate-700);
   color: white;
 }
 .btn:disabled,

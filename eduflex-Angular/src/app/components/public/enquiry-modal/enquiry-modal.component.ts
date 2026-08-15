@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Client, CreateEnquiryDto, CoursePromotionDto } from '@services/content.services';
@@ -28,6 +28,15 @@ export class EnquiryModalComponent implements AfterViewInit, OnDestroy {
   recaptchaToken = '';
 
   private recaptchaWidgetId: number | null = null;
+
+  /** The backdrop could already be dismissed by clicking it, but not from the
+   *  keyboard — Escape was the missing exit. */
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (!this.isSubmitting) {
+      this.close();
+    }
+  }
   private recaptchaPollHandle: any;
 
   constructor(private fb: FormBuilder, private apiClient: Client) {

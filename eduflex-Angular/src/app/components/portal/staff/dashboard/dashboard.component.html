@@ -1,82 +1,120 @@
 <div class="p-6">
+  @let counts = moduleCounts$ | async;
+
   <!-- Welcome banner -->
-  <div class="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-white px-6 py-6 shadow-sm">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-white px-6 py-6">
     <div>
       <p class="text-sm font-medium !text-muted">{{ today | date: 'EEEE, MMMM d, y' }}</p>
-      <h2 class="mt-1 text-xl font-bold !text-ink">{{ greeting }}, {{ userInfo?.firstName }}</h2>
+      <h2 class="mt-1 !text-xl !font-bold !text-ink">{{ greeting }}, {{ userInfo?.firstName }}</h2>
       <p class="mt-1 text-sm !text-muted">{{ userInfo?.role }} &middot; Eduflex Staff Portal</p>
     </div>
-    <div *ngIf="(moduleCounts$ | async) as bannerCounts" class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium"
-      [ngClass]="totalOpenCount(bannerCounts) > 0 ? 'bg-error/10 text-error' : 'bg-success/10 text-success'">
-      <i class="fas" [ngClass]="totalOpenCount(bannerCounts) > 0 ? 'fa-bell' : 'fa-circle-check'"></i>
-      <ng-container *ngIf="totalOpenCount(bannerCounts) as total">
+    <div *ngIf="counts" role="status" aria-live="polite" class="flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-semibold"
+      [ngClass]="totalOpenCount(counts) > 0 ? 'border-error/30 text-error' : 'border-success/30 text-success'">
+      <i class="fas" aria-hidden="true" [ngClass]="totalOpenCount(counts) > 0 ? 'fa-bell' : 'fa-circle-check'"></i>
+      <ng-container *ngIf="totalOpenCount(counts) as total">
         {{ total }} item{{ total === 1 ? '' : 's' }} need{{ total === 1 ? 's' : '' }} attention
       </ng-container>
-      <ng-container *ngIf="totalOpenCount(bannerCounts) === 0">All caught up</ng-container>
+      <ng-container *ngIf="totalOpenCount(counts) === 0">All caught up</ng-container>
     </div>
   </div>
 
   <!-- At a glance -->
-  <div *ngIf="(moduleCounts$ | async) as counts" class="mb-8">
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide !text-muted">At a Glance</h2>
+  <div class="mb-8">
+    <h2 class="!mb-3 !text-sm !font-semibold uppercase tracking-wide !text-muted">At a Glance</h2>
 
-    <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-      <a *ngFor="let m of modules" [routerLink]="m.route"
-        class="relative flex items-center gap-3 rounded-lg border border-border bg-white p-4 !no-underline shadow-sm transition-shadow hover:shadow-md">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-          [ngClass]="(counts[m.module] ?? 0) > 0 ? 'bg-error/10 text-error' : 'bg-navy-900/10 text-navy-900'">
-          <i class="fas fa-{{m.icon}}"></i>
+    <div class="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <ng-container *ngIf="counts; else tileSkeleton">
+        <a *ngFor="let m of modules" [routerLink]="m.route"
+          class="relative flex flex-col gap-2.5 overflow-hidden rounded-lg border border-border bg-white p-4 !no-underline transition-colors hover:border-navy-900/30">
+          <div class="absolute inset-x-0 top-0 h-[3px]" [ngClass]="(counts[m.module] ?? 0) > 0 ? 'bg-error' : 'bg-border'"></div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-{{m.icon}} text-sm !text-muted" aria-hidden="true"></i>
+            <span class="text-[11px] font-semibold uppercase tracking-wide !text-muted">{{ m.label }}</span>
+          </div>
+          <p class="text-2xl font-bold tabular-nums !text-ink">{{ counts[m.module] ?? 0 }}</p>
+        </a>
+      </ng-container>
+      <ng-template #tileSkeleton>
+        <div *ngFor="let m of modules" class="relative flex flex-col gap-2.5 overflow-hidden rounded-lg border border-border bg-white p-4">
+          <div class="absolute inset-x-0 top-0 h-[3px] bg-border"></div>
+          <div class="h-3 w-20 animate-pulse motion-reduce:animate-none rounded bg-surface"></div>
+          <div class="h-7 w-12 animate-pulse motion-reduce:animate-none rounded bg-surface"></div>
         </div>
-        <div>
-          <p class="text-lg font-bold !text-ink">{{ counts[m.module] ?? 0 }}</p>
-          <p class="text-xs !text-muted">{{ m.label }}</p>
-        </div>
-      </a>
+      </ng-template>
     </div>
 
-    <div class="rounded-lg border border-border bg-white shadow-sm">
-      <div class="border-b border-border px-5 py-3">
-        <h3 class="font-semibold !text-ink">Recent Notifications</h3>
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <!-- Open items by module -->
+      <div class="rounded-lg border border-border bg-white p-5">
+        <h3 class="!mb-4 !text-base !font-semibold !text-ink">Open Items by Module</h3>
+        <div *ngIf="counts; else barSkeleton" class="flex flex-col gap-3.5">
+          <div *ngFor="let m of sortedModules(counts)">
+            <div class="mb-1.5 flex items-baseline justify-between text-sm">
+              <span class="font-medium !text-ink">{{ m.label }}</span>
+              <span class="font-semibold tabular-nums !text-ink">{{ counts[m.module] ?? 0 }}</span>
+            </div>
+            <div class="h-[5px] w-full overflow-hidden rounded-full bg-surface"
+              [title]="m.label + ': ' + (counts[m.module] ?? 0)">
+              <div class="h-full rounded-full bg-accent transition-[width] duration-300"
+                [style.width.%]="((counts[m.module] ?? 0) / maxModuleCount(counts)) * 100"></div>
+            </div>
+          </div>
+        </div>
+        <ng-template #barSkeleton>
+          <div class="flex flex-col gap-3.5">
+            <div *ngFor="let m of modules">
+              <div class="mb-2 h-3 w-24 animate-pulse motion-reduce:animate-none rounded bg-surface"></div>
+              <div class="h-[5px] w-full animate-pulse motion-reduce:animate-none rounded-full bg-surface"></div>
+            </div>
+          </div>
+        </ng-template>
       </div>
 
-      <ul *ngIf="(notifications$ | async) as list" class="max-h-80 divide-y divide-border overflow-y-auto">
-        <li *ngFor="let n of list" class="flex items-start justify-between gap-3 px-5 py-3">
-          <a [routerLink]="moduleRoute(n.module)" class="min-w-0 flex-1 !no-underline">
-            <span
-              class="inline-block rounded-full bg-navy-900/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-navy-900">{{
-              n.module }}</span>
-            <p class="mt-1 text-sm !text-ink">{{ n.summary }}</p>
-          </a>
-          <button type="button" class="shrink-0 !text-muted hover:!text-error" (click)="dismissNotification(n.id, $event)"
-            aria-label="Dismiss notification">
-            <i class="fas fa-times"></i>
-          </button>
-        </li>
-        <li *ngIf="list.length === 0" class="flex flex-col items-center gap-2 px-5 py-8 text-center">
-          <i class="fas fa-circle-check text-2xl text-success"></i>
-          <p class="text-sm font-medium !text-ink">All caught up</p>
-          <p class="text-xs !text-muted">Nothing outstanding right now.</p>
-        </li>
-      </ul>
+      <!-- Recent Notifications -->
+      <div class="lg:col-span-2 rounded-lg border border-border bg-white">
+        <div class="border-b border-border px-5 py-3">
+          <h3 class="!text-base !font-semibold !text-ink">Recent Notifications</h3>
+        </div>
+
+        <ul *ngIf="(notifications$ | async) as list" class="max-h-80 divide-y divide-border overflow-y-auto">
+          <li *ngFor="let n of list" class="flex items-start justify-between gap-3 px-5 py-3">
+            <a [routerLink]="moduleRoute(n.module)" class="flex min-w-0 flex-1 gap-2.5 !no-underline">
+              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-navy-900" aria-hidden="true"></span>
+              <span class="min-w-0">
+                <span class="text-[11px] font-semibold uppercase tracking-wide !text-muted">{{ n.module }}</span>
+                <p class="mt-0.5 text-sm !text-ink">{{ n.summary }}</p>
+              </span>
+            </a>
+            <button type="button"
+              class="-m-2.5 flex h-11 w-11 shrink-0 appearance-none items-center justify-center rounded-full border-0 bg-transparent !text-muted hover:!text-error hover:bg-surface"
+              (click)="dismissNotification(n.id, $event)" aria-label="Dismiss notification">
+              <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+          </li>
+          <li *ngIf="list.length === 0" class="flex flex-col items-center gap-2 px-5 py-8 text-center">
+            <i class="fas fa-circle-check text-2xl text-success" aria-hidden="true"></i>
+            <p class="text-sm font-medium !text-ink">All caught up</p>
+            <p class="text-xs !text-muted">Nothing outstanding right now.</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <!-- Quick access -->
-  <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide !text-muted">Quick Access</h2>
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" *ngIf="(moduleCounts$ | async) as quickCounts">
+  <h2 class="!mb-3 !text-sm !font-semibold uppercase tracking-wide !text-muted">Quick Access</h2>
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
     <a
       *ngFor="let card of cards"
       [routerLink]="card.route"
-      class="relative flex items-start gap-4 rounded-lg border border-border bg-white p-5 !no-underline shadow-sm transition-shadow hover:shadow-md">
-      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-navy-900/10 text-navy-900">
-        <i class="fas fa-{{card.icon}}"></i>
-      </div>
+      class="relative flex items-center gap-3 rounded-lg border border-border bg-white p-4 !no-underline transition-colors hover:border-navy-900/30">
+      <i class="fas fa-{{card.icon}} text-lg text-navy-900" aria-hidden="true"></i>
       <div class="min-w-0 flex-1">
-        <h3 class="font-semibold !text-ink">{{ card.title }}</h3>
-        <p class="mt-1 text-sm !text-muted">{{ card.description }}</p>
+        <h3 class="!text-base !font-semibold !text-ink">{{ card.title }}</h3>
+        <p class="mt-0.5 text-xs !text-muted">{{ card.description }}</p>
       </div>
-      <span *ngIf="cardCount(card, quickCounts) as n"
-        class="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-error px-1.5 text-xs font-bold text-white">{{
+      <span *ngIf="counts && cardCount(card, counts) as n"
+        class="flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-error px-1.5 text-[11px] font-bold tabular-nums text-white">{{
         n > 9 ? '9+' : n }}</span>
     </a>
   </div>

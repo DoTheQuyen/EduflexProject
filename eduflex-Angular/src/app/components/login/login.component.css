@@ -1,28 +1,36 @@
+/* The login card sits between the navbar and footer, so the host supplies the
+   page ground — otherwise the card floated on bare white and the page read as
+   unfinished next to the other public pages. */
+:host {
+  display: block;
+  background: var(--color-slate-surface);
+  padding: 4rem 1.25rem 5rem;
+}
+
+/* Surface, border and top rule come from .card-ruled in theme.css. */
 .login-container {
   max-width: 450px;
-  margin: 4rem auto;
-  padding: 3rem 2.5rem;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--color-border);
-  font-family: 'Arial', sans-serif;
+  margin: 0 auto;
+  padding: 2.75rem 2.5rem;
+  font-family: var(--font-body);
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.25rem;
 }
 
 .login-header h2 {
-  color: var(--color-ink);
-  font-size: 2.2rem;
+  font-family: var(--font-display);
+  color: var(--color-slate-900);
+  font-size: 2rem;
+  line-height: 1.2;
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .login-header p {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 1rem;
   margin-bottom: 0;
 }
@@ -30,42 +38,45 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  position: relative;
 }
 
 .form-group label {
-  color: var(--color-ink);
-  font-weight: 500;
-  font-size: 0.95rem;
-  margin-bottom: 0.25rem;
+  color: var(--color-slate-900);
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-bottom: 0.15rem;
 }
 
 .form-group input {
   width: 100%;
   box-sizing: border-box;
-  padding: 0.875rem 1rem;
-  border: 2px solid var(--color-border);
-  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--color-slate-border);
+  border-radius: var(--radius);
+  font-family: inherit;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  background-color: var(--color-surface);
+  color: var(--color-slate-900);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  background-color: var(--color-slate-surface);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--color-navy-700);
+  border-color: var(--color-slate-500);
   background-color: #ffffff;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-navy-700) 15%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-slate-500) 18%, transparent);
 }
 
 .form-group input::placeholder {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
 }
 
 .password-input-container {
@@ -74,62 +85,76 @@
 }
 
 .password-input-container input {
-  padding-right: 2.75rem;
+  padding-right: 2.9rem;
 }
 
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: color 0.3s ease;
+  /* 44px hit area even though the glyph is small. */
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.toggle-password svg {
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 .toggle-password:hover {
-  color: var(--color-navy-700);
+  color: var(--color-slate-900);
+  background: color-mix(in srgb, var(--color-slate-500) 10%, transparent);
 }
 
+/* Same raised slate treatment as the primary buttons on the public site. */
 .login-button {
-  background: var(--color-accent);
+  background: var(--shine-slate);
+  box-shadow: var(--shadow-raised);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.95rem 2rem;
   border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1.02rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
   margin-top: 0.5rem;
+  min-height: 44px;
 }
 
-.login-button:hover {
-  background: var(--color-accent-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px color-mix(in srgb, var(--color-accent) 30%, transparent);
+.login-button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
 }
 
-.login-button:active {
-  transform: translateY(0);
+.login-button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .login-button:disabled {
-  background: var(--color-muted);
+  background: var(--color-slate-300);
+  box-shadow: none;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
 .form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.25rem 0;
   font-size: 0.9rem;
 }
 
@@ -137,207 +162,190 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
+  cursor: pointer;
 }
 
-.remember-me input[type="checkbox"] {
+.remember-me input[type='checkbox'] {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-navy-700);
+  accent-color: var(--color-slate-500);
 }
 
 .forgot-password {
-  color: var(--color-navy-700);
+  color: var(--color-slate-700);
+  font-weight: 600;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .forgot-password:hover {
-  color: var(--color-navy-900);
+  color: var(--color-slate-900);
   text-decoration: underline;
 }
 
 .error-message {
-  background-color: color-mix(in srgb, var(--color-error) 12%, white);
-  border: 1px solid color-mix(in srgb, var(--color-error) 35%, white);
+  background-color: color-mix(in srgb, var(--color-error) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--color-error) 32%, white);
   color: var(--color-error-dark);
-  padding: 0.875rem 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  font-size: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.5;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
 }
 
 .error-message::before {
-  content: "⚠";
-  font-weight: bold;
+  content: '!';
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: var(--color-error);
+  color: white;
+  font-weight: 700;
+  font-size: 0.72rem;
+  line-height: 1.05rem;
+  text-align: center;
 }
 
 .success-message {
-  background-color: color-mix(in srgb, var(--color-success) 12%, white);
-  border: 1px solid color-mix(in srgb, var(--color-success) 35%, white);
+  background-color: color-mix(in srgb, var(--color-success) 10%, white);
+  border: 1px solid color-mix(in srgb, var(--color-success) 32%, white);
   color: var(--color-success-dark);
-  padding: 0.875rem 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  font-size: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.5;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.5rem;
 }
 
 .success-message::before {
-  content: "✓";
-  font-weight: bold;
+  content: '✓';
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: white;
+  font-weight: 700;
+  font-size: 0.72rem;
+  line-height: 1.05rem;
+  text-align: center;
+}
+
+/* Was nested inside the reduced-motion media query, so invalid fields only
+   turned red for users who had reduced motion enabled. */
+input.error {
+  border-color: var(--color-error) !important;
+  background-color: color-mix(in srgb, var(--color-error) 8%, white) !important;
 }
 
 .loading-spinner {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid #ffffff;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.45);
   border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s ease-in-out infinite;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
   margin-right: 0.5rem;
+  vertical-align: -3px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .login-divider {
   display: flex;
   align-items: center;
   margin: 1.5rem 0;
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 0.9rem;
 }
 
 .login-divider::before,
 .login-divider::after {
-  content: "";
+  content: '';
   flex: 1;
   height: 1px;
-  background-color: var(--color-border);
+  background-color: var(--color-slate-border);
 }
 
 .login-divider span {
   padding: 0 1rem;
 }
 
-.social-login {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.social-button {
-  flex: 1;
-  padding: 0.75rem;
-  border: 2px solid var(--color-border);
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-weight: 500;
-}
-
-.social-button.google {
-  color: #db4437;
-  border-color: var(--color-border);
-}
-
-.social-button.google:hover {
-  background-color: #fce8e6;
-  border-color: #db4437;
-}
-
-.social-button.microsoft {
-  color: #0078d4;
-  border-color: var(--color-border);
-}
-
-.social-button.microsoft:hover {
-  background-color: #e6f3ff;
-  border-color: #0078d4;
-}
-
 .register-link {
   text-align: center;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-muted);
+  border-top: 1px solid var(--color-slate-border);
+  color: var(--color-slate-muted);
 }
 
 .register-link a {
-  color: var(--color-navy-700);
+  color: var(--color-slate-700);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   margin-left: 0.25rem;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 }
 
 .register-link a:hover {
-  color: var(--color-navy-900);
+  color: var(--color-slate-900);
   text-decoration: underline;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
+  :host {
+    padding: 2.5rem 1rem 3.5rem;
+  }
+
   .login-container {
-    margin: 2rem 1rem;
     padding: 2rem 1.5rem;
   }
 
   .login-header h2 {
-    font-size: 1.8rem;
-  }
-
-  .social-login {
-    flex-direction: column;
+    font-size: 1.7rem;
   }
 
   .form-options {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.9rem;
     align-items: flex-start;
   }
 }
 
 @media (max-width: 480px) {
   .login-container {
-    margin: 1rem;
-    padding: 1.5rem;
+    padding: 1.6rem 1.25rem;
   }
 
   .login-header h2 {
-    font-size: 1.6rem;
+    font-size: 1.55rem;
   }
 }
 
-/* Accessibility Improvements */
-.form-group input:focus-visible {
-  outline: 2px solid var(--color-navy-700);
+/* Accessibility */
+.form-group input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-slate-700);
   outline-offset: 2px;
 }
 
-button:focus-visible {
-  outline: 2px solid var(--color-navy-700);
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .login-container {
-    border: 2px solid #000;
+    border: 2px solid var(--color-slate-900);
   }
 
   .form-group input {
@@ -345,47 +353,19 @@ button:focus-visible {
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .login-button,
-  .social-button,
+  .toggle-password,
   .form-group input {
     transition: none;
   }
 
-  .loading-spinner {
-    animation: none;
-    border: 2px solid #ffffff;
-    border-top-color: transparent;
+  .login-button:hover:not(:disabled),
+  .login-button:active:not(:disabled) {
+    transform: none;
   }
 
-  /* Add this to your existing CSS */
-input.error {
-  border-color: var(--color-error) !important;
-  background-color: color-mix(in srgb, var(--color-error) 12%, white) !important;
-}
-
-.form-group {
-  position: relative;
-}
-
-.error-message {
-  background-color: color-mix(in srgb, var(--color-error) 12%, white);
-  border: 1px solid color-mix(in srgb, var(--color-error) 35%, white);
-  color: var(--color-error-dark);
-  padding: 0.5rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.success-message {
-  background-color: color-mix(in srgb, var(--color-success) 12%, white);
-  border: 1px solid color-mix(in srgb, var(--color-success) 35%, white);
-  color: var(--color-success-dark);
-  padding: 0.5rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
+  .loading-spinner {
+    animation: none;
+  }
 }

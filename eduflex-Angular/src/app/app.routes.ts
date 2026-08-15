@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/public/student-handbook/student-handbook.component').then(m => m.StudentHandbookComponent)
   }, // Public student handbook page
   {
+    path: 'feedback',
+    loadComponent: () => import('./components/public/feedback/feedback.component').then(m => m.FeedbackComponent)
+  }, // Public student feedback wall
+  {
     path: 'register',
     loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
   },

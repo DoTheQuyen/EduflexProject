@@ -1,5 +1,5 @@
 section {
-  padding: 4rem 0;
+  padding: 4.5rem 0;
 }
 
 .container {
@@ -8,89 +8,88 @@ section {
   padding: 0 2rem;
 }
 
+/* Colour and type come from theme.css's .eyebrow; only layout is set here. */
 .eyebrow {
-  font-size: 0.8rem;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--color-accent-dark);
   display: block;
   margin-bottom: 0.4rem;
 }
 
-/* Header */
+/* Header — same treatment as the feedback page header, so every public
+   secondary page opens the same way. */
 .about-header {
   text-align: center;
-  padding: 4rem 0 2rem;
-  background: white;
+  padding: 4rem 0 3.25rem;
+  background: var(--color-slate-surface-deep);
+  border-bottom: 1px solid var(--color-slate-border);
 }
 
 .about-header h1 {
-  font-size: 2.5rem;
-  color: var(--color-navy-900);
-  margin: 0.4rem 0 1rem;
+  font-size: clamp(2rem, 3.4vw, 2.5rem);
+  line-height: 1.15;
+  color: var(--color-slate-900);
+  margin: 0.6rem 0 1rem;
+  text-wrap: balance;
 }
 
 .header-sub {
-  font-size: 1.1rem;
-  color: var(--color-muted);
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--color-slate-muted);
   max-width: 60ch;
   margin: 0 auto;
 }
 
 /* Bands */
 .band {
-  background: white;
+  background: var(--color-slate-surface);
 }
 
 .band-head {
   max-width: 60ch;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 2.75rem;
   text-align: center;
 }
 
 .band-head h2 {
   font-size: 1.9rem;
-  color: var(--color-navy-900);
-  margin-top: 0.4rem;
+  color: var(--color-slate-900);
+  margin-top: 0.5rem;
 }
 
 /* Mission / Vision / Values */
 .mission-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: 1.75rem;
+  align-items: stretch;
 }
 
+/* Surface, border and rule come from .card-ruled in theme.css. */
 .mission-card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
   padding: 2rem;
   text-align: center;
-  background: white;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .mission-card:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-slate-500);
+  box-shadow: var(--shadow-lift);
 }
 
+/* Tile itself comes from .icon-tile in theme.css. */
 .mission-icon {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 1rem;
-  color: var(--color-accent);
+  margin: 0 auto 1.1rem;
 }
 
 .mission-card h3 {
-  color: var(--color-ink);
+  color: var(--color-slate-900);
   margin-bottom: 0.75rem;
   font-size: 1.1rem;
 }
 
 .mission-card p {
-  color: var(--color-muted);
-  font-size: 0.9rem;
+  color: var(--color-slate-muted);
+  font-size: 0.92rem;
   line-height: 1.6;
 }
 
@@ -102,29 +101,37 @@ section {
   flex-direction: column;
   gap: 0.6rem;
   text-align: left;
-  color: var(--color-muted);
-  font-size: 0.9rem;
+  color: var(--color-slate-muted);
+  font-size: 0.92rem;
   line-height: 1.6;
+}
+
+.values-list strong {
+  color: var(--color-slate-900);
 }
 
 /* Approach / Steps */
 .approach-band {
-  background: var(--color-surface);
+  background: var(--color-slate-surface-deep);
 }
 
 .step-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
+  align-items: stretch;
 }
 
 .step-card {
   background: white;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-slate-border);
   border-radius: var(--radius);
   padding: 1.5rem;
+  box-shadow: var(--shadow-card);
 }
 
+/* These numbers are a real sequence — step 1 genuinely precedes step 2 — so
+   the numbering carries information rather than just decorating the cards. */
 .step-num {
   display: inline-flex;
   align-items: center;
@@ -132,21 +139,23 @@ section {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--color-navy-900);
+  background: var(--shine-slate);
+  box-shadow: var(--shadow-raised);
   color: white;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
   margin-bottom: 0.9rem;
 }
 
 .step-card h3 {
   font-size: 1rem;
-  color: var(--color-ink);
+  color: var(--color-slate-900);
   margin-bottom: 0.4rem;
 }
 
 .step-card p {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 0.88rem;
   line-height: 1.5;
   margin: 0;
@@ -154,7 +163,7 @@ section {
 
 /* Story */
 .story-band {
-  background: white;
+  background: var(--color-slate-surface);
 }
 
 .story-text {
@@ -165,12 +174,12 @@ section {
 
 .story-text h2 {
   font-size: 1.75rem;
-  color: var(--color-navy-900);
-  margin-top: 0.4rem;
+  color: var(--color-slate-900);
+  margin-top: 0.5rem;
 }
 
 .story-text p {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 1rem;
   margin-top: 1rem;
   line-height: 1.6;
@@ -179,10 +188,10 @@ section {
 .pull-quote {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.2rem;
-  color: var(--color-navy-900);
-  border-left: 2px solid var(--color-accent);
-  padding-left: 1.1rem;
+  font-size: 1.25rem;
+  color: var(--color-slate-900);
+  border-left: 3px solid var(--color-slate-500);
+  padding-left: 1.2rem;
   margin: 1.5rem auto;
   line-height: 1.5;
   text-align: left;
@@ -191,10 +200,10 @@ section {
 
 /* Stats */
 .stats {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: 2.1rem 2rem;
+  background: var(--color-slate-surface-deep);
+  border-top: 1px solid var(--color-slate-border);
+  border-bottom: 1px solid var(--color-slate-border);
+  padding: 2.5rem 2rem;
 }
 
 .stats-grid {
@@ -204,19 +213,21 @@ section {
 }
 
 .stats-grid > div + div {
-  border-left: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-slate-hairline);
 }
 
 .stat-num {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  color: var(--color-navy-900);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 2.3rem;
+  color: var(--color-slate-700);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  margin-top: 0.2rem;
+  font-size: 0.87rem;
+  color: var(--color-slate-muted);
+  margin-top: 0.3rem;
 }
 
 /* Team */
@@ -224,19 +235,24 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
+  align-items: stretch;
 }
 
 .team-member {
+  display: flex;
+  flex-direction: column;
   background: white;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-slate-border);
   border-radius: var(--radius);
   padding: 1rem;
   text-align: center;
-  transition: border-color 0.15s ease;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .team-member:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-slate-500);
+  box-shadow: var(--shadow-lift);
 }
 
 .team-member img {
@@ -245,37 +261,42 @@ section {
   object-fit: cover;
   object-position: top center;
   border-radius: 5%;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
 }
 
 .team-body h3 {
   font-size: 1.2rem;
-  color: var(--color-navy-900);
+  color: var(--color-slate-900);
   margin-bottom: 0.25rem;
 }
 
 .team-body .title {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
 }
 
 .pill {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin-bottom: 0.9rem;
 }
 
+/* Kept the .pill-gold class name so the template needn't change; the colour
+   it carries is now the slate accent like every other pill on the site. */
 .pill-gold {
-  background: rgba(184, 134, 47, 0.12);
-  color: var(--color-accent-dark);
+  background: color-mix(in srgb, var(--color-slate-500) 12%, transparent);
+  color: var(--color-slate-700);
 }
 
 .team-body .bio {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 0.9rem;
   line-height: 1.6;
 }
@@ -287,8 +308,20 @@ section {
   }
   .stats-grid > div + div {
     border-left: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-slate-hairline);
     padding-top: 1rem;
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+  section {
+    padding: 3.25rem 0;
+  }
+  .about-header {
+    padding: 3rem 0 2.5rem;
   }
 }

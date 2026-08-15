@@ -149,6 +149,34 @@ export class SidebarComponent implements OnChanges {
       });
     }
 
+    // Tasks group: My Tasks (every role — assigner/assignee access is the same for
+    // everyone; TaskManagementComponent itself checks TasksView and shows a permission
+    // error) and All Tasks (Manager/Admin only, department-scoped server-side too, see
+    // TaskItemService.SearchAllTasksAsync).
+    const taskChildren: MenuItem[] = [];
+    if (this.authHelper.hasTasksPermission().view) {
+      taskChildren.push({
+        title: 'My Tasks',
+        icon: 'list-check',
+        route: '/staff-portal/my-tasks',
+      });
+    }
+    if (this.authHelper.hasTasksPermission().viewAll) {
+      taskChildren.push({
+        title: 'All Tasks',
+        icon: 'list-check',
+        route: '/staff-portal/tasks',
+      });
+    }
+    if (taskChildren.length) {
+      items.push({
+        title: 'Tasks',
+        icon: 'list-check',
+        children: taskChildren,
+        expanded: false,
+      });
+    }
+
     // Partners group: Education Partners, Business Partners
     const partnersChildren: MenuItem[] = [];
     if (this.authHelper.hasEducationPartnersPermission().view) {
@@ -269,7 +297,7 @@ export class SidebarComponent implements OnChanges {
     if (templateChildren.length) {
       items.push({
         title: 'Template',
-        icon: 'gear',
+        icon: 'copy',
         children: templateChildren,
         expanded: false,
       });

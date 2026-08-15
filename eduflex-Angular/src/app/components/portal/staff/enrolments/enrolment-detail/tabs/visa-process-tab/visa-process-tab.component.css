@@ -203,8 +203,10 @@
   justify-content: center;
   font-weight: 700;
   font-size: 0.85rem;
+  /* muted-on-border was 4.12:1 — the step number is the one thing this badge
+     exists to show, so it takes the darker ink token. */
+  color: var(--color-ink);
   background: var(--color-border);
-  color: var(--color-muted);
 }
 
 .step[data-state="Complete"] .step-badge {

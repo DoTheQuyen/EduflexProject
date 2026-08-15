@@ -23,7 +23,10 @@ namespace Eduflex.Mapping.Settings
                 ChatSystemPrompt = model.ChatSystemPrompt,
                 ChatApiUrl = model.ChatApiUrl,
                 ChatGroqApiUrl = model.ChatGroqApiUrl,
-                ChatOpenRouterApiUrl = model.ChatOpenRouterApiUrl
+                ChatOpenRouterApiUrl = model.ChatOpenRouterApiUrl,
+                ChatGeminiModel = model.ChatGeminiModel,
+                ChatGroqModel = model.ChatGroqModel,
+                ChatOpenRouterModel = model.ChatOpenRouterModel
             };
         }
 
@@ -55,7 +58,10 @@ namespace Eduflex.Mapping.Settings
                 ChatSystemPrompt = dto.ChatSystemPrompt,
                 ChatApiUrl = dto.ChatApiUrl,
                 ChatGroqApiUrl = dto.ChatGroqApiUrl,
-                ChatOpenRouterApiUrl = dto.ChatOpenRouterApiUrl
+                ChatOpenRouterApiUrl = dto.ChatOpenRouterApiUrl,
+                ChatGeminiModel = dto.ChatGeminiModel,
+                ChatGroqModel = dto.ChatGroqModel,
+                ChatOpenRouterModel = dto.ChatOpenRouterModel
             };
         }
 

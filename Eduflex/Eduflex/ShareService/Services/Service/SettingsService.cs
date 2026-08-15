@@ -79,6 +79,18 @@ namespace ShareService.Services
             {
                 throw new ArgumentException("ChatOpenRouterApiUrl cannot be empty");
             }
+            if (string.IsNullOrWhiteSpace(settings.ChatGeminiModel))
+            {
+                throw new ArgumentException("ChatGeminiModel cannot be empty");
+            }
+            if (string.IsNullOrWhiteSpace(settings.ChatGroqModel))
+            {
+                throw new ArgumentException("ChatGroqModel cannot be empty");
+            }
+            if (string.IsNullOrWhiteSpace(settings.ChatOpenRouterModel))
+            {
+                throw new ArgumentException("ChatOpenRouterModel cannot be empty");
+            }
 
             var updated = await _settingsDataAccess.UpsertSettingsAsync(settings);
             _logger.LogInformation("Settings updated by {UserId}", userId);

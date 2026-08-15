@@ -14046,6 +14046,18 @@
           "chatOpenRouterApiUrl": {
             "type": "string",
             "nullable": true
+          },
+          "chatGeminiModel": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatGroqModel": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatOpenRouterModel": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14789,6 +14801,18 @@
             "nullable": true
           },
           "chatOpenRouterApiUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatGeminiModel": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatGroqModel": {
+            "type": "string",
+            "nullable": true
+          },
+          "chatOpenRouterModel": {
             "type": "string",
             "nullable": true
           }

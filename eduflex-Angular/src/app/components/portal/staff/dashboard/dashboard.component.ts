@@ -90,6 +90,21 @@ export class DashboardComponent implements OnInit {
     return counts ? Object.values(counts).reduce((sum, n) => sum + n, 0) : 0;
   }
 
+  // Bar widths in the "Open Items by Module" chart are relative to whichever module has
+  // the most open items — Math.max(1, ...) avoids a divide-by-zero when everything's 0.
+  maxModuleCount(counts: Record<string, number> | null): number {
+    if (!counts) return 1;
+    return Math.max(1, ...this.modules.map((m) => counts[m.module] ?? 0));
+  }
+
+  // "Open Items by Module" is a magnitude-comparison bar list, not a nav menu — sort
+  // descending so the busiest module surfaces first. (The "At a Glance" tile grid stays
+  // in fixed order on purpose: it's positional navigation users memorize the layout of.)
+  sortedModules(counts: Record<string, number> | null): ModuleTile[] {
+    if (!counts) return this.modules;
+    return [...this.modules].sort((a, b) => (counts[b.module] ?? 0) - (counts[a.module] ?? 0));
+  }
+
   dismissNotification(id: string, event: MouseEvent): void {
     event.stopPropagation();
     this.notificationService.clear(id);

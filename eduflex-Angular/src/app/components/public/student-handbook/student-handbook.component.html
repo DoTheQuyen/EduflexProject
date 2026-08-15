@@ -7,6 +7,10 @@
   </div>
 </section>
 
+<!-- The tinted ground has to sit on a full-width wrapper; .handbook-grid is
+     also the .container that caps content at 1200px, so painting the
+     background there left the tint stopping short of the viewport edges. -->
+<div class="handbook-body">
 <div class="handbook-grid container">
   <nav class="handbook-toc" aria-label="Handbook sections">
     <p class="toc-label">{{ 'HANDBOOK.TOC.LABEL' | translate }}</p>
@@ -101,7 +105,7 @@
         <h2>{{ 'HANDBOOK.CH03.TITLE' | translate }}</h2>
       </div>
       <div class="mission-grid">
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH03.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH03.CARD1_ITEM1' | translate }}</li>
@@ -110,7 +114,7 @@
             <li>{{ 'HANDBOOK.CH03.CARD1_ITEM4' | translate }}</li>
           </ul>
         </div>
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH03.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH03.CARD2_ITEM1' | translate }}</li>
@@ -153,7 +157,7 @@
       </ul>
 
       <div class="mission-grid">
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH04.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH04.CARD1_ITEM1' | translate }}</li>
@@ -162,7 +166,7 @@
             <li>{{ 'HANDBOOK.CH04.CARD1_ITEM4' | translate }}</li>
           </ul>
         </div>
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH04.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH04.CARD2_ITEM1' | translate }}</li>
@@ -237,7 +241,7 @@
         <h2>{{ 'HANDBOOK.CH07.TITLE' | translate }}</h2>
       </div>
       <div class="mission-grid">
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH07.CARD1_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH07.CARD1_ITEM1' | translate }}</li>
@@ -245,7 +249,7 @@
             <li>{{ 'HANDBOOK.CH07.CARD1_ITEM3' | translate }}</li>
           </ul>
         </div>
-        <div class="mission-card">
+        <div class="mission-card card-ruled">
           <h3>{{ 'HANDBOOK.CH07.CARD2_TITLE' | translate }}</h3>
           <ul class="values-list plain">
             <li>{{ 'HANDBOOK.CH07.CARD2_ITEM1' | translate }}</li>
@@ -388,6 +392,7 @@
     </section>
 
   </main>
+</div>
 </div>
 
 <footer class="handbook-footer">

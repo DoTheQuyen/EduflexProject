@@ -1,7 +1,10 @@
+/* Light footer. The navy masthead opens the page; repeating that weight at
+   the foot boxed the content in and made the whole page read heavy. */
 .footer {
-  background: var(--color-navy-900);
-  color: var(--color-surface);
+  background: var(--color-slate-surface-deep);
+  color: var(--color-slate-muted);
   font-family: var(--font-body);
+  border-top: 1px solid var(--color-slate-border);
 }
 
 .footer-container {
@@ -13,7 +16,7 @@
 /* Top area */
 .footer-top {
   padding: 3rem 0 2.5rem;
-  border-bottom: 1px solid var(--color-navy-700);
+  border-bottom: 1px solid var(--color-slate-border);
 }
 
 .footer-grid {
@@ -23,11 +26,13 @@
 }
 
 .footer-col h4 {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 1rem;
-  color: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 1.1rem;
+  color: var(--color-slate-700);
 }
 
 /* Brand column */
@@ -49,13 +54,14 @@
   font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 700;
+  color: var(--color-slate-900);
 }
 
 .footer-tagline {
   margin: 0 0 1.25rem;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-muted);
   max-width: 32ch;
 }
 
@@ -71,16 +77,20 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-navy-700);
-  color: var(--color-surface);
+  background: white;
+  border: 1px solid var(--color-slate-border);
+  color: var(--color-slate-900);
   transition:
     background 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .footer-social a:hover {
-  background: var(--color-accent);
-  color: var(--color-accent-content, var(--color-navy-900));
+  background: var(--shine-slate);
+  border-color: transparent;
+  box-shadow: var(--shadow-raised);
+  color: white;
 }
 
 /* Quick links column */
@@ -90,7 +100,7 @@
 }
 
 .footer-nav a {
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-muted);
   text-decoration: none;
   font-size: 0.9rem;
   margin-bottom: 0.65rem;
@@ -99,7 +109,7 @@
 }
 
 .footer-nav a:hover {
-  color: var(--color-accent);
+  color: var(--color-slate-700);
 }
 
 /* Contact column */
@@ -109,22 +119,22 @@
   align-items: flex-start;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-muted);
 }
 
 .footer-info i {
   margin-top: 0.2rem;
   width: 1rem;
-  color: var(--color-accent);
+  color: var(--color-slate-700);
 }
 
 .footer-info a {
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-muted);
   text-decoration: none;
 }
 
 .footer-info a:hover {
-  color: var(--color-accent);
+  color: var(--color-slate-700);
 }
 
 /* Bottom bar */
@@ -135,15 +145,15 @@
 .footer-copy {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-muted);
   text-align: center;
 }
 
 .footer-version {
   margin: 0.3rem 0 0;
   font-size: 0.7rem;
-  color: var(--color-muted-on-dark);
-  opacity: 0.6;
+  color: var(--color-slate-muted);
+  opacity: 0.7;
   text-align: center;
 }
 

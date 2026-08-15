@@ -1,0 +1,104 @@
+<!-- Page header -->
+<header class="page-head">
+  <div class="container">
+    <span class="eyebrow">{{ 'FEEDBACK_PAGE.EYEBROW' | translate }}</span>
+    <h1>{{ 'FEEDBACK_PAGE.TITLE' | translate }}</h1>
+    <p class="page-sub">{{ 'FEEDBACK_PAGE.SUBTITLE' | translate }}</p>
+
+    <div class="page-stats" *ngIf="!isLoading && feedbacks.length > 0">
+      <div class="page-stat">
+        <span class="page-stat-num">{{ feedbacks.length }}</span>
+        <span class="page-stat-label">{{ 'FEEDBACK_PAGE.STAT_REVIEWS' | translate }}</span>
+      </div>
+      <div class="page-stat" *ngIf="courseCount > 0">
+        <span class="page-stat-num">{{ courseCount }}</span>
+        <span class="page-stat-label">{{ 'FEEDBACK_PAGE.STAT_COURSES' | translate }}</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="wall-section">
+  <div class="container">
+
+    <!-- Loading: placeholder cards hold the layout so the page doesn't jump
+         when the real reviews arrive. -->
+    <div class="wall" *ngIf="isLoading" aria-hidden="true">
+      <article class="wall-card card-ruled is-skeleton" *ngFor="let slot of skeletonSlots">
+        <span class="skeleton-line"></span>
+        <span class="skeleton-line"></span>
+        <span class="skeleton-line short"></span>
+        <div class="skeleton-person">
+          <span class="skeleton-avatar"></span>
+          <span class="skeleton-line tiny"></span>
+        </div>
+      </article>
+    </div>
+    <p class="sr-only" *ngIf="isLoading" role="status">{{ 'FEEDBACK_PAGE.LOADING' | translate }}</p>
+
+    <!-- Error -->
+    <div class="wall-state" *ngIf="hasError">
+      <h2>{{ 'FEEDBACK_PAGE.ERROR_TITLE' | translate }}</h2>
+      <p>{{ 'FEEDBACK_PAGE.ERROR_DESC' | translate }}</p>
+      <button type="button" class="btn-slate" (click)="loadFeedbacks()">
+        {{ 'FEEDBACK_PAGE.ERROR_RETRY' | translate }}
+      </button>
+    </div>
+
+    <!-- Empty -->
+    <div class="wall-state" *ngIf="!isLoading && !hasError && feedbacks.length === 0">
+      <h2>{{ 'FEEDBACK_PAGE.EMPTY_TITLE' | translate }}</h2>
+      <p>{{ 'FEEDBACK_PAGE.EMPTY_DESC' | translate }}</p>
+    </div>
+
+    <!-- An even grid of equal-height cards. Reviews run from one line to
+         several paragraphs, so each quote is clamped to a fixed number of
+         lines with a toggle — that keeps every row the same height instead of
+         letting a single long review dictate the layout. -->
+    <div class="wall" *ngIf="!isLoading && !hasError && feedbacks.length > 0">
+      <article class="wall-card card-ruled" *ngFor="let feedback of feedbacks">
+        <span class="quote-mark" aria-hidden="true">&#8220;</span>
+        <p class="wall-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)">
+          {{ feedback.comment }}
+        </p>
+
+        <button
+          type="button"
+          class="wall-more link-more"
+          *ngIf="isLong(feedback.comment)"
+          (click)="toggleExpanded(feedback)">
+          {{ (isExpanded(feedback) ? 'FEEDBACK_CAROUSEL.SHOW_LESS' : 'FEEDBACK_CAROUSEL.READ_MORE') | translate }}
+        </button>
+
+        <div class="wall-person">
+          <!-- Decorative: the name is shown as text alongside. -->
+          <img
+            *ngIf="feedback.photoUrl; else initialsAvatar"
+            class="wall-avatar"
+            [src]="feedback.photoUrl"
+            alt="" />
+          <ng-template #initialsAvatar>
+            <span class="wall-avatar avatar-initials" aria-hidden="true">
+              {{ initials(feedback.name) }}
+            </span>
+          </ng-template>
+          <div class="wall-person-text">
+            <p class="wall-name">{{ feedback.name }}</p>
+            <p class="wall-course">{{ feedback.courseName }}</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Closing CTA -->
+<section class="feedback-cta">
+  <div class="container cta-panel panel-cta">
+    <div>
+      <h2>{{ 'FEEDBACK_PAGE.CTA_TITLE' | translate }}</h2>
+      <p>{{ 'FEEDBACK_PAGE.CTA_DESC' | translate }}</p>
+    </div>
+    <a routerLink="/" class="btn-slate">{{ 'FEEDBACK_PAGE.CTA_BUTTON' | translate }}</a>
+  </div>
+</section>

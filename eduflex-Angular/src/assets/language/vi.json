@@ -3,6 +3,7 @@
     "HOME": "Trang chủ",
     "ABOUT": "Giới thiệu",
     "HANDBOOK": "Sổ tay sinh viên",
+    "FEEDBACK": "Phản hồi học viên",
     "CONTACT": "Liên hệ",
     "LOGIN": "Đăng nhập"
   },
@@ -16,7 +17,9 @@
     "MOBILE": "Số điện thoại *",
     "ENQUIRY_LABEL": "Nội dung *",
     "SUBMIT": "Gửi yêu cầu",
-    "SUBMITTING": "Đang gửi..."
+    "SUBMITTING": "Đang gửi...",
+    "ENQUIRING_ABOUT": "Yêu cầu về:",
+    "CLOSE_ARIA": "Đóng biểu mẫu yêu cầu"
   },
   "CHAT": {
     "HEADER_TITLE": "Trợ lý AI Hỏi đáp Visa",
@@ -416,7 +419,9 @@
       "BAD_REQUEST": "Vui lòng kiểm tra định dạng email và mật khẩu.",
       "NO_CONNECTION": "Không thể kết nối đến máy chủ.",
       "UNEXPECTED": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại."
-    }
+    },
+    "SHOW_PASSWORD": "Hiện mật khẩu",
+    "HIDE_PASSWORD": "Ẩn mật khẩu"
   },
   "PROMO_CAROUSEL": {
     "EYEBROW": "Ưu đãi khóa học học kỳ này",
@@ -436,13 +441,32 @@
     "TITLE": "Phản hồi thực tế từ những học viên chúng tôi đã hướng dẫn",
     "PREV_ARIA": "Phản hồi trước",
     "NEXT_ARIA": "Phản hồi tiếp theo",
-    "GO_TO_ARIA": "Đi đến phản hồi {{num}}"
+    "GO_TO_ARIA": "Đi đến phản hồi {{num}}",
+    "READ_MORE": "Xem thêm",
+    "SHOW_LESS": "Thu gọn",
+    "VIEW_ALL": "Xem tất cả phản hồi học viên"
   },
-   "FOOTER": {
+  "FEEDBACK_PAGE": {
+    "EYEBROW": "Phản hồi học viên",
+    "TITLE": "Chia sẻ từ chính học viên",
+    "SUBTITLE": "Mỗi phản hồi dưới đây được viết bởi học viên mà chúng tôi đã đồng hành trong quá trình chọn khóa học, nhập học hoặc xin visa. Chúng tôi đăng nguyên văn.",
+    "STAT_REVIEWS": "Phản hồi đã đăng",
+    "STAT_COURSES": "Khóa học được nhắc đến",
+    "LOADING": "Đang tải phản hồi học viên",
+    "ERROR_TITLE": "Không tải được phản hồi",
+    "ERROR_DESC": "Đã có lỗi xảy ra từ phía chúng tôi. Vui lòng thử lại sau giây lát.",
+    "ERROR_RETRY": "Thử lại",
+    "EMPTY_TITLE": "Chưa có phản hồi nào được đăng",
+    "EMPTY_DESC": "Phản hồi của học viên sẽ xuất hiện tại đây ngay khi được đăng.",
+    "CTA_TITLE": "Bạn cũng muốn có kết quả như vậy?",
+    "CTA_DESC": "Đặt lịch tư vấn miễn phí để cùng chúng tôi vạch ra lộ trình khóa học và visa phù hợp.",
+    "CTA_BUTTON": "Đặt lịch tư vấn miễn phí"
+  },
+  "FOOTER": {
     "TAGLINE": "Tư vấn cá nhân hóa từ chọn khóa học đến kết quả visa — đồng hành cùng học sinh du học và định cư tại Úc.",
     "QUICK_LINKS": "Liên kết nhanh",
     "CONTACT_US": "Liên hệ",
     "ADDRESS": "23 Beale Street, Southport QLD 4215, Úc",
     "COPYRIGHT": "© {{year}} Quyen Do. Đã đăng ký bản quyền."
-   }
+  }
 }

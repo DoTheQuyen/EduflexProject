@@ -1,0 +1,180 @@
+<title>Eduflex Color Options</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f2ee;
+  color: #23201b;
+  font-family: Georgia, 'Times New Roman', serif;
+  padding: 2rem 1.25rem 3rem;
+}
+.page-head { max-width: 1200px; margin: 0 auto 2rem; }
+.page-head h1 { font-size: 1.6rem; margin: 0 0 0.4rem; }
+.page-head p { margin: 0; color: #5a564d; font-family: Arial, sans-serif; font-size: 0.95rem; max-width: 60ch; }
+
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+@media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+.swatch {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+.swatch-header {
+  background: var(--primary);
+  color: var(--on-primary);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.swatch-header span.tag {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.18);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+}
+.swatch-body { padding: 1.4rem 1.2rem 1.6rem; flex: 1; display: flex; flex-direction: column; }
+.swatch-body h2 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  color: var(--fg);
+}
+.swatch-body p.desc {
+  font-family: Arial, sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 1.1rem;
+  line-height: 1.5;
+}
+.swatch-btn {
+  align-self: flex-start;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 6px;
+  margin-bottom: 1.2rem;
+}
+.swatch-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.8rem;
+}
+.swatch-card .stat {
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+.swatch-card .label { font-family: Arial, sans-serif; font-size: 0.75rem; color: var(--muted); }
+.swatch-pill {
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-on);
+  background: var(--accent);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  margin-bottom: 0.6rem;
+  width: fit-content;
+}
+.swatch-name {
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--border);
+}
+.swatch-hexes {
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+.s1 { --primary: #0F766E; --on-primary: #ffffff; --bg: #F0FDFA; --fg: #134E4A; --muted: #5c7d78; --border: #cdeae4; --card: #ffffff; --accent: #14B8A6; --accent-on: #06322d; }
+.s2 { --primary: #1E3A5F; --on-primary: #ffffff; --bg: #F8FAFC; --fg: #0F172A; --muted: #5b6779; --border: #dde3ec; --card: #ffffff; --accent: #2563EB; --accent-on: #ffffff; }
+.s3 { --primary: #3F6E52; --on-primary: #ffffff; --bg: #F4F7F1; --fg: #24352A; --muted: #647566; --border: #dbe6dc; --card: #ffffff; --accent: #8FAE7C; --accent-on: #24352A; }
+.s4 { --primary: #7A2E3D; --on-primary: #ffffff; --bg: #FBF3EE; --fg: #3A211F; --muted: #856a63; --border: #ecdad3; --card: #ffffff; --accent: #C98A54; --accent-on: #3A211F; }
+</style>
+
+<div class="page-head">
+  <h1>Four color directions — pick one</h1>
+  <p>Same mini layout (header, headline, button, stat card), four different professional palettes. No yellow/amber, no heavy dark navy or brown. Tell me the label at the bottom of the one you like, or mix pieces from more than one.</p>
+</div>
+
+<div class="grid">
+  <div class="swatch s1">
+    <div class="swatch-header">Eduflex <span class="tag">Home</span></div>
+    <div class="swatch-body">
+      <span class="swatch-pill">Education consultancy</span>
+      <h2>Your gateway to studying in Australia</h2>
+      <button class="swatch-btn">Book a free consultation</button>
+      <div class="swatch-card"><div class="stat">95%</div><div class="label">Visa success rate</div></div>
+      <div class="swatch-name">Teal<div class="swatch-hexes">#0F766E · #14B8A6</div></div>
+    </div>
+  </div>
+
+  <div class="swatch s2">
+    <div class="swatch-header">Eduflex <span class="tag">Home</span></div>
+    <div class="swatch-body">
+      <span class="swatch-pill">Education consultancy</span>
+      <h2>Your gateway to studying in Australia</h2>
+      <button class="swatch-btn">Book a free consultation</button>
+      <div class="swatch-card"><div class="stat">95%</div><div class="label">Visa success rate</div></div>
+      <div class="swatch-name">Slate blue-gray<div class="swatch-hexes">#1E3A5F · #2563EB</div></div>
+    </div>
+  </div>
+
+  <div class="swatch s3">
+    <div class="swatch-header">Eduflex <span class="tag">Home</span></div>
+    <div class="swatch-body">
+      <span class="swatch-pill">Education consultancy</span>
+      <h2>Your gateway to studying in Australia</h2>
+      <button class="swatch-btn">Book a free consultation</button>
+      <div class="swatch-card"><div class="stat">95%</div><div class="label">Visa success rate</div></div>
+      <div class="swatch-name">Forest / sage green<div class="swatch-hexes">#3F6E52 · #8FAE7C</div></div>
+    </div>
+  </div>
+
+  <div class="swatch s4">
+    <div class="swatch-header">Eduflex <span class="tag">Home</span></div>
+    <div class="swatch-body">
+      <span class="swatch-pill">Education consultancy</span>
+      <h2>Your gateway to studying in Australia</h2>
+      <button class="swatch-btn">Book a free consultation</button>
+      <div class="swatch-card"><div class="stat">95%</div><div class="label">Visa success rate</div></div>
+      <div class="swatch-name">Burgundy / wine<div class="swatch-hexes">#7A2E3D · #C98A54</div></div>
+    </div>
+  </div>
+</div>

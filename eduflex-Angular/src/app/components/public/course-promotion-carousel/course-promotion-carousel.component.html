@@ -26,10 +26,12 @@
             <div class="promo-stat"><span>{{ 'PROMO_CAROUSEL.OFFER_ENDS' | translate }}</span><span class="is-gold">{{ coursePromotions[currentPromotionIndex].expiryDate | date:'mediumDate' }}</span></div>
           </div>
           <p class="promo-note" *ngIf="coursePromotions[currentPromotionIndex].note">{{ coursePromotions[currentPromotionIndex].note }}</p>
-          <div class="promo-ctas">
-            <a class="btn-outline-navy" [href]="coursePromotions[currentPromotionIndex].websiteUrl" target="_blank" rel="noopener">{{ 'PROMO_CAROUSEL.VISIT_WEBSITE' | translate }}</a>
-            <button type="button" class="btn-primary" (click)="onEnquireClick()">{{ 'PROMO_CAROUSEL.ENQUIRE' | translate }}</button>
-          </div>
+          <button type="button" class="promo-enquire-link" (click)="onEnquireClick()">
+            {{ 'PROMO_CAROUSEL.ENQUIRE' | translate }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
         </div>
       </article>
 

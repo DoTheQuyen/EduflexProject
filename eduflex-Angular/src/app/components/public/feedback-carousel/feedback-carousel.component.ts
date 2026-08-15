@@ -1,19 +1,29 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Client, FeedbackDto } from '@services/content.services';
 import { TranslatePipe } from '@ngx-translate/core';
+
+/** Comments longer than this get clamped with a "read more" toggle. Chosen by
+ *  character count rather than measuring the rendered box: it needs no layout
+ *  read, so the toggle never flickers in or out as fonts and images settle. */
+const CLAMP_THRESHOLD = 260;
 
 @Component({
   selector: 'app-feedback-carousel',
   standalone: true,
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './feedback-carousel.component.html',
   styleUrls: ['./feedback-carousel.component.css']
 })
-export class FeedbackCarouselComponent implements OnInit, OnDestroy {
+export class FeedbackCarouselComponent implements OnInit, AfterViewInit {
+  @ViewChild('track') trackRef?: ElementRef<HTMLElement>;
+
   feedbacks: FeedbackDto[] = [];
-  currentFeedbackIndex: number = 0;
-  private feedbackAutoplayTimer: any;
+  atStart = true;
+  atEnd = false;
+
+  private readonly expandedIds = new Set<string>();
 
   constructor(
     private apiClient: Client,
@@ -26,52 +36,74 @@ export class FeedbackCarouselComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.stopFeedbackAutoplay();
+  ngAfterViewInit(): void {
+    this.updateArrowState();
   }
 
   loadFeedbacks(): void {
-
-     this.apiClient.feedbackLatest(10).subscribe({
+    this.apiClient.feedbackLatest(12).subscribe({
       next: (feedbacks) => {
         this.feedbacks = feedbacks;
-        this.restartFeedbackAutoplay();
+        // Wait for the cards to lay out before measuring the track.
+        setTimeout(() => this.updateArrowState());
       },
       error: (err) => {
-        console.error('Failed to load course promotions', err);
+        console.error('Failed to load feedbacks', err);
       }
     });
-
   }
 
-  goToFeedbackSlide(index: number): void {
-    this.currentFeedbackIndex = index;
+  /** Scrolls by one card width, so the step matches however many cards the
+   *  current breakpoint happens to show. */
+  scrollByCard(direction: -1 | 1): void {
+    const track = this.trackRef?.nativeElement;
+    if (!track) { return; }
+    const card = track.querySelector<HTMLElement>('.feedback-card');
+    const step = card ? card.offsetWidth + 24 : track.clientWidth;
+    // scrollBy's smooth behaviour isn't covered by the CSS reduced-motion
+    // query, so it has to be opted out of explicitly.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    track.scrollBy({ left: step * direction, behavior: reduceMotion ? 'auto' : 'smooth' });
   }
 
-  nextFeedbackSlide(): void {
-    if (this.feedbacks.length === 0) { return; }
-    this.currentFeedbackIndex = (this.currentFeedbackIndex + 1) % this.feedbacks.length;
+  updateArrowState(): void {
+    const track = this.trackRef?.nativeElement;
+    if (!track) { return; }
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    this.atStart = track.scrollLeft <= 1;
+    // 1px of slack: fractional widths mean scrollLeft rarely lands exactly.
+    this.atEnd = track.scrollLeft >= maxScroll - 1;
   }
 
-  prevFeedbackSlide(): void {
-    if (this.feedbacks.length === 0) { return; }
-    this.currentFeedbackIndex = (this.currentFeedbackIndex - 1 + this.feedbacks.length) % this.feedbacks.length;
+  isLong(comment: string | undefined): boolean {
+    return (comment?.length ?? 0) > CLAMP_THRESHOLD;
   }
 
-  startFeedbackAutoplay(): void {
-    this.stopFeedbackAutoplay();
-    this.feedbackAutoplayTimer = setInterval(() => this.nextFeedbackSlide(), 6000);
+  isExpanded(feedback: FeedbackDto): boolean {
+    return this.expandedIds.has(this.keyFor(feedback));
   }
 
-  stopFeedbackAutoplay(): void {
-    if (this.feedbackAutoplayTimer) {
-      clearInterval(this.feedbackAutoplayTimer);
+  toggleExpanded(feedback: FeedbackDto): void {
+    const key = this.keyFor(feedback);
+    if (this.expandedIds.has(key)) {
+      this.expandedIds.delete(key);
+    } else {
+      this.expandedIds.add(key);
     }
   }
 
-  restartFeedbackAutoplay(): void {
-    if (this.feedbacks.length > 1) {
-      this.startFeedbackAutoplay();
-    }
+  /** Fallback avatar for feedback with no photo: up to two initials. */
+  initials(name: string | undefined): string {
+    if (!name) { return ''; }
+    return name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join('');
+  }
+
+  private keyFor(feedback: FeedbackDto): string {
+    return feedback.id ?? `${feedback.name}|${feedback.comment}`;
   }
 }

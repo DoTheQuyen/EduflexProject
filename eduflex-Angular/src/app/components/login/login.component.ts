@@ -13,7 +13,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslatePipe],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
@@ -30,19 +30,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private authHelper: AuthHelperService,
     private translate: TranslateService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rememberMe: [false]
+      rememberMe: [false],
     });
   }
 
   ngOnInit(): void {
     // Detect navigation loops
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd), takeUntil(this.destroy$))
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$),
+      )
       .subscribe((event: NavigationEnd) => {
         if (event.url === '/login' && this.authHelper.isLoggedIn()) {
           this.forcePortalRedirect();
@@ -84,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const loginDto: LoginDto = new LoginDto({
       email: this.loginForm.get('email')?.value,
-      password: this.loginForm.get('password')?.value
+      password: this.loginForm.get('password')?.value,
     });
 
     this.apiClient.login(loginDto).subscribe({
@@ -107,23 +110,28 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.errorMessage = this.getErrorMessage(err);
         this.isLoading = false;
         this.loginForm.get('password')?.reset();
-      }
+      },
     });
   }
 
+  // The JWT and refresh token arrive as httpOnly Set-Cookie headers now — nothing for
+  // JS to store there. This just keeps the non-sensitive display/permission snapshot
+  // the rest of the app reads for UI gating (real authorization is always server-side).
   private storeAuthData(authResponse: AuthResponseDto): void {
     if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem('authToken', authResponse.token || '');
-      sessionStorage.setItem('userData', JSON.stringify({
-        id: authResponse.userId,
-        email: authResponse.email,
-        firstName: authResponse.firstName,
-        lastName: authResponse.lastName,
-        role: authResponse.roleName,
-        roleId: authResponse.roleId,
-        mustChangePassword: authResponse.mustChangePassword,
-        permissions: authResponse.permissions || []
-      }));
+      sessionStorage.setItem(
+        'userData',
+        JSON.stringify({
+          id: authResponse.userId,
+          email: authResponse.email,
+          firstName: authResponse.firstName,
+          lastName: authResponse.lastName,
+          role: authResponse.roleName,
+          roleId: authResponse.roleId,
+          mustChangePassword: authResponse.mustChangePassword,
+          permissions: authResponse.permissions || [],
+        }),
+      );
     }
   }
 
@@ -153,7 +161,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       const savedEmail = localStorage.getItem('userEmail');
       this.loginForm.patchValue({
         rememberMe: true,
-        email: savedEmail || ''
+        email: savedEmail || '',
       });
     }
   }
@@ -177,7 +185,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (control.errors['required']) return this.translate.instant('LOGIN.ERRORS.REQUIRED');
     if (control.errors['email']) return this.translate.instant('LOGIN.ERRORS.EMAIL_INVALID');
     if (control.errors['minlength']) {
-      return this.translate.instant('LOGIN.ERRORS.PASSWORD_MIN_LENGTH', { length: control.errors['minlength'].requiredLength });
+      return this.translate.instant('LOGIN.ERRORS.PASSWORD_MIN_LENGTH', {
+        length: control.errors['minlength'].requiredLength,
+      });
     }
 
     return this.translate.instant('LOGIN.ERRORS.INVALID_FIELD');

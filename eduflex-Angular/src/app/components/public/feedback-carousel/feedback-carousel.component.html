@@ -5,34 +5,68 @@
       <h2>{{ 'FEEDBACK_CAROUSEL.TITLE' | translate }}</h2>
     </div>
 
-    <div class="carousel" (mouseenter)="stopFeedbackAutoplay()" (mouseleave)="restartFeedbackAutoplay()">
-      <button type="button" class="carousel-arrow carousel-arrow-prev" (click)="prevFeedbackSlide(); restartFeedbackAutoplay()" [attr.aria-label]="'FEEDBACK_CAROUSEL.PREV_ARIA' | translate">&#8249;</button>
-
-      <div class="feedback-card">
-        <div class="feedback-photo" [style.background-image]="'url(' + feedbacks[currentFeedbackIndex].photoUrl + ')'">
-          <div class="feedback-photo-overlay">
-            <p class="feedback-name">{{ feedbacks[currentFeedbackIndex].name }}</p>
-            <p class="feedback-course">{{ feedbacks[currentFeedbackIndex].courseName }}</p>
-          </div>
-        </div>
-        <div class="feedback-quote-wrap">
-          <span class="quote-mark">&#8220;</span>
-          <p>{{ feedbacks[currentFeedbackIndex].comment }}</p>
-        </div>
-      </div>
-
-      <button type="button" class="carousel-arrow carousel-arrow-next" (click)="nextFeedbackSlide(); restartFeedbackAutoplay()" [attr.aria-label]="'FEEDBACK_CAROUSEL.NEXT_ARIA' | translate">&#8250;</button>
-    </div>
-
-    <div class="dots">
+    <div class="carousel">
       <button
         type="button"
-        *ngFor="let f of feedbacks; let i = index"
-        class="dot"
-        [class.is-active]="i === currentFeedbackIndex"
-        (click)="goToFeedbackSlide(i)"
-        [attr.aria-label]="'FEEDBACK_CAROUSEL.GO_TO_ARIA' | translate: { num: i + 1 }">
-      </button>
+        class="carousel-arrow"
+        [disabled]="atStart"
+        (click)="scrollByCard(-1)"
+        [attr.aria-label]="'FEEDBACK_CAROUSEL.PREV_ARIA' | translate">&#8249;</button>
+
+      <!-- A scroll-snap track rather than an index-swapped slide: the arrows,
+           a trackpad swipe and the keyboard all drive the same scroll, and the
+           number of visible cards falls out of the breakpoint instead of
+           needing its own resize bookkeeping. -->
+      <div class="feedback-track" #track (scroll)="updateArrowState()">
+        <article class="feedback-card card-ruled" *ngFor="let feedback of feedbacks">
+          <p class="feedback-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)">
+            {{ feedback.comment }}
+          </p>
+
+          <button
+            type="button"
+            class="feedback-more link-more"
+            *ngIf="isLong(feedback.comment)"
+            (click)="toggleExpanded(feedback)">
+            {{ (isExpanded(feedback) ? 'FEEDBACK_CAROUSEL.SHOW_LESS' : 'FEEDBACK_CAROUSEL.READ_MORE') | translate }}
+          </button>
+
+          <div class="feedback-person">
+            <!-- Decorative: the name is shown as text alongside, so an alt here
+                 would just make screen readers announce it twice. -->
+            <img
+              *ngIf="feedback.photoUrl; else initialsAvatar"
+              class="feedback-avatar"
+              [src]="feedback.photoUrl"
+              alt="" />
+            <ng-template #initialsAvatar>
+              <span class="feedback-avatar avatar-initials" aria-hidden="true">
+                {{ initials(feedback.name) }}
+              </span>
+            </ng-template>
+            <div class="feedback-person-text">
+              <p class="feedback-name">{{ feedback.name }}</p>
+              <p class="feedback-course">{{ feedback.courseName }}</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <button
+        type="button"
+        class="carousel-arrow"
+        [disabled]="atEnd"
+        (click)="scrollByCard(1)"
+        [attr.aria-label]="'FEEDBACK_CAROUSEL.NEXT_ARIA' | translate">&#8250;</button>
+    </div>
+
+    <div class="feedback-foot">
+      <a routerLink="/feedback" class="feedback-all-link">
+        {{ 'FEEDBACK_CAROUSEL.VIEW_ALL' | translate }}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
     </div>
   </div>
 </section>

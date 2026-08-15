@@ -255,14 +255,50 @@
                   formatting.
                 </p>
               </div>
-              <div class="col-md-12">
+              <div class="col-md-8">
                 <label class="form-label">API URL *</label>
                 <input type="text" class="form-control" formControlName="chatApiUrl">
                 <span class="field-error" *ngIf="isFieldInvalid('chatApiUrl')">API URL cannot be empty</span>
                 <p class="text-muted small mt-1 mb-0">
-                  Use <code>{{ '{model}' }}</code> as a placeholder — it's substituted with the configured Gemini
-                  model at request time. The API key is kept separately outside this form.
+                  Use <code>{{ '{model}' }}</code> as a placeholder — it's substituted with the model below at
+                  request time. The API key is kept separately outside this form.
                 </p>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Model *</label>
+                <input type="text" class="form-control" formControlName="chatGeminiModel">
+                <span class="field-error" *ngIf="isFieldInvalid('chatGeminiModel')">Model cannot be empty</span>
+              </div>
+            </div>
+
+            <h6 class="form-section-title mt-4">Fallback provider — Groq</h6>
+            <p class="text-muted small">Tried automatically if Gemini is rate-limited, times out, or errors.</p>
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label class="form-label">API URL *</label>
+                <input type="text" class="form-control" formControlName="chatGroqApiUrl">
+                <span class="field-error" *ngIf="isFieldInvalid('chatGroqApiUrl')">API URL cannot be empty</span>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Model *</label>
+                <input type="text" class="form-control" formControlName="chatGroqModel">
+                <span class="field-error" *ngIf="isFieldInvalid('chatGroqModel')">Model cannot be empty</span>
+              </div>
+            </div>
+
+            <h6 class="form-section-title mt-4">Fallback provider — OpenRouter</h6>
+            <p class="text-muted small">Tried automatically if both Gemini and Groq are unavailable.</p>
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label class="form-label">API URL *</label>
+                <input type="text" class="form-control" formControlName="chatOpenRouterApiUrl">
+                <span class="field-error" *ngIf="isFieldInvalid('chatOpenRouterApiUrl')">API URL cannot be
+                  empty</span>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Model *</label>
+                <input type="text" class="form-control" formControlName="chatOpenRouterModel">
+                <span class="field-error" *ngIf="isFieldInvalid('chatOpenRouterModel')">Model cannot be empty</span>
               </div>
             </div>
           </ng-container>

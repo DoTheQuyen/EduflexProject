@@ -20146,6 +20146,9 @@ export class SettingsDto implements ISettingsDto {
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
     chatOpenRouterApiUrl?: string | undefined;
+    chatGeminiModel?: string | undefined;
+    chatGroqModel?: string | undefined;
+    chatOpenRouterModel?: string | undefined;
 
     constructor(data?: ISettingsDto) {
         if (data) {
@@ -20169,6 +20172,9 @@ export class SettingsDto implements ISettingsDto {
             this.chatApiUrl = _data["chatApiUrl"];
             this.chatGroqApiUrl = _data["chatGroqApiUrl"];
             this.chatOpenRouterApiUrl = _data["chatOpenRouterApiUrl"];
+            this.chatGeminiModel = _data["chatGeminiModel"];
+            this.chatGroqModel = _data["chatGroqModel"];
+            this.chatOpenRouterModel = _data["chatOpenRouterModel"];
         }
     }
 
@@ -20192,6 +20198,9 @@ export class SettingsDto implements ISettingsDto {
         data["chatApiUrl"] = this.chatApiUrl;
         data["chatGroqApiUrl"] = this.chatGroqApiUrl;
         data["chatOpenRouterApiUrl"] = this.chatOpenRouterApiUrl;
+        data["chatGeminiModel"] = this.chatGeminiModel;
+        data["chatGroqModel"] = this.chatGroqModel;
+        data["chatOpenRouterModel"] = this.chatOpenRouterModel;
         return data;
     }
 }
@@ -20208,6 +20217,9 @@ export interface ISettingsDto {
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
     chatOpenRouterApiUrl?: string | undefined;
+    chatGeminiModel?: string | undefined;
+    chatGroqModel?: string | undefined;
+    chatOpenRouterModel?: string | undefined;
 }
 
 export class SkipPlanEntryDto implements ISkipPlanEntryDto {
@@ -21458,6 +21470,9 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
     chatOpenRouterApiUrl?: string | undefined;
+    chatGeminiModel?: string | undefined;
+    chatGroqModel?: string | undefined;
+    chatOpenRouterModel?: string | undefined;
 
     constructor(data?: IUpdateSettingsDto) {
         if (data) {
@@ -21481,6 +21496,9 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
             this.chatApiUrl = _data["chatApiUrl"];
             this.chatGroqApiUrl = _data["chatGroqApiUrl"];
             this.chatOpenRouterApiUrl = _data["chatOpenRouterApiUrl"];
+            this.chatGeminiModel = _data["chatGeminiModel"];
+            this.chatGroqModel = _data["chatGroqModel"];
+            this.chatOpenRouterModel = _data["chatOpenRouterModel"];
         }
     }
 
@@ -21504,6 +21522,9 @@ export class UpdateSettingsDto implements IUpdateSettingsDto {
         data["chatApiUrl"] = this.chatApiUrl;
         data["chatGroqApiUrl"] = this.chatGroqApiUrl;
         data["chatOpenRouterApiUrl"] = this.chatOpenRouterApiUrl;
+        data["chatGeminiModel"] = this.chatGeminiModel;
+        data["chatGroqModel"] = this.chatGroqModel;
+        data["chatOpenRouterModel"] = this.chatOpenRouterModel;
         return data;
     }
 }
@@ -21520,6 +21541,9 @@ export interface IUpdateSettingsDto {
     chatApiUrl?: string | undefined;
     chatGroqApiUrl?: string | undefined;
     chatOpenRouterApiUrl?: string | undefined;
+    chatGeminiModel?: string | undefined;
+    chatGroqModel?: string | undefined;
+    chatOpenRouterModel?: string | undefined;
 }
 
 export class UpdateStudentDto implements IUpdateStudentDto {

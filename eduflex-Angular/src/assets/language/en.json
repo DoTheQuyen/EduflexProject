@@ -3,6 +3,7 @@
     "HOME": "Home",
     "ABOUT": "About Us",
     "HANDBOOK": "Student Handbook",
+    "FEEDBACK": "Student Feedback",
     "CONTACT": "Contact",
     "LOGIN": "Login"
   },
@@ -16,7 +17,9 @@
     "MOBILE": "Mobile *",
     "ENQUIRY_LABEL": "Enquiry *",
     "SUBMIT": "Submit Enquiry",
-    "SUBMITTING": "Submitting..."
+    "SUBMITTING": "Submitting...",
+    "ENQUIRING_ABOUT": "Enquiring about:",
+    "CLOSE_ARIA": "Close enquiry form"
   },
   "CHAT": {
     "HEADER_TITLE": "Visa Q&A AI Assistant",
@@ -416,7 +419,9 @@
       "BAD_REQUEST": "Check your email and password format.",
       "NO_CONNECTION": "Unable to connect to server.",
       "UNEXPECTED": "Unexpected error. Try again."
-    }
+    },
+    "SHOW_PASSWORD": "Show password",
+    "HIDE_PASSWORD": "Hide password"
   },
   "PROMO_CAROUSEL": {
     "EYEBROW": "Course offers this semester",
@@ -436,9 +441,28 @@
     "TITLE": "Real feedback from students we've guided",
     "PREV_ARIA": "Previous feedback",
     "NEXT_ARIA": "Next feedback",
-    "GO_TO_ARIA": "Go to feedback {{num}}"
+    "GO_TO_ARIA": "Go to feedback {{num}}",
+    "READ_MORE": "Read more",
+    "SHOW_LESS": "Show less",
+    "VIEW_ALL": "Read all student feedback"
   },
-    "FOOTER": {
+  "FEEDBACK_PAGE": {
+    "EYEBROW": "Student feedback",
+    "TITLE": "In their own words",
+    "SUBTITLE": "Every review below was written by a student we guided through course placement, enrolment, or a visa application. We publish them unedited.",
+    "STAT_REVIEWS": "Published reviews",
+    "STAT_COURSES": "Courses represented",
+    "LOADING": "Loading student feedback",
+    "ERROR_TITLE": "We couldn't load the reviews",
+    "ERROR_DESC": "Something went wrong on our side. Try again in a moment.",
+    "ERROR_RETRY": "Try again",
+    "EMPTY_TITLE": "No reviews published yet",
+    "EMPTY_DESC": "Student feedback will appear here as soon as it's published.",
+    "CTA_TITLE": "Want a result like these?",
+    "CTA_DESC": "Book a free consultation and we'll map out your course and visa options together.",
+    "CTA_BUTTON": "Book a free consultation"
+  },
+  "FOOTER": {
     "TAGLINE": "Personalised guidance from course selection to visa outcomes — helping students study and migrate to Australia with confidence.",
     "QUICK_LINKS": "Quick Links",
     "CONTACT_US": "Contact Us",

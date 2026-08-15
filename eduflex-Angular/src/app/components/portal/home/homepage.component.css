@@ -1,3 +1,26 @@
+/* ===== Portal theme =====
+   The portal's 64 component stylesheets reference brand tokens (586 var()
+   uses) rather than literal colours, and Tailwind's colour utilities compile
+   to the same var() references. So retargeting the tokens here — on the shell
+   that hosts every internal page — restyles the whole portal without touching
+   those files. Custom properties inherit through the DOM, so view
+   encapsulation doesn't block it.
+
+   Only the navy/brass identity is remapped. --color-ink, --color-muted and
+   --color-border are already desaturated blue-greys that belong in the slate
+   family, and --color-error/-success/-highlight are semantic — recolouring
+   those would cost meaning, not gain consistency. Contrast was measured for
+   each pair below; the notable win is white-on-accent, which today is white
+   on brass at a failing 3.24:1 and becomes 6.10:1. */
+:host {
+  --color-navy-900: var(--color-slate-900); /* sidebar ground, headings, primary fills */
+  --color-navy-700: var(--color-slate-700);
+  --color-accent: var(--color-slate-500); /* solid fills; white text on it = 6.10:1 */
+  --color-accent-light: var(--color-slate-300); /* light fills that carry dark text */
+  --color-accent-dark: var(--color-slate-700); /* accent text on light = 9.78:1 */
+  --color-surface: var(--color-slate-surface); /* muted text on it = 5.14:1 */
+}
+
 .portal-container {
   display: flex;
   min-height: 100vh;

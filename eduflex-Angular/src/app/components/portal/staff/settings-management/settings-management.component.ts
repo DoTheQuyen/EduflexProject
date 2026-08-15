@@ -93,7 +93,12 @@ export class SettingsManagementComponent implements OnInit {
         allowedExtensions: this.fb.array([])
       }),
       chatSystemPrompt: ['', [Validators.required]],
-      chatApiUrl: ['', [Validators.required]]
+      chatApiUrl: ['', [Validators.required]],
+      chatGeminiModel: ['', [Validators.required]],
+      chatGroqApiUrl: ['', [Validators.required]],
+      chatGroqModel: ['', [Validators.required]],
+      chatOpenRouterApiUrl: ['', [Validators.required]],
+      chatOpenRouterModel: ['', [Validators.required]]
     });
   }
 
@@ -147,7 +152,12 @@ export class SettingsManagementComponent implements OnInit {
         maxFileCount: settings.enrolmentUpload?.maxFileCount
       },
       chatSystemPrompt: settings.chatSystemPrompt,
-      chatApiUrl: settings.chatApiUrl
+      chatApiUrl: settings.chatApiUrl,
+      chatGeminiModel: settings.chatGeminiModel,
+      chatGroqApiUrl: settings.chatGroqApiUrl,
+      chatGroqModel: settings.chatGroqModel,
+      chatOpenRouterApiUrl: settings.chatOpenRouterApiUrl,
+      chatOpenRouterModel: settings.chatOpenRouterModel
     });
 
     this.setExtensions(this.defaultExtensions, settings.documentUpload?.default?.allowedExtensions ?? []);
@@ -204,7 +214,15 @@ export class SettingsManagementComponent implements OnInit {
       case 'enrolment':
         return [this.settingsForm.get('enrolmentUpload')!];
       case 'chat':
-        return [this.settingsForm.get('chatSystemPrompt')!, this.settingsForm.get('chatApiUrl')!];
+        return [
+          this.settingsForm.get('chatSystemPrompt')!,
+          this.settingsForm.get('chatApiUrl')!,
+          this.settingsForm.get('chatGeminiModel')!,
+          this.settingsForm.get('chatGroqApiUrl')!,
+          this.settingsForm.get('chatGroqModel')!,
+          this.settingsForm.get('chatOpenRouterApiUrl')!,
+          this.settingsForm.get('chatOpenRouterModel')!
+        ];
     }
   }
 
@@ -256,7 +274,12 @@ export class SettingsManagementComponent implements OnInit {
       contractUpload: new UploadLimitDto(value.contractUpload),
       enrolmentUpload: new UploadLimitDto(value.enrolmentUpload),
       chatSystemPrompt: value.chatSystemPrompt,
-      chatApiUrl: value.chatApiUrl
+      chatApiUrl: value.chatApiUrl,
+      chatGeminiModel: value.chatGeminiModel,
+      chatGroqApiUrl: value.chatGroqApiUrl,
+      chatGroqModel: value.chatGroqModel,
+      chatOpenRouterApiUrl: value.chatOpenRouterApiUrl,
+      chatOpenRouterModel: value.chatOpenRouterModel
     });
 
     this.apiClient.settingsPUT(payload).subscribe({

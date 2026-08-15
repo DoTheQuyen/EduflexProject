@@ -1,6 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PermissionKey } from '@services/api.services';
+import { Client } from '@services/public.services';
 
 export interface ModulePermissions {
   view: boolean;
@@ -21,21 +22,17 @@ export interface TaskPermissions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthHelperService {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private authClient: Client,
+  ) {}
 
   isLoggedIn(): boolean {
     if (!isPlatformBrowser(this.platformId)) return false;
-    const token = sessionStorage.getItem('authToken');
-    return !!token && this.isTokenValid();
-  }
-
-  private isTokenValid(): boolean {
-    // Add your token validation logic here
-    // For now, just return true if token exists
-    return true;
+    return !!sessionStorage.getItem('userData');
   }
 
   getCurrentUser(): any {
@@ -52,19 +49,15 @@ export class AuthHelperService {
     return this.getCurrentUser();
   }
 
+  // The real session lives in the httpOnly cookies now, so this also tells the
+  // backend to revoke the refresh token — this only clears the local UI snapshot.
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.removeItem('authToken');
+      this.authClient.logout().subscribe({ error: () => {} });
       sessionStorage.removeItem('userData');
       sessionStorage.removeItem('rememberMe');
       sessionStorage.removeItem('userEmail');
     }
-    // Optionally navigate using Router here instead of full reload
-  }
-
-  getAuthToken(): string | null {
-    if (!isPlatformBrowser(this.platformId)) return null;
-    return sessionStorage.getItem('authToken');
   }
 
   getUserRole(): string {
@@ -82,7 +75,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.UsersView),
       add: this.hasPermission(PermissionKey.UsersAdd),
       edit: this.hasPermission(PermissionKey.UsersEdit),
-      delete: this.hasPermission(PermissionKey.UsersDelete)
+      delete: this.hasPermission(PermissionKey.UsersDelete),
     };
   }
 
@@ -91,7 +84,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.CoursePromotionsView),
       add: this.hasPermission(PermissionKey.CoursePromotionsAdd),
       edit: this.hasPermission(PermissionKey.CoursePromotionsEdit),
-      delete: this.hasPermission(PermissionKey.CoursePromotionsDelete)
+      delete: this.hasPermission(PermissionKey.CoursePromotionsDelete),
     };
   }
 
@@ -100,7 +93,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.RolesView),
       add: this.hasPermission(PermissionKey.RolesAdd),
       edit: this.hasPermission(PermissionKey.RolesEdit),
-      delete: this.hasPermission(PermissionKey.RolesDelete)
+      delete: this.hasPermission(PermissionKey.RolesDelete),
     };
   }
 
@@ -109,7 +102,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.EnquiryView),
       add: this.hasPermission(PermissionKey.EnquiryAdd),
       edit: this.hasPermission(PermissionKey.EnquiryEdit),
-      delete: this.hasPermission(PermissionKey.EnquiryDelete)
+      delete: this.hasPermission(PermissionKey.EnquiryDelete),
     };
   }
 
@@ -118,7 +111,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.EducationPartnersView),
       add: this.hasPermission(PermissionKey.EducationPartnersAdd),
       edit: this.hasPermission(PermissionKey.EducationPartnersEdit),
-      delete: this.hasPermission(PermissionKey.EducationPartnersDelete)
+      delete: this.hasPermission(PermissionKey.EducationPartnersDelete),
     };
   }
 
@@ -127,7 +120,7 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.BusinessPartnersView),
       add: this.hasPermission(PermissionKey.BusinessPartnersAdd),
       edit: this.hasPermission(PermissionKey.BusinessPartnersEdit),
-      delete: this.hasPermission(PermissionKey.BusinessPartnersDelete)
+      delete: this.hasPermission(PermissionKey.BusinessPartnersDelete),
     };
   }
 
@@ -137,7 +130,7 @@ export class AuthHelperService {
       add: this.hasPermission(PermissionKey.EnrolmentsAdd),
       edit: this.hasPermission(PermissionKey.EnrolmentsEdit),
       delete: this.hasPermission(PermissionKey.EnrolmentsDelete),
-      reassign: this.hasPermission(PermissionKey.EnrolmentsReassign)
+      reassign: this.hasPermission(PermissionKey.EnrolmentsReassign),
     };
   }
 
@@ -146,16 +139,16 @@ export class AuthHelperService {
       view: this.hasPermission(PermissionKey.FinanceView),
       add: this.hasPermission(PermissionKey.FinanceAdd),
       edit: this.hasPermission(PermissionKey.FinanceEdit),
-      delete: this.hasPermission(PermissionKey.FinanceDelete)
+      delete: this.hasPermission(PermissionKey.FinanceDelete),
     };
   }
 
-    hasStudentsPermission(): ModulePermissions {
+  hasStudentsPermission(): ModulePermissions {
     return {
       view: this.hasPermission(PermissionKey.StudentsView),
       add: this.hasPermission(PermissionKey.StudentsAdd),
       edit: this.hasPermission(PermissionKey.StudentsEdit),
-      delete: this.hasPermission(PermissionKey.StudentsDelete)
+      delete: this.hasPermission(PermissionKey.StudentsDelete),
     };
   }
 
@@ -165,7 +158,7 @@ export class AuthHelperService {
       view: canEdit,
       add: false,
       edit: canEdit,
-      delete: false
+      delete: false,
     };
   }
 
@@ -177,7 +170,7 @@ export class AuthHelperService {
       view: this.hasPermission('DepartmentsView'),
       add: this.hasPermission('DepartmentsAdd'),
       edit: this.hasPermission('DepartmentsEdit'),
-      delete: this.hasPermission('DepartmentsDelete')
+      delete: this.hasPermission('DepartmentsDelete'),
     };
   }
 
@@ -190,7 +183,7 @@ export class AuthHelperService {
       view: canEdit,
       add: canEdit,
       edit: canEdit,
-      delete: canEdit
+      delete: canEdit,
     };
   }
 
@@ -204,7 +197,7 @@ export class AuthHelperService {
       add: this.hasPermission('MigrationCasesAdd'),
       edit: this.hasPermission('MigrationCasesEdit'),
       delete: this.hasPermission('MigrationCasesDelete'),
-      reassign: this.hasPermission('MigrationCasesReassign')
+      reassign: this.hasPermission('MigrationCasesReassign'),
     };
   }
 
@@ -218,7 +211,7 @@ export class AuthHelperService {
       view: canEdit,
       add: canEdit,
       edit: canEdit,
-      delete: canEdit
+      delete: canEdit,
     };
   }
 
@@ -231,7 +224,7 @@ export class AuthHelperService {
       view: canEdit,
       add: canEdit,
       edit: canEdit,
-      delete: canEdit
+      delete: canEdit,
     };
   }
 
@@ -244,7 +237,7 @@ export class AuthHelperService {
       view: canEdit,
       add: canEdit,
       edit: canEdit,
-      delete: canEdit
+      delete: canEdit,
     };
   }
 
@@ -255,7 +248,7 @@ export class AuthHelperService {
       view: this.hasPermission('TasksView'),
       add: this.hasPermission('TasksAdd'),
       edit: this.hasPermission('TasksEdit'),
-      viewAll: this.hasPermission('TasksViewAll')
+      viewAll: this.hasPermission('TasksViewAll'),
     };
   }
 }

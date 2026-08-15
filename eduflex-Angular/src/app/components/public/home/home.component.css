@@ -1,5 +1,5 @@
 section {
-  padding: 3rem 0;
+  padding: 4.5rem 0;
 }
 
 .container {
@@ -26,10 +26,21 @@ h1, h2, h3 {
   background-color: var(--color-navy-900);
   color: white;
   padding: 2rem 1.5rem 1.5rem;
+  /* Brighter scrim: navy-700 instead of navy-900, so more of the sunset photo
+     comes through. The opacity floor (0.89) is not arbitrary — below it the
+     .hero-sub grey drops under 4.5:1 against the photo's brightest areas.
+     Measured worst case (scrim over white): 7.45:1 for the white headline and
+     4.71:1 for the sub-heading, both still AA. The ground is ~70% brighter in
+     luminance than the old navy-900 scrim.
+     Grid lines were a hardcoded copy of --color-accent; now derived from it. */
   background-image:
-    linear-gradient(rgba(184, 134, 47, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(184, 134, 47, 0.18) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(22, 35, 58, 0.86) 0%, rgba(22, 35, 58, 0.93) 100%),
+    linear-gradient(color-mix(in srgb, var(--color-accent) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-navy-700) 89%, transparent) 0%,
+      color-mix(in srgb, var(--color-navy-700) 94%, transparent) 100%
+    ),
     url('assets/hero/sydney-opera-house-sunset-hero.jpg');
   background-size: 42px 42px, 42px 42px, cover, cover;
   background-position: 0 0, 0 0, center, center;
@@ -45,19 +56,27 @@ h1, h2, h3 {
   align-items: center;
 }
 
+/* The masthead keeps the brass brand colour. !important is needed to beat
+   theme.css's .eyebrow, which is now slate for every section below. */
 .hero-eyebrow {
-  color: var(--color-accent-light);
+  color: var(--color-accent-light) !important;
 }
 
+/* Display type at 700 with a touch of negative tracking — the 400 weight read
+   thin and washed out at this size against the photo. */
 .hero h1 {
-  font-size: 2.75rem;
-  line-height: 1.15;
+  font-size: clamp(2rem, 3.2vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
   color: white;
-  margin: 0.6rem 0 1.1rem;
+  margin: 0.7rem 0 1.1rem;
+  text-wrap: balance;
 }
 
 .hero-sub {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
+  line-height: 1.65;
   color: var(--color-muted-on-dark);
   max-width: 46ch;
   margin: 0 0 2rem;
@@ -69,19 +88,59 @@ h1, h2, h3 {
   flex-wrap: wrap;
 }
 
+/* One definition for both consultation buttons — the hero's and the closing
+   CTA band's — so they read as the same control in two places. Raised rather
+   than flat: a directional gradient for the curve, a lit top edge, a shaded
+   underside, and a cast shadow to lift it off the page. */
 .btn-primary {
-  background: var(--color-accent);
+  background: var(--shine-slate);
   border: none;
   color: white;
   font-weight: 600;
   padding: 0.9rem 1.9rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 5px rgba(20, 30, 45, 0.3),
+    0 5px 12px rgba(20, 30, 45, 0.32);
+  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-primary:hover {
-  background: var(--color-accent-dark);
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -3px 5px rgba(20, 30, 45, 0.3),
+    0 8px 18px rgba(20, 30, 45, 0.36);
+}
+
+/* Pressed: the cast shadow collapses and the inset deepens, so it reads as
+   pushed in rather than merely recoloured. */
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 2px 5px rgba(20, 30, 45, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18),
+    0 2px 6px rgba(20, 30, 45, 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-primary:hover,
+  .btn-primary:active {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Slate sits close to the hero's navy in luminance (~1.3:1 fill contrast), so
+   on the dark ground the drop shadow does nothing and the button edge would be
+   hard to find. This hairline gives it a perceivable boundary without changing
+   the fill, keeping it visually the same button as the one at the foot. */
+.hero .btn-primary {
+  border: 1px solid rgba(255, 255, 255, 0.32);
 }
 
 .btn-outline {
@@ -101,16 +160,18 @@ h1, h2, h3 {
 
 .btn-quiet {
   background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-navy-900);
+  border: 1.5px solid var(--color-slate-hairline);
+  color: var(--color-slate-900);
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .btn-quiet:hover {
-  border-color: var(--color-navy-900);
+  border-color: var(--color-slate-700);
+  color: var(--color-slate-700);
 }
 
 /* Journey timeline */
@@ -157,110 +218,107 @@ h1, h2, h3 {
 .journey-label {
   font-size: 0.95rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: white;
 }
 
+/* Was a hardcoded #9CA6B8; --color-muted-on-dark is the token for exactly
+   this (secondary text on a dark surface) and is a touch lighter, which the
+   smaller size needs. */
 .journey-sub {
   font-size: 0.85rem;
-  color: #9CA6B8;
-  margin-top: 0.15rem;
+  line-height: 1.55;
+  color: var(--color-muted-on-dark);
+  margin-top: 0.2rem;
 }
 
 /* Stats */
 .stats {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  padding: 0.5rem 0.5rem;
+  background: var(--color-slate-surface-deep);
+  border-top: 1px solid var(--color-slate-border);
+  border-bottom: 1px solid var(--color-slate-border);
+  padding: 0;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   text-align: center;
+  padding: 2.5rem 0;
 }
 
 .stats-grid > div + div {
-  border-left: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-slate-hairline);
 }
 
+/* Tabular figures in the mono face: the three numbers read as a measured
+   record rather than decorative display type. */
 .stat-num {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  color: var(--color-navy-900);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 2.3rem;
+  color: var(--color-slate-700);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  margin-top: 0.2rem;
+  font-size: 0.87rem;
+  color: var(--color-slate-muted);
+  margin-top: 0.3rem;
 }
 
 /* Section heading block */
 .band-head {
   max-width: 60ch;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.75rem;
 }
 
 .band-head h2 {
   font-size: 1.9rem;
-  color: var(--color-navy-900);
-  margin-top: 0.4rem;
+  color: var(--color-slate-900);
+  margin-top: 0.5rem;
 }
 
 /* Why Eduflex */
 .why-band {
-  position: relative;
-  background-color: white;
-  background-image:
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.78) 78%, rgba(255, 255, 255, 1) 100%),
-    url('assets/hero/students-studying-park.jpg');
-  background-size: cover, cover;
-  background-position: center, center 68%;
-  background-repeat: no-repeat, no-repeat;
+  background: var(--color-slate-surface);
 }
 
-.why-band .band-head {
-  display: inline-block;
-  
-  padding: 1.25rem 1.5rem;
-  border-radius: var(--radius);
-}
-
+/* Ruled columns rather than boxed cards: four short claims sitting under a
+   shared rule read as one set, where four bordered boxes read as four
+   separate things competing for attention. */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
 .feature-card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 1.6rem 1.4rem;
-  background: white;
+  border-top: 2px solid var(--color-slate-500);
+  padding: 1.65rem 0 0;
+  background: transparent;
 }
 
+/* Tile itself comes from .icon-tile in theme.css. */
 .feature-icon {
-  width: 34px;
-  height: 34px;
-  margin-bottom: 1rem;
-  color: var(--color-accent);
+  margin-bottom: 1.1rem;
 }
 
 .feature-card h3 {
   font-size: 1.05rem;
-  color: var(--color-ink);
-  margin-bottom: 0.4rem;
+  color: var(--color-slate-900);
+  margin-bottom: 0.5rem;
 }
 
 .feature-card p {
-  font-size: 0.9rem;
-  color: var(--color-muted);
+  font-size: 0.92rem;
+  color: var(--color-slate-muted);
   margin: 0;
 }
 
 /* Story & Mission */
 .story-band {
-  background: var(--color-surface);
+  background: var(--color-slate-surface-deep);
 }
 
 .story-grid {
@@ -272,12 +330,12 @@ h1, h2, h3 {
 
 .story-text h2 {
   font-size: 1.75rem;
-  color: var(--color-navy-900);
-  margin-top: 0.4rem;
+  color: var(--color-slate-900);
+  margin-top: 0.5rem;
 }
 
 .story-text p {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 1rem;
   margin-top: 1rem;
   line-height: 1.6;
@@ -286,10 +344,10 @@ h1, h2, h3 {
 .pull-quote {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.2rem;
-  color: var(--color-navy-900);
-  border-left: 2px solid var(--color-accent);
-  padding-left: 1.1rem;
+  font-size: 1.25rem;
+  color: var(--color-slate-900);
+  border-left: 3px solid var(--color-slate-500);
+  padding-left: 1.2rem;
   margin: 1.5rem 0;
   line-height: 1.5;
 }
@@ -297,27 +355,32 @@ h1, h2, h3 {
 .mission-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
+/* Raised cards here, not rules: mission/vision sit on the tinted story band,
+   so they need their own surface to separate from it. */
 .mission-item {
-  border-top: 1px solid var(--color-border);
-  padding-top: 1.2rem;
+  background: white;
+  border: 1px solid var(--color-slate-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
 }
 
 .mission-item .eyebrow {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .mission-item h3 {
-  font-size: 1.05rem;
-  color: var(--color-ink);
-  margin-bottom: 0.35rem;
+  font-size: 1.1rem;
+  color: var(--color-slate-900);
+  margin-bottom: 0.5rem;
 }
 
 .mission-item p {
-  color: var(--color-muted);
+  color: var(--color-slate-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -330,31 +393,32 @@ h1, h2, h3 {
 }
 
 .service-card {
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-slate-border);
   border-radius: var(--radius);
-  padding: 1.75rem;
+  padding: 1.85rem;
   background: white;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .service-card:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-slate-500);
+  box-shadow: var(--shadow-card);
 }
 
 .service-card .eyebrow {
   display: block;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.7rem;
 }
 
 .service-card h3 {
-  font-size: 1.1rem;
-  color: var(--color-ink);
-  margin-bottom: 0.5rem;
+  font-size: 1.12rem;
+  color: var(--color-slate-900);
+  margin-bottom: 0.55rem;
 }
 
 .service-card p {
-  font-size: 0.9rem;
-  color: var(--color-muted);
+  font-size: 0.92rem;
+  color: var(--color-slate-muted);
   margin: 0;
 }
 
@@ -362,35 +426,32 @@ h1, h2, h3 {
   margin-top: 2.2rem;
 }
 
-/* CTA */
+/* CTA — a pastel slate panel with dark text, rather than another dark slab.
+   The page already opens on a dark navy hero; repeating that weight at the
+   foot made the whole page read heavy. */
 .cta-band {
   padding: 4rem 2rem 5rem;
 }
 
+/* Gradient, radius and layout come from .panel-cta in theme.css. */
 .cta-panel {
   max-width: 1200px;
   margin: 0 auto;
-  background: var(--color-navy-900);
-  border-radius: 14px;
   padding: 3rem 3.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
 }
 
 .cta-panel h2 {
   font-size: 1.65rem;
-  color: white;
+  color: var(--color-slate-900);
   max-width: 32ch;
 }
 
 .cta-panel p {
-  color: var(--color-muted-on-dark);
+  color: var(--color-slate-700);
   font-size: 0.95rem;
   margin-top: 0.5rem;
 }
+
 
 /* Responsive */
 @media (max-width: 992px) {
@@ -409,7 +470,7 @@ h1, h2, h3 {
   }
   .stats-grid > div + div {
     border-left: none;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-slate-hairline);
     padding-top: 1rem;
     margin-top: 1rem;
   }

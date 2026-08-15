@@ -1,18 +1,14 @@
 <div class="chat-widget">
     <button type="button" class="chat-toggle-btn" (click)="toggleOpen()"
         [attr.aria-label]="(isOpen ? 'CHAT.TOGGLE_CLOSE_ARIA' : 'CHAT.TOGGLE_OPEN_ARIA') | translate">
-        <svg *ngIf="!isOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
-            <path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H8l-4 4V6a1 1 0 0 1 1-1z" />
-            <circle cx="8" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
-            <circle cx="12" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
-            <circle cx="16" cy="10.5" r="0.75" fill="currentColor" stroke="none" />
-        </svg>
         <svg *ngIf="isOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
             stroke-linecap="round" width="20" height="20">
             <line x1="6" y1="6" x2="18" y2="18" />
             <line x1="18" y1="6" x2="6" y2="18" />
         </svg>
+        <!-- Decorative: the button's accessible name comes from its aria-label,
+             so announcing this too would only repeat it. -->
+        <span class="chat-toggle-label" *ngIf="!isOpen" aria-hidden="true">Q&amp;A</span>
     </button>
 
     <div class="chat-panel" *ngIf="isOpen">

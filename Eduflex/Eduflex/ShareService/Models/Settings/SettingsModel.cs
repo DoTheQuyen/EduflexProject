@@ -87,6 +87,17 @@ namespace ShareService.Models.Settings
         // OpenRouterSettings.OpenRouterApiKey (secret store) is sent as a Bearer header separately.
         [BsonElement("chatOpenRouterApiUrl")]
         public string ChatOpenRouterApiUrl { get; set; } = "https://openrouter.ai/api/v1/chat/completions";
+
+        // Model IDs for each provider — DB-backed so a version can be pinned/swapped without a
+        // redeploy (e.g. avoiding a "-latest" alias silently migrating to an unstable new release).
+        [BsonElement("chatGeminiModel")]
+        public string ChatGeminiModel { get; set; } = "gemini-3.6-flash";
+
+        [BsonElement("chatGroqModel")]
+        public string ChatGroqModel { get; set; } = "llama-3.3-70b-versatile";
+
+        [BsonElement("chatOpenRouterModel")]
+        public string ChatOpenRouterModel { get; set; } = "nvidia/nemotron-3.5-lightning:free";
     }
 
     public class DocumentUploadSettings

@@ -116,7 +116,7 @@ namespace ShareService.Services.Service.Integration
                 contents = new[] { new { parts = new[] { new { text = question } } } }
             };
 
-            var url = $"{appSettings.ChatApiUrl.Replace("{model}", _settings.Model)}?key={_settings.ApiKey}";
+            var url = $"{appSettings.ChatApiUrl.Replace("{model}", appSettings.ChatGeminiModel)}?key={_settings.ApiKey}";
 
             try
             {
@@ -153,7 +153,7 @@ namespace ShareService.Services.Service.Integration
         {
             var requestBody = new
             {
-                model = _groqSettings.Model,
+                model = appSettings.ChatGroqModel,
                 messages = new object[]
                 {
                     new { role = "system", content = appSettings.ChatSystemPrompt },
@@ -200,7 +200,7 @@ namespace ShareService.Services.Service.Integration
         {
             var requestBody = new
             {
-                model = _openRouterSettings.Model,
+                model = appSettings.ChatOpenRouterModel,
                 messages = new object[]
                 {
                     new { role = "system", content = appSettings.ChatSystemPrompt },

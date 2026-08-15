@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Eduflex.Authorization;
 using Eduflex.API.BackgroundServices;
 using Eduflex.API.Hubs;
+using Eduflex.API.Realtime;
+using ShareService.Services.Interface;
 using StackExchange.Redis;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
@@ -40,36 +42,13 @@ builder.Services.AddMemoryCache();
 // });
 builder.Services.AddDistributedMemoryCache();
 
-// Redis pub/sub disabled (cost) — this fed NotificationListener below, which fanned out
-// to SignalR for live notification push. Notifications still persist to Mongo and load
-// on page load/reconnect via NotificationsController; only the *live* push to someone
-// already on the page is skipped. Uncomment this, the IConnectionMultiplexer parameter
-// in NotificationPublisher, and AddHostedService<NotificationListener>() below together
-// to restore it.
-// builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-// {
-//     var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Redis");
-//     var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
-//
-//     // StackExchange.Redis auto-reconnects on its own — these are just visibility hooks so an
-//     // outage shows up in logs instead of silently degrading (cache calls fail open, pub/sub
-//     // messages stop arriving, with nothing telling you why).
-//     multiplexer.ConnectionFailed += (_, args) =>
-//         logger.LogError("Redis connection failed on {EndPoint}: {FailureType}", args.EndPoint, args.FailureType);
-//
-//     multiplexer.ConnectionRestored += (_, args) =>
-//         logger.LogInformation("Redis connection restored on {EndPoint}", args.EndPoint);
-//
-//     return multiplexer;
-// });
-
 // ✅ SignalR for pushing live notifications to connected clients
 builder.Services.AddSignalR();
 
-// Background listener that subscribed to the notifications channel and fanned out to
-// SignalR groups — disabled alongside the IConnectionMultiplexer registration above,
-// since it can't run without it.
-// builder.Services.AddHostedService<NotificationListener>();
+// NotificationPublisher pushes straight into this hub via the interface below — no
+// message bus needed for a single backend instance. A Redis (or similar) relay would
+// only earn its cost back if this ever ran as multiple horizontally-scaled instances.
+builder.Services.AddScoped<INotificationBroadcaster, SignalRNotificationBroadcaster>();
 
 // ✅ Register health checks
 builder.Services.AddHealthChecks();
@@ -158,24 +137,32 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
 
-        // Browsers can't set the Authorization header on WebSocket/SSE connections, so the
-        // SignalR JS client sends the JWT as an "access_token" query string param instead —
-        // this reads it from there, but only for requests hitting a hub path.
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
+                // Browsers can't set the Authorization header on WebSocket/SSE connections,
+                // so the SignalR JS client relies on the cookie below instead now.
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
                 {
                     context.Token = accessToken;
+                    return Task.CompletedTask;
                 }
+
+                // No Authorization header (the normal browser case now that the JWT lives
+                // in an httpOnly cookie) — fall back to reading it from there.
+                if (string.IsNullOrEmpty(context.Token) &&
+                    context.HttpContext.Request.Cookies.TryGetValue("access_token", out var cookieToken))
+                {
+                    context.Token = cookieToken;
+                }
+
                 return Task.CompletedTask;
             }
         };
     });
-
 // Add Authorization services + our custom permission-based handlers
 builder.Services.AddAuthorization(options =>
 {
@@ -255,6 +242,28 @@ app.UseRouting();
 
 app.UseCors("AllowAngular");
 app.UseRateLimiter();
+// Lightweight CSRF guard: browsers can't attach a custom header to a cross-site
+// request without a CORS preflight, and our CORS policy only allows the configured
+// Angular origin(s) — so requiring this header on state-changing requests blocks
+// simple cross-site form/img/fetch CSRF attempts against the auth cookies.
+app.Use(async (context, next) =>
+{
+    var method = context.Request.Method;
+    var isStateChanging = HttpMethods.IsPost(method) || HttpMethods.IsPut(method) ||
+                           HttpMethods.IsPatch(method) || HttpMethods.IsDelete(method);
+
+    if (isStateChanging &&
+        context.Request.Path.StartsWithSegments("/api") &&
+        !context.Request.Headers.ContainsKey("X-Eduflex-Csrf"))
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsync("Missing CSRF header");
+        return;
+    }
+
+    await next();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

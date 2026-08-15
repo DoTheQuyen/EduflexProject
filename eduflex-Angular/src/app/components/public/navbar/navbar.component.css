@@ -33,10 +33,15 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.nav-brand h2 {
+/* The template renders the brand as an <h1>; the old rule targeted h2 and so
+   never applied. Now it also uses the display face, matching the wordmark
+   treatment in the hero and footer. */
+.nav-brand h1 {
   margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700; /* Match home component font weight */
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.005em;
 }
 
 /* Main Navigation Container */
@@ -60,7 +65,9 @@
   text-decoration: none;
   color: #fff;
   transition: color 0.3s ease; /* Match home transition */
+  font-size: 0.92rem;
   font-weight: 500;
+  letter-spacing: 0.015em;
   padding: 0.5rem 0;
   position: relative;
 }
@@ -87,15 +94,21 @@
   padding: 2px;
 }
 
+/* Mono here on purpose: EN/VI are codes, not words, and the mono face makes
+   them read as a setting rather than another nav link. */
 .lang-switch button {
   background: transparent;
   border: none;
-  color: rgba(255,255,255,0.75);
+  /* Lifted from 0.75 — the inactive code needs to stay legible now that the
+     active one is a bright chip beside it (7.3:1 on the bar). */
+  color: rgba(255, 255, 255, 0.8);
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
   cursor: pointer;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   transition: all 0.2s ease;
 }
 
@@ -103,9 +116,17 @@
   color: #fff;
 }
 
+/* A light chip rather than a slate one. This is a selection state, not an
+   action, and on a navy bar a dark chip would sit at ~2:1 against the track
+   and barely read as selected — light gives 8.4:1 against the bar with a
+   12.8:1 label. It's the same light-on-dark logic as the sidebar's active row. */
 .lang-switch button.active {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--color-slate-100);
+  color: var(--color-ink);
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Auth Section - Moved to right */
@@ -126,11 +147,16 @@
   position: relative;
 }
 
+/* Was white on brass at 3.24:1, which fails AA. Slate carries white at 6.10:1
+   and matches the Login button beside it. */
 .user-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--shine-slate);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 2px 5px rgba(0, 0, 0, 0.25);
   color: #fff;
   display: flex;
   align-items: center;
@@ -138,7 +164,6 @@
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .user-avatar:hover {
@@ -150,7 +175,7 @@
   top: 46px;
   right: 0;
   background: #fff;
-  color: var(--color-ink);
+  color: var(--color-slate-900);
   min-width: 200px;
   border-radius: 6px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Enhanced shadow */
@@ -160,7 +185,7 @@
 
 .user-dropdown .user-info {
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-slate-border);
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -168,13 +193,15 @@
 .user-dropdown .dropdown-links a {
   display: block;
   padding: 0.5rem 0;
-  color: var(--color-ink);
+  color: var(--color-slate-900);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
+/* Must differ from the resting colour above, or the hover does nothing. */
 .user-dropdown .dropdown-links a:hover {
-  color: var(--color-navy-900);
+  color: var(--color-slate-700);
+  text-decoration: underline;
 }
 
 .logout-button {
@@ -196,23 +223,43 @@
 }
 
 /* Login Button - matches the site's accent (gold) buttons, e.g. "Đặt lịch tư vấn miễn phí" */
+/* Same raised slate control as the hero CTA, so the two buttons on the navy
+   ground read as one system. The hairline is doing real work: a slate fill is
+   only 1.6–2.6:1 against this bar, so without an edge the button would have no
+   perceivable boundary — the white label itself is a comfortable 9.8:1. */
 .login-button {
-  background: var(--color-accent);
+  background: var(--shine-slate);
   color: #fff;
-  padding: 0.2rem 0.8rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 6px;
   text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  border: none;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.32);
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(20, 30, 45, 0.3),
+    0 3px 8px rgba(0, 0, 0, 0.28);
 }
 
 .login-button:hover {
-  background: var(--color-accent-dark);
+  filter: brightness(1.12);
+  color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(20, 30, 45, 0.3),
+    0 6px 14px rgba(0, 0, 0, 0.32);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 4px rgba(20, 30, 45, 0.45),
+    0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 /* Mobile Menu Button */

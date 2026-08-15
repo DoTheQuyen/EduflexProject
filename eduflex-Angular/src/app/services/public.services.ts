@@ -87,6 +87,57 @@ export class Client {
     /**
      * @return OK
      */
+    refresh(): Observable<AuthResponseDto> {
+        let url_ = this.baseUrl + "/api/Auth/refresh";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRefresh(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRefresh(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<AuthResponseDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<AuthResponseDto>;
+        }));
+    }
+
+    protected processRefresh(response: HttpResponseBase): Observable<AuthResponseDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthResponseDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     logout(): Observable<string> {
         let url_ = this.baseUrl + "/api/Auth/logout";
         url_ = url_.replace(/[?&]$/, "");
@@ -138,7 +189,6 @@ export class Client {
 }
 
 export class AuthResponseDto implements IAuthResponseDto {
-    token?: string | undefined;
     userId?: string | undefined;
     email?: string | undefined;
     firstName?: string | undefined;
@@ -159,7 +209,6 @@ export class AuthResponseDto implements IAuthResponseDto {
 
     init(_data?: any) {
         if (_data) {
-            this.token = _data["token"];
             this.userId = _data["userId"];
             this.email = _data["email"];
             this.firstName = _data["firstName"];
@@ -184,7 +233,6 @@ export class AuthResponseDto implements IAuthResponseDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["token"] = this.token;
         data["userId"] = this.userId;
         data["email"] = this.email;
         data["firstName"] = this.firstName;
@@ -202,7 +250,6 @@ export class AuthResponseDto implements IAuthResponseDto {
 }
 
 export interface IAuthResponseDto {
-    token?: string | undefined;
     userId?: string | undefined;
     email?: string | undefined;
     firstName?: string | undefined;

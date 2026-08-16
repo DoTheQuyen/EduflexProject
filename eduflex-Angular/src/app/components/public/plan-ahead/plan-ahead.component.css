@@ -1,0 +1,266 @@
+section {
+  padding: 2.5rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Colour and type come from theme.css's .eyebrow; only layout is set here. */
+.eyebrow {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+/* Short quote, so italic display type is the right call here — unlike the
+   closing paragraphs further down, this is two sentences, not a page of
+   reading, so it doesn't cost the legibility a longer passage would. */
+.header-note {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--color-slate-900);
+  max-width: 58ch;
+  margin: 1.75rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-slate-border);
+}
+
+.header-note-sign {
+  display: block;
+  margin-top: 0.65rem;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-slate-muted);
+}
+
+.band {
+  background: var(--color-slate-surface);
+}
+
+/* ===== Intro ===== */
+.intro-block {
+  max-width: 68ch;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.intro-block h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--color-slate-900);
+  margin-bottom: 1rem;
+}
+
+.intro-block p {
+  color: var(--color-slate-muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+/* ===== Timeline ===== */
+.timeline-band {
+  background: var(--color-slate-surface-deep);
+}
+
+/* stretch, not start: with short cards next to a longer one, "start" left
+   them at their own natural height, so the shorter card's border stopped
+   well above the taller one beside it — the same fix as every other card
+   grid on the site (mission, team, step). */
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+/* Surface, border and top rule come from .card-ruled in theme.css. */
+.stage {
+  padding: 1.75rem;
+}
+
+/* The graduation-prep stage carries a document checklist, so it needs the
+   room a half-width column doesn't give it. */
+.stage-wide {
+  grid-column: 1 / -1;
+}
+
+/* A real stage of the journey, not a decorative index — this is why it's a
+   mono "record label" rather than a numbered badge: the label states *when*,
+   which is the one thing this whole page is organised around. */
+.stage-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-slate-700);
+  background: color-mix(in srgb, var(--color-slate-500) 10%, transparent);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.stage h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-slate-900);
+  margin-bottom: 0.65rem;
+  line-height: 1.3;
+}
+
+.stage p {
+  color: var(--color-slate-muted);
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+/* theme.css's .callout caps its text at 62ch, sized for the handbook's
+   narrower reading column. This card spans the full grid width, so that cap
+   left the note stranded in a narrow strip with dead space beside it. */
+.stage-wide .callout p {
+  max-width: none;
+}
+
+.stage-doc-label {
+  font-weight: 600;
+  color: var(--color-slate-900);
+  font-size: 0.9rem;
+  margin: 1.4rem 0 0.75rem;
+}
+
+.doc-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.6rem 1.5rem;
+}
+
+.doc-checklist li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  color: var(--color-slate-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.doc-checklist .box {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.2rem;
+  border: 1.5px solid var(--color-slate-500);
+  border-radius: 4px;
+}
+
+/* ===== Closing thread ===== */
+/* Was capped at 64ch, which reads fine for a single short quote but left two
+   full paragraphs stranded in the left third of the container with a wide
+   band of empty space beside them. Runs the full container width now, same
+   as the timeline cards above it. */
+.closing-block {
+  width: 100%;
+}
+
+.closing-block h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--color-slate-900);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Plain body weight, not the italic display face used for the site's short
+   pull-quotes — italic reads fine for a sentence or two, but it measurably
+   slows reading across a full paragraph, and this is exactly the part meant
+   to be read carefully, not skimmed. The left rule keeps the "this matters"
+   framing without costing readability. */
+/* Two columns rather than one full-width paragraph: at the container's full
+   1200px width a single column ran to 140+ characters a line, which is hard
+   to read no matter how the type itself is styled. Two columns keep each
+   line at a normal reading measure while the block still fills the row, the
+   same trade-off the timeline cards above make. */
+.closing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2.5rem;
+  align-items: start;
+}
+
+.closing-body {
+  font-size: 1.04rem;
+  line-height: 1.75;
+  color: var(--color-slate-muted);
+  text-align: left;
+  border-left: 3px solid var(--color-slate-500);
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+/* The one piece of real emphasis: darker, heavier, so the cost-of-delay
+   point stands out from the explanatory sentence around it. */
+.closing-body strong {
+  color: var(--color-slate-900);
+  font-weight: 700;
+}
+
+/* The closing line. Short enough that the display face and uppercase don't
+   cost readability the way they would across a paragraph, and it's meant to
+   land as a single hard statement, not blend into the paragraphs above it. */
+.closing-tagline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-slate-700);
+  text-align: center;
+  margin-top: 2.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-slate-border);
+}
+
+/* Deliberately plain — muted, no border, no button, no panel. Everything
+   above this line argues its case; this is just a quiet, honest closing
+   sentence, not another call to action. */
+.closing-final {
+  margin-top: 1.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-slate-muted);
+  text-align: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 860px) {
+  .timeline {
+    grid-template-columns: 1fr;
+  }
+  .stage-wide {
+    grid-column: auto;
+  }
+  .closing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+  section {
+    padding: 3.25rem 0;
+  }
+}

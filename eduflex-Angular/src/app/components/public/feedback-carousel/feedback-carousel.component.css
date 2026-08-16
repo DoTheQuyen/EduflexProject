@@ -2,7 +2,7 @@
    arrow controls the course promo carousel uses. Long comments are clamped so
    one essay-length review can't set the height of the whole row. */
 .feedback-section {
-  padding: 4.5rem 0;
+  padding: 2.5rem 0;
   background: var(--color-slate-surface-deep);
 }
 

@@ -40,7 +40,7 @@
     <div class="wall-state" *ngIf="hasError">
       <h2>{{ 'FEEDBACK_PAGE.ERROR_TITLE' | translate }}</h2>
       <p>{{ 'FEEDBACK_PAGE.ERROR_DESC' | translate }}</p>
-      <button type="button" class="btn-slate" (click)="loadFeedbacks()">
+      <button type="button" class="btn btn-primary btn-md" (click)="loadFeedbacks()">
         {{ 'FEEDBACK_PAGE.ERROR_RETRY' | translate }}
       </button>
     </div>
@@ -99,6 +99,6 @@
       <h2>{{ 'FEEDBACK_PAGE.CTA_TITLE' | translate }}</h2>
       <p>{{ 'FEEDBACK_PAGE.CTA_DESC' | translate }}</p>
     </div>
-    <a routerLink="/" class="btn-slate">{{ 'FEEDBACK_PAGE.CTA_BUTTON' | translate }}</a>
+    <a routerLink="/" class="btn btn-primary btn-md">{{ 'FEEDBACK_PAGE.CTA_BUTTON' | translate }}</a>
   </div>
 </section>

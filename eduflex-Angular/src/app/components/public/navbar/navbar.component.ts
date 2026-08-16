@@ -45,6 +45,14 @@ export class NavbarComponent implements OnInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
+  /** Bound to every link inside the mobile menu, rather than closing on
+   *  router navigation — Angular's default onSameUrlNavigation is 'ignore',
+   *  so tapping the link for the page you're already on wouldn't have fired
+   *  a navigation event at all, and the menu would have stayed open. */
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
   setLang(lang: string): void {
     this.languageService.setLang(lang);
   }

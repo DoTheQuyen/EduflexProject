@@ -1,5 +1,5 @@
 section {
-  padding: 4.5rem 0;
+  padding: 2.5rem 0;
 }
 
 .container {
@@ -14,30 +14,7 @@ section {
   margin-bottom: 0.4rem;
 }
 
-/* Header — same treatment as the feedback page header, so every public
-   secondary page opens the same way. */
-.about-header {
-  text-align: center;
-  padding: 4rem 0 3.25rem;
-  background: var(--color-slate-surface-deep);
-  border-bottom: 1px solid var(--color-slate-border);
-}
-
-.about-header h1 {
-  font-size: clamp(2rem, 3.4vw, 2.5rem);
-  line-height: 1.15;
-  color: var(--color-slate-900);
-  margin: 0.6rem 0 1rem;
-  text-wrap: balance;
-}
-
-.header-sub {
-  font-size: 1.08rem;
-  line-height: 1.6;
-  color: var(--color-slate-muted);
-  max-width: 60ch;
-  margin: 0 auto;
-}
+/* Header comes from .page-head/.page-head.is-centered in theme.css. */
 
 /* Bands */
 .band {
@@ -68,7 +45,9 @@ section {
 .mission-card {
   padding: 2rem;
   text-align: center;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .mission-card:hover {
@@ -247,7 +226,9 @@ section {
   padding: 1rem;
   text-align: center;
   box-shadow: var(--shadow-card);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .team-member:hover {

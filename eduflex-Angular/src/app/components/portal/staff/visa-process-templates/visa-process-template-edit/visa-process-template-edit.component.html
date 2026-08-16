@@ -148,11 +148,11 @@
                 <button type="button" class="btn btn-sm btn-link text-danger"
                   (click)="removeFieldOption(field, oi)">&times;</button>
               </div>
-              <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFieldOption(field)">+ Add
+              <button type="button" class="btn btn-md btn-outline-secondary" (click)="addFieldOption(field)">+ Add
                 option</button>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addField(step)">+ Add field</button>
+          <button type="button" class="btn btn-md btn-outline-secondary" (click)="addField(step)">+ Add field</button>
         </div>
 
         <!-- Required evidence -->
@@ -168,7 +168,7 @@
             <input type="text" class="form-control form-control-sm" style="max-width:220px"
               [(ngModel)]="newEvidenceCategoryInput[i]" placeholder="e.g. CoE"
               (keyup.enter)="addEvidenceCategory(step, i)" />
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addEvidenceCategory(step, i)">+
+            <button type="button" class="btn btn-md btn-outline-secondary" (click)="addEvidenceCategory(step, i)">+
               Add</button>
           </div>
         </div>
@@ -209,11 +209,11 @@
                 [ngModel]="newAllowedValueInput[allowedValueKey(i, pi)]"
                 (ngModelChange)="newAllowedValueInput[allowedValueKey(i, pi)] = $event" placeholder="Allowed value"
                 (keyup.enter)="addAllowedValue(p, allowedValueKey(i, pi))" />
-              <button type="button" class="btn btn-sm btn-outline-secondary"
+              <button type="button" class="btn btn-md btn-outline-secondary"
                 (click)="addAllowedValue(p, allowedValueKey(i, pi))">+ Add</button>
             </div>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addPrecondition(step)">+ Add
+          <button type="button" class="btn btn-md btn-outline-secondary" (click)="addPrecondition(step)">+ Add
             precondition</button>
         </div>
 
@@ -235,12 +235,12 @@
           <div class="d-flex gap-2 mt-2">
             <input type="text" class="form-control form-control-sm" [(ngModel)]="newHintTextInput[i]"
               placeholder="Share a tip for staff working this step…" (keyup.enter)="addHint(step, i)" />
-            <button type="button" class="btn btn-sm btn-primary" (click)="addHint(step, i)">Add</button>
+            <button type="button" class="btn btn-md btn-primary" (click)="addHint(step, i)">Add</button>
           </div>
         </div>
       </div>
 
-      <button type="button" class="btn btn-outline-primary w-100 add-step-btn" (click)="addStep()">
+      <button type="button" class="btn btn-md btn-outline-primary w-100 add-step-btn" (click)="addStep()">
         <i class="fas fa-plus me-1"></i>Add step
       </button>
     </div>

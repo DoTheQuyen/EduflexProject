@@ -1,0 +1,98 @@
+<!-- Header — same treatment as About/Feedback, so every public secondary page opens the same way. -->
+<header class="page-head is-centered">
+  <div class="container">
+    <span class="eyebrow">{{ 'PLAN_AHEAD.EYEBROW' | translate }}</span>
+    <h1>{{ 'PLAN_AHEAD.TITLE' | translate }}</h1>
+    <p class="page-sub">{{ 'PLAN_AHEAD.SUBTITLE' | translate }}</p>
+
+    <p class="header-note">
+      {{ 'PLAN_AHEAD.NOTE_BODY' | translate }}
+      <span class="header-note-sign">{{ 'PLAN_AHEAD.NOTE_SIGNATURE' | translate }}</span>
+    </p>
+  </div>
+</header>
+
+<!-- Why timing matters -->
+<section class="band">
+  <div class="container intro-block">
+    <h2>{{ 'PLAN_AHEAD.INTRO_TITLE' | translate }}</h2>
+    <p>{{ 'PLAN_AHEAD.INTRO_BODY' | translate }}</p>
+  </div>
+</section>
+
+<!-- The timeline. Each stage is anchored to a real moment in the student
+     journey — the label is a stage of that journey, not a decorative index,
+     so it stays even when read out of order. -->
+<section class="band timeline-band" aria-label="Plan ahead by stage of your journey">
+  <div class="container timeline">
+
+    <article class="stage card-ruled">
+      <span class="stage-label">{{ 'PLAN_AHEAD.STAGE1_LABEL' | translate }}</span>
+      <h3>{{ 'PLAN_AHEAD.STAGE1_TITLE' | translate }}</h3>
+      <p>{{ 'PLAN_AHEAD.STAGE1_BODY' | translate }}</p>
+    </article>
+
+    <article class="stage card-ruled">
+      <span class="stage-label">{{ 'PLAN_AHEAD.STAGE_APPLY_LABEL' | translate }}</span>
+      <h3>{{ 'PLAN_AHEAD.STAGE_APPLY_TITLE' | translate }}</h3>
+      <p>{{ 'PLAN_AHEAD.STAGE_APPLY_BODY' | translate }}</p>
+    </article>
+
+    <article class="stage card-ruled">
+      <span class="stage-label">{{ 'PLAN_AHEAD.STAGE_CONDITIONS_LABEL' | translate }}</span>
+      <h3>{{ 'PLAN_AHEAD.STAGE_CONDITIONS_TITLE' | translate }}</h3>
+      <p>{{ 'PLAN_AHEAD.STAGE_CONDITIONS_BODY' | translate }}</p>
+    </article>
+
+    <article class="stage card-ruled">
+      <span class="stage-label">{{ 'PLAN_AHEAD.STAGE2_LABEL' | translate }}</span>
+      <h3>{{ 'PLAN_AHEAD.STAGE2_TITLE' | translate }}</h3>
+      <p>{{ 'PLAN_AHEAD.STAGE2_BODY' | translate }}</p>
+    </article>
+
+    <article class="stage card-ruled stage-wide">
+      <span class="stage-label">{{ 'PLAN_AHEAD.STAGE3_LABEL' | translate }}</span>
+      <h3>{{ 'PLAN_AHEAD.STAGE3_TITLE' | translate }}</h3>
+      <p>{{ 'PLAN_AHEAD.STAGE3_BODY' | translate }}</p>
+
+      <p class="stage-doc-label">{{ 'PLAN_AHEAD.STAGE3_DOC_LABEL' | translate }}</p>
+      <ul class="doc-checklist">
+        <li *ngFor="let doc of graduationDocs">
+          <span class="box" aria-hidden="true"></span>
+          <span>{{ 'PLAN_AHEAD.' + doc | translate }}</span>
+        </li>
+      </ul>
+
+      <div class="callout callout-tip">
+        <span class="callout-mark" aria-hidden="true">&#9733;</span>
+        <p>{{ 'PLAN_AHEAD.STAGE3_CALLOUT' | translate }}</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- Closing thread -->
+<section class="band">
+  <div class="container closing-block">
+    <h2>{{ 'PLAN_AHEAD.CLOSING_TITLE' | translate }}</h2>
+
+    <div class="closing-grid">
+      <p class="closing-body">
+        <strong>{{ 'PLAN_AHEAD.CLOSING_BODY_STRONG' | translate }}</strong>
+        {{ 'PLAN_AHEAD.CLOSING_BODY_REST' | translate }}
+      </p>
+
+      <p class="closing-body">
+        <strong>{{ 'PLAN_AHEAD.CLOSING_485_STRONG' | translate }}</strong>
+        {{ 'PLAN_AHEAD.CLOSING_485_REST' | translate }}
+      </p>
+    </div>
+
+    <p class="closing-tagline">{{ 'PLAN_AHEAD.CLOSING_TAGLINE' | translate }}</p>
+
+    <!-- No booking button here on purpose — the point of this page is that
+         it isn't a pitch. -->
+    <p class="closing-final">{{ 'PLAN_AHEAD.FINAL_LINE' | translate }}</p>
+  </div>
+</section>

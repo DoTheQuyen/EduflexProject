@@ -24,6 +24,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/public/feedback/feedback.component').then(m => m.FeedbackComponent)
   }, // Public student feedback wall
   {
+    path: 'plan-ahead',
+    loadComponent: () => import('./components/public/plan-ahead/plan-ahead.component').then(m => m.PlanAheadComponent)
+  }, // Public general timing/planning advice page
+  {
     path: 'register',
     loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
   },

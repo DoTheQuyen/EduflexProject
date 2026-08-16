@@ -15,7 +15,7 @@
       <div class="card border shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
           <span>All tags</span>
-          <button type="button" class="btn btn-primary btn-sm" (click)="startNew()" *ngIf="permissions.add">+ New tag</button>
+          <button type="button" class="btn btn-md btn-primary" (click)="startNew()" *ngIf="permissions.add">+ New tag</button>
         </div>
         <div class="card-body p-0">
           <div class="tag-row" *ngFor="let tag of tags" [class.selected]="tag.id === selectedTagId"
@@ -67,7 +67,7 @@
             </span>
           </div>
 
-          <button type="button" class="btn btn-primary btn-sm" (click)="save()" [disabled]="isSaving || !permissions.edit">
+          <button type="button" class="btn btn-md btn-primary" (click)="save()" [disabled]="isSaving || !permissions.edit">
             {{ isSaving ? 'Saving...' : (form.id ? 'Save changes' : 'Create tag') }}
           </button>
         </div>

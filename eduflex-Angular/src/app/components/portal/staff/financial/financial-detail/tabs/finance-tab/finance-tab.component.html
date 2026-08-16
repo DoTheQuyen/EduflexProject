@@ -176,7 +176,7 @@
                 <div *ngIf="editingEntryId === entry.id" class="d-flex gap-1">
                   <input type="date" class="form-control form-control-sm" [(ngModel)]="editingDate"
                     [ngModelOptions]="{standalone: true}">
-                  <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan"
+                  <button type="button" class="btn btn-md btn-primary" [disabled]="isMutatingPlan"
                     (click)="saveEditDate(entry)">&check;</button>
                   <button type="button" class="btn btn-sm btn-outline-secondary" [disabled]="isMutatingPlan"
                     (click)="cancelEditDate()">&times;</button>
@@ -221,7 +221,7 @@
           <div class="d-flex gap-2">
             <input type="date" class="form-control form-control-sm" [(ngModel)]="manualDate"
               [ngModelOptions]="{standalone: true}">
-            <button type="button" class="btn btn-sm btn-primary" [disabled]="isMutatingPlan"
+            <button type="button" class="btn btn-md btn-primary" [disabled]="isMutatingPlan"
               (click)="addManualEntry()">Add</button>
           </div>
         </div>

@@ -7,7 +7,7 @@
         </p>
       </div>
       <div class="col-md-6 text-md-end">
-        <a class="btn btn-primary btn-md" *ngIf="permissions.add" routerLink="/staff-portal/education-partners/new">
+        <a class="btn btn-md btn-primary" *ngIf="permissions.add" routerLink="/staff-portal/education-partners/new">
           <i class="fas fa-plus me-2"></i>Add Partner
         </a>
       </div>
@@ -343,7 +343,7 @@
           <span class="level-chip" *ngFor="let entry of getLevelBreakdown(partner)">{{ entry.count }} {{ entry.level
             }}</span>
         </div>
-        <a *ngIf="permissions.add" class="btn btn-sm btn-primary ms-auto"
+        <a *ngIf="permissions.add" class="btn btn-md btn-primary ms-auto"
           [routerLink]="['/staff-portal/education-partners', partner.id, 'edit']" [queryParams]="{ tab: 'course' }">
           <i class="fas fa-plus me-1"></i>Add Course
         </a>

@@ -117,6 +117,96 @@
   color: #fff;
 }
 
+/* Secondary-page header: flat tinted band, eyebrow, title, one-line intro.
+   Was defined twice under two different names (.about-header / .page-head)
+   with the title's font-family missing from one of them, so About's h1 was
+   silently rendering in body Arial instead of the display face every other
+   page uses. Consolidated here — except alignment, which genuinely differed
+   (About centres its header, Feedback left-anchors its title next to a stat
+   row) and stays a per-page choice rather than being forced one way. */
+.page-head {
+  background: var(--color-slate-surface-deep);
+  border-bottom: 1px solid var(--color-slate-border);
+  padding: 4rem 0 3.25rem;
+}
+
+.page-head h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  line-height: 1.15;
+  color: var(--color-slate-900);
+  margin: 0.6rem 0 1rem;
+  text-wrap: balance;
+}
+
+.page-sub {
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: var(--color-slate-muted);
+  max-width: 60ch;
+}
+
+/* Opt-in for pages that want the centred treatment (About, Plan Ahead). */
+.page-head.is-centered {
+  text-align: center;
+}
+
+.page-head.is-centered .page-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Inline note box. Three distinguishable roles: tip carries the slate accent,
+   note stays neutral grey, and warn keeps the semantic error red — a warning
+   that looked like everything else would stop reading as a warning. */
+.callout {
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+  display: flex;
+  gap: 0.8rem;
+  border: 1px solid transparent;
+}
+
+.callout p {
+  margin: 0;
+  color: var(--color-slate-900);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+.callout-mark {
+  flex: none;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.callout-tip {
+  background: color-mix(in srgb, var(--color-slate-500) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-slate-500) 30%, transparent);
+}
+.callout-tip .callout-mark {
+  color: var(--color-slate-700);
+}
+
+.callout-warn {
+  background: color-mix(in srgb, var(--color-error) 8%, transparent);
+  border-color: color-mix(in srgb, var(--color-error) 25%, transparent);
+}
+.callout-warn .callout-mark {
+  color: var(--color-error);
+}
+
+.callout-note {
+  background: color-mix(in srgb, var(--color-slate-muted) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-slate-muted) 25%, transparent);
+}
+.callout-note .callout-mark {
+  color: var(--color-slate-muted);
+}
+
 /* Pastel closing-CTA panel. */
 .panel-cta {
   position: relative;
@@ -150,10 +240,45 @@
   position: relative;
 }
 
+/* ===== Buttons =====
+   Bootstrap supplies the .btn base; everything below overrides it (theme.css
+   loads after bootstrap in angular.json). Defined here rather than per
+   component so all 250-odd buttons in the app move together.
+
+   Sizes: .btn-sm for dense table rows, .btn-md for page-level actions
+   ("Add …" headers, form submits), plain .btn between them. Note .btn-md is
+   NOT a Bootstrap class — it was dropped in v4, so the places already using it
+   were rendering at default size with no effect. */
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   border-radius: var(--radius);
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: filter 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  min-height: 32px;
+}
+
+.btn-md {
+  padding: 0.6rem 1.15rem;
+  font-size: 0.92rem;
+  /* Comfortably clear of the 44px guidance once line-height is counted, and a
+     visible step up from .btn-sm so page actions read as page actions. */
+  min-height: 42px;
+}
+
+.btn-lg {
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+  min-height: 48px;
 }
 /* Slate directly rather than via the navy tokens. Inside the portal those
    already resolve to slate, so nothing changes there — but on the public site
@@ -172,6 +297,11 @@
   filter: brightness(1.1);
   transform: translateY(-1px);
 }
+.btn-primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(20, 30, 45, 0.4);
+}
+
 .btn-outline-primary {
   border: 1.5px solid var(--color-slate-500);
   color: var(--color-slate-700);
@@ -182,10 +312,136 @@
   border-color: var(--color-slate-700);
   color: white;
 }
+
+/* Bootstrap's stock grey — the most-used variant in the app (84 uses), so
+   leaving it stock was the single biggest source of off-palette chrome. */
+.btn-outline-secondary {
+  border: 1.5px solid var(--color-slate-border);
+  color: var(--color-slate-700);
+  background: transparent;
+}
+.btn-outline-secondary:hover {
+  background: var(--color-slate-surface);
+  border-color: var(--color-slate-500);
+  color: var(--color-slate-900);
+}
+
+/* Was Bootstrap's link blue, the last stock accent colour in the interface. */
+.btn-link {
+  color: var(--color-slate-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  background: none;
+  border: none;
+}
+.btn-link:hover {
+  color: var(--color-slate-900);
+}
+
+/* Semantic variants keep their own hues — a destructive action that looked
+   like every other button would stop reading as destructive. They only pick up
+   the shared sizing and weight. */
+.btn-danger {
+  background: var(--color-error);
+  border: 1px solid var(--color-error);
+  color: #fff;
+}
+.btn-danger:hover {
+  background: var(--color-error-dark);
+  border-color: var(--color-error-dark);
+  color: #fff;
+}
+.btn-outline-danger {
+  border: 1.5px solid var(--color-error);
+  color: var(--color-error-dark);
+  background: transparent;
+}
+.btn-outline-danger:hover {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: #fff;
+}
+
+.btn-success {
+  background: var(--color-success);
+  border: 1px solid var(--color-success);
+  color: #fff;
+}
+.btn-success:hover {
+  background: var(--color-success-dark);
+  border-color: var(--color-success-dark);
+  color: #fff;
+}
+.btn-outline-success {
+  border: 1.5px solid var(--color-success);
+  color: var(--color-success-dark);
+  background: transparent;
+}
+.btn-outline-success:hover {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}
+
+/* Highlight is the "needs attention now" orange. The base tone can't carry a
+   label at all — white on it is 4.21:1 and dark text 3.71:1, both failing — so
+   the filled variant uses highlight-dark, where white reaches 6.09:1. */
+.btn-warning {
+  background: var(--color-highlight-dark);
+  border: 1px solid var(--color-highlight-dark);
+  color: #fff;
+}
+.btn-warning:hover {
+  background: color-mix(in srgb, var(--color-highlight) 60%, black);
+  border-color: color-mix(in srgb, var(--color-highlight) 60%, black);
+  color: #fff;
+}
+.btn-outline-warning {
+  border: 1.5px solid var(--color-highlight);
+  color: var(--color-highlight-dark);
+  background: transparent;
+}
+.btn-outline-warning:hover {
+  background: var(--color-highlight);
+  border-color: var(--color-highlight);
+  color: #fff;
+}
+
+/* Used once, and not a Bootstrap class — defined so it isn't an unstyled
+   button sitting among styled ones. */
+.btn-outline-accent {
+  border: 1.5px solid var(--color-slate-500);
+  color: var(--color-slate-700);
+  background: transparent;
+}
+.btn-outline-accent:hover {
+  background: var(--color-slate-500);
+  border-color: var(--color-slate-500);
+  color: #fff;
+}
+
 .btn:disabled,
 .btn.disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-slate-700);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn:hover,
+  .btn:active {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* === Cards === */

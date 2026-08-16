@@ -4,30 +4,20 @@
   padding: 0 2rem;
 }
 
-/* ===== Page header ===== */
-.page-head {
-  background: var(--color-slate-surface-deep);
-  border-bottom: 1px solid var(--color-slate-border);
-  padding: 4rem 0 3.25rem;
-}
-
+/* ===== Page header =====
+   Shared band/eyebrow/title/sub styling comes from .page-head in theme.css.
+   Was overriding the title to font-weight 400 here, the only heading on the
+   site set that way — everywhere else (including every other h1/h2) renders
+   at the browser's default bold, since Tailwind's preflight reset isn't
+   imported. That made this one page's title read distinctly lighter for no
+   stated reason; it now matches. The narrower column widths are a genuine
+   page-specific choice (a short title, "In their own words") and stay. */
 .page-head h1 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2rem, 3.4vw, 2.75rem);
-  line-height: 1.15;
-  color: var(--color-slate-900);
-  margin: 0.6rem 0 1rem;
   max-width: 20ch;
-  text-wrap: balance;
 }
 
 .page-sub {
-  font-size: 1.08rem;
-  line-height: 1.6;
-  color: var(--color-slate-muted);
   max-width: 56ch;
-  margin: 0;
 }
 
 .page-stats {
@@ -60,7 +50,7 @@
 /* ===== The wall ===== */
 .wall-section {
   background: var(--color-slate-surface);
-  padding: 3.5rem 0 4.5rem;
+  padding: 2.5rem 0 3.5rem;
 }
 
 /* A plain grid, not CSS columns. Columns filled top-to-bottom per column, so
@@ -240,30 +230,6 @@
   border: 0;
 }
 
-/* ===== Shared button ===== */
-.btn-slate {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0.85rem 1.6rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  background: var(--shine-slate);
-  box-shadow: var(--shadow-raised);
-  color: white;
-  transition: filter 0.15s ease;
-}
-
-.btn-slate:hover {
-  filter: brightness(1.08);
-}
-
 /* ===== Closing CTA ===== */
 .feedback-cta {
   padding: 0 0 4.5rem;
@@ -309,7 +275,7 @@
   }
 
   .page-head {
-    padding: 3rem 0 2.5rem;
+    padding: 2rem 0 2rem;
   }
 
   .page-stats {

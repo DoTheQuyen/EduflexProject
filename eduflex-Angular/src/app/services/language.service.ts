@@ -14,6 +14,12 @@ export class LanguageService {
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
+    // index.html hardcodes lang="en" for the prerendered/first-paint case;
+    // this keeps it truthful once a real locale is known. CSS relies on it
+    // too — :lang(vi) in styles.css swaps the display font for Vietnamese —
+    // so a stale attribute would silently break that as well as
+    // screen-reader pronunciation.
+    this.translate.onLangChange.subscribe(({ lang }) => this.setDocumentLang(lang));
   }
 
  init(): Observable<InterpolatableTranslationObject> {
@@ -30,6 +36,12 @@ export class LanguageService {
     this.translate.use(lang);
     if (this.isBrowser) {
       localStorage.setItem(LANG_STORAGE_KEY, lang);
+    }
+  }
+
+  private setDocumentLang(lang: string): void {
+    if (this.isBrowser) {
+      document.documentElement.lang = lang;
     }
   }
 }

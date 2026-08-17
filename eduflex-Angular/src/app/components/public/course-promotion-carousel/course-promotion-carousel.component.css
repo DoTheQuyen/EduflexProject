@@ -9,6 +9,11 @@ section {
 }
 
 .promotion-section {
+  /* Top trimmed from the generic 4.5rem `section` rule — matches the
+     reduction on "How it works" above it. Same background on both sides, so
+     no divider either; the two now sit close enough to read as one flowing
+     area of the page rather than two blocks with a gap between them. */
+  padding-top: 2rem;
   background: var(--color-slate-surface);
 }
 
@@ -96,6 +101,19 @@ section {
   background: white;
   overflow: hidden;
   box-shadow: var(--shadow-card);
+}
+
+/* .skeleton-line / .skeleton-avatar come from theme.css. The avatar there is
+   sized for a person's photo (2.5rem), so it's scaled down here to match the
+   university crest circle it stands in for. */
+.is-skeleton .promo-top-row .skeleton-avatar {
+  width: 34px;
+  height: 34px;
+}
+
+.is-skeleton .promo-banner .skeleton-line.short {
+  height: 1.3rem;
+  margin: 0.7rem 0 0.2rem;
 }
 
 .promo-banner {

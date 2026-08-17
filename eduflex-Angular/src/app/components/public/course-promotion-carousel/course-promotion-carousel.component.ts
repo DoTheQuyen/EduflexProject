@@ -15,6 +15,12 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
 
   coursePromotions: CoursePromotionDto[] = [];
   currentPromotionIndex: number = 0;
+  /** True until the first response (success or failure) arrives. Starts true
+   *  on the server too, so the skeleton below — not a blank gap — is what
+   *  actually ships in the prerendered HTML; isPlatformBrowser only gates the
+   *  HTTP call itself, not this initial state. */
+  isLoading = true;
+  hasError = false;
   private promotionAutoplayTimer: any;
 
   constructor(
@@ -33,13 +39,19 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
   }
 
   loadCoursePromotions(): void {
+    this.isLoading = true;
+    this.hasError = false;
+
     this.apiClient.courseLatest(10).subscribe({
       next: (promotions) => {
         this.coursePromotions = promotions;
+        this.isLoading = false;
         this.restartPromotionAutoplay();
       },
       error: (err) => {
         console.error('Failed to load course promotions', err);
+        this.hasError = true;
+        this.isLoading = false;
       }
     });
   }

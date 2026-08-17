@@ -138,63 +138,10 @@
   margin: 0.15rem 0 0;
 }
 
-/* ===== Loading / error / empty ===== */
-.is-skeleton {
-  border-top-color: var(--color-slate-border);
-}
-
-.skeleton-line,
-.skeleton-avatar {
-  display: block;
-  background: var(--color-slate-surface-deep);
-  border-radius: 4px;
-  animation: feedback-pulse 1.4s ease-in-out infinite;
-}
-
-.skeleton-line {
-  height: 0.85rem;
-  margin-bottom: 0.7rem;
-}
-
-.skeleton-line.short {
-  width: 60%;
-}
-
-.skeleton-line.tiny {
-  width: 7rem;
-  margin-bottom: 0;
-}
-
-.skeleton-person {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 1.5rem;
-}
-
-.skeleton-avatar {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-@keyframes feedback-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skeleton-line,
-  .skeleton-avatar {
-    animation: none;
-  }
-}
+/* ===== Loading / error / empty =====
+   .skeleton-line / .skeleton-avatar / .skeleton-person / .sr-only / the
+   .card-ruled.is-skeleton override now live in theme.css, shared with the
+   homepage carousels that fetch the same way. */
 
 .wall-state {
   text-align: center;
@@ -214,20 +161,6 @@
   font-size: 0.95rem;
   color: var(--color-slate-muted);
   margin: 0 0 1.5rem;
-}
-
-/* Visible to screen readers only — announces the loading state that the
-   skeleton cards convey visually. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 /* ===== Closing CTA ===== */

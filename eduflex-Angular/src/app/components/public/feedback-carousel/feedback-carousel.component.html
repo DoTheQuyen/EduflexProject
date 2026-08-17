@@ -1,4 +1,40 @@
-<section class="feedback-section" *ngIf="feedbacks.length > 0">
+<!-- Shown while isLoading is true, which includes the server-rendered /
+     prerendered HTML: isPlatformBrowser only gates the HTTP call, not this
+     initial state, so this skeleton — not a blank gap — is what ships on
+     first paint. Previously the whole section was `*ngIf="feedbacks.length
+     > 0"`, so nothing rendered at all until the API responded, and a slow or
+     failed call left the section invisible with no sign anything was coming. -->
+<section class="feedback-section" *ngIf="isLoading" aria-hidden="true">
+  <div class="container">
+    <div class="center-head">
+      <span class="eyebrow">{{ 'FEEDBACK_CAROUSEL.EYEBROW' | translate }}</span>
+      <h2>{{ 'FEEDBACK_CAROUSEL.TITLE' | translate }}</h2>
+    </div>
+    <div class="carousel">
+      <span class="carousel-arrow" aria-hidden="true">&#8249;</span>
+      <div class="feedback-track">
+        <article class="feedback-card card-ruled is-skeleton" *ngFor="let slot of skeletonSlots">
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line short"></span>
+          <div class="skeleton-person">
+            <span class="skeleton-avatar"></span>
+            <span class="skeleton-line tiny"></span>
+          </div>
+        </article>
+      </div>
+      <span class="carousel-arrow" aria-hidden="true">&#8250;</span>
+    </div>
+  </div>
+</section>
+<p class="sr-only" *ngIf="isLoading" role="status">{{ 'FEEDBACK_CAROUSEL.LOADING' | translate }}</p>
+
+<!-- Error and empty are both handled by disappearing rather than showing a
+     block on the homepage: this is a supplementary widget, not a page whose
+     whole job is showing this content, so a silent skip is less jarring than
+     an error message a visitor didn't ask for. It still fails loud in the
+     console via the error handler in the component. -->
+<section class="feedback-section" *ngIf="!isLoading && !hasError && feedbacks.length > 0">
   <div class="container">
     <div class="center-head">
       <span class="eyebrow">{{ 'FEEDBACK_CAROUSEL.EYEBROW' | translate }}</span>

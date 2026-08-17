@@ -72,6 +72,7 @@
     },
     "STORY": {
       "EYEBROW": "Câu chuyện của chúng tôi",
+      "LEAD": "Bạn vừa đọc về những gì chúng tôi làm. Đây là những người đứng sau điều đó.",
       "TITLE": "Được sáng lập bởi những người từng ở vị trí của bạn",
       "PARA1": "Được sáng lập bởi những chuyên gia từng ở vị trí của bạn, Eduflex ra đời để lấp đầy khoảng trống — mang đến sự hướng dẫn cá nhân hóa, đáng tin cậy cho du học sinh quốc tế theo đuổi giáo dục tại Úc.",
       "QUOTE": "Mỗi học sinh đều xứng đáng có sự rõ ràng, tôn trọng, và một lộ trình đến thành công.",
@@ -399,6 +400,7 @@
     "HIDE_PASSWORD": "Ẩn mật khẩu"
   },
   "PROMO_CAROUSEL": {
+    "LOADING": "Đang tải ưu đãi khóa học…",
     "EYEBROW": "Ưu đãi khóa học học kỳ này",
     "TITLE": "Học bổng từ các trường đại học đối tác",
     "LOCATION": "Địa điểm",
@@ -412,6 +414,7 @@
     "GO_TO_ARIA": "Đi đến ưu đãi {{num}}"
   },
   "FEEDBACK_CAROUSEL": {
+    "LOADING": "Đang tải phản hồi học viên…",
     "EYEBROW": "Học viên nói gì về chúng tôi",
     "TITLE": "Phản hồi thực tế từ những học viên chúng tôi đã hướng dẫn",
     "PREV_ARIA": "Phản hồi trước",

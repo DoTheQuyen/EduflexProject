@@ -72,6 +72,7 @@
     },
     "STORY": {
       "EYEBROW": "Our story",
+      "LEAD": "You've just read what we do. Here's who's behind it.",
       "TITLE": "Started by people who once stood where you stand",
       "PARA1": "Founded by professionals who once stood where you stand now, Eduflex was built to fill a gap — to offer personalized, trustworthy guidance to international students pursuing education in Australia.",
       "QUOTE": "Every student deserves clarity, respect, and a roadmap toward success.",
@@ -399,6 +400,7 @@
     "HIDE_PASSWORD": "Hide password"
   },
   "PROMO_CAROUSEL": {
+    "LOADING": "Loading course offers…",
     "EYEBROW": "Course offers this semester",
     "TITLE": "Scholarships from our partner universities",
     "LOCATION": "Location",
@@ -412,6 +414,7 @@
     "GO_TO_ARIA": "Go to offer {{num}}"
   },
   "FEEDBACK_CAROUSEL": {
+    "LOADING": "Loading student feedback…",
     "EYEBROW": "What our students say",
     "TITLE": "Real feedback from students we've guided",
     "PREV_ARIA": "Previous feedback",

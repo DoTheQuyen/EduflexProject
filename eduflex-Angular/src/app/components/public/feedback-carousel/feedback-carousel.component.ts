@@ -22,6 +22,17 @@ export class FeedbackCarouselComponent implements OnInit, AfterViewInit {
   feedbacks: FeedbackDto[] = [];
   atStart = true;
   atEnd = false;
+  /** True until the first response (success or failure) arrives. Starts true
+   *  on the server too, so the skeleton below — not a blank gap — is what
+   *  actually ships in the prerendered HTML; isPlatformBrowser only gates the
+   *  HTTP call itself, not this initial state. */
+  isLoading = true;
+  hasError = false;
+
+  /** Held as a field, not an array literal in the template — an inline
+   *  literal is a new identity every change-detection pass, so ngFor would
+   *  tear down and rebuild the placeholder cards on each one. */
+  readonly skeletonSlots = [1, 2, 3];
 
   private readonly expandedIds = new Set<string>();
 
@@ -41,14 +52,20 @@ export class FeedbackCarouselComponent implements OnInit, AfterViewInit {
   }
 
   loadFeedbacks(): void {
+    this.isLoading = true;
+    this.hasError = false;
+
     this.apiClient.feedbackLatest(12).subscribe({
       next: (feedbacks) => {
         this.feedbacks = feedbacks;
+        this.isLoading = false;
         // Wait for the cards to lay out before measuring the track.
         setTimeout(() => this.updateArrowState());
       },
       error: (err) => {
         console.error('Failed to load feedbacks', err);
+        this.hasError = true;
+        this.isLoading = false;
       }
     });
   }

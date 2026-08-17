@@ -259,7 +259,14 @@ h1, h2, h3 {
    The media column is sticky so the image holds position while the steps
    scroll past it: the process reads as continuous rather than as five cards. */
 .how-band {
-  padding: 4.5rem 0 5rem;
+  /* Bottom trimmed from 5rem: this band and the course-promotion carousel
+     right after it share the same background colour, and their combined
+     padding (this band's bottom plus the carousel's own top) was leaving a
+     long run of identical, seamless empty space between the last step and
+     the next heading — long enough to read as a gap in the page rather than
+     a boundary between two sections. No divider either: same background on
+     both sides plus a short gap reads as one continuous area on its own. */
+  padding: 4.5rem 0 2rem;
   background: var(--color-slate-surface);
 }
 
@@ -377,10 +384,21 @@ h1, h2, h3 {
   align-items: start;
 }
 
+/* Kicker sentence, not another eyebrow — sits between the mono label and the
+   headline so the section opens with a sentence addressed to the reader
+   before it pivots to the company's own story. */
+.story-lead {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--color-slate-700);
+  max-width: 42ch;
+  margin: 0.6rem 0 0;
+}
+
 .story-text h2 {
   font-size: 1.75rem;
   color: var(--color-slate-900);
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .story-text p {

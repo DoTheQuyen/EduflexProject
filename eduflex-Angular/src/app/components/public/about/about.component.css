@@ -27,7 +27,12 @@ section {
   text-align: center;
 }
 
+/* These five headings had no font-family at all, so they were silently
+   falling back to the body face while every other heading on the site renders
+   in the display serif — exactly the "still looks sans-serif" gap that
+   prompted this fix. */
 .band-head h2 {
+  font-family: var(--font-display);
   font-size: 1.9rem;
   color: var(--color-slate-900);
   margin-top: 0.5rem;
@@ -61,6 +66,7 @@ section {
 }
 
 .mission-card h3 {
+  font-family: var(--font-display);
   color: var(--color-slate-900);
   margin-bottom: 0.75rem;
   font-size: 1.1rem;
@@ -128,6 +134,7 @@ section {
 }
 
 .step-card h3 {
+  font-family: var(--font-display);
   font-size: 1rem;
   color: var(--color-slate-900);
   margin-bottom: 0.4rem;
@@ -152,6 +159,7 @@ section {
 }
 
 .story-text h2 {
+  font-family: var(--font-display);
   font-size: 1.75rem;
   color: var(--color-slate-900);
   margin-top: 0.5rem;
@@ -175,38 +183,6 @@ section {
   line-height: 1.5;
   text-align: left;
   max-width: 55ch;
-}
-
-/* Stats */
-.stats {
-  background: var(--color-slate-surface-deep);
-  border-top: 1px solid var(--color-slate-border);
-  border-bottom: 1px solid var(--color-slate-border);
-  padding: 2.5rem 2rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  text-align: center;
-}
-
-.stats-grid > div + div {
-  border-left: 1px solid var(--color-slate-hairline);
-}
-
-.stat-num {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 2.3rem;
-  color: var(--color-slate-700);
-  font-variant-numeric: tabular-nums;
-}
-
-.stat-label {
-  font-size: 0.87rem;
-  color: var(--color-slate-muted);
-  margin-top: 0.3rem;
 }
 
 /* Team */
@@ -246,6 +222,7 @@ section {
 }
 
 .team-body h3 {
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: var(--color-slate-900);
   margin-bottom: 0.25rem;
@@ -283,18 +260,6 @@ section {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  .stats-grid > div + div {
-    border-left: none;
-    border-top: 1px solid var(--color-slate-hairline);
-    padding-top: 1rem;
-    margin-top: 1rem;
-  }
-}
-
 @media (max-width: 640px) {
   .container {
     padding: 0 1.25rem;

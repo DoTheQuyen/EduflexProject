@@ -44,38 +44,31 @@
   "HOME": {
     "HERO": {
       "EYEBROW": "Education consultancy · Australia",
-      "TITLE": "Your gateway to studying and migrating in Australia",
-      "SUBTITLE": "Personalised guidance from course selection to visa outcomes — we walk you through each step.",
+      "TITLE": "One counsellor, from your first question to your first semester",
+      "SUBTITLE": "We help international students choose a course in Australia, secure the offer, and get every document in order — with the same person handling your case throughout.",
       "CTA": "Book a free consultation"
     },
-    "JOURNEY": {
-      "ENQUIRE_LABEL": "Enquire",
-      "ENQUIRE_SUB": "Tell us your goals and background",
-      "MATCH_LABEL": "Match your course",
-      "MATCH_SUB": "Shortlist from 30+ partner institutions",
-      "VISA_LABEL": "Lodge your visa",
-      "VISA_SUB": "Subclass 500 or 485, prepared with you",
-      "ENROL_LABEL": "Enrol",
-      "ENROL_SUB": "Confirm your offer and start dates",
-      "ARRIVE_LABEL": "Arrive in Australia",
-      "ARRIVE_SUB": "Settle in with ongoing support"
+    "START": {
+      "TITLE": "Where are you up to?",
+      "OPT1": "Just starting to look",
+      "OPT2": "I've chosen a course",
+      "OPT3": "Already studying in Australia",
+      "OPT4": "I want to hear from students first"
     },
-    "STATS": {
-      "STUDENTS": "Students assisted",
-      "VISA_RATE": "Visa success rate",
-      "PARTNERS": "Partner institutions"
-    },
-    "WHY": {
-      "EYEBROW": "Why Eduflex",
-      "TITLE": "Guidance built around your journey, not our process",
-      "FEATURE1_TITLE": "Comprehensive services",
-      "FEATURE1_DESC": "From course selection to post-arrival support, all in one place.",
-      "FEATURE2_TITLE": "A transparent process",
-      "FEATURE2_DESC": "We map your pathway clearly, with no hidden surprises.",
-      "FEATURE3_TITLE": "High success rates",
-      "FEATURE3_DESC": "Strong outcomes in visa approvals and academic placement.",
-      "FEATURE4_TITLE": "Ongoing support",
-      "FEATURE4_DESC": "Your journey doesn't end at enrolment — we help you settle in."
+    "HOW": {
+      "EYEBROW": "How it works",
+      "TITLE": "Five steps, one person",
+      "SUB": "The same counsellor stays with your case the whole way, so nothing has to be explained twice.",
+      "S1_TITLE": "Tell us where you're at",
+      "S1_DESC": "Your goals, your budget, your academic background, and when you want to start.",
+      "S2_TITLE": "Shortlist your course",
+      "S2_DESC": "Options weighed against entry requirements, cost and what you want to do afterwards. You choose — we don't place you with a preferred provider.",
+      "S3_TITLE": "Secure your offer",
+      "S3_DESC": "We apply on your behalf and handle the back-and-forth with the institution until your offer letter and Confirmation of Enrolment are issued.",
+      "S4_TITLE": "Get your documents in order",
+      "S4_DESC": "Transcripts, references, financial evidence and forms gathered and checked in advance, so nothing is missing at the point it matters.",
+      "S5_TITLE": "Settle in once you land",
+      "S5_DESC": "Enrolment confirmation, bank account and Medicare setup, and help changing course if your plans shift."
     },
     "STORY": {
       "EYEBROW": "Our story",
@@ -94,23 +87,9 @@
       "TITLE": "A trusted name, globally",
       "DESC": "To be the most trusted education & migration consultancy for students globally."
     },
-    "SERVICES": {
-      "EYEBROW": "Our services",
-      "TITLE": "What we help you with",
-      "STUDENT_VISA_TAG": "Subclass 500",
-      "STUDENT_VISA_TITLE": "Student visa",
-      "STUDENT_VISA_DESC": "Advice, application, and renewal support.",
-      "GRAD_VISA_TAG": "Subclass 485",
-      "GRAD_VISA_TITLE": "Graduate visa",
-      "GRAD_VISA_DESC": "Post-study work rights guidance and application.",
-      "PLACEMENT_TAG": "Placement",
-      "PLACEMENT_TITLE": "University & course placement",
-      "PLACEMENT_DESC": "Match your profile to the best institutions across Australia.",
-      "EXPLORE_BTN": "Explore all services"
-    },
     "CTA": {
-      "TITLE": "Ready to start?",
-      "DESC": "Book a free consultation with Eduflex today and let us help you design your future in Australia.",
+      "TITLE": "Start with a conversation, not a contract",
+      "DESC": "Bring your transcripts and an idea of what you want to study. You'll leave with a shortlist and a realistic timeline.",
       "BUTTON": "Book a free consultation now"
     },
     "TOAST_SUCCESS": "Your enquiry has been submitted. Our staff will contact you shortly."
@@ -149,8 +128,8 @@
       "STEP1_DESC": "Tell us your goals, background, and timeline.",
       "STEP2_TITLE": "Match your course",
       "STEP2_DESC": "We shortlist options from 30+ partner institutions.",
-      "STEP3_TITLE": "Lodge your visa",
-      "STEP3_DESC": "Subclass 500 or 485, prepared together, step by step.",
+      "STEP3_TITLE": "Get your paperwork ready",
+      "STEP3_DESC": "Offer letter, CoE and supporting documents, checked together before anything is submitted.",
       "STEP4_TITLE": "Enrol",
       "STEP4_DESC": "Confirm your offer and lock in start dates.",
       "STEP5_TITLE": "Arrive in Australia",
@@ -162,11 +141,6 @@
       "PARA1": "Eduflex was founded by consultants who personally experienced the challenges of studying and living abroad. With a strong passion for education, we focus on helping international students achieve their dream of studying in Australia with confidence.",
       "QUOTE": "Education is more than just a degree — it's a life-changing journey.",
       "PARA2": "Our team combines more than 5 years of hands-on experience guiding students through university admissions, visa processes, and settlement in Australia. Our support doesn't stop at enrolment — we continue helping students find accommodation, adjust to Australian culture, and plan for their future careers."
-    },
-    "STATS": {
-      "STUDENTS": "Students supported",
-      "VISA_RATE": "Visa success rate",
-      "PARTNERS": "Partner institutions"
     },
     "TEAM": {
       "EYEBROW": "Our team",

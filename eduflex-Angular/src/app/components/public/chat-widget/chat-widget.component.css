@@ -115,6 +115,7 @@
 }
 
 .chat-header h3 {
+  font-family: var(--font-display);
   margin: 0 0 0.25rem;
   font-size: 1rem;
 }

@@ -1,96 +1,88 @@
-<!-- Hero -->
+<!-- Hero. The situation router used to be its own section below this — a
+     one-line question and four links given the padding of a full section,
+     which left a band of near-empty space and a heading set smaller than its
+     own answers. Fusing it into the hero's bottom edge fixes both: it puts
+     the choice at the moment someone is actually making it (right after
+     reading the headline), and it removes a whole section rather than just
+     restyling the old one. Plan Ahead and the Handbook are otherwise only
+     reachable from the nav, where people at the start of this process don't
+     think to look for them. -->
 <header class="hero">
-  <div class="hero-grid">
-    <div>
-      <span class="eyebrow hero-eyebrow">{{ 'HOME.HERO.EYEBROW' | translate }}</span>
-      <h1>{{ 'HOME.HERO.TITLE' | translate }}</h1>
-      <p class="hero-sub">{{ 'HOME.HERO.SUBTITLE' | translate }}</p>
-      <div class="hero-ctas">
-        <button (click)="openEnquiryModal()" class="btn-primary">{{ 'HOME.HERO.CTA' | translate }}</button>
-        <!-- <button routerLink="/services" class="btn-outline">Explore services</button> -->
-      </div>
-    </div>
-    <div class="journey">
-      <div class="journey-step is-active">
-        <div class="journey-label">{{ 'HOME.JOURNEY.ENQUIRE_LABEL' | translate }}</div>
-        <div class="journey-sub">{{ 'HOME.JOURNEY.ENQUIRE_SUB' | translate }}</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">{{ 'HOME.JOURNEY.MATCH_LABEL' | translate }}</div>
-        <div class="journey-sub">{{ 'HOME.JOURNEY.MATCH_SUB' | translate }}</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">{{ 'HOME.JOURNEY.VISA_LABEL' | translate }}</div>
-        <div class="journey-sub">{{ 'HOME.JOURNEY.VISA_SUB' | translate }}</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">{{ 'HOME.JOURNEY.ENROL_LABEL' | translate }}</div>
-        <div class="journey-sub">{{ 'HOME.JOURNEY.ENROL_SUB' | translate }}</div>
-      </div>
-      <div class="journey-step">
-        <div class="journey-label">{{ 'HOME.JOURNEY.ARRIVE_LABEL' | translate }}</div>
-        <div class="journey-sub">{{ 'HOME.JOURNEY.ARRIVE_SUB' | translate }}</div>
-      </div>
+  <div class="hero-in">
+    <span class="eyebrow hero-eyebrow">{{ 'HOME.HERO.EYEBROW' | translate }}</span>
+    <h1>{{ 'HOME.HERO.TITLE' | translate }}</h1>
+    <p class="hero-sub">{{ 'HOME.HERO.SUBTITLE' | translate }}</p>
+    <div class="hero-ctas">
+      <button (click)="openEnquiryModal()" class="btn-primary">{{ 'HOME.HERO.CTA' | translate }}</button>
     </div>
   </div>
+  <nav class="start-rail" [attr.aria-label]="'HOME.START.TITLE' | translate">
+    <div class="hero-in start-rail-in">
+      <span class="start-q">{{ 'HOME.START.TITLE' | translate }}</span>
+      <a class="start-opt" routerLink="/plan-ahead">
+        <span>{{ 'HOME.START.OPT1' | translate }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h13M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <button type="button" class="start-opt" (click)="openEnquiryModal()">
+        <span>{{ 'HOME.START.OPT2' | translate }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h13M13 6l6 6-6 6" />
+        </svg>
+      </button>
+      <a class="start-opt" routerLink="/student-handbook">
+        <span>{{ 'HOME.START.OPT3' | translate }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h13M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a class="start-opt" routerLink="/feedback">
+        <span>{{ 'HOME.START.OPT4' | translate }}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h13M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </div>
+  </nav>
 </header>
 
-<!-- Stats -->
-<section class="stats">
-  <div class="container stats-grid">
-    <div>
-      <div class="stat-num">300+</div>
-      <div class="stat-label">{{ 'HOME.STATS.STUDENTS' | translate }}</div>
+<!-- How it works. This one section replaces three: the hero journey timeline,
+     "Why Eduflex", and "Services" — all of which stated the same five facts in
+     three different shapes. Each fact now appears exactly once. The image holds
+     position while the steps scroll past it, so the section reads as one
+     continuous process rather than a row of separate cards. -->
+<section class="how-band">
+  <div class="container how-grid">
+    <div class="how-media">
+      <img src="assets/hero/students-park-portrait.jpg" alt="" loading="lazy" width="720" height="900" />
     </div>
     <div>
-      <div class="stat-num">95%</div>
-      <div class="stat-label">{{ 'HOME.STATS.VISA_RATE' | translate }}</div>
-    </div>
-    <div>
-      <div class="stat-num">30+</div>
-      <div class="stat-label">{{ 'HOME.STATS.PARTNERS' | translate }}</div>
-    </div>
-  </div>
-</section>
-
-<!-- Why Eduflex -->
-<section class="band why-band">
-  <div class="container">
-    <div class="band-head">
-      <span class="eyebrow">{{ 'HOME.WHY.EYEBROW' | translate }}</span>
-      <h2>{{ 'HOME.WHY.TITLE' | translate }}</h2>
-    </div>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <svg class="feature-icon icon-tile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z" />
-          <path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z" />
-        </svg>
-        <h3>{{ 'HOME.WHY.FEATURE1_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.WHY.FEATURE1_DESC' | translate }}</p>
-      </div>
-      <div class="feature-card">
-        <svg class="feature-icon icon-tile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M4 6h16M4 12h10M4 18h13" />
-        </svg>
-        <h3>{{ 'HOME.WHY.FEATURE2_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.WHY.FEATURE2_DESC' | translate }}</p>
-      </div>
-      <div class="feature-card">
-        <svg class="feature-icon icon-tile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 3 5 6v6c0 4.2 3 7.4 7 9 4-1.6 7-4.8 7-9V6l-7-3Z" />
-        </svg>
-        <h3>{{ 'HOME.WHY.FEATURE3_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.WHY.FEATURE3_DESC' | translate }}</p>
-      </div>
-      <div class="feature-card">
-        <svg class="feature-icon icon-tile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path
-            d="M12 21s-7-4.35-9.5-8.8C.7 8.4 2.3 5 5.8 5c1.9 0 3.3 1 4.2 2.3C11 6 12.4 5 14.3 5c3.4 0 5 3.4 3.2 7.2C15 16.65 12 21 12 21Z" />
-        </svg>
-        <h3>{{ 'HOME.WHY.FEATURE4_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.WHY.FEATURE4_DESC' | translate }}</p>
-      </div>
+      <span class="eyebrow">{{ 'HOME.HOW.EYEBROW' | translate }}</span>
+      <h2>{{ 'HOME.HOW.TITLE' | translate }}</h2>
+      <p class="how-sub">{{ 'HOME.HOW.SUB' | translate }}</p>
+      <ol class="steps">
+        <li class="step">
+          <h3>{{ 'HOME.HOW.S1_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.HOW.S1_DESC' | translate }}</p>
+        </li>
+        <li class="step">
+          <h3>{{ 'HOME.HOW.S2_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.HOW.S2_DESC' | translate }}</p>
+        </li>
+        <li class="step">
+          <h3>{{ 'HOME.HOW.S3_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.HOW.S3_DESC' | translate }}</p>
+        </li>
+        <li class="step">
+          <h3>{{ 'HOME.HOW.S4_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.HOW.S4_DESC' | translate }}</p>
+        </li>
+        <li class="step">
+          <h3>{{ 'HOME.HOW.S5_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.HOW.S5_DESC' | translate }}</p>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
@@ -126,39 +118,13 @@
 <!-- Student Feedback / Testimonials -->
 <app-feedback-carousel></app-feedback-carousel>
 
-<!-- Services / What We Offer -->
-<section class="band">
-  <div class="container">
-    <div class="band-head">
-      <span class="eyebrow">{{ 'HOME.SERVICES.EYEBROW' | translate }}</span>
-      <h2>{{ 'HOME.SERVICES.TITLE' | translate }}</h2>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <span class="eyebrow">{{ 'HOME.SERVICES.STUDENT_VISA_TAG' | translate }}</span>
-        <h3>{{ 'HOME.SERVICES.STUDENT_VISA_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.SERVICES.STUDENT_VISA_DESC' | translate }}</p>
-      </div>
-      <div class="service-card">
-        <span class="eyebrow">{{ 'HOME.SERVICES.GRAD_VISA_TAG' | translate }}</span>
-        <h3>{{ 'HOME.SERVICES.GRAD_VISA_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.SERVICES.GRAD_VISA_DESC' | translate }}</p>
-      </div>
-      <div class="service-card">
-        <span class="eyebrow">{{ 'HOME.SERVICES.PLACEMENT_TAG' | translate }}</span>
-        <h3>{{ 'HOME.SERVICES.PLACEMENT_TITLE' | translate }}</h3>
-        <p>{{ 'HOME.SERVICES.PLACEMENT_DESC' | translate }}</p>
-      </div>
-    </div>
-    <div class="services-foot">
-      <button routerLink="/services" class="btn-quiet">{{ 'HOME.SERVICES.EXPLORE_BTN' | translate }}</button>
-    </div>
-  </div>
-</section>
-
-<!-- Call to Action -->
+<!-- Closing CTA over a full-bleed photo, which also gives the page a second
+     image and stops it ending on a third run of text. The Services section that
+     used to sit here is gone: it restated the five steps above, and its
+     "Explore all services" button pointed at /services, a route that has never
+     existed. -->
 <section class="cta-band">
-  <div class="cta-panel panel-cta">
+  <div class="cta-in">
     <div>
       <h2>{{ 'HOME.CTA.TITLE' | translate }}</h2>
       <p>{{ 'HOME.CTA.DESC' | translate }}</p>

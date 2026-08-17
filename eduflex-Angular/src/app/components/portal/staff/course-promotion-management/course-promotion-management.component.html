@@ -46,8 +46,8 @@
 </div>
 
 <!-- Add / Edit Course Promotion Modal -->
-<div class="modal-backdrop-custom" *ngIf="isModalOpen" (click)="closeModal()">
-  <div class="modal-panel-custom" (click)="$event.stopPropagation()">
+<div class="modal-backdrop-custom" *ngIf="isModalOpen">
+  <div class="modal-panel-custom">
     <div class="modal-header">
       <h5 class="mb-0">{{ editingId ? 'Edit Course Promotion' : 'Add Course Promotion' }}</h5>
       <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
@@ -84,8 +84,9 @@
 
           <div class="col-md-4">
             <label for="expiryDate" class="form-label">Offer ends *</label>
-            <input id="expiryDate" type="date" class="form-control" formControlName="expiryDate">
-            <span class="field-error" *ngIf="isFieldInvalid('expiryDate')">Offer end date is required</span>
+            <input id="expiryDate" type="date" class="form-control" formControlName="expiryDate" [max]="maxExpiryDate">
+            <span class="field-error" *ngIf="isFieldInvalid('expiryDate') && promotionForm.get('expiryDate')?.hasError('required')">Offer end date is required</span>
+            <span class="field-error" *ngIf="isFieldInvalid('expiryDate') && promotionForm.get('expiryDate')?.hasError('maxExpiryDate')">Offer end date can't be more than 12 months out</span>
           </div>
 
           <div class="col-md-6">
@@ -110,15 +111,14 @@
 
           <div class="col-md-12">
             <label for="note" class="form-label">Marketing note</label>
-            <textarea id="note" rows="3" class="form-control" formControlName="note"></textarea>
-            <span class="field-error" *ngIf="isFieldInvalid('note')">Note must not exceed 600 characters</span>
+            <quill-editor id="note" formControlName="note" [modules]="quillModules" format="html" [sanitize]="true"></quill-editor>
+            <span class="field-error" *ngIf="isFieldInvalid('note')">Note is too long</span>
           </div>
 
           <div class="col-md-8">
-            <label for="websiteUrl" class="form-label">University website URL *</label>
+            <label for="websiteUrl" class="form-label">University website URL</label>
             <input id="websiteUrl" type="url" class="form-control" placeholder="https://www.unimelb.edu.au"
               formControlName="websiteUrl">
-            <span class="field-error" *ngIf="isFieldInvalid('websiteUrl')">A valid website URL is required</span>
           </div>
 
           <div class="col-md-4">

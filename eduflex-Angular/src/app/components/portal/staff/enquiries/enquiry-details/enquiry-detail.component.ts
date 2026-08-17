@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { Client, EnquiryDto, EnquiryStatusDto, EnquiryEnums } from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
@@ -11,11 +13,13 @@ import { formatDateTime } from '../../../../../shared/utils/date-time.util';
 @Component({
   selector: 'app-enquiry-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, QuillModule, RouterLink],
   templateUrl: './enquiry-detail.component.html',
   styleUrls: ['./enquiry-detail.component.css']
 })
 export class EnquiryDetailComponent implements OnInit {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   enquiry: EnquiryDto | null = null;
   statusOptions: EnquiryStatusDto[] = [];
   isLoading = true;
@@ -38,7 +42,7 @@ export class EnquiryDetailComponent implements OnInit {
 
     this.responseForm = this.fb.group({
       status: ['', [Validators.required]],
-      response: ['', [Validators.maxLength(2000)]]
+      response: ['', [Validators.maxLength(5000)]]
     }, { validators: EnquiryDetailComponent.respondingValidator });
   }
 
@@ -57,7 +61,7 @@ export class EnquiryDetailComponent implements OnInit {
 
   get responseCharsLeft(): number {
     const length = this.responseForm.get('response')?.value?.length ?? 0;
-    return 2000 - length;
+    return 5000 - length;
   }
 
   get responseAlreadySet(): boolean {

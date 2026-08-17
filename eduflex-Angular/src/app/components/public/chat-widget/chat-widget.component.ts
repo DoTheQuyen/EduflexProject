@@ -36,7 +36,13 @@ export class ChatWidgetComponent implements AfterViewChecked {
   currentQuestion = '';
   errorMessage = '';
   messages: ChatMessage[] = [];
-  private readonly dailyLimit = 10;
+  readonly dailyLimit = 10;
+  // Exact text ChatService.cs returns (as a normal 200 answer) when all three AI
+  // providers fail/are exhausted. Backend deliberately keeps this hardcoded and
+  // untranslated ("as is") — we match on it here so it can still be localized,
+  // without adding backend-side i18n for a single canned string.
+  private readonly providersExhaustedMessage =
+    "We're getting a lot of questions right now - please wait a moment and try again.";
   private readonly usageStorageKey = 'eduflex_chat_usage';
   private isBrowser: boolean;
   questionsAskedToday = 0;
@@ -107,7 +113,12 @@ export class ChatWidgetComponent implements AfterViewChecked {
       )
       .subscribe({
         next: (result) => {
-          this.messages.push({ role: 'assistant', text: result.answer ?? '' });
+          const answer = result.answer ?? '';
+          const text =
+            answer === this.providersExhaustedMessage
+              ? this.translate.instant('CHAT.PROVIDERS_BUSY')
+              : answer;
+          this.messages.push({ role: 'assistant', text });
         },
         error: (err) => {
           this.errorMessage = extractApiErrorMessage(

@@ -39,7 +39,8 @@
           </div>
           <div class="col-12">
             <label class="form-label">Notes</label>
-            <textarea class="form-control" rows="2" [(ngModel)]="newCaseNotes"></textarea>
+            <quill-editor [(ngModel)]="newCaseNotes" [modules]="quillModules" format="html"
+              [sanitize]="true"></quill-editor>
           </div>
         </div>
         <div class="d-flex gap-2 mt-3">

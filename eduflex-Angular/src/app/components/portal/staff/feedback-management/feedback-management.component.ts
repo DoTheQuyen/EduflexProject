@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import {
   Client,
   FeedbackDto,
@@ -28,6 +30,7 @@ import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util'
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    QuillModule,
     DataTableComponent,
     ModalComponent,
     NotificationComponent,
@@ -36,6 +39,8 @@ import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util'
   styleUrls: ['./feedback-management.component.css'],
 })
 export class FeedbackManagementComponent implements OnInit {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   feedbacks: FeedbackDto[] = [];
   isLoading = false;
   isModalOpen = false;
@@ -92,7 +97,7 @@ export class FeedbackManagementComponent implements OnInit {
       photoData: ['', [Validators.required]],
       photoContentType: ['image/jpeg'],
       courseName: ['', [Validators.required, Validators.maxLength(150)]],
-      comment: ['', [Validators.required, Validators.maxLength(2000)]],
+      comment: ['', [Validators.required, Validators.maxLength(5000)]],
     });
   }
 

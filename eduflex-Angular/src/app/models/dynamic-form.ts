@@ -3,7 +3,7 @@ export type AnswerType = 'RichText' | 'YesNo' | 'SingleSelect' | 'MultiSelect';
 // Shared with the backend's DynamicFormLimits.RichTextAnswerMaxLength (ShareService/
 // Enums/DynamicForms/DynamicFormEnums.cs) — keep both in sync if this changes. The
 // backend enforces this for real; this is just so the UI can show/limit it live.
-export const RICH_TEXT_MAX_LENGTH = 2000;
+export const RICH_TEXT_MAX_LENGTH = 5000;
 
 export const ANSWER_TYPE_LABELS: Record<AnswerType, string> = {
   RichText: 'Rich text',

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { Client, EducationPartnerDto, CourseDto, AddCourseApplicationDto, SetCourseApplicationStatusDto, UpdateCourseApplicationDetailsDto } from '@services/api.services';
 import { ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
@@ -20,11 +22,13 @@ import { StepEvidenceSectionComponent } from '../step-evidence-section/step-evid
 @Component({
   selector: 'app-course-applications-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, StepEvidenceSectionComponent],
+  imports: [CommonModule, FormsModule, QuillModule, StepEvidenceSectionComponent],
   templateUrl: './course-applications-panel.component.html',
   styleUrls: ['./course-applications-panel.component.css']
 })
 export class CourseApplicationsPanelComponent {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   @Input({ required: true }) enrolment!: Enrolment;
   @Input() partners: EducationPartnerDto[] = [];
   @Input() isOwner = false;

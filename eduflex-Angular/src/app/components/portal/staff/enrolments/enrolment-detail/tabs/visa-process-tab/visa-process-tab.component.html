@@ -213,10 +213,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('StudentInfo','comment')"
+            <quill-editor [ngModel]="fieldValue('StudentInfo','comment')"
               (ngModelChange)="setFieldValue('StudentInfo','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('StudentInfo','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="step-actions">
@@ -297,10 +297,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('EnrolmentForm','comment')"
+            <quill-editor [ngModel]="fieldValue('EnrolmentForm','comment')"
               (ngModelChange)="setFieldValue('EnrolmentForm','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('EnrolmentForm','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="step-actions">
@@ -377,12 +377,12 @@
             <div class="col-12">
               <label class="form-label">Notes</label>
               <div *ngIf="getStep('ApplyOffer')?.status === 'Complete' && editingStepKey !== 'ApplyOffer'"
-                class="form-control-plaintext" style="white-space: pre-wrap;">{{ fieldValue('ApplyOffer','notes') || '—'
-                }}</div>
-              <textarea *ngIf="getStep('ApplyOffer')?.status !== 'Complete' || editingStepKey === 'ApplyOffer'"
-                class="form-control" rows="2" [ngModel]="fieldValue('ApplyOffer','notes')"
+                class="form-control-plaintext" [innerHTML]="fieldValue('ApplyOffer','notes') || '—'"></div>
+              <quill-editor *ngIf="getStep('ApplyOffer')?.status !== 'Complete' || editingStepKey === 'ApplyOffer'"
+                [ngModel]="fieldValue('ApplyOffer','notes')"
                 (ngModelChange)="setFieldValue('ApplyOffer','notes',$event)"
-                [ngModelOptions]="{standalone: true}"></textarea>
+                [ngModelOptions]="{standalone: true}" [modules]="quillModules" format="html"
+                [sanitize]="true"></quill-editor>
             </div>
           </div>
 
@@ -408,10 +408,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('ApplyOffer','comment')"
+            <quill-editor [ngModel]="fieldValue('ApplyOffer','comment')"
               (ngModelChange)="setFieldValue('ApplyOffer','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('ApplyOffer','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="step-actions"
@@ -537,10 +537,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('CoeCompletion','comment')"
+            <quill-editor [ngModel]="fieldValue('CoeCompletion','comment')"
               (ngModelChange)="setFieldValue('CoeCompletion','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('CoeCompletion','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="step-actions"
@@ -684,10 +684,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('VisaApplication','comment')"
+            <quill-editor [ngModel]="fieldValue('VisaApplication','comment')"
               (ngModelChange)="setFieldValue('VisaApplication','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('VisaApplication','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="step-actions"
@@ -802,10 +802,10 @@
           <div class="comment-block">
             <label class="form-label">Staff comment <span class="text-muted small fw-normal">(optional, visible to staff
                 only)</span></label>
-            <textarea class="form-control" rows="2" maxlength="500" [ngModel]="fieldValue('VisaOutcome','comment')"
+            <quill-editor [ngModel]="fieldValue('VisaOutcome','comment')"
               (ngModelChange)="setFieldValue('VisaOutcome','comment',$event)" [ngModelOptions]="{standalone: true}"
-              placeholder="Add any notes about this step…"></textarea>
-            <div class="char-count">{{ fieldValue('VisaOutcome','comment').length }} / 500</div>
+              [modules]="quillModules" format="html" [sanitize]="true"
+              placeholder="Add any notes about this step…"></quill-editor>
           </div>
 
           <div class="final-note">

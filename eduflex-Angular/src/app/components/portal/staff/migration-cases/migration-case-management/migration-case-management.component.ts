@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { Router } from '@angular/router';
 import { MigrationCaseService } from '@services/migration-case.service';
 import { VisaProcessTemplateService } from '@services/visa-process-template.service';
@@ -15,11 +17,12 @@ import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
 @Component({
   selector: 'app-migration-case-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, DataTableComponent],
+  imports: [CommonModule, FormsModule, QuillModule, DataTableComponent],
   templateUrl: './migration-case-management.component.html',
   styleUrls: ['./migration-case-management.component.css'],
 })
 export class MigrationCaseManagementComponent implements OnInit {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
   cases: MigrationCase[] = [];
   isLoading = false;
   permissions!: ModulePermissions;

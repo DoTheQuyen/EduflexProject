@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { Client, EducationPartnerDto, SetMaxApplicationsOverrideDto } from '@services/api.services';
 import { EnrolmentService } from '@services/enrolment.service';
 import { DynamicFormTemplateService } from '@services/dynamic-form-template.service';
@@ -33,13 +35,15 @@ const STEP_DESCRIPTIONS: Record<VisaStepKey, string> = {
   selector: 'app-visa-process-tab',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, FormsModule, ModalComponent, FormPrintPreviewComponent,
+    CommonModule, ReactiveFormsModule, FormsModule, QuillModule, ModalComponent, FormPrintPreviewComponent,
     StepEvidenceSectionComponent, CourseApplicationsPanelComponent, EnrolmentInvoicePanelComponent
   ],
   templateUrl: './visa-process-tab.component.html',
   styleUrls: ['./visa-process-tab.component.css']
 })
 export class VisaProcessTabComponent implements OnInit, OnChanges {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   @Input({ required: true }) enrolment!: Enrolment;
   @Input() partners: EducationPartnerDto[] = [];
   @Input() isOwner = false;

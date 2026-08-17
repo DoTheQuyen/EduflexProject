@@ -112,7 +112,8 @@
         <div class="card-header bg-white"><strong>Timeline</strong></div>
         <div class="card-body">
           <div class="mb-3" *ngIf="canRespond">
-            <textarea class="form-control mb-2" rows="2" placeholder="Add a note..." [(ngModel)]="noteContent" [ngModelOptions]="{standalone: true}"></textarea>
+            <quill-editor class="d-block mb-2" [(ngModel)]="noteContent" [ngModelOptions]="{standalone: true}"
+              [modules]="quillModules" format="html" [sanitize]="true" placeholder="Add a note..."></quill-editor>
             <button type="button" class="btn btn-sm btn-primary" [disabled]="isAddingNote || !noteContent.trim()" (click)="addNote()">
               {{ isAddingNote ? 'Posting...' : 'Add Note' }}
             </button>
@@ -126,7 +127,7 @@
                 </strong>
                 <span class="text-muted small">{{ note.createdAt | date: 'medium' }}</span>
               </div>
-              <div [class.fst-italic]="note.type !== 'Note'" [class.text-muted]="note.type !== 'Note'">{{ note.content }}</div>
+              <div [class.fst-italic]="note.type !== 'Note'" [class.text-muted]="note.type !== 'Note'" [innerHTML]="note.content"></div>
             </div>
           </div>
           <p *ngIf="!task.notes.length" class="text-muted text-center py-3 mb-0">No activity yet.</p>
@@ -160,7 +161,8 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Note *</label>
-        <textarea class="form-control" rows="3" formControlName="note" placeholder="Why is this being reassigned?"></textarea>
+        <quill-editor formControlName="note" [modules]="quillModules" format="html" [sanitize]="true"
+          placeholder="Why is this being reassigned?"></quill-editor>
       </div>
     </form>
   </app-modal>

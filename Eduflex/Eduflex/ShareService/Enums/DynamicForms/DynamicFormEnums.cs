@@ -35,6 +35,6 @@ namespace ShareService.Enums.DynamicForms
     {
         // Shared with the frontend's RICH_TEXT_MAX_LENGTH (models/dynamic-form.ts) —
         // keep both in sync if this changes.
-        public const int RichTextAnswerMaxLength = 2000;
+        public const int RichTextAnswerMaxLength = 5000;
     }
 }

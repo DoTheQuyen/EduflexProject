@@ -23,8 +23,8 @@
     "CLOSE_ARIA": "Đóng biểu mẫu yêu cầu"
   },
   "CHAT": {
-    "HEADER_TITLE": "Trợ lý AI Hỏi đáp Visa",
-    "HEADER_SUBTITLE": "Chỉ mang tính thông tin chung — không phải tư vấn di trú.",
+    "HEADER_TITLE": "Hỏi đáp Visa: hỏi trợ lý AI của chúng tôi",
+    "HEADER_SUBTITLE": "Chỉ mang tính thông tin chung — không phải tư vấn di trú. Bạn có thể hỏi tối đa {{limit}} câu mỗi ngày để mọi người đều được chia sẻ công bằng.",
     "EMPTY_PROMPT": "Đặt câu hỏi chung về visa du học, hoặc thử một câu hỏi bên dưới:",
     "FAQ1": "Sự khác biệt giữa visa diện 189 và 190 là gì?",
     "FAQ2": "Visa diện 485 (Tốt nghiệp tạm thời) có thời hạn bao lâu?",
@@ -36,8 +36,9 @@
     "SIGNATURE_PREFIX": "Cần hỗ trợ thêm?",
     "CONTACT_STAFF": "Liên hệ nhân viên của chúng tôi",
     "SIGNATURE_SUFFIX": "để được hướng dẫn riêng.",
-    "LIMIT_REACHED": "Bạn đã đạt giới hạn {{limit}} câu hỏi hôm nay. Vui lòng thử lại vào ngày mai.",
+    "LIMIT_REACHED": "Bạn đã dùng hết {{limit}} câu hỏi hôm nay — AI của tụi mình cũng cần nghỉ giải lao ☕. Quay lại vào ngày mai nhé, hoặc liên hệ nhân viên nếu cần gấp.",
     "GENERIC_ERROR": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "PROVIDERS_BUSY": "Hiện có rất nhiều câu hỏi cùng lúc - vui lòng đợi một chút rồi thử lại.",
     "TOGGLE_OPEN_ARIA": "Mở trò chuyện",
     "TOGGLE_CLOSE_ARIA": "Đóng trò chuyện"
   },

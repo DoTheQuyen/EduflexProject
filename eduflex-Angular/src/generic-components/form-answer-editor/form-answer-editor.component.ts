@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { FormAnswer, FormQuestion, RICH_TEXT_MAX_LENGTH } from '@app/models/dynamic-form';
 
 // Editable counterpart to app-form-print-preview — reused by the staff Forms tab's
@@ -10,11 +12,13 @@ import { FormAnswer, FormQuestion, RICH_TEXT_MAX_LENGTH } from '@app/models/dyna
 @Component({
   selector: 'app-form-answer-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, QuillModule],
   templateUrl: './form-answer-editor.component.html',
   styleUrls: ['./form-answer-editor.component.css']
 })
 export class FormAnswerEditorComponent {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   @Input({ required: true }) questions: FormQuestion[] = [];
   @Input({ required: true }) answers: FormAnswer[] = [];
   @Input() disabled = false;

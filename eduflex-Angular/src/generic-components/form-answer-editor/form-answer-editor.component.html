@@ -36,8 +36,8 @@
 
     <!-- Rich text -->
     <ng-container *ngIf="q.answerType === 'RichText'">
-      <textarea class="form-control" rows="3" [disabled]="disabled" [maxLength]="maxLengthFor(q)"
-        [ngModel]="textValue(q.id)" (ngModelChange)="setText(q.id, $event)"></textarea>
+      <quill-editor [readOnly]="disabled" [modules]="quillModules" format="html" [sanitize]="true"
+        [ngModel]="textValue(q.id)" (ngModelChange)="setText(q.id, $event)"></quill-editor>
       <div class="char-count" [class.char-count-limit]="charCount(q.id) >= maxLengthFor(q)">
         {{ charCount(q.id) }} / {{ maxLengthFor(q) }}
       </div>

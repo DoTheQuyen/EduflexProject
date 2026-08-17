@@ -173,3 +173,30 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
 }
+
+/* Quill rich-text editor — shared chrome for every <quill-editor> instance
+   app-wide, so each component only needs to override min-height for its own
+   sizing. Unscoped on purpose: Quill.js injects .ql-toolbar/.ql-container at
+   runtime, outside Angular's template, so per-component ::ng-deep is still
+   needed for anything that must win over this (see min-height overrides). */
+quill-editor {
+  display: block;
+  width: 100%;
+}
+
+.ql-toolbar.ql-snow {
+  border-color: var(--color-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.ql-container.ql-snow {
+  border-color: var(--color-border);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.ql-editor {
+  min-height: 150px;
+  font-size: 0.9rem;
+  overflow-y: auto;
+  resize: vertical;
+}

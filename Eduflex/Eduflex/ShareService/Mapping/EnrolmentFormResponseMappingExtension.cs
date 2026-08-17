@@ -167,9 +167,16 @@ namespace ShareService.Mapping
                     : "<div class=\"answer\">" + WebUtility.HtmlEncode(selected) + "</div>";
             }
 
-            // RichText and YesNo both just render TextValue ("Yes"/"No" for YesNo).
-            return string.IsNullOrWhiteSpace(answer.TextValue)
-                ? "<div class=\"answer empty\">No answer provided</div>"
+            if (string.IsNullOrWhiteSpace(answer.TextValue))
+            {
+                return "<div class=\"answer empty\">No answer provided</div>";
+            }
+
+            // RichText answers are stored as HTML from the Quill editor — embedded as-is so
+            // formatting renders, not encoded (which would show literal tags). YesNo is always
+            // the plain literal "Yes"/"No", still encoded for consistency/defense in depth.
+            return question.AnswerType == AnswerType.RichText.ToString()
+                ? "<div class=\"answer\">" + answer.TextValue + "</div>"
                 : "<div class=\"answer\">" + WebUtility.HtmlEncode(answer.TextValue).Replace("\n", "<br/>") + "</div>";
         }
     }

@@ -49,7 +49,7 @@ namespace ShareService.Validations.Enquiry
                     .When(x => x.Status != EnquiryEnums.New.ToString());
 
                 RuleFor(x => x.Response)
-                    .MaximumLength(2000).WithMessage("Response must not exceed 2000 characters");
+                    .MaximumLength(5000).WithMessage("Response must not exceed 5000 characters");
             });
         }
     }

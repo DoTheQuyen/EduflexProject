@@ -26,7 +26,7 @@ namespace ShareService.Validations.Feedback
 
             RuleFor(x => x.Comment)
                 .NotEmpty().WithMessage("Comment is required")
-                .MaximumLength(2000).WithMessage("Comment must not exceed 1000 characters");
+                .MaximumLength(5000).WithMessage("Comment must not exceed 5000 characters");
         }
     }
 }

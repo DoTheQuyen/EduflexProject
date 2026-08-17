@@ -70,7 +70,9 @@
             <div class="promo-stat"><span>{{ 'PROMO_CAROUSEL.OPPORTUNITIES' | translate }}</span><span>{{ coursePromotions[currentPromotionIndex].opportunities }}</span></div>
             <div class="promo-stat"><span>{{ 'PROMO_CAROUSEL.OFFER_ENDS' | translate }}</span><span class="is-gold">{{ coursePromotions[currentPromotionIndex].expiryDate | date:'mediumDate' }}</span></div>
           </div>
-          <div class="promo-note" *ngIf="coursePromotions[currentPromotionIndex].note" [innerHTML]="coursePromotions[currentPromotionIndex].note"></div>
+          <div class="promo-note" #noteEl [class.is-truncated]="noteIsTruncated"
+            *ngIf="coursePromotions[currentPromotionIndex].note"
+            [innerHTML]="coursePromotions[currentPromotionIndex].note"></div>
           <button type="button" class="promo-enquire-link" (click)="onEnquireClick()">
             {{ 'PROMO_CAROUSEL.ENQUIRE' | translate }}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

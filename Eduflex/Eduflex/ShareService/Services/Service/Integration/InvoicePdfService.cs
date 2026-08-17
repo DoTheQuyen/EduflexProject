@@ -10,7 +10,10 @@ namespace ShareService.Services.Service.Integration
         {
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
-            var page = await browser.NewPageAsync();
+            // JS disabled: this HTML embeds free-text fields (e.g. rich-text form answers) that
+            // are never server-side sanitized, so a malicious answer containing a <script> tag
+            // must not be able to execute in this headless page.
+            var page = await browser.NewPageAsync(new BrowserNewPageOptions { JavaScriptEnabled = false });
             await page.SetContentAsync(htmlContent, new PageSetContentOptions { WaitUntil = WaitUntilState.NetworkIdle });
 
             return await page.PdfAsync(new PagePdfOptions

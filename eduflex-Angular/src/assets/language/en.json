@@ -23,8 +23,8 @@
     "CLOSE_ARIA": "Close enquiry form"
   },
   "CHAT": {
-    "HEADER_TITLE": "Visa Q&A AI Assistant",
-    "HEADER_SUBTITLE": "General information only — not migration advice.",
+    "HEADER_TITLE": "Visa Q&A: ask our AI agent",
+    "HEADER_SUBTITLE": "General information only — not migration advice. You can ask up to {{limit}} questions a day, so everyone gets a fair share.",
     "EMPTY_PROMPT": "Ask a general question about student visas, or try one below:",
     "FAQ1": "What is the difference between a 189 and 190 visa?",
     "FAQ2": "How long does a 485 Temporary Graduate visa last?",
@@ -36,8 +36,9 @@
     "SIGNATURE_PREFIX": "Need more help?",
     "CONTACT_STAFF": "Contact our staff",
     "SIGNATURE_SUFFIX": "for personalised guidance.",
-    "LIMIT_REACHED": "You've reached today's limit of {{limit}} questions. Please try again tomorrow.",
+    "LIMIT_REACHED": "You've used all {{limit}} of today's questions — even our AI needs a coffee break ☕. Come back tomorrow, or contact our staff if it's urgent.",
     "GENERIC_ERROR": "Something went wrong. Please try again.",
+    "PROVIDERS_BUSY": "We're getting a lot of questions right now - please wait a moment and try again.",
     "TOGGLE_OPEN_ARIA": "Open chat",
     "TOGGLE_CLOSE_ARIA": "Close chat"
   },

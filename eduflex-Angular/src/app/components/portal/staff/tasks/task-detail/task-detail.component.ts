@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Client, PermissionKey, UserFilterDto, UserSummaryDto } from '@services/api.services';
 import { AuthHelperService, TaskPermissions } from '@services/auth-helper.service';
@@ -24,11 +26,13 @@ const LINK_TYPES: LinkedRecordType[] = ['Enrolment', 'Enquiry', 'Application', '
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, RecordPickerComponent, ModalComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, QuillModule, RouterLink, RecordPickerComponent, ModalComponent],
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.css']
 })
 export class TaskDetailComponent implements OnInit {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   taskId!: string;
   task: Task | null = null;
   isLoading = false;

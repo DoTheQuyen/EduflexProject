@@ -48,7 +48,7 @@
       <div class="fill-rich" *ngIf="mode === 'blank' || !hasAnswer(q)">
         <span *ngIf="mode === 'filled'" class="empty-note">No answer provided</span>
       </div>
-      <div class="answer-text" *ngIf="mode === 'filled' && hasAnswer(q)">{{ textAnswer(q.id) }}</div>
+      <div class="answer-text" *ngIf="mode === 'filled' && hasAnswer(q)" [innerHTML]="textAnswer(q.id)"></div>
     </ng-container>
   </div>
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 import {
   Client,
   EducationPartnerDto,
@@ -37,6 +39,7 @@ import { ModalComponent } from '@generic/modal/modal.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    QuillModule,
     StudentDetailsFormComponent,
     NotificationComponent,
     DataTableComponent,
@@ -46,6 +49,8 @@ import { ModalComponent } from '@generic/modal/modal.component';
   styleUrls: ['./enrolment-new.component.css'],
 })
 export class EnrolmentNewComponent implements OnInit {
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
+
   step: 1 | 2 = 1;
 
   enquiryId: string | null = null;

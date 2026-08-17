@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Client, CoursePromotionDto } from '@services/content.services';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -22,6 +22,12 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
   isLoading = true;
   hasError = false;
   private promotionAutoplayTimer: any;
+
+  @ViewChild('noteEl') noteEl?: ElementRef<HTMLElement>;
+  /** Only true once the note's content actually overflows its max-height — the
+   *  fade-out gradient (::after on .promo-note) is gated on this class so it
+   *  doesn't sit on top of (and dim) a short note that never gets clipped. */
+  noteIsTruncated = false;
 
   constructor(
     private apiClient: Client,
@@ -47,6 +53,7 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
         this.coursePromotions = promotions;
         this.isLoading = false;
         this.restartPromotionAutoplay();
+        this.checkNoteTruncation();
       },
       error: (err) => {
         console.error('Failed to load course promotions', err);
@@ -58,21 +65,33 @@ export class CoursePromotionCarouselComponent implements OnInit, OnDestroy {
 
   goToPromotionSlide(index: number): void {
     this.currentPromotionIndex = index;
+    this.checkNoteTruncation();
   }
 
   nextPromotionSlide(): void {
     if (this.coursePromotions.length === 0) { return; }
     this.currentPromotionIndex = (this.currentPromotionIndex + 1) % this.coursePromotions.length;
+    this.checkNoteTruncation();
   }
 
   prevPromotionSlide(): void {
     if (this.coursePromotions.length === 0) { return; }
     this.currentPromotionIndex = (this.currentPromotionIndex - 1 + this.coursePromotions.length) % this.coursePromotions.length;
+    this.checkNoteTruncation();
+  }
+
+  /** Runs after the DOM updates for the new slide, so scrollHeight/clientHeight
+   *  reflect the note that's now actually rendered. */
+  private checkNoteTruncation(): void {
+    setTimeout(() => {
+      const el = this.noteEl?.nativeElement;
+      this.noteIsTruncated = !!el && el.scrollHeight > el.clientHeight + 1;
+    });
   }
 
   startPromotionAutoplay(): void {
     this.stopPromotionAutoplay();
-    this.promotionAutoplayTimer = setInterval(() => this.nextPromotionSlide(), 5000);
+    this.promotionAutoplayTimer = setInterval(() => this.nextPromotionSlide(), 10000);
   }
 
   stopPromotionAutoplay(): void {

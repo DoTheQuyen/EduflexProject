@@ -14,7 +14,7 @@
     <div class="chat-panel" *ngIf="isOpen">
         <div class="chat-header">
             <h3>{{ 'CHAT.HEADER_TITLE' | translate }}</h3>
-            <p class="chat-subtitle">{{ 'CHAT.HEADER_SUBTITLE' | translate }}</p>
+            <p class="chat-subtitle">{{ 'CHAT.HEADER_SUBTITLE' | translate: { limit: dailyLimit } }}</p>
         </div>
 
         <div class="chat-messages">
@@ -51,14 +51,17 @@
             <div #messagesEnd></div>
         </div>
 
-        <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="form-error" *ngIf="errorMessage && !isLimitReached">{{ errorMessage }}</p>
 
-        <form class="chat-input-row" (ngSubmit)="sendQuestion()">
+        <p class="chat-limit-reached" *ngIf="isLimitReached">
+            {{ 'CHAT.LIMIT_REACHED' | translate: { limit: dailyLimit } }}
+        </p>
+
+        <form class="chat-input-row" (ngSubmit)="sendQuestion()" *ngIf="!isLimitReached">
             <input type="text" [(ngModel)]="currentQuestion" name="question"
-                [placeholder]="'CHAT.INPUT_PLACEHOLDER' | translate" maxlength="500"
-                [disabled]="isSending || isLimitReached">
+                [placeholder]="'CHAT.INPUT_PLACEHOLDER' | translate" maxlength="500" [disabled]="isSending">
             <button type="submit" class="btn-primary"
-                [disabled]="isSending || !currentQuestion.trim() || isLimitReached">{{ 'CHAT.SEND' | translate
+                [disabled]="isSending || !currentQuestion.trim()">{{ 'CHAT.SEND' | translate
                 }}</button>
         </form>
     </div>

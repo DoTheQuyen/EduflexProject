@@ -192,10 +192,40 @@ section {
   font-size: 0.86rem;
   line-height: 1.5;
   color: var(--color-slate-muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  -webkit-box-orient: vertical;
+  /* Height-based clip, not -webkit-line-clamp: line-clamp counts lines across the
+     box and corrupts the render (overlapping text) when the cut lands mid-item in
+     nested content like a Quill <ul><li> list, especially on mobile browsers. A
+     fixed max-height always just clips visually, regardless of what's inside. */
+  max-height: 9.3em;
   overflow: hidden;
+  position: relative;
+}
+
+/* Gated on .is-truncated (set from JS via scrollHeight > clientHeight) — the
+   box's own height only reaches max-height when content actually overflows;
+   for a short note the box is much shorter, and an unconditional gradient
+   here would sit across most of that box, dimming text that was never
+   clipped in the first place. */
+.promo-note.is-truncated::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.2em;
+  /* Reaches fully solid well before the bottom edge (not just at 100%) so a
+     partial line caught by the max-height clip is fully hidden, not left
+     readable-but-faint underneath the gradient. */
+  background: linear-gradient(to bottom, transparent, var(--color-slate-surface-deep) 65%);
+  pointer-events: none;
+}
+
+.promo-note :is(p, ul, ol) {
+  margin: 0 0 0.4em;
+}
+
+.promo-note :is(p, ul, ol):last-child {
+  margin-bottom: 0;
 }
 
 /* Replaces the old two-button row (website + enquire). The card sits inside

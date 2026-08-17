@@ -31,8 +31,8 @@
 
               <div class="mb-3">
                 <label for="response" class="form-label">Response message</label>
-                <textarea id="response" class="form-control" rows="20" maxlength="2000"
-                  formControlName="response"></textarea>
+                <quill-editor id="response" formControlName="response" [modules]="quillModules" format="html"
+                  [sanitize]="true"></quill-editor>
                 <p class="text-muted small mt-1" *ngIf="responseAlreadySet">
                   This enquiry has already been responded to — the response message can no longer be changed.
                 </p>

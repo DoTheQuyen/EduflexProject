@@ -27,13 +27,7 @@ import { formatDateTime } from '../../../../shared/utils/date-time.util';
 import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util';
 import { NotificationService } from '@services/notification.service';
 import { Button } from 'primeng/button';
-
-const QUILL_TOOLBAR = [
-  ['bold', 'italic', 'underline'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['link'],
-  ['clean'],
-];
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 
 const MAX_OFFER_MONTHS = 12;
 
@@ -56,7 +50,7 @@ function maxExpiryDateValidator(control: AbstractControl): ValidationErrors | nu
   styleUrls: ['./course-promotion-management.component.css'],
 })
 export class CoursePromotionManagementComponent implements OnInit {
-  readonly quillModules = { toolbar: QUILL_TOOLBAR };
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
 
   promotions: CoursePromotionDto[] = [];
   isLoading = false;

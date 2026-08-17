@@ -12,17 +12,6 @@
   margin-right: 0.25rem;
 }
 
-:host ::ng-deep .ql-toolbar.ql-snow {
-  border-color: var(--color-border);
-  border-radius: var(--radius) var(--radius) 0 0;
-}
-
-:host ::ng-deep .ql-container.ql-snow {
-  border-color: var(--color-border);
-  border-radius: 0 0 var(--radius) var(--radius);
-}
-
 :host ::ng-deep .ql-editor {
   min-height: 260px;
-  font-size: 0.9rem;
 }

@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Client, FeedbackDto } from '@services/content.services';
 import { TranslatePipe } from '@ngx-translate/core';
+import { stripHtml } from '@app/shared/utils/strip-html.util';
 
 /** Comments longer than this get clamped with a "read more" toggle, so one
  *  essay-length review can't set the height of an entire grid row. Chosen by
@@ -66,7 +67,7 @@ export class FeedbackComponent implements OnInit {
   }
 
   isLong(comment: string | undefined): boolean {
-    return (comment?.length ?? 0) > CLAMP_THRESHOLD;
+    return stripHtml(comment ?? '').length > CLAMP_THRESHOLD;
   }
 
   isExpanded(feedback: FeedbackDto): boolean {

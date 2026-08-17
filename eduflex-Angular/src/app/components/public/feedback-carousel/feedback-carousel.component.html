@@ -55,9 +55,8 @@
            needing its own resize bookkeeping. -->
       <div class="feedback-track" #track (scroll)="updateArrowState()">
         <article class="feedback-card card-ruled" *ngFor="let feedback of feedbacks">
-          <p class="feedback-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)">
-            {{ feedback.comment }}
-          </p>
+          <p class="feedback-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)"
+            [innerHTML]="feedback.comment"></p>
 
           <button
             type="button"

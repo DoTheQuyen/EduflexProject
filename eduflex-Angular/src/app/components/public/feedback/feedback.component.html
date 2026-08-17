@@ -58,9 +58,8 @@
     <div class="wall" *ngIf="!isLoading && !hasError && feedbacks.length > 0">
       <article class="wall-card card-ruled" *ngFor="let feedback of feedbacks">
         <span class="quote-mark" aria-hidden="true">&#8220;</span>
-        <p class="wall-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)">
-          {{ feedback.comment }}
-        </p>
+        <p class="wall-quote" [class.is-clamped]="isLong(feedback.comment) && !isExpanded(feedback)"
+          [innerHTML]="feedback.comment"></p>
 
         <button
           type="button"

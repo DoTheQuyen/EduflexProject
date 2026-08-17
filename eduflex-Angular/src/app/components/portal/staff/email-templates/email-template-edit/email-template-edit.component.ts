@@ -6,20 +6,7 @@ import { QuillModule } from 'ngx-quill';
 import { EmailTemplateService } from '@services/email-template.service';
 import { NotificationService } from '@services/notification.service';
 import { extractHttpErrorMessage } from '@app/shared/utils/http-error.util';
-
-// Toolbar covers the "font, color, size etc." ask explicitly — Quill's default
-// toolbar omits font/size/color unless listed here.
-const QUILL_TOOLBAR = [
-  [{ header: [1, 2, 3, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ font: [] }],
-  [{ size: ['small', false, 'large', 'huge'] }],
-  [{ color: [] }, { background: [] }],
-  [{ align: [] }],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['link'],
-  ['clean']
-];
+import { RICH_TEXT_QUILL_MODULES } from '@app/shared/utils/quill-toolbar.util';
 
 @Component({
   selector: 'app-email-template-edit',
@@ -29,7 +16,7 @@ const QUILL_TOOLBAR = [
   styleUrls: ['./email-template-edit.component.css']
 })
 export class EmailTemplateEditComponent implements OnInit {
-  readonly quillModules = { toolbar: QUILL_TOOLBAR };
+  readonly quillModules = RICH_TEXT_QUILL_MODULES;
 
   isEditMode = false;
   templateId: string | null = null;

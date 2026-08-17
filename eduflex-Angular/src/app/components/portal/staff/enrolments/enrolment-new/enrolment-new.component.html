@@ -224,7 +224,8 @@
 
                 <div class="col-12">
                   <label class="form-label">Notes</label>
-                  <textarea class="form-control" rows="3" formControlName="notes"></textarea>
+                  <quill-editor formControlName="notes" [modules]="quillModules" format="html"
+                    [sanitize]="true"></quill-editor>
                 </div>
               </div>
 

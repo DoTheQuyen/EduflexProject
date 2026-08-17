@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { AuthHelperService } from '../../../services/auth-helper.service';
 import { EnquiryModalComponent } from '../enquiry-modal/enquiry-modal.component';
 import { FeedbackCarouselComponent } from '../feedback-carousel/feedback-carousel.component';
@@ -15,8 +15,6 @@ import { ChatWidgetComponent } from '../chat-widget/chat-widget.component';
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
     EnquiryModalComponent,
     FeedbackCarouselComponent,
     CoursePromotionCarouselComponent,

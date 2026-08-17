@@ -25,7 +25,9 @@ h1, h2, h3 {
 .hero {
   background-color: var(--color-navy-900);
   color: white;
-  padding: 2rem 1.5rem 1.5rem;
+  /* No bottom padding: the situation router sits flush against the hero's own
+     lower edge, and .start-opt supplies its own vertical padding. */
+  padding: 2rem 1.5rem 0;
   /* Brighter scrim: navy-700 instead of navy-900, so more of the sunset photo
      comes through. The opacity floor (0.89) is not arbitrary — below it the
      .hero-sub grey drops under 4.5:1 against the photo's brightest areas.
@@ -47,13 +49,13 @@ h1, h2, h3 {
   background-repeat: repeat, repeat, no-repeat, no-repeat;
 }
 
-.hero-grid {
+/* Single column now: the journey timeline that occupied the right half has
+   moved into "How it works". Width is capped so the headline still wraps at a
+   readable measure across the full-bleed photo. */
+.hero-in {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 3.5rem;
-  align-items: center;
+  padding: 2rem 0 1.5rem;
 }
 
 /* The masthead keeps the brass brand colour. !important is needed to beat
@@ -143,128 +145,95 @@ h1, h2, h3 {
   border: 1px solid rgba(255, 255, 255, 0.32);
 }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
-  font-weight: 600;
-  padding: 0.85rem 1.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
+/* Situation router, fused to the hero's bottom edge instead of living in its
+   own section. As a standalone band it was one sentence and four links given
+   a full section's padding — mostly empty space, with the question set
+   smaller than its own answers. Here it puts the choice at the moment someone
+   is actually making it, right after reading the headline, and removes a
+   whole section rather than restyling the old one. */
+.start-rail {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
-.btn-outline:hover {
-  border-color: white;
-}
-
-.btn-quiet {
-  background: transparent;
-  border: 1.5px solid var(--color-slate-hairline);
-  color: var(--color-slate-900);
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.btn-quiet:hover {
-  border-color: var(--color-slate-700);
-  color: var(--color-slate-700);
-}
-
-/* Journey timeline */
-.journey {
-  position: relative;
-  padding-left: 1.75rem;
-}
-
-.journey::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 8px;
-  bottom: 8px;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.journey-step {
-  position: relative;
-  padding-bottom: 1.6rem;
-}
-
-.journey-step:last-child {
-  padding-bottom: 0;
-}
-
-.journey-step::before {
-  content: "";
-  position: absolute;
-  left: -1.75rem;
-  top: 4px;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--color-navy-900);
-  border: 2px solid var(--color-accent);
-}
-
-.journey-step.is-active::before {
-  background: var(--color-accent);
-}
-
-.journey-label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: white;
-}
-
-/* Was a hardcoded #9CA6B8; --color-muted-on-dark is the token for exactly
-   this (secondary text on a dark surface) and is a touch lighter, which the
-   smaller size needs. */
-.journey-sub {
-  font-size: 0.85rem;
-  line-height: 1.55;
-  color: var(--color-muted-on-dark);
-  margin-top: 0.2rem;
-}
-
-/* Stats */
-.stats {
-  background: var(--color-slate-surface-deep);
-  border-top: 1px solid var(--color-slate-border);
-  border-bottom: 1px solid var(--color-slate-border);
+.start-rail-in {
+  display: flex;
+  flex-wrap: wrap;
   padding: 0;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  text-align: center;
-  padding: 2.5rem 0;
-}
-
-.stats-grid > div + div {
-  border-left: 1px solid var(--color-slate-hairline);
-}
-
-/* Tabular figures in the mono face: the three numbers read as a measured
-   record rather than decorative display type. */
-.stat-num {
+.start-q {
   font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 2.3rem;
-  color: var(--color-slate-700);
-  font-variant-numeric: tabular-nums;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--color-muted-on-dark);
+  align-self: center;
+  padding: 1rem 1.5rem 1rem 0;
 }
 
-.stat-label {
-  font-size: 0.87rem;
-  color: var(--color-slate-muted);
-  margin-top: 0.3rem;
+/* Anchors and the enquiry button read as one connected control: equal flex
+   basis, a hairline between each, and a hover fill rather than an underline —
+   underlines were illegible at this size against a photo. */
+.start-opt {
+  flex: 1 1 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 1.05rem 1.25rem;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  background: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-muted-on-dark);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.start-opt svg {
+  width: 0.78rem;
+  height: 0.78rem;
+  flex: none;
+  transition: transform 0.15s ease;
+}
+
+.start-opt:hover,
+.start-opt:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+.start-opt:hover svg {
+  transform: translateX(3px);
+}
+
+.start-opt:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: -2px;
+}
+
+@media (max-width: 700px) {
+  .start-opt {
+    flex-basis: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-opt,
+  .start-opt svg,
+  .start-opt:hover svg {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* Section heading block */
@@ -279,41 +248,121 @@ h1, h2, h3 {
   margin-top: 0.5rem;
 }
 
+
 /* Why Eduflex */
 .why-band {
   background: var(--color-slate-surface);
 }
 
-/* Ruled columns rather than boxed cards: four short claims sitting under a
-   shared rule read as one set, where four bordered boxes read as four
-   separate things competing for attention. */
-.feature-grid {
+/* ===== How it works =====
+   Replaces three sections that stated the same five facts in three shapes.
+   The media column is sticky so the image holds position while the steps
+   scroll past it: the process reads as continuous rather than as five cards. */
+.how-band {
+  padding: 4.5rem 0 5rem;
+  background: var(--color-slate-surface);
+}
+
+.how-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 3.5rem;
+  align-items: start;
 }
 
-.feature-card {
-  border-top: 2px solid var(--color-slate-500);
-  padding: 1.65rem 0 0;
-  background: transparent;
+.how-media {
+  position: sticky;
+  top: 2rem;
 }
 
-/* Tile itself comes from .icon-tile in theme.css. */
-.feature-icon {
-  margin-bottom: 1.1rem;
+.how-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
 }
 
-.feature-card h3 {
+.how-grid h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  line-height: 1.25;
+  color: var(--color-slate-900);
+  margin: 0.5rem 0 0.6rem;
+}
+
+.how-sub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-slate-muted);
+  max-width: 50ch;
+  margin: 0 0 2.5rem;
+}
+
+/* Numbered from a CSS counter rather than hardcoded, so reordering a step in
+   the template can't leave the numbering wrong. */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.step {
+  counter-increment: step;
+  position: relative;
+  margin-left: 0.6rem;
+  padding: 0 0 1.9rem 3.4rem;
+  border-left: 1px solid var(--color-slate-border);
+}
+
+/* The connecting rule stops at the last marker instead of trailing past it. */
+.step:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: -0.85rem;
+  top: -0.15rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--color-slate-surface);
+  border: 1px solid var(--color-slate-hairline);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--color-slate-700);
+}
+
+.step h3 {
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: var(--color-slate-900);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
-.feature-card p {
+.step p {
   font-size: 0.92rem;
+  line-height: 1.6;
   color: var(--color-slate-muted);
   margin: 0;
+}
+
+@media (max-width: 900px) {
+  .how-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* Sticky is meaningless once the image sits above the steps rather than
+     beside them, and it would pin the photo over the content while scrolling. */
+  .how-media {
+    position: static;
+  }
 }
 
 /* Story & Mission */
@@ -385,77 +434,52 @@ h1, h2, h3 {
   margin: 0;
 }
 
-/* Services */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.5rem;
-}
-
-.service-card {
-  border: 1px solid var(--color-slate-border);
-  border-radius: var(--radius);
-  padding: 1.85rem;
-  background: white;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.service-card:hover {
-  border-color: var(--color-slate-500);
-  box-shadow: var(--shadow-card);
-}
-
-.service-card .eyebrow {
-  display: block;
-  margin-bottom: 0.7rem;
-}
-
-.service-card h3 {
-  font-size: 1.12rem;
-  color: var(--color-slate-900);
-  margin-bottom: 0.55rem;
-}
-
-.service-card p {
-  font-size: 0.92rem;
-  color: var(--color-slate-muted);
-  margin: 0;
-}
-
-.services-foot {
-  margin-top: 2.2rem;
-}
-
-/* CTA — a pastel slate panel with dark text, rather than another dark slab.
-   The page already opens on a dark navy hero; repeating that weight at the
-   foot made the whole page read heavy. */
+/* CTA over a full-bleed photo. The page opens on a dark hero and previously
+   closed on a pale panel; ending on an image gives the page a second photo and
+   avoids finishing on a third consecutive run of text. */
 .cta-band {
-  padding: 4rem 2rem 5rem;
+  position: relative;
+  color: #fff;
+  padding: 4.5rem 0 5rem;
+  background-image:
+    linear-gradient(180deg, rgba(22, 35, 58, 0.9), rgba(22, 35, 58, 0.93)),
+    url('assets/hero/student-travel-cta.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
-/* Gradient, radius and layout come from .panel-cta in theme.css. */
-.cta-panel {
+/* Single left-aligned column, same shape as the hero, rather than the
+   space-between row this replaced. That row put the heading at one edge and
+   the button at the other with nothing between them but empty container width
+   — and the photo's subject sits in the right third, so the gap fell exactly
+   where the one thing in the image actually was. A stacked column can't
+   produce that gap regardless of viewport width or photo crop. */
+.cta-in {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 3.5rem;
+  padding: 0 2rem;
 }
 
-.cta-panel h2 {
-  font-size: 1.65rem;
-  color: var(--color-slate-900);
-  max-width: 32ch;
+.cta-in h2 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1.25;
+  color: #fff;
+  margin: 0 0 0.8rem;
+  max-width: 20ch;
 }
 
-.cta-panel p {
-  color: var(--color-slate-700);
-  font-size: 0.95rem;
-  margin-top: 0.5rem;
+.cta-in p {
+  color: var(--color-muted-on-dark);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 46ch;
+  margin: 0 0 1.75rem;
 }
 
 
 /* Responsive */
 @media (max-width: 992px) {
-  .hero-grid,
   .story-grid {
     grid-template-columns: 1fr;
   }
@@ -464,15 +488,6 @@ h1, h2, h3 {
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2.1rem;
-  }
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  .stats-grid > div + div {
-    border-left: none;
-    border-top: 1px solid var(--color-slate-hairline);
-    padding-top: 1rem;
-    margin-top: 1rem;
   }
 }
 

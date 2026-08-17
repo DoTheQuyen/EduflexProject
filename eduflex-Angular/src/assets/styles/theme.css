@@ -120,7 +120,7 @@
 /* Secondary-page header: flat tinted band, eyebrow, title, one-line intro.
    Was defined twice under two different names (.about-header / .page-head)
    with the title's font-family missing from one of them, so About's h1 was
-   silently rendering in body Arial instead of the display face every other
+   silently rendering in the body face instead of the display face every other
    page uses. Consolidated here — except alignment, which genuinely differed
    (About centres its header, Feedback left-anchors its title next to a stat
    row) and stays a per-page choice rather than being forced one way. */

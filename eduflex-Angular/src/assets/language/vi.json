@@ -44,38 +44,31 @@
   "HOME": {
     "HERO": {
       "EYEBROW": "Tư vấn giáo dục · Úc",
-      "TITLE": "Cánh cửa của bạn đến du học và định cư tại Úc",
-      "SUBTITLE": "Hướng dẫn cá nhân hóa từ chọn khóa học đến kết quả visa — chúng tôi đồng hành cùng bạn từng bước.",
+      "TITLE": "Một chuyên viên, từ câu hỏi đầu tiên đến học kỳ đầu tiên",
+      "SUBTITLE": "Chúng tôi giúp sinh viên quốc tế chọn khóa học tại Úc, lấy thư mời nhập học và chuẩn bị đầy đủ giấy tờ — với cùng một người theo hồ sơ của bạn từ đầu đến cuối.",
       "CTA": "Đặt lịch tư vấn miễn phí"
     },
-    "JOURNEY": {
-      "ENQUIRE_LABEL": "Liên hệ",
-      "ENQUIRE_SUB": "Cho chúng tôi biết mục tiêu và hoàn cảnh của bạn",
-      "MATCH_LABEL": "Chọn khóa học phù hợp",
-      "MATCH_SUB": "Lựa chọn từ hơn 30 trường đối tác",
-      "VISA_LABEL": "Nộp hồ sơ visa",
-      "VISA_SUB": "Diện 500 hoặc 485, được chuẩn bị cùng bạn",
-      "ENROL_LABEL": "Nhập học",
-      "ENROL_SUB": "Xác nhận thư mời và ngày nhập học",
-      "ARRIVE_LABEL": "Đến Úc",
-      "ARRIVE_SUB": "Ổn định cuộc sống với sự hỗ trợ liên tục"
+    "START": {
+      "TITLE": "Bạn đang ở giai đoạn nào?",
+      "OPT1": "Mới bắt đầu tìm hiểu",
+      "OPT2": "Tôi đã chọn được khóa học",
+      "OPT3": "Đang du học tại Úc",
+      "OPT4": "Muốn nghe từ sinh viên trước đã"
     },
-    "STATS": {
-      "STUDENTS": "Học sinh đã hỗ trợ",
-      "VISA_RATE": "Tỷ lệ đậu visa",
-      "PARTNERS": "Trường đối tác"
-    },
-    "WHY": {
-      "EYEBROW": "Vì sao chọn Eduflex",
-      "TITLE": "Hướng dẫn xây dựng quanh hành trình của bạn, không phải quy trình của chúng tôi",
-      "FEATURE1_TITLE": "Dịch vụ toàn diện",
-      "FEATURE1_DESC": "Từ chọn khóa học đến hỗ trợ sau khi đến nơi, tất cả trong một nơi.",
-      "FEATURE2_TITLE": "Quy trình minh bạch",
-      "FEATURE2_DESC": "Chúng tôi vạch rõ lộ trình của bạn, không có bất ngờ nào ẩn giấu.",
-      "FEATURE3_TITLE": "Tỷ lệ thành công cao",
-      "FEATURE3_DESC": "Kết quả tốt trong việc đậu visa và xếp lớp học.",
-      "FEATURE4_TITLE": "Hỗ trợ liên tục",
-      "FEATURE4_DESC": "Hành trình của bạn không kết thúc khi nhập học — chúng tôi giúp bạn ổn định cuộc sống."
+    "HOW": {
+      "EYEBROW": "Quy trình làm việc",
+      "TITLE": "Năm bước, một người đồng hành",
+      "SUB": "Một chuyên viên theo hồ sơ của bạn từ đầu đến cuối, nên bạn không phải giải thích lại từ đầu.",
+      "S1_TITLE": "Cho chúng tôi biết bạn đang ở đâu",
+      "S1_DESC": "Mục tiêu, ngân sách, nền tảng học vấn của bạn, và khi nào bạn muốn bắt đầu.",
+      "S2_TITLE": "Chọn lọc khóa học",
+      "S2_DESC": "Các lựa chọn được cân nhắc theo điều kiện đầu vào, chi phí và dự định sau tốt nghiệp. Bạn chọn — chúng tôi không xếp bạn vào trường ưu tiên nào.",
+      "S3_TITLE": "Lấy thư mời nhập học",
+      "S3_DESC": "Chúng tôi nộp hồ sơ thay bạn và làm việc với nhà trường cho đến khi thư mời và CoE được cấp.",
+      "S4_TITLE": "Chuẩn bị đầy đủ giấy tờ",
+      "S4_DESC": "Bảng điểm, thư giới thiệu, chứng minh tài chính và biểu mẫu được thu thập và kiểm tra từ trước, để không thiếu gì vào đúng lúc cần.",
+      "S5_TITLE": "Ổn định khi bạn đến nơi",
+      "S5_DESC": "Xác nhận nhập học, mở tài khoản ngân hàng và Medicare, và hỗ trợ đổi khóa học nếu kế hoạch thay đổi."
     },
     "STORY": {
       "EYEBROW": "Câu chuyện của chúng tôi",
@@ -94,23 +87,9 @@
       "TITLE": "Một cái tên đáng tin cậy, trên toàn cầu",
       "DESC": "Trở thành công ty tư vấn giáo dục & định cư đáng tin cậy nhất cho học sinh trên toàn thế giới."
     },
-    "SERVICES": {
-      "EYEBROW": "Dịch vụ của chúng tôi",
-      "TITLE": "Những gì chúng tôi giúp bạn",
-      "STUDENT_VISA_TAG": "Diện 500",
-      "STUDENT_VISA_TITLE": "Visa du học",
-      "STUDENT_VISA_DESC": "Tư vấn, nộp hồ sơ, và hỗ trợ gia hạn.",
-      "GRAD_VISA_TAG": "Diện 485",
-      "GRAD_VISA_TITLE": "Visa tốt nghiệp",
-      "GRAD_VISA_DESC": "Tư vấn quyền làm việc sau tốt nghiệp và nộp hồ sơ.",
-      "PLACEMENT_TAG": "Xếp lớp",
-      "PLACEMENT_TITLE": "Xếp lớp đại học & khóa học",
-      "PLACEMENT_DESC": "Kết nối hồ sơ của bạn với những trường tốt nhất trên khắp nước Úc.",
-      "EXPLORE_BTN": "Khám phá tất cả dịch vụ"
-    },
     "CTA": {
-      "TITLE": "Sẵn sàng bắt đầu?",
-      "DESC": "Đặt lịch tư vấn miễn phí với Eduflex ngay hôm nay và để chúng tôi giúp bạn thiết kế tương lai tại Úc.",
+      "TITLE": "Bắt đầu bằng một cuộc trò chuyện, không phải một bản hợp đồng",
+      "DESC": "Mang theo bảng điểm và ý tưởng về ngành bạn muốn học. Bạn sẽ ra về với một danh sách khóa học và lộ trình thực tế.",
       "BUTTON": "Đặt lịch tư vấn miễn phí ngay"
     },
     "TOAST_SUCCESS": "Yêu cầu của bạn đã được gửi. Nhân viên của chúng tôi sẽ liên hệ với bạn sớm."
@@ -149,8 +128,8 @@
       "STEP1_DESC": "Cho chúng tôi biết mục tiêu, hoàn cảnh, và thời gian biểu của bạn.",
       "STEP2_TITLE": "Chọn khóa học phù hợp",
       "STEP2_DESC": "Chúng tôi lựa chọn từ hơn 30 trường đối tác.",
-      "STEP3_TITLE": "Nộp hồ sơ visa",
-      "STEP3_DESC": "Diện 500 hoặc 485, được chuẩn bị cùng nhau, từng bước một.",
+      "STEP3_TITLE": "Chuẩn bị giấy tờ",
+      "STEP3_DESC": "Thư mời, CoE và giấy tờ kèm theo, cùng nhau kiểm tra trước khi nộp.",
       "STEP4_TITLE": "Nhập học",
       "STEP4_DESC": "Xác nhận thư mời và chốt ngày nhập học.",
       "STEP5_TITLE": "Đến Úc",
@@ -162,11 +141,6 @@
       "PARA1": "Eduflex được sáng lập bởi các chuyên viên tư vấn từng trải qua những thách thức khi du học và sống ở nước ngoài. Với niềm đam mê mạnh mẽ với giáo dục, chúng tôi tập trung giúp du học sinh quốc tế đạt được ước mơ học tập tại Úc với sự tự tin.",
       "QUOTE": "Giáo dục không chỉ là một tấm bằng — đó là một hành trình thay đổi cuộc sống.",
       "PARA2": "Đội ngũ của chúng tôi kết hợp hơn 5 năm kinh nghiệm thực tế hướng dẫn học sinh qua quá trình tuyển sinh đại học, thủ tục visa, và định cư tại Úc. Sự hỗ trợ của chúng tôi không dừng lại ở việc nhập học — chúng tôi tiếp tục giúp học sinh tìm chỗ ở, thích nghi với văn hóa Úc, và lên kế hoạch cho sự nghiệp tương lai."
-    },
-    "STATS": {
-      "STUDENTS": "Học sinh đã hỗ trợ",
-      "VISA_RATE": "Tỷ lệ đậu visa",
-      "PARTNERS": "Trường đối tác"
     },
     "TEAM": {
       "EYEBROW": "Đội ngũ của chúng tôi",

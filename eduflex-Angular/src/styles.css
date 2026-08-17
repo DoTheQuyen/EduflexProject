@@ -97,12 +97,25 @@
      they were invisible to Tailwind, and a `font-sans` in a template quietly
      fell back to Tailwind's default system stack — a fourth family nobody
      chose. Adding a face means adding it here, which is the point.
-       display — Playfair, headings and pull quotes
-       sans    — Arial, all running text and UI
+       display — Source Serif 4, headings and pull quotes
+       sans    — Be Vietnam Pro, all running text and UI
        mono    — IBM Plex Mono, eyebrows, figures and pills
-     (Material Icons and Font Awesome are icon fonts, not text faces.) */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-sans: Arial, Helvetica, sans-serif;
+     (Material Icons and Font Awesome are icon fonts, not text faces.)
+
+     Both text faces were chosen for the Vietnamese half of the site, which is
+     where the old stack failed. Running text was Arial — a system face with no
+     Vietnamese design, so stacked marks (ế ộ ữ ẫ) were mechanically piled on
+     and browsers swapped to a fallback mid-word. Be Vietnam Pro draws and
+     spaces those marks as part of the face, so accented lines hold one weight
+     and an even rhythm.
+
+     Headings were Playfair Display, a high-contrast Didone whose hairlines
+     thin out badly at the 16–20px most headings on this site actually render
+     at, and which stacks diacritics worst exactly where strokes are finest.
+     Source Serif 4 keeps the serif credibility signal at far lower contrast,
+     so it stays solid at small sizes. */
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Be Vietnam Pro', system-ui, 'Segoe UI', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
 

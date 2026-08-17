@@ -36,14 +36,14 @@ namespace ShareService.Validations.CoursePromotion
                 .MaximumLength(150).WithMessage("Opportunities must not exceed 150 characters");
 
             RuleFor(x => x.ExpiryDate)
-                .GreaterThan(DateTime.UtcNow).WithMessage("Offer end date must be in the future");
+                .GreaterThan(DateTime.UtcNow).WithMessage("Offer end date must be in the future")
+                .LessThanOrEqualTo(DateTime.UtcNow.AddMonths(12)).WithMessage("Offer end date can't be more than 12 months out");
 
             RuleFor(x => x.Note)
-                .MaximumLength(600).WithMessage("Note must not exceed 600 characters");
+                .MaximumLength(5000).WithMessage("Note must not exceed 5000 characters");
 
             RuleFor(x => x.WebsiteUrl)
-                .NotEmpty().WithMessage("University website URL is required")
-                .Must(url => Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                .Must(url => string.IsNullOrWhiteSpace(url) || (Uri.TryCreate(url, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)))
                 .WithMessage("University website URL must be a valid http(s) URL");
 
             RuleFor(x => x.DisplayOrder)

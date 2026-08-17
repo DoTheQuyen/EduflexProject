@@ -16,7 +16,6 @@
       <article class="promo-card is-skeleton">
         <div class="promo-banner">
           <div class="promo-top-row">
-            <span class="skeleton-avatar"></span>
             <span class="skeleton-line tiny"></span>
           </div>
           <span class="skeleton-line short"></span>
@@ -55,10 +54,12 @@
       <article class="promo-card">
         <div class="promo-banner">
           <div class="promo-top-row">
-            <span class="promo-crest">{{ coursePromotions[currentPromotionIndex].universityName?.charAt(0) }}</span>
             <span class="pill pill-navy">{{ coursePromotions[currentPromotionIndex].semester }}</span>
           </div>
-          <span class="pill pill-gold">{{ coursePromotions[currentPromotionIndex].scholarshipLabel }}</span>
+          <div class="promo-scholarship" *ngIf="coursePromotions[currentPromotionIndex].scholarshipLabel">
+            <span class="promo-scholarship-caption">{{ 'PROMO_CAROUSEL.SCHOLARSHIP' | translate }}</span>
+            <span class="pill pill-gold">{{ coursePromotions[currentPromotionIndex].scholarshipLabel }}</span>
+          </div>
           <h3>{{ coursePromotions[currentPromotionIndex].courseName }}</h3>
           <p class="promo-uni">{{ coursePromotions[currentPromotionIndex].universityName }}</p>
         </div>
@@ -69,7 +70,7 @@
             <div class="promo-stat"><span>{{ 'PROMO_CAROUSEL.OPPORTUNITIES' | translate }}</span><span>{{ coursePromotions[currentPromotionIndex].opportunities }}</span></div>
             <div class="promo-stat"><span>{{ 'PROMO_CAROUSEL.OFFER_ENDS' | translate }}</span><span class="is-gold">{{ coursePromotions[currentPromotionIndex].expiryDate | date:'mediumDate' }}</span></div>
           </div>
-          <p class="promo-note" *ngIf="coursePromotions[currentPromotionIndex].note">{{ coursePromotions[currentPromotionIndex].note }}</p>
+          <div class="promo-note" *ngIf="coursePromotions[currentPromotionIndex].note" [innerHTML]="coursePromotions[currentPromotionIndex].note"></div>
           <button type="button" class="promo-enquire-link" (click)="onEnquireClick()">
             {{ 'PROMO_CAROUSEL.ENQUIRE' | translate }}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

@@ -19,7 +19,7 @@
   background: white;
   border-radius: 10px;
   width: 100%;
-  max-width: 640px;
+  max-width: 960px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -50,4 +50,24 @@
   font-size: 0.8rem;
   display: block;
   margin-top: 0.25rem;
+}
+
+quill-editor {
+  display: block;
+  width: 100%;
+}
+
+:host ::ng-deep .ql-toolbar.ql-snow {
+  border-color: var(--color-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+:host ::ng-deep .ql-container.ql-snow {
+  border-color: var(--color-border);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+:host ::ng-deep .ql-editor {
+  min-height: 150px;
+  font-size: 0.9rem;
 }

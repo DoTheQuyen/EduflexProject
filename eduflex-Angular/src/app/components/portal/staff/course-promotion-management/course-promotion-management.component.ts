@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { QuillModule } from 'ngx-quill';
 import {
   Client,
   CoursePromotionDto,
@@ -20,14 +28,36 @@ import { extractApiErrorMessage } from '../../../../shared/utils/api-error.util'
 import { NotificationService } from '@services/notification.service';
 import { Button } from 'primeng/button';
 
+const QUILL_TOOLBAR = [
+  ['bold', 'italic', 'underline'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['link'],
+  ['clean'],
+];
+
+const MAX_OFFER_MONTHS = 12;
+
+function maxExpiryDateValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+  const max = new Date();
+  max.setMonth(max.getMonth() + MAX_OFFER_MONTHS);
+  max.setHours(0, 0, 0, 0);
+  const selected = new Date(control.value);
+  return selected > max ? { maxExpiryDate: true } : null;
+}
+
 @Component({
   selector: 'app-course-promotion-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, Button],
+  imports: [CommonModule, ReactiveFormsModule, DataTableComponent, Button, QuillModule],
   templateUrl: './course-promotion-management.component.html',
   styleUrls: ['./course-promotion-management.component.css'],
 })
 export class CoursePromotionManagementComponent implements OnInit {
+  readonly quillModules = { toolbar: QUILL_TOOLBAR };
+
   promotions: CoursePromotionDto[] = [];
   isLoading = false;
   isModalOpen = false;
@@ -95,9 +125,9 @@ export class CoursePromotionManagementComponent implements OnInit {
       location: ['', [Validators.required, Validators.maxLength(100)]],
       tuition: ['', [Validators.required, Validators.maxLength(80)]],
       opportunities: ['', [Validators.required, Validators.maxLength(150)]],
-      expiryDate: ['', [Validators.required]],
-      note: ['', [Validators.maxLength(600)]],
-      websiteUrl: ['', [Validators.required]],
+      expiryDate: ['', [Validators.required, maxExpiryDateValidator]],
+      note: ['', [Validators.maxLength(5000)]],
+      websiteUrl: [''],
       isFeatured: [true],
       displayOrder: [0, [Validators.required, Validators.min(0)]],
     });
@@ -184,6 +214,12 @@ export class CoursePromotionManagementComponent implements OnInit {
   isFieldInvalid(fieldName: string): boolean {
     const control = this.promotionForm.get(fieldName);
     return control ? control.invalid && control.touched : false;
+  }
+
+  get maxExpiryDate(): string {
+    const d = new Date();
+    d.setMonth(d.getMonth() + MAX_OFFER_MONTHS);
+    return d.toISOString().substring(0, 10);
   }
 
   openAddModal(): void {

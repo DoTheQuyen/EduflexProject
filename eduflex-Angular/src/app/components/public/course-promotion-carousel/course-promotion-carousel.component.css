@@ -46,6 +46,21 @@ section {
   gap: 1rem;
 }
 
+.promo-scholarship {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.promo-scholarship-caption {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-slate-muted);
+}
+
 .dots {
   display: flex;
   justify-content: center;
@@ -90,7 +105,6 @@ section {
 .pill-gold {
   background: var(--color-slate-500);
   color: white;
-  margin-bottom: 0.75rem;
 }
 
 .promo-card {
@@ -103,21 +117,13 @@ section {
   box-shadow: var(--shadow-card);
 }
 
-/* .skeleton-line / .skeleton-avatar come from theme.css. The avatar there is
-   sized for a person's photo (2.5rem), so it's scaled down here to match the
-   university crest circle it stands in for. */
-.is-skeleton .promo-top-row .skeleton-avatar {
-  width: 34px;
-  height: 34px;
-}
-
 .is-skeleton .promo-banner .skeleton-line.short {
   height: 1.3rem;
   margin: 0.7rem 0 0.2rem;
 }
 
 .promo-banner {
-  padding: 1.6rem 1.75rem 1.2rem;
+  padding: 1.1rem 1.75rem 0.9rem;
   border-bottom: 1px solid var(--color-slate-border);
   background: linear-gradient(135deg, color-mix(in srgb, var(--color-slate-300) 22%, white) 0%, white 70%);
 }
@@ -125,23 +131,8 @@ section {
 .promo-top-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.promo-crest {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--color-slate-hairline);
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--color-slate-700);
+  justify-content: flex-end;
+  margin-bottom: 0.6rem;
 }
 
 .promo-banner h3 {
@@ -149,7 +140,7 @@ section {
   font-weight: 400;
   font-size: 1.3rem;
   color: var(--color-slate-900);
-  margin: 0.7rem 0 0.2rem;
+  margin: 0.4rem 0 0.15rem;
 }
 
 .promo-uni {
@@ -202,7 +193,7 @@ section {
   line-height: 1.5;
   color: var(--color-slate-muted);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -47,6 +47,39 @@
   </nav>
 </header>
 
+<!-- Our Story / Mission. Moved ahead of "How it works" — who you are, before
+     what the process looks like. -->
+<section class="band story-band">
+  <div class="container story-grid">
+    <div class="story-text">
+      <span class="eyebrow">{{ 'HOME.STORY.EYEBROW' | translate }}</span>
+      <!-- One line bridging the hero's "you" to this section's "us" — the
+           hero promises something to the reader, then this section switches
+           straight to talking about the company with no acknowledgment of
+           that handoff. A generic "Welcome!" would fix the abruptness but
+           reintroduce template filler; this instead names the actual
+           transition that's happening. -->
+      <p class="story-lead">{{ 'HOME.STORY.LEAD' | translate }}</p>
+      <h2>{{ 'HOME.STORY.TITLE' | translate }}</h2>
+      <p>{{ 'HOME.STORY.PARA1' | translate }}</p>
+      <p class="pull-quote">"{{ 'HOME.STORY.QUOTE' | translate }}"</p>
+      <p>{{ 'HOME.STORY.PARA2' | translate }}</p>
+    </div>
+    <div class="mission-list">
+      <div class="mission-item">
+        <span class="eyebrow">{{ 'HOME.MISSION.EYEBROW' | translate }}</span>
+        <h3>{{ 'HOME.MISSION.TITLE' | translate }}</h3>
+        <p>{{ 'HOME.MISSION.DESC' | translate }}</p>
+      </div>
+      <div class="mission-item">
+        <span class="eyebrow">{{ 'HOME.VISION.EYEBROW' | translate }}</span>
+        <h3>{{ 'HOME.VISION.TITLE' | translate }}</h3>
+        <p>{{ 'HOME.VISION.DESC' | translate }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- How it works. This one section replaces three: the hero journey timeline,
      "Why Eduflex", and "Services" — all of which stated the same five facts in
      three different shapes. Each fact now appears exactly once. The image holds
@@ -83,31 +116,6 @@
           <p>{{ 'HOME.HOW.S5_DESC' | translate }}</p>
         </li>
       </ol>
-    </div>
-  </div>
-</section>
-
-<!-- Our Story / Mission -->
-<section class="band story-band">
-  <div class="container story-grid">
-    <div class="story-text">
-      <span class="eyebrow">{{ 'HOME.STORY.EYEBROW' | translate }}</span>
-      <h2>{{ 'HOME.STORY.TITLE' | translate }}</h2>
-      <p>{{ 'HOME.STORY.PARA1' | translate }}</p>
-      <p class="pull-quote">"{{ 'HOME.STORY.QUOTE' | translate }}"</p>
-      <p>{{ 'HOME.STORY.PARA2' | translate }}</p>
-    </div>
-    <div class="mission-list">
-      <div class="mission-item">
-        <span class="eyebrow">{{ 'HOME.MISSION.EYEBROW' | translate }}</span>
-        <h3>{{ 'HOME.MISSION.TITLE' | translate }}</h3>
-        <p>{{ 'HOME.MISSION.DESC' | translate }}</p>
-      </div>
-      <div class="mission-item">
-        <span class="eyebrow">{{ 'HOME.VISION.EYEBROW' | translate }}</span>
-        <h3>{{ 'HOME.VISION.TITLE' | translate }}</h3>
-        <p>{{ 'HOME.VISION.DESC' | translate }}</p>
-      </div>
     </div>
   </div>
 </section>

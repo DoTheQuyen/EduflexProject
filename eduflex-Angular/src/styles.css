@@ -142,6 +142,17 @@
     0 4px 10px rgba(30, 45, 65, 0.22);
 }
 
+/* Source Serif 4 has full Vietnamese diacritic coverage, but a native-speaker
+   read of it in headings still came back as stiff/unfriendly — coverage isn't
+   the same as looking right. Rather than source and re-verify a second serif
+   for one language, Vietnamese headings fall back to the sans face already
+   fetched and already proven for Vietnamese body text; English keeps the
+   serif untouched. :lang(vi) tracks LanguageService, which keeps
+   document.documentElement.lang in sync with the active locale. */
+:lang(vi) {
+  --font-display: var(--font-sans);
+}
+
 /* This reset is unlayered, which under CSS Cascade Layers rules means it
    unconditionally beats ANY layered style regardless of specificity — including
    every PrimeNG component's own padding/margin (they render inside the "primeng"

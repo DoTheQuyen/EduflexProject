@@ -21,7 +21,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all-practitioner-tags")]
         public Task<ActionResult<List<PractitionerTagDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll practitioner tags endpoint", async () =>

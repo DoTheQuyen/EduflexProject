@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Client, CreateStudentDto, CheckDuplicateStudentDto, DuplicateCheckResultDto, AddressDto } from '@services/api.services';
+import { Client, CreateStudentDto, CheckDuplicateStudentDto, DuplicateCheckResultDto, AddressDto, PersonType } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { StudentDetailsFormComponent } from '../../../share-component/student-details-form/student-details-form.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
@@ -23,19 +23,29 @@ export class StudentNewComponent {
 
   duplicateWarning: DuplicateCheckResultDto | null = null;
 
+  // Which tab "Add" was clicked from — read once from the query param, not editable
+  // afterwards (Type is immutable once a record is created, see CreateStudentDto).
+  isCustomer = false;
+
   constructor(
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private apiClient: Client,
     private authHelper: AuthHelperService,
     private notificationService: NotificationService
   ) {
+    this.isCustomer = this.route.snapshot.queryParamMap.get('type') === 'customer';
     this.form = StudentDetailsFormComponent.buildFormGroup(this.fb);
 
     if (!this.authHelper.hasStudentsPermission().add) {
-      this.notificationService.error('You do not have permission to add students.');
-      this.router.navigate(['/staff-portal/students']);
+      this.notificationService.error('You do not have permission to add contacts.');
+      this.router.navigate(['/staff-portal/contacts']);
     }
+  }
+
+  get pageTitle(): string {
+    return this.isCustomer ? 'Add Customer' : 'Add Student';
   }
 
   private buildAddress(): AddressDto {
@@ -92,6 +102,7 @@ export class StudentNewComponent {
     this.isSubmitting = true;
     const v = this.form.value;
     const createDto = new CreateStudentDto({
+      type: this.isCustomer ? PersonType.Customer : PersonType.Student,
       email: v.email,
       mobile: v.mobile,
       firstName: v.firstName,
@@ -105,12 +116,12 @@ export class StudentNewComponent {
     this.apiClient.studentsPOST(createDto).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.notificationService.success('Student created successfully. They have been emailed their login details.');
-        this.router.navigate(['/staff-portal/students']);
+        this.notificationService.success(`${this.isCustomer ? 'Customer' : 'Student'} created successfully. They have been emailed their login details.`);
+        this.router.navigate(['/staff-portal/contacts']);
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong creating this student. Please try again.');
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong creating this record. Please try again.');
       }
     });
   }
@@ -122,12 +133,12 @@ export class StudentNewComponent {
     this.apiClient.reactivate(this.duplicateWarning.existingStudentId).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.notificationService.success('Existing student reactivated.');
-        this.router.navigate(['/staff-portal/students']);
+        this.notificationService.success('Existing record reactivated.');
+        this.router.navigate(['/staff-portal/contacts']);
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Could not reactivate this student. Please try again.');
+        this.errorMessage = extractApiErrorMessage(err, 'Could not reactivate this record. Please try again.');
       }
     });
   }
@@ -137,6 +148,6 @@ export class StudentNewComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/staff-portal/students']);
+    this.router.navigate(['/staff-portal/contacts']);
   }
 }

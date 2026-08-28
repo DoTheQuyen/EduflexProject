@@ -10,5 +10,7 @@ namespace ShareService.DataAccess.Interface
         Task<PagedResult<MigrationCaseModel>> GetCasesAsync(MigrationCaseFilter filter);
         Task<long> CountAllAsync();
         Task<bool> ReplaceCaseAsync(string id, MigrationCaseModel migrationCase);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync();
     }
 }

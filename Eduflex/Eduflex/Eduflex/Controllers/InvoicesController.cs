@@ -27,7 +27,7 @@ namespace Eduflex.API.Controllers
         // shares that permission gate (checked inside InvoiceService.GetAllAsync).
         // Paginated (default 50/page) — the ledger has no upper bound on invoice volume,
         // so returning the whole collection on every load doesn't scale.
-        [HttpGet]
+        [HttpGet("all-invoices")]
         public Task<ActionResult<PagedResult<InvoiceRecordDto>>> GetAll(
             [FromQuery] string? category, [FromQuery] string? status,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 50)

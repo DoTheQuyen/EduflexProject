@@ -10,5 +10,7 @@ namespace ShareService.Services.Interface
         Task<EnquiryModel?> GetEnquiryAsync(string id, string userId);
         Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel updateModel, string userId);
         Task<bool> DeleteEnquiriesAsync(string id, string userId);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync(string userId);
     }
 }

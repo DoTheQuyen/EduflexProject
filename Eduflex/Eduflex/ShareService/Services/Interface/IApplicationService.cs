@@ -19,5 +19,7 @@ namespace ShareService.Services.Interface
         Task<ApplicationModel> CreateApplication(ApplicationModel application, string userId);
         Task<bool> UpdateApplicationStatus(string id, string status, string userId);
         Task<int> CountPendingApplicationsAsync(string userId);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync(string userId);
     }
 }

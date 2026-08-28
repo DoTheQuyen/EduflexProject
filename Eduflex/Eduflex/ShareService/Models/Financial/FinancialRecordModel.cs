@@ -56,7 +56,7 @@ namespace ShareService.Models.Financial
         public List<InvoicePlanEntryModel> InvoicePlan { get; set; } = new();
 
         [BsonElement("invoices")]
-        public List<InvoiceModel> Invoices { get; set; } = new();
+        public List<LegacyInvoiceModel> Invoices { get; set; } = new();
 
         [BsonElement("communications")]
         public List<FinancialCommunicationModel> Communications { get; set; } = new();

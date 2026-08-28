@@ -101,21 +101,9 @@
     </div>
   </div>
 
-  <!-- Quick access -->
-  <h2 class="!mb-3 !text-sm !font-semibold uppercase tracking-wide !text-muted">Quick Access</h2>
-  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-    <a
-      *ngFor="let card of cards"
-      [routerLink]="card.route"
-      class="relative flex items-center gap-3 rounded-lg border border-border bg-white p-4 !no-underline transition-colors hover:border-navy-900/30">
-      <i class="fas fa-{{card.icon}} text-lg text-navy-900" aria-hidden="true"></i>
-      <div class="min-w-0 flex-1">
-        <h3 class="!text-base !font-semibold !text-ink">{{ card.title }}</h3>
-        <p class="mt-0.5 text-xs !text-muted">{{ card.description }}</p>
-      </div>
-      <span *ngIf="counts && cardCount(card, counts) as n"
-        class="flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-error px-1.5 text-[11px] font-bold tabular-nums text-white">{{
-        n > 9 ? '9+' : n }}</span>
-    </a>
+  <app-dashboard-trend-chart></app-dashboard-trend-chart>
+
+  <div class="mt-8">
+    <app-dashboard-status-breakdown></app-dashboard-status-breakdown>
   </div>
 </div>

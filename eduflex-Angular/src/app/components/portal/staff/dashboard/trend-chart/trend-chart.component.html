@@ -1,0 +1,58 @@
+<div class="trend-card-3d rounded-lg border border-border bg-white p-5">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <h3 class="!text-base !font-semibold !text-ink">Monthly Trends</h3>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <p-selectButton
+        [options]="viewOptions"
+        optionLabel="label"
+        optionValue="key"
+        [ngModel]="selectedView"
+        (ngModelChange)="setView($event)"
+        [allowEmpty]="false"
+        aria-label="View mode" />
+
+      <p-selectButton
+        [options]="periodOptions"
+        optionLabel="label"
+        optionValue="key"
+        [ngModel]="selectedMonths"
+        (ngModelChange)="setMonths($event)"
+        [allowEmpty]="false"
+        aria-label="Time period" />
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="flex h-64 items-center justify-center">
+    <p-progressSpinner ariaLabel="Loading monthly trends" strokeWidth="4" />
+  </div>
+
+  <div *ngIf="error && !loading" class="flex h-64 flex-col items-center justify-center gap-2 text-center">
+    <p class="text-sm !text-error">Couldn't load trend data.</p>
+    <button type="button" class="text-sm font-medium underline !text-navy-900" (click)="load()">Retry</button>
+  </div>
+
+  <div [hidden]="loading || error" style="height: 260px;">
+    <p-chart type="bar" [data]="chartData" [options]="chartOptions" [ariaLabel]="chartSummary" height="260px" />
+  </div>
+
+  <details class="mt-3" *ngIf="!loading && !error && points.length">
+    <summary class="cursor-pointer text-xs font-medium !text-muted">View as table</summary>
+    <div class="mt-2 overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="text-left !text-muted">
+            <th class="py-1 pr-4 font-medium">Month</th>
+            <th *ngFor="let s of activeSeries()" class="py-1 pr-4 font-medium">{{ s.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of points" class="border-t border-border">
+            <td class="py-1 pr-4 !text-ink">{{ monthLabel(p.month) }}</td>
+            <td *ngFor="let s of activeSeries()" class="py-1 pr-4 tabular-nums !text-ink">{{ valueFor(p, s.key) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>

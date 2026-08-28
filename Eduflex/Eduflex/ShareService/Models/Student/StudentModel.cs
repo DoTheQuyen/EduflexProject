@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ShareService.Enums.Student;
 using ShareService.Models.Address;
 using ShareService.Models.Application;
 using ShareService.Models.Common;
@@ -15,6 +16,13 @@ namespace ShareService.Models.Student
 
         [BsonElement("userId")]
         public string UserId { get; set; }
+
+        // Student vs Customer (migration-case-only contact) — same record shape, this is
+        // the only thing that distinguishes them. Immutable after creation (see
+        // UpdateStudentDto) so a record can't silently flip type.
+        [BsonElement("type")]
+        [BsonRepresentation(BsonType.String)]
+        public PersonType Type { get; set; } = PersonType.Student;
 
         [BsonElement("email")]
         public string Email { get; set; }

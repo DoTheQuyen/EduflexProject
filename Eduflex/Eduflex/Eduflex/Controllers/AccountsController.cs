@@ -35,7 +35,7 @@ namespace Eduflex.API.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("all-accounts")]
         public Task<ActionResult<PagedResult<AccountSummaryDto>>> GetAccounts(
             [FromQuery] string? search, [FromQuery] string? accountType, [FromQuery] string? status,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)

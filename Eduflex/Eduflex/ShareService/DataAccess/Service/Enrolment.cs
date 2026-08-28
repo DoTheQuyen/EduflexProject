@@ -98,5 +98,24 @@ namespace ShareService.DataAccess
             var result = await Collection.DeleteOneAsync(e => e.Id == id);
             return result.DeletedCount > 0;
         }
+
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since)
+        {
+            var results = await Collection.Aggregate()
+                .Match(e => e.CreatedAt >= since)
+                .Group(e => new { e.CreatedAt.Year, e.CreatedAt.Month }, g => new { g.Key.Year, g.Key.Month, Count = g.Count() })
+                .ToListAsync();
+
+            return results.ToDictionary(r => $"{r.Year:D4}-{r.Month:D2}", r => r.Count);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync()
+        {
+            var results = await Collection.Aggregate()
+                .Group(e => e.Status, g => new { Status = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            return results.ToDictionary(r => r.Status, r => r.Count);
+        }
     }
 }

@@ -57,6 +57,26 @@ export const EduflexPreset = definePreset(Aura, {
         light: severityTokens(),
       },
     },
+    // SelectButton's items render as ToggleButtons internally — this is the pressed-brass
+    // "raised/selected" language already used for the sidebar's active nav item (see
+    // sidebar.component.css .sidebar-item-active), reused here as the app-wide default so
+    // any segmented control reads as the same tactile control, not a one-off per component.
+    togglebutton: {
+      root: {
+        background: '#F5F6F7',
+        borderColor: '#DCE0E4',
+        color: '#5C6B7A',
+        hoverColor: '#1B2430',
+        hoverBackground: '#F5F6F7',
+        checkedColor: '#1B2430',
+        checkedBorderColor: 'transparent',
+      },
+      content: {
+        checkedBackground: 'linear-gradient(150deg, #D9B876 0%, #B8862F 100%)',
+        checkedShadow:
+          'inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -2px 4px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.25)',
+      },
+    },
     datatable: {
       // Neutral, low-saturation header — a bold saturated color band reads well as a
       // screenshot but is genuinely more fatiguing over long viewing sessions (WCAG /

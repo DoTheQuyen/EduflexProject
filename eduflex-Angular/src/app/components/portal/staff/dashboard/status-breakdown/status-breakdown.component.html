@@ -1,0 +1,20 @@
+<div>
+  <h2 class="!mb-3 !text-sm !font-semibold uppercase tracking-wide !text-muted">Status Breakdown</h2>
+
+  <div *ngIf="loading" class="flex h-40 items-center justify-center rounded-lg border border-border bg-white">
+    <p-progressSpinner ariaLabel="Loading status breakdown" strokeWidth="4" />
+  </div>
+
+  <div *ngIf="error && !loading" class="flex h-40 flex-col items-center justify-center gap-2 rounded-lg border border-border bg-white text-center">
+    <p class="text-sm !text-error">Couldn't load status breakdown.</p>
+    <button type="button" class="text-sm font-medium underline !text-navy-900" (click)="load()">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <app-status-breakdown-chart
+      *ngFor="let m of modules"
+      [title]="m.title"
+      [color]="m.color"
+      [items]="itemsFor(m)" />
+  </div>
+</div>

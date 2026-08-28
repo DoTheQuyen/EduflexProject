@@ -124,15 +124,25 @@ export class SidebarComponent implements OnChanges {
         module: 'Enrolment',
       });
     }
-    if (this.authHelper.hasStudentsPermission().view) {
-      academicChildren.push({ title: 'Students', icon: 'users', route: '/staff-portal/students' });
-    }
     if (academicChildren.length) {
       items.push({
         title: 'Academic',
         icon: 'graduation-cap',
         children: academicChildren,
         expanded: false,
+      });
+    }
+
+    // Contacts — Students and Customers (migration-case-only, non-student contacts). Same
+    // underlying record type (see StudentModel.Type), viewed as two tabs on one page, so
+    // this is one menu entry, not two. Deliberately standalone: it's not academic-specific
+    // (Customers never touch Courses/Applications/Enrolments) so it doesn't belong under
+    // Academic — same reasoning as Migration Cases below.
+    if (this.authHelper.hasStudentsPermission().view) {
+      items.push({
+        title: 'Contacts',
+        icon: 'address-book',
+        route: '/staff-portal/contacts',
       });
     }
 

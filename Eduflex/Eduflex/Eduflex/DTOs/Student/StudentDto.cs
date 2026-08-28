@@ -1,6 +1,7 @@
 ﻿using Eduflex.DTOs.Address;
 using Eduflex.DTOs.Application;
 using Eduflex.DTOs.Education;
+using ShareService.Enums.Student;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ namespace Eduflex.DTOs.Student
     {
         public string Id { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public PersonType Type { get; set; } = PersonType.Student;
         public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

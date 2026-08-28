@@ -21,7 +21,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all-visa-process-templates")]
         public Task<ActionResult<List<VisaProcessTemplateDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll VISA process templates endpoint", async () =>

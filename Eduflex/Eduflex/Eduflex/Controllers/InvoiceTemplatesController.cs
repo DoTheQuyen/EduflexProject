@@ -24,7 +24,7 @@ namespace Eduflex.API.Controllers
         // Ungated — any staff member sending an invoice needs this list to populate their
         // template picker. The gated GetById/Create/Update/SetStatus below are the admin
         // management screen. Same reasoning as EmailTemplatesController.GetAll.
-        [HttpGet]
+        [HttpGet("all-invoice-templates")]
         public Task<ActionResult<List<InvoiceTemplateDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll invoice templates endpoint", async () =>

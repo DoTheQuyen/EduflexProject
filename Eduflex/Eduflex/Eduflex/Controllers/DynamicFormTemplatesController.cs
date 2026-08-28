@@ -22,7 +22,7 @@ namespace Eduflex.API.Controllers
         }
 
        
-        [HttpGet]
+        [HttpGet("all-dynamic-form-templates")]
         public Task<ActionResult<List<DynamicFormTemplateDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll dynamic form templates endpoint", async () =>

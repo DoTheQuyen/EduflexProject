@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Client, UpdateStudentDto, AddressDto } from '@services/api.services';
+import { Client, UpdateStudentDto, AddressDto, PersonType } from '@services/api.services';
 import { AuthHelperService } from '@services/auth-helper.service';
 import { StudentDetailsFormComponent } from '../../../share-component/student-details-form/student-details-form.component';
 import { NotificationComponent } from '@generic/notification/notification.component';
@@ -23,6 +23,10 @@ export class StudentEditComponent implements OnInit {
   errorMessage = '';
   private studentId!: string;
 
+  // Type is immutable after creation — shown read-only, never sent back on update
+  // (see UpdateStudentDto).
+  personType: PersonType = PersonType.Student;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -34,9 +38,13 @@ export class StudentEditComponent implements OnInit {
     this.form = StudentDetailsFormComponent.buildFormGroup(this.fb);
 
     if (!this.authHelper.hasStudentsPermission().edit) {
-      this.notificationService.error('You do not have permission to edit students.');
-      this.router.navigate(['/staff-portal/students']);
+      this.notificationService.error('You do not have permission to edit contacts.');
+      this.router.navigate(['/staff-portal/contacts']);
     }
+  }
+
+  get pageTitle(): string {
+    return this.personType === PersonType.Customer ? 'Edit Customer' : 'Edit Student';
   }
 
   ngOnInit(): void {
@@ -50,6 +58,7 @@ export class StudentEditComponent implements OnInit {
     this.isLoading = true;
     this.apiClient.studentsGET(this.studentId).subscribe({
       next: (student) => {
+        this.personType = student.type ?? PersonType.Student;
         this.form.patchValue({
           email: student.email,
           mobile: student.mobile,
@@ -117,17 +126,17 @@ export class StudentEditComponent implements OnInit {
     this.apiClient.studentsPUT(this.studentId, updateDto).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.notificationService.success('Student updated successfully.');
-        this.router.navigate(['/staff-portal/students', this.studentId]);
+        this.notificationService.success('Updated successfully.');
+        this.router.navigate(['/staff-portal/contacts', this.studentId]);
       },
       error: (err) => {
         this.isSubmitting = false;
-        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong updating this student. Please try again.');
+        this.errorMessage = extractApiErrorMessage(err, 'Something went wrong updating this record. Please try again.');
       }
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/staff-portal/students', this.studentId]);
+    this.router.navigate(['/staff-portal/contacts', this.studentId]);
   }
 }

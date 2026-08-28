@@ -24,7 +24,7 @@ public class ApplicationsController : BaseApiController
         _logger = logger;
     }
 
-    [HttpGet]
+    [HttpGet("my-applications")]
     public Task<ActionResult<PagedResult<ApplicationDto>>> GetApplications([FromQuery] PaginationQuery query)
     {
         return HandleRequestAsync(_logger, "Error in GetApplications endpoint", async () =>
@@ -42,7 +42,7 @@ public class ApplicationsController : BaseApiController
         });
     }
 
-    [HttpGet("all")]
+    [HttpGet("all-applications")]
     public Task<ActionResult<PagedResult<ApplicationDto>>> GetAllApplications([FromQuery] PaginationQuery query)
     {
         return HandleRequestAsync(_logger, "Error in GetAllApplications endpoint", async () =>

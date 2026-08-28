@@ -24,7 +24,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all-business-partners")]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<List<BusinessPartnerDto>>> GetBusinessPartnersDirectory()
         {

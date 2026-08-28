@@ -15,5 +15,7 @@ namespace ShareService.DataAccess.Interface
         Task<PagedResult<EnrolmentModel>> GetEnrolmentsAsync(EnrolmentFilter filter);
         Task<bool> ReplaceEnrolmentAsync(string id, EnrolmentModel enrolment);
         Task<bool> DeleteEnrolmentAsync(string id);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync();
     }
 }

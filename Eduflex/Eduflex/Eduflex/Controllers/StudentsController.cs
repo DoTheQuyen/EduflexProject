@@ -42,6 +42,7 @@ namespace Eduflex.API.Controllers
                 {
                     Id = student.Id,
                     UserId = student.UserId,
+                    Type = student.Type,
                     Email = student.Email,
                     FirstName = student.FirstName,
                     LastName = student.LastName,

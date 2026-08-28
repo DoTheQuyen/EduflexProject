@@ -98,7 +98,8 @@ export class SettingsManagementComponent implements OnInit {
       chatGroqApiUrl: ['', [Validators.required]],
       chatGroqModel: ['', [Validators.required]],
       chatOpenRouterApiUrl: ['', [Validators.required]],
-      chatOpenRouterModel: ['', [Validators.required]]
+      chatOpenRouterModel: ['', [Validators.required]],
+      chatProviderTimeoutSeconds: [12, [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -157,7 +158,8 @@ export class SettingsManagementComponent implements OnInit {
       chatGroqApiUrl: settings.chatGroqApiUrl,
       chatGroqModel: settings.chatGroqModel,
       chatOpenRouterApiUrl: settings.chatOpenRouterApiUrl,
-      chatOpenRouterModel: settings.chatOpenRouterModel
+      chatOpenRouterModel: settings.chatOpenRouterModel,
+      chatProviderTimeoutSeconds: settings.chatProviderTimeoutSeconds
     });
 
     this.setExtensions(this.defaultExtensions, settings.documentUpload?.default?.allowedExtensions ?? []);
@@ -221,7 +223,8 @@ export class SettingsManagementComponent implements OnInit {
           this.settingsForm.get('chatGroqApiUrl')!,
           this.settingsForm.get('chatGroqModel')!,
           this.settingsForm.get('chatOpenRouterApiUrl')!,
-          this.settingsForm.get('chatOpenRouterModel')!
+          this.settingsForm.get('chatOpenRouterModel')!,
+          this.settingsForm.get('chatProviderTimeoutSeconds')!
         ];
     }
   }
@@ -279,7 +282,8 @@ export class SettingsManagementComponent implements OnInit {
       chatGroqApiUrl: value.chatGroqApiUrl,
       chatGroqModel: value.chatGroqModel,
       chatOpenRouterApiUrl: value.chatOpenRouterApiUrl,
-      chatOpenRouterModel: value.chatOpenRouterModel
+      chatOpenRouterModel: value.chatOpenRouterModel,
+      chatProviderTimeoutSeconds: value.chatProviderTimeoutSeconds
     });
 
     this.apiClient.settingsPUT(payload).subscribe({

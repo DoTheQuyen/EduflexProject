@@ -1,0 +1,9 @@
+<div class="rounded-lg border border-border bg-white p-4">
+  <div class="mb-3 flex items-center justify-between">
+    <h4 class="!text-sm !font-semibold !text-ink">{{ title }}</h4>
+    <span class="text-xs tabular-nums !text-muted">{{ total }} total</span>
+  </div>
+  <div style="height: 180px;">
+    <p-chart type="bar" [data]="chartData" [options]="chartOptions" [ariaLabel]="chartSummary" height="180px" />
+  </div>
+</div>

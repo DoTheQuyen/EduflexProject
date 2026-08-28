@@ -1,3 +1,5 @@
+using ShareService.Enums.Student;
+
 namespace Eduflex.DTOs.Student
 {
     public class StudentFilterDto
@@ -6,5 +8,6 @@ namespace Eduflex.DTOs.Student
         public int PageSize { get; set; } = 10;
         public string? SearchTerm { get; set; }
         public bool? IsActive { get; set; }
+        public PersonType? Type { get; set; }
     }
 }

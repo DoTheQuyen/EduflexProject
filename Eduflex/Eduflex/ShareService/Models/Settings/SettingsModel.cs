@@ -98,6 +98,11 @@ namespace ShareService.Models.Settings
 
         [BsonElement("chatOpenRouterModel")]
         public string ChatOpenRouterModel { get; set; } = "nvidia/nemotron-3.5-lightning:free";
+
+        // Per-provider HTTP timeout for the Gemini/Groq/OpenRouter fallback chain — DB-backed so
+        // it can be tuned (e.g. after a slow provider day) without a redeploy.
+        [BsonElement("chatProviderTimeoutSeconds")]
+        public int ChatProviderTimeoutSeconds { get; set; } = 12;
     }
 
     public class DocumentUploadSettings

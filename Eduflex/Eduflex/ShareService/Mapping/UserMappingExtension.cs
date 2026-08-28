@@ -14,5 +14,6 @@ namespace ShareService.Mapping
             existing.RoleId = updateModel.RoleId;
             existing.IsActive = updateModel.IsActive;
         }
+
     }
 }

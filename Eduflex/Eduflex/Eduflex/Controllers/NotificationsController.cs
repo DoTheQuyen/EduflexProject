@@ -25,7 +25,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("my-notifications")]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<List<NotificationDto>>> GetMyNotifications()
         {
@@ -50,6 +50,36 @@ namespace Eduflex.API.Controllers
                 var userId = GetRequiredUserId();
                 var summary = await _dashboardService.GetDashboardSummaryAsync(userId);
                 return summary.ToDto();
+            });
+        }
+
+        // Monthly Enquiry/Application/Enrolment counts for the dashboard trend chart — a
+        // separate, lighter-polled route from "summary" (which the realtime bell polls
+        // frequently); this one is fetched once per dashboard load / period change.
+        [HttpGet("monthly-trends")]
+        [ApiExplorerSettings(GroupName = "app")]
+        public Task<ActionResult<MonthlyTrendDto>> GetMonthlyTrends([FromQuery] int months = 6)
+        {
+            return HandleRequestAsync(_logger, "Error in GetMonthlyTrends endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var trends = await _dashboardService.GetMonthlyTrendsAsync(userId, months);
+                return trends.ToDto();
+            });
+        }
+
+        // Current pipeline composition per module (Enquiry/Application/Enrolment/
+        // MigrationCase status counts) — the "where do things stand today" companion to
+        // monthly-trends' "how much came in over time".
+        [HttpGet("status-breakdown")]
+        [ApiExplorerSettings(GroupName = "app")]
+        public Task<ActionResult<StatusBreakdownDto>> GetStatusBreakdown()
+        {
+            return HandleRequestAsync(_logger, "Error in GetStatusBreakdown endpoint", async () =>
+            {
+                var userId = GetRequiredUserId();
+                var breakdown = await _dashboardService.GetStatusBreakdownAsync(userId);
+                return breakdown.ToDto();
             });
         }
 

@@ -2,11 +2,11 @@
   <div class="container-fluid py-1">
     <div class="row align-items-center">
       <div class="col-md-6">
-        <h3 class="mb-2">Add Student</h3>
+        <h3 class="mb-2">{{ pageTitle }}</h3>
       </div>
       <div class="col-md-6 text-md-end">
         <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
-          <i class="fas fa-arrow-left me-2"></i>Back to Students
+          <i class="fas fa-arrow-left me-2"></i>Back to Contacts
         </button>
       </div>
     </div>
@@ -22,17 +22,17 @@
 
               <div class="alert alert-warning" *ngIf="duplicateWarning">
                 <p class="mb-2" *ngIf="duplicateWarning.existingIsActive">
-                  An active student already exists with this {{ duplicateWarning.matchedField }}. Choose different
+                  An active record already exists with this {{ duplicateWarning.matchedField }}. Choose different
                   details, or cancel.
                 </p>
                 <p class="mb-2" *ngIf="!duplicateWarning.existingIsActive">
-                  An inactive (archived) student already exists with this {{ duplicateWarning.matchedField }}.
+                  An inactive (archived) record already exists with this {{ duplicateWarning.matchedField }}.
                   Reactivate that record instead of creating a new one?
                 </p>
                 <div class="d-flex gap-2">
                   <button type="button" class="btn btn-sm btn-warning" *ngIf="!duplicateWarning.existingIsActive"
                     [disabled]="isSubmitting" (click)="reactivateFromDuplicate()">
-                    Reactivate Existing Student
+                    Reactivate Existing Record
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-secondary" (click)="dismissDuplicateWarning()">
                     Change Details
@@ -44,7 +44,7 @@
 
               <div class="d-flex gap-2 mt-3">
                 <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || !!duplicateWarning">
-                  {{ isSubmitting ? 'Saving...' : 'Save Student' }}
+                  {{ isSubmitting ? 'Saving...' : (isCustomer ? 'Save Customer' : 'Save Student') }}
                 </button>
                 <button type="button" class="btn btn-outline-secondary" (click)="goBack()" [disabled]="isSubmitting">
                   Cancel

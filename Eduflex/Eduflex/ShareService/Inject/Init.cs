@@ -89,7 +89,6 @@ namespace ShareService.Inject
 
             // Register all your services here
             #region Services
-            services.AddScoped<MongoDBService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IAuthService, AuthService>();

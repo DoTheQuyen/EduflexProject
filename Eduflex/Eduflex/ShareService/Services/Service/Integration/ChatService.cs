@@ -34,7 +34,6 @@ namespace ShareService.Services.Service.Integration
         }
 
         private const int CacheDays = 3;
-        private const int ProviderTimeoutSeconds = 8;
 
         public async Task<string> AskQuestionAsync(string question)
         {
@@ -120,7 +119,7 @@ namespace ShareService.Services.Service.Integration
 
             try
             {
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(ProviderTimeoutSeconds));
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(appSettings.ChatProviderTimeoutSeconds));
                 using var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
                 using var response = await _httpClient.PostAsync(url, content, cts.Token);
 
@@ -163,7 +162,7 @@ namespace ShareService.Services.Service.Integration
 
             try
             {
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(ProviderTimeoutSeconds));
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(appSettings.ChatProviderTimeoutSeconds));
                 using var request = new HttpRequestMessage(HttpMethod.Post, appSettings.ChatGroqApiUrl)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
@@ -210,7 +209,7 @@ namespace ShareService.Services.Service.Integration
 
             try
             {
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(ProviderTimeoutSeconds));
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(appSettings.ChatProviderTimeoutSeconds));
                 using var request = new HttpRequestMessage(HttpMethod.Post, appSettings.ChatOpenRouterApiUrl)
                 {
                     Content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")

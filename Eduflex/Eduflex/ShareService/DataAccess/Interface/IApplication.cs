@@ -16,6 +16,8 @@ namespace ShareService.DataAccess.Interface
         Task<bool> UpdateApplicationStatusAsync(string id, string status, IClientSessionHandle? session = null);
         Task<StudentModel> CreateStudentAsync(StudentModel student, IClientSessionHandle? session = null);
         Task<int> CountApplicationsByStatusAsync(string status);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync();
 
     }
 }

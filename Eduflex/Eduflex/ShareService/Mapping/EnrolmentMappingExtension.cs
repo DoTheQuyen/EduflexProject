@@ -1,3 +1,4 @@
+using ShareService.Models.Address;
 using ShareService.Models.Application;
 using ShareService.Models.Auth;
 using ShareService.Models.Enrolment;
@@ -35,7 +36,7 @@ namespace ShareService.Mapping
                 PassportNumber = input.PassportNumber ?? string.Empty,
                 DateOfBirth = input.DateOfBirth ?? DateTime.UtcNow,
                 PhoneNumber = input.Mobile,
-                Address = input.CurrentAddress ?? input.HometownAddress
+                Address = input.CurrentAddress ?? input.HometownAddress ?? new AddressModel()
             };
         }
 

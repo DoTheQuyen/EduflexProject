@@ -192,22 +192,36 @@ builder.Services.AddCors(options =>
 // Rate limiting for public endpoints that call metered external APIs (e.g. Gemini chat)
 builder.Services.AddRateLimiter(options =>
 {
+    // Limit to 15 requests per 10 minutes per IP for the Chat endpoint
+    var chatRateLimitConfig = builder.Configuration.GetSection("ChatRateLimiting");
     options.AddPolicy("ChatPolicy", httpContext =>
         RateLimitPartition.GetSlidingWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
             factory: _ => new SlidingWindowRateLimiterOptions
             {
-                PermitLimit = 15,
-                Window = TimeSpan.FromMinutes(10),
+                PermitLimit = chatRateLimitConfig.GetValue<int>("ChatPermitLimit", 15),
+                Window = TimeSpan.FromMinutes(chatRateLimitConfig.GetValue<int>("ChatWindowMinutes", 10)),
                 SegmentsPerWindow = 5,
                 QueueLimit = 0
             }));
+
+    // Limit to 100 requests per minute per IP for all other endpoints (global limit)
+    var globalRateLimitConfig = builder.Configuration.GetSection("GlobalRateLimiting");
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = globalRateLimitConfig.GetValue<int>("GlobalPermitLimit", 100),
+            Window = TimeSpan.FromSeconds(globalRateLimitConfig.GetValue<int>("GlobalWindowSeconds", 60)),
+            QueueLimit = 0
+        }));
 
     options.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
         await context.HttpContext.Response.WriteAsync(
-            "Too many questions in a short time. Please wait a few minutes and try again.", token);
+            "Too many requests. Please wait a moment and try again.", token);
     };
 });
 

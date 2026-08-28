@@ -4,13 +4,8 @@ import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthHelperService } from '../../../../services/auth-helper.service';
 import { RealtimeNotificationService, RealtimeNotificationMessage } from '../../../../services/realtime-notification.service';
-
-interface DashboardCard {
-  title: string;
-  description: string;
-  icon: string;
-  route: string;
-}
+import { TrendChartComponent } from './trend-chart/trend-chart.component';
+import { StatusBreakdownComponent } from './status-breakdown/status-breakdown.component';
 
 interface ModuleTile {
   module: string;
@@ -22,14 +17,13 @@ interface ModuleTile {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TrendChartComponent, StatusBreakdownComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   userInfo: any;
   today = new Date();
-  cards: DashboardCard[] = [];
 
   // One tile per module — same keys the backend's DashboardService returns counts for
   // (GET /api/Notifications/summary), and the same ones the sidebar count bubbles key
@@ -42,9 +36,9 @@ export class DashboardComponent implements OnInit {
     { module: 'Finance', label: 'Finance Action Queue', icon: 'dollar-sign', route: '/staff-portal/finance/accounts' },
   ];
 
-  // "At a Glance" tiles and Quick Access badges: real open/actionable record counts,
-  // computed server-side by DashboardService and delivered on the same call as the
-  // notification list below, so both refresh together on the same poll cycle.
+  // "At a Glance" tiles: real open/actionable record counts, computed server-side by
+  // DashboardService and delivered on the same call as the notification list below, so
+  // both refresh together on the same poll cycle.
   moduleCounts$: Observable<Record<string, number>>;
 
   // Recent Notifications panel: the separate, live personal notification feed — not the
@@ -64,7 +58,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.authHelper.getCurrentUser();
-    this.setCards();
   }
 
   get greeting(): string {
@@ -76,14 +69,6 @@ export class DashboardComponent implements OnInit {
 
   moduleRoute(module: string): string {
     return this.modules.find((m) => m.module === module)?.route ?? '/staff-portal/dashboard';
-  }
-
-  // Quick Access cards don't fetch their own data — this just looks up a count already
-  // pulled in for the "At a Glance" tiles above, so a card like "Applications" can show
-  // how many are outstanding without a second API call.
-  cardCount(card: DashboardCard, counts: Record<string, number> | null): number {
-    const module = this.modules.find((m) => m.route === card.route)?.module;
-    return module && counts ? (counts[module] ?? 0) : 0;
   }
 
   totalOpenCount(counts: Record<string, number> | null): number {
@@ -108,19 +93,5 @@ export class DashboardComponent implements OnInit {
   dismissNotification(id: string, event: MouseEvent): void {
     event.stopPropagation();
     this.notificationService.clear(id);
-  }
-
-  private setCards(): void {
-    const allCards: DashboardCard[] = [
-      { title: 'Applications', description: 'Review student applications', icon: 'clipboard-list', route: '/staff-portal/applications' },
-      { title: 'Feedback', description: 'Read student feedback', icon: 'comment', route: '/staff-portal/feedback' },
-      { title: 'Course Promotions', description: 'Manage promotional campaigns', icon: 'bullhorn', route: '/staff-portal/course-promotions' },
-      { title: 'Roles', description: 'Configure role permissions', icon: 'lock', route: '/staff-portal/roles' },
-      { title: 'Users', description: 'Manage staff and student accounts', icon: 'users', route: '/staff-portal/users' }
-    ];
-
-    this.cards = this.userInfo?.role === 'Admin'
-      ? allCards
-      : allCards.filter(c => c.title !== 'Roles' && c.title !== 'Users');
   }
 }

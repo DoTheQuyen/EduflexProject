@@ -51,5 +51,8 @@ namespace ShareService.Services.Interface
         Task<MyEnrolmentSummaryModel?> GetMyEnrolmentSummaryAsync(string applicationId, string studentUserId);
         Task<bool> SaveFormDraftAsync(string id, string responseId, List<FormAnswerModel> answers, string studentUserId);
         Task<bool> SubmitFormAsync(string id, string responseId, List<FormAnswerModel> answers, string studentUserId);
+
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync(string userId);
     }
 }

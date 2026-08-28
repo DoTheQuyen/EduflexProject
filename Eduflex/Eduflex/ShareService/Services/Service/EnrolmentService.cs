@@ -272,6 +272,28 @@ namespace ShareService.Services
             return await _enrolmentDataAccess.GetEnrolmentsAsync(filter);
         }
 
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.EnrolmentsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view enrolments");
+            }
+
+            return await _enrolmentDataAccess.GetMonthlyCountsAsync(since);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync(string userId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.EnrolmentsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view enrolments");
+            }
+
+            return await _enrolmentDataAccess.GetStatusCountsAsync();
+        }
+
         // Auth: requires EnrolmentsView permission (staff-only).
         public async Task<EnrolmentModel?> GetEnrolmentAsync(string id, string userId)
         {

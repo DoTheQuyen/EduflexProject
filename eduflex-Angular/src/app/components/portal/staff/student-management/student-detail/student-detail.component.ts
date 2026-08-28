@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { Client, StudentAccountDto } from '@services/api.services';
+import { Client, PersonType, StudentAccountDto } from '@services/api.services';
 import { AuthHelperService, ModulePermissions } from '@services/auth-helper.service';
 import { NotificationService } from '@services/notification.service';
 import { EnrolmentService } from '@services/enrolment.service';
@@ -52,6 +52,14 @@ export class StudentDetailComponent implements OnInit {
     this.permissions = this.authHelper.hasStudentsPermission();
   }
 
+  get isCustomer(): boolean {
+    return this.student?.type === PersonType.Customer;
+  }
+
+  get typeLabel(): string {
+    return this.isCustomer ? 'Customer' : 'Student';
+  }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;
@@ -60,8 +68,8 @@ export class StudentDetailComponent implements OnInit {
 
   private load(id: string): void {
     if (!this.permissions.view) {
-      this.notificationService.error('You do not have permission to view students.');
-      this.router.navigate(['/staff-portal/students']);
+      this.notificationService.error('You do not have permission to view contacts.');
+      this.router.navigate(['/staff-portal/contacts']);
       return;
     }
 
@@ -73,7 +81,7 @@ export class StudentDetailComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.notificationService.error(extractApiErrorMessage(err, 'Could not load this student.'));
+        this.notificationService.error(extractApiErrorMessage(err, 'Could not load this record.'));
       }
     });
   }
@@ -152,11 +160,11 @@ export class StudentDetailComponent implements OnInit {
 
     this.apiClient.deactivate(this.student.id).subscribe({
       next: () => {
-        this.notificationService.success('Student deactivated.');
+        this.notificationService.success(`${this.typeLabel} deactivated.`);
         this.load(this.student!.id!);
       },
       error: (err) => {
-        this.notificationService.error(extractApiErrorMessage(err, 'Could not deactivate this student.'));
+        this.notificationService.error(extractApiErrorMessage(err, 'Could not deactivate this record.'));
       }
     });
   }
@@ -167,11 +175,11 @@ export class StudentDetailComponent implements OnInit {
 
     this.apiClient.reactivate(this.student.id).subscribe({
       next: () => {
-        this.notificationService.success('Student reactivated.');
+        this.notificationService.success(`${this.typeLabel} reactivated.`);
         this.load(this.student!.id!);
       },
       error: (err) => {
-        this.notificationService.error(extractApiErrorMessage(err, 'Could not reactivate this student.'));
+        this.notificationService.error(extractApiErrorMessage(err, 'Could not reactivate this record.'));
       }
     });
   }

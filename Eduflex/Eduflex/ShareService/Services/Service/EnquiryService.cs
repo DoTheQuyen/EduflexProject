@@ -190,5 +190,17 @@ namespace ShareService.Services
             }
             return deleted;
         }
+
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since)
+        {
+            await RequirePermissionAsync(userId, PermissionKey.EnquiryView, "view enquiries");
+            return await _enquiryDataAccess.GetMonthlyCountsAsync(since);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync(string userId)
+        {
+            await RequirePermissionAsync(userId, PermissionKey.EnquiryView, "view enquiries");
+            return await _enquiryDataAccess.GetStatusCountsAsync();
+        }
     }
 }

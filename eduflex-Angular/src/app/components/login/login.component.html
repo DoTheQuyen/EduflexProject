@@ -8,13 +8,9 @@
     <!-- Email Field -->
     <div class="form-group">
       <label for="email">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
-      <input
-        type="email"
-        id="email"
-        formControlName="email"
-        [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
+      <input type="email" id="email" formControlName="email" [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
         [class.error]="isFieldInvalid('email')">
-      
+
       <div *ngIf="isFieldInvalid('email')" class="error-message">
         {{ getFieldError('email') }}
       </div>
@@ -24,20 +20,10 @@
     <div class="form-group">
       <label for="password">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
       <div class="password-input-container">
-        <input
-          [type]="showPassword ? 'text' : 'password'"
-          id="password"
-          formControlName="password"
-          [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
-          [class.error]="isFieldInvalid('password')">
-        <!-- Emoji render differently per platform and can't be themed, so the
-             toggle uses inline SVG like every other icon on the site. It's an
-             icon-only control, hence the aria-label and pressed state. -->
-        <button
-          type="button"
-          class="toggle-password"
-          (click)="togglePassword()"
-          [attr.aria-pressed]="showPassword"
+        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+          [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate" [class.error]="isFieldInvalid('password')">
+
+        <button type="button" class="toggle-password" (click)="togglePassword()" [attr.aria-pressed]="showPassword"
           [attr.aria-label]="(showPassword ? 'LOGIN.HIDE_PASSWORD' : 'LOGIN.SHOW_PASSWORD') | translate">
           <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -64,7 +50,8 @@
         <input type="checkbox" formControlName="rememberMe">
         {{ 'LOGIN.REMEMBER_ME' | translate }}
       </label>
-      <a href="#" class="forgot-password" (click)="onForgotPassword($event)">{{ 'LOGIN.FORGOT_PASSWORD' | translate }}</a>
+      <a href="#" class="forgot-password" (click)="onForgotPassword($event)">{{ 'LOGIN.FORGOT_PASSWORD' | translate
+        }}</a>
     </div>
 
     <!-- Error Message -->
@@ -78,10 +65,7 @@
     </div>
 
     <!-- Submit Button -->
-    <button 
-      type="submit" 
-      class="login-button" 
-      [disabled]="loginForm.invalid || isLoading">
+    <button type="submit" class="login-button" [disabled]="loginForm.invalid || isLoading">
       <span *ngIf="isLoading" class="loading-spinner"></span>
       {{ isLoading ? ('LOGIN.SIGNING_IN' | translate) : ('LOGIN.SIGN_IN' | translate) }}
     </button>

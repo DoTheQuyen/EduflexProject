@@ -36,5 +36,8 @@ namespace ShareService.Services.Interface
         Task<bool> SetFormResponseStatusAsync(string id, string responseId, string newStatus, string actingUserId);
         Task<bool> ReopenFormForEditAsync(string id, string responseId, string actingUserId);
         Task<(byte[] Content, string FileName)> ExportFormAsync(string id, string responseId, string actingUserId);
+
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync(string userId);
     }
 }

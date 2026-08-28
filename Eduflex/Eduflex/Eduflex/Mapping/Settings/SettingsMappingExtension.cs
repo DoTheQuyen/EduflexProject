@@ -26,7 +26,8 @@ namespace Eduflex.Mapping.Settings
                 ChatOpenRouterApiUrl = model.ChatOpenRouterApiUrl,
                 ChatGeminiModel = model.ChatGeminiModel,
                 ChatGroqModel = model.ChatGroqModel,
-                ChatOpenRouterModel = model.ChatOpenRouterModel
+                ChatOpenRouterModel = model.ChatOpenRouterModel,
+                ChatProviderTimeoutSeconds = model.ChatProviderTimeoutSeconds
             };
         }
 
@@ -61,7 +62,8 @@ namespace Eduflex.Mapping.Settings
                 ChatOpenRouterApiUrl = dto.ChatOpenRouterApiUrl,
                 ChatGeminiModel = dto.ChatGeminiModel,
                 ChatGroqModel = dto.ChatGroqModel,
-                ChatOpenRouterModel = dto.ChatOpenRouterModel
+                ChatOpenRouterModel = dto.ChatOpenRouterModel,
+                ChatProviderTimeoutSeconds = dto.ChatProviderTimeoutSeconds
             };
         }
 

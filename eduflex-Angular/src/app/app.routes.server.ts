@@ -34,11 +34,11 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: 'staff-portal/students/:id',
+    path: 'staff-portal/contacts/:id',
     renderMode: RenderMode.Client
   },
   {
-    path: 'staff-portal/students/:id/edit',
+    path: 'staff-portal/contacts/:id/edit',
     renderMode: RenderMode.Client
   },
   {

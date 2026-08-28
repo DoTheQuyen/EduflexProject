@@ -22,7 +22,7 @@ namespace Eduflex.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("all-departments")]
         public Task<ActionResult<List<DepartmentDto>>> GetDepartmentsDirectory()
         {
             return HandleRequestAsync(_logger, "Error in GetDepartmentsDirectory endpoint", async () =>

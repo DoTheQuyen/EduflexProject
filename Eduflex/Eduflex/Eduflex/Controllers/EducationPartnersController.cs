@@ -31,7 +31,7 @@ namespace Eduflex.API.Controllers
         }
 
        
-        [HttpGet]
+        [HttpGet("all-education-partners")]
         [ApiExplorerSettings(GroupName = "app")]
         public Task<ActionResult<List<EducationPartnerDirectoryDto>>> GetEducationPartnersDirectory()
         {

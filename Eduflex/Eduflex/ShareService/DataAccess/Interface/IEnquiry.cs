@@ -11,5 +11,7 @@ namespace ShareService.DataAccess.Interface
         Task<PagedResult<EnquiryModel>> GetEnquiriesAsync(EnquiryFilter filter);
         Task<bool> UpdateEnquiriesAsync(string id, EnquiryModel enquiry);
         Task<bool> DeleteEnquiriesAsync(string id);
+        Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since);
+        Task<Dictionary<string, int>> GetStatusCountsAsync();
     }
 }

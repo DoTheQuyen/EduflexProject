@@ -71,6 +71,11 @@ namespace ShareService.DataAccess
                 mongoFilters.Add(Builders<StudentModel>.Filter.In(s => s.UserId, restrictToUserIds));
             }
 
+            if (filter.Type.HasValue)
+            {
+                mongoFilters.Add(Builders<StudentModel>.Filter.Eq(s => s.Type, filter.Type.Value));
+            }
+
             var mongoFilter = Builders<StudentModel>.Filter.And(mongoFilters);
             var sort = Builders<StudentModel>.Sort.Descending(s => s.CreatedAt);
 

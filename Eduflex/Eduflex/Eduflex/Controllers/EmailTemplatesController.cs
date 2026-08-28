@@ -20,7 +20,7 @@ namespace Eduflex.API.Controllers
             _emailTemplateService = emailTemplateService;
             _logger = logger;
         }
-        [HttpGet]
+        [HttpGet("all-email-templates")]
         public Task<ActionResult<List<EmailTemplateDto>>> GetAll()
         {
             return HandleRequestAsync(_logger, "Error in GetAll email templates endpoint", async () =>

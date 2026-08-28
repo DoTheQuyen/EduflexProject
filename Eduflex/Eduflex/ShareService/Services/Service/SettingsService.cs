@@ -91,6 +91,10 @@ namespace ShareService.Services
             {
                 throw new ArgumentException("ChatOpenRouterModel cannot be empty");
             }
+            if (settings.ChatProviderTimeoutSeconds <= 0)
+            {
+                throw new ArgumentException("ChatProviderTimeoutSeconds must be greater than zero");
+            }
 
             var updated = await _settingsDataAccess.UpsertSettingsAsync(settings);
             _logger.LogInformation("Settings updated by {UserId}", userId);

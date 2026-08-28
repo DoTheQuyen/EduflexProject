@@ -1,8 +1,8 @@
 <div class="container-fluid py-3">
-  <a class="back-link mb-3 d-inline-block" (click)="goBack()" role="button">&larr; Student details</a>
+  <a class="back-link mb-3 d-inline-block" (click)="goBack()" role="button">&larr; Contact details</a>
 
   <div class="card border shadow-sm">
-    <div class="card-header">Edit student</div>
+    <div class="card-header">{{ pageTitle }}</div>
     <div class="card-body">
       <div *ngIf="isLoading" class="text-center py-4">
         <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>

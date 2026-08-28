@@ -45,7 +45,7 @@
         }
       }
     },
-    "/api/Accounts": {
+    "/api/Accounts/all-accounts": {
       "get": {
         "tags": [
           "Accounts"
@@ -160,7 +160,7 @@
         }
       }
     },
-    "/api/Applications": {
+    "/api/Applications/my-applications": {
       "get": {
         "tags": [
           "Applications"
@@ -212,55 +212,9 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Applications"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateApplicationDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApplicationModel"
-                }
-              }
-            }
-          }
-        }
       }
     },
-    "/api/Applications/all": {
+    "/api/Applications/all-applications": {
       "get": {
         "tags": [
           "Applications"
@@ -440,6 +394,54 @@
         }
       }
     },
+    "/api/Applications": {
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Applications/{id}/status": {
       "put": {
         "tags": [
@@ -498,7 +500,7 @@
         }
       }
     },
-    "/api/BusinessPartners": {
+    "/api/BusinessPartners/all-business-partners": {
       "get": {
         "tags": [
           "BusinessPartners"
@@ -529,52 +531,6 @@
                   "items": {
                     "$ref": "#/components/schemas/BusinessPartnerDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "BusinessPartners"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
                 }
               }
             }
@@ -738,6 +694,54 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BusinessPartnerDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessPartners": {
+      "post": {
+        "tags": [
+          "BusinessPartners"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBusinessPartnerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBusinessPartnerResultDto"
                 }
               }
             }
@@ -1190,7 +1194,7 @@
         }
       }
     },
-    "/api/Departments": {
+    "/api/Departments/all-departments": {
       "get": {
         "tags": [
           "Departments"
@@ -1221,52 +1225,6 @@
                   "items": {
                     "$ref": "#/components/schemas/DepartmentDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Departments"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDepartmentDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDepartmentDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDepartmentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
                 }
               }
             }
@@ -1437,7 +1395,55 @@
         }
       }
     },
-    "/api/DynamicFormTemplates": {
+    "/api/Departments": {
+      "post": {
+        "tags": [
+          "Departments"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DynamicFormTemplates/all-dynamic-form-templates": {
       "get": {
         "tags": [
           "DynamicFormTemplates"
@@ -1468,52 +1474,6 @@
                   "items": {
                     "$ref": "#/components/schemas/DynamicFormTemplateDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "DynamicFormTemplates"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
                 }
               }
             }
@@ -1616,6 +1576,54 @@
         }
       }
     },
+    "/api/DynamicFormTemplates": {
+      "post": {
+        "tags": [
+          "DynamicFormTemplates"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDynamicFormTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DynamicFormTemplateDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/DynamicFormTemplates/{id}/status": {
       "post": {
         "tags": [
@@ -1674,7 +1682,7 @@
         }
       }
     },
-    "/api/EducationPartners": {
+    "/api/EducationPartners/all-education-partners": {
       "get": {
         "tags": [
           "EducationPartners"
@@ -1705,52 +1713,6 @@
                   "items": {
                     "$ref": "#/components/schemas/EducationPartnerDirectoryDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "EducationPartners"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEducationPartnerDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEducationPartnerDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEducationPartnerDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
                 }
               }
             }
@@ -1921,7 +1883,55 @@
         }
       }
     },
-    "/api/EmailTemplates": {
+    "/api/EducationPartners": {
+      "post": {
+        "tags": [
+          "EducationPartners"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEducationPartnerDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEducationPartnerDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEducationPartnerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEducationPartnerResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmailTemplates/all-email-templates": {
       "get": {
         "tags": [
           "EmailTemplates"
@@ -1952,52 +1962,6 @@
                   "items": {
                     "$ref": "#/components/schemas/EmailTemplateDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "EmailTemplates"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEmailTemplateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEmailTemplateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEmailTemplateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmailTemplateDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmailTemplateDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmailTemplateDto"
                 }
               }
             }
@@ -2093,6 +2057,54 @@
               "text/json": {
                 "schema": {
                   "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmailTemplates": {
+      "post": {
+        "tags": [
+          "EmailTemplates"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailTemplateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailTemplateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
                 }
               }
             }
@@ -4731,7 +4743,7 @@
         }
       }
     },
-    "/api/Invoices": {
+    "/api/Invoices/all-invoices": {
       "get": {
         "tags": [
           "Invoices"
@@ -5151,7 +5163,7 @@
         }
       }
     },
-    "/api/InvoiceTemplates": {
+    "/api/InvoiceTemplates/all-invoice-templates": {
       "get": {
         "tags": [
           "InvoiceTemplates"
@@ -5182,52 +5194,6 @@
                   "items": {
                     "$ref": "#/components/schemas/InvoiceTemplateDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "InvoiceTemplates"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceTemplateDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceTemplateDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InvoiceTemplateDto"
                 }
               }
             }
@@ -5323,6 +5289,54 @@
               "text/json": {
                 "schema": {
                   "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/InvoiceTemplates": {
+      "post": {
+        "tags": [
+          "InvoiceTemplates"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceTemplateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceTemplateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceTemplateDto"
                 }
               }
             }
@@ -6325,7 +6339,7 @@
         }
       }
     },
-    "/api/Notifications": {
+    "/api/Notifications/my-notifications": {
       "get": {
         "tags": [
           "Notifications"
@@ -6385,6 +6399,75 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DashboardSummaryDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Notifications/monthly-trends": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "parameters": [
+          {
+            "name": "months",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 6
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyTrendDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyTrendDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyTrendDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Notifications/status-breakdown": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusBreakdownDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusBreakdownDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusBreakdownDto"
                 }
               }
             }
@@ -6469,7 +6552,7 @@
         }
       }
     },
-    "/api/PractitionerTags": {
+    "/api/PractitionerTags/all-practitioner-tags": {
       "get": {
         "tags": [
           "PractitionerTags"
@@ -6505,7 +6588,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/PractitionerTags": {
       "post": {
         "tags": [
           "PractitionerTags"
@@ -8504,7 +8589,7 @@
         }
       }
     },
-    "/api/VisaProcessTemplates": {
+    "/api/VisaProcessTemplates/all-visa-process-templates": {
       "get": {
         "tags": [
           "VisaProcessTemplates"
@@ -8535,52 +8620,6 @@
                   "items": {
                     "$ref": "#/components/schemas/VisaProcessTemplateDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "VisaProcessTemplates"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
                 }
               }
             }
@@ -8676,6 +8715,54 @@
               "text/json": {
                 "schema": {
                   "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/VisaProcessTemplates": {
+      "post": {
+        "tags": [
+          "VisaProcessTemplates"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveVisaProcessTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisaProcessTemplateDto"
                 }
               }
             }
@@ -10673,6 +10760,9 @@
       "CreateStudentDto": {
         "type": "object",
         "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PersonType"
+          },
           "email": {
             "type": "string",
             "nullable": true
@@ -13132,6 +13222,45 @@
         },
         "additionalProperties": false
       },
+      "MonthlyTrendDto": {
+        "type": "object",
+        "properties": {
+          "points": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonthlyTrendPointDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MonthlyTrendPointDto": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string",
+            "nullable": true
+          },
+          "enquiry": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "application": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolment": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "migrationCase": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "MyEnrolmentFormsDto": {
         "type": "object",
         "properties": {
@@ -13300,6 +13429,13 @@
           "MigrationCasesReassign",
           "EmailTemplatesEdit",
           "InvoiceTemplatesEdit"
+        ],
+        "type": "string"
+      },
+      "PersonType": {
+        "enum": [
+          "Student",
+          "Customer"
         ],
         "type": "string"
       },
@@ -14058,6 +14194,10 @@
           "chatOpenRouterModel": {
             "type": "string",
             "nullable": true
+          },
+          "chatProviderTimeoutSeconds": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -14078,6 +14218,58 @@
           "reason": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusBreakdownDto": {
+        "type": "object",
+        "properties": {
+          "enquiry": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusCountDto"
+            },
+            "nullable": true
+          },
+          "application": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusCountDto"
+            },
+            "nullable": true
+          },
+          "enrolment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusCountDto"
+            },
+            "nullable": true
+          },
+          "migrationCase": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusCountDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StatusCountDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -14149,6 +14341,9 @@
           "userId": {
             "type": "string",
             "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/PersonType"
           },
           "email": {
             "type": "string",
@@ -14266,6 +14461,9 @@
             "type": "string",
             "nullable": true
           },
+          "type": {
+            "$ref": "#/components/schemas/PersonType"
+          },
           "email": {
             "type": "string",
             "nullable": true
@@ -14336,6 +14534,9 @@
           "isActive": {
             "type": "boolean",
             "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/PersonType"
           }
         },
         "additionalProperties": false
@@ -14815,6 +15016,10 @@
           "chatOpenRouterModel": {
             "type": "string",
             "nullable": true
+          },
+          "chatProviderTimeoutSeconds": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

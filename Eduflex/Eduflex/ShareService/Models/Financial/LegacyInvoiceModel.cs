@@ -2,7 +2,10 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ShareService.Models.Financial
 {
-    public class InvoiceModel
+    // Renamed from InvoiceModel to avoid a duplicate class name with the active
+    // ShareService.Models.Invoice.InvoiceModel ledger this one was replaced by (see that
+    // class's remarks) — this type is legacy/embedded and nothing writes to it anymore.
+    public class LegacyInvoiceModel
     {
         [BsonElement("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();

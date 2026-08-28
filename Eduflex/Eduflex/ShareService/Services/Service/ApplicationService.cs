@@ -360,5 +360,27 @@ namespace ShareService.Services
 
             return await _applicationDataAccess.CountApplicationsByStatusAsync("Pending");
         }
+
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            return await _applicationDataAccess.GetMonthlyCountsAsync(since);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync(string userId)
+        {
+            var permissions = await _permissionService.GetPermissionsForUserAsync(userId);
+            if (!permissions.Contains(PermissionKey.ApplicationsView.GetDescription()))
+            {
+                throw new UnauthorizedAccessException("You do not have permission to view applications");
+            }
+
+            return await _applicationDataAccess.GetStatusCountsAsync();
+        }
     }
 }

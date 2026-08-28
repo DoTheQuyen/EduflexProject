@@ -770,5 +770,17 @@ namespace ShareService.Services
             var count = await _caseDataAccess.CountAllAsync();
             return $"MIG-{DateTime.UtcNow:yyyy}-{count + 1:D5}";
         }
+
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(string userId, DateTime since)
+        {
+            await RequirePermissionAsync(userId, PermissionKey.MigrationCasesView, "view migration cases");
+            return await _caseDataAccess.GetMonthlyCountsAsync(since);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync(string userId)
+        {
+            await RequirePermissionAsync(userId, PermissionKey.MigrationCasesView, "view migration cases");
+            return await _caseDataAccess.GetStatusCountsAsync();
+        }
     }
 }

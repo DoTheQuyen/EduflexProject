@@ -27,5 +27,41 @@ namespace Eduflex.Mapping.Notification
                 Counts = model.Counts
             };
         }
+
+        public static MonthlyTrendDto ToDto(this MonthlyTrendModel model)
+        {
+            return new MonthlyTrendDto
+            {
+                Points = model.Points.Select(p => new MonthlyTrendPointDto
+                {
+                    Month = p.Month,
+                    Enquiry = p.Enquiry,
+                    Application = p.Application,
+                    Enrolment = p.Enrolment,
+                    MigrationCase = p.MigrationCase
+                }).ToList()
+            };
+        }
+
+        public static StatusCountDto ToDto(this StatusCountModel model)
+        {
+            return new StatusCountDto
+            {
+                Status = model.Status,
+                Label = model.Label,
+                Count = model.Count
+            };
+        }
+
+        public static StatusBreakdownDto ToDto(this StatusBreakdownModel model)
+        {
+            return new StatusBreakdownDto
+            {
+                Enquiry = model.Enquiry.Select(s => s.ToDto()).ToList(),
+                Application = model.Application.Select(s => s.ToDto()).ToList(),
+                Enrolment = model.Enrolment.Select(s => s.ToDto()).ToList(),
+                MigrationCase = model.MigrationCase.Select(s => s.ToDto()).ToList()
+            };
+        }
     }
 }

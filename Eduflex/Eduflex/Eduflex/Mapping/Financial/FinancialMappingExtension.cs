@@ -41,7 +41,7 @@ namespace Eduflex.Mapping.Financial
             };
         }
 
-        public static InvoiceDto ToDto(this InvoiceModel model)
+        public static InvoiceDto ToDto(this LegacyInvoiceModel model)
         {
             return new InvoiceDto
             {

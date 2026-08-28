@@ -1,4 +1,5 @@
 using Eduflex.DTOs.Address;
+using ShareService.Enums.Student;
 using System;
 
 namespace Eduflex.DTOs.Student
@@ -7,6 +8,7 @@ namespace Eduflex.DTOs.Student
     {
         public string Id { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public PersonType Type { get; set; } = PersonType.Student;
         public string Email { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;

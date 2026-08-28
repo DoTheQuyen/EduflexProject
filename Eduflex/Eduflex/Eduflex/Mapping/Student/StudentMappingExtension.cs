@@ -19,6 +19,7 @@ namespace Eduflex.Mapping.Student
             {
                 Id = model.Id,
                 UserId = model.UserId,
+                Type = model.Type,
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -39,6 +40,7 @@ namespace Eduflex.Mapping.Student
             {
                 Id = dto.Id,
                 UserId = dto.UserId,
+                Type = dto.Type,
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,

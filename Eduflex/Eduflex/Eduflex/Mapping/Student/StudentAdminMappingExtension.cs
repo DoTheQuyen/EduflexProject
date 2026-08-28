@@ -14,7 +14,8 @@ namespace Eduflex.Mapping.Student
                 PageNumber = dto.PageNumber,
                 PageSize = dto.PageSize,
                 SearchTerm = dto.SearchTerm,
-                IsActive = dto.IsActive
+                IsActive = dto.IsActive,
+                Type = dto.Type
             };
         }
 
@@ -34,6 +35,7 @@ namespace Eduflex.Mapping.Student
         {
             return new StudentModel
             {
+                Type = dto.Type,
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
@@ -66,6 +68,7 @@ namespace Eduflex.Mapping.Student
             {
                 Id = model.Student.Id,
                 UserId = model.Student.UserId,
+                Type = model.Student.Type,
                 Email = model.Student.Email,
                 Mobile = model.Mobile,
                 FirstName = model.Student.FirstName,

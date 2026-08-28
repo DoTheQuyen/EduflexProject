@@ -2,42 +2,60 @@
   <div class="container-fluid py-1">
     <div class="row align-items-center">
       <div class="col-md-6">
-        <h3 class="mb-2">Manage Students</h3>
+        <h3 class="mb-2">Contacts</h3>
       </div>
       <div class="col-md-6 text-md-end">
-        <a class="btn btn-md btn-primary" routerLink="/staff-portal/students/new" *ngIf="permissions.add">
-          <i class="fas fa-plus me-2"></i>Add Student
+        <a class="btn btn-md btn-primary" [routerLink]="addRoute()" [queryParams]="addQueryParams()"
+          *ngIf="permissions.add">
+          <i class="fas fa-plus me-2"></i>{{ activeTab === 'student' ? 'Add Student' : 'Add Customer' }}
         </a>
       </div>
     </div>
   </div>
 
   <div class="container-fluid">
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'student'"
+          (click)="switchTab('student')">
+          Students
+        </button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="nav-link" [class.active]="activeTab === 'customer'"
+          (click)="switchTab('customer')">
+          Customers
+        </button>
+      </li>
+    </ul>
+
     <div class="row">
       <div class="col-12">
         <div *ngIf="isLoading" class="text-center py-5">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <p class="mt-2">Loading students...</p>
+          <p class="mt-2">Loading...</p>
         </div>
 
         <div *ngIf="!isLoading" class="card border shadow-sm">
           <div class="card-body p-0">
-            <app-data-table [columns]="columns" [data]="students" [rowActions]="rowActions"
-              [pageNumber]="pager.pageNumber" [pageSize]="pager.pageSize" [totalCount]="pager.totalCount"
-              [showSearch]="true" searchPlaceholder="Search name, email, mobile or passport no..."
-              (search)="onSearchChange($event)" (refresh)="onRefresh()" (pageChange)="onPageChange($event)"
-              (actionClick)="onTableAction($event)" tableClass="table table-bordered table-hover mb-0">
-              <select tableFilters class="form-select" style="max-width: 150px;" [value]="activeFilter"
+            <app-data-table [columns]="columns" [data]="current.rows" [rowActions]="rowActions"
+              [pageNumber]="current.pager.pageNumber" [pageSize]="current.pager.pageSize"
+              [totalCount]="current.pager.totalCount" [showSearch]="true"
+              searchPlaceholder="Search name, email, mobile or passport no..." (search)="onSearchChange($event)"
+              (refresh)="onRefresh()" (pageChange)="onPageChange($event)" (actionClick)="onTableAction($event)"
+              tableClass="table table-bordered table-hover mb-0">
+              <select tableFilters class="form-select" style="max-width: 150px;" [value]="current.activeFilter"
                 (change)="onActiveFilterChange($event)">
                 <option value="all">All statuses</option>
                 <option value="true">Active only</option>
                 <option value="false">Inactive only</option>
               </select>
             </app-data-table>
-            <p *ngIf="!isLoading && students.length === 0" class="text-center text-muted py-4 mb-0">
-              No students yet. Click "Add Student" to create one.
+            <p *ngIf="!isLoading && current.rows.length === 0" class="text-center text-muted py-4 mb-0">
+              No {{ activeTab === 'student' ? 'students' : 'customers' }} yet. Click "Add {{ activeTab === 'student'
+              ? 'Student' : 'Customer' }}" to create one.
             </p>
           </div>
         </div>

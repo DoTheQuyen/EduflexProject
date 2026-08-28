@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareService", "ShareServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareService.Tests", "ShareService.Tests\ShareService.Tests.csproj", "{8D1F9A53-351E-436B-A591-EFA394F7A5AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMigrationPostgres", "DBMigrationPostgres\DBMigrationPostgres.csproj", "{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,18 @@ Global
 		{8D1F9A53-351E-436B-A591-EFA394F7A5AE}.Release|x64.Build.0 = Release|Any CPU
 		{8D1F9A53-351E-436B-A591-EFA394F7A5AE}.Release|x86.ActiveCfg = Release|Any CPU
 		{8D1F9A53-351E-436B-A591-EFA394F7A5AE}.Release|x86.Build.0 = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|x64.Build.0 = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{64B48417-CFE1-4E1D-8B60-F138C1EC17FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

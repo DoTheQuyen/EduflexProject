@@ -301,6 +301,20 @@
                 <span class="field-error" *ngIf="isFieldInvalid('chatOpenRouterModel')">Model cannot be empty</span>
               </div>
             </div>
+
+            <h6 class="form-section-title mt-4">Timeout</h6>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Per-provider timeout (seconds) *</label>
+                <input type="number" class="form-control" formControlName="chatProviderTimeoutSeconds">
+                <span class="field-error" *ngIf="isFieldInvalid('chatProviderTimeoutSeconds')">Enter a number greater
+                  than 0</span>
+                <p class="text-muted small mt-1 mb-0">
+                  How long each provider above gets before giving up and falling through to the next one. Worst case
+                  (all three fail) is roughly 3× this value.
+                </p>
+              </div>
+            </div>
           </ng-container>
 
           <p class="text-danger mt-3 mb-0" *ngIf="errorMessage">{{ errorMessage }}</p>

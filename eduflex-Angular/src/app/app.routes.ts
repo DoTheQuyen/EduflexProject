@@ -267,28 +267,28 @@ export const routes: Routes = [
         data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Application Detail' }
       },
       {
-        path: 'students',
+        path: 'contacts',
         loadComponent: () => import('./components/portal/staff/student-management/student-management.component').then(m => m.StudentManagementComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Students' }
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Contacts' }
       },
       {
-        path: 'students/new',
+        path: 'contacts/new',
         loadComponent: () => import('./components/portal/staff/student-management/student-new/student-new.component').then(m => m.StudentNewComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Add Student' }
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Add Contact' }
       },
       {
-        path: 'students/:id/edit',
+        path: 'contacts/:id/edit',
         loadComponent: () => import('./components/portal/staff/student-management/student-edit/student-edit.component').then(m => m.StudentEditComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Edit Student' }
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Edit Contact' }
       },
       {
-        path: 'students/:id',
+        path: 'contacts/:id',
         loadComponent: () => import('./components/portal/staff/student-management/student-detail/student-detail.component').then(m => m.StudentDetailComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Student Details' }
+        data: { roles: ['Admin', 'Manager', 'Staff'], breadcrumb: 'Contact Details' }
       },
             {
         path: 'profile',

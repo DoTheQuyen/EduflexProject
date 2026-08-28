@@ -1,0 +1,9 @@
+/* A deliberately more prominent shadow than its sibling cards ("Open Items by Module",
+   "Recent Notifications") — this is the one chart on the dashboard, so a slightly raised,
+   featured look is intentional here rather than something to make consistent with them. */
+.trend-card-3d {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 1px 2px rgba(22, 35, 58, 0.06),
+    0 14px 28px -12px rgba(22, 35, 58, 0.18);
+}

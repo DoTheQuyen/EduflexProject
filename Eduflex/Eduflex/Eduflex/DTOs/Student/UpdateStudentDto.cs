@@ -3,6 +3,8 @@ using System;
 
 namespace Eduflex.DTOs.Student
 {
+    // No Type here deliberately — Student vs Customer is fixed at creation, an edit can't
+    // flip it (see StudentModel.Type).
     public class UpdateStudentDto
     {
         public string Email { get; set; } = string.Empty;

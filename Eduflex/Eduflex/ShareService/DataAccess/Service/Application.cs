@@ -127,5 +127,24 @@ namespace ShareService.DataAccess
             var count = await _applicationsCollection.CountDocumentsAsync(filter);
             return (int)count;
         }
+
+        public async Task<Dictionary<string, int>> GetMonthlyCountsAsync(DateTime since)
+        {
+            var results = await _applicationsCollection.Aggregate()
+                .Match(a => a.DateApplied >= since)
+                .Group(a => new { a.DateApplied.Year, a.DateApplied.Month }, g => new { g.Key.Year, g.Key.Month, Count = g.Count() })
+                .ToListAsync();
+
+            return results.ToDictionary(r => $"{r.Year:D4}-{r.Month:D2}", r => r.Count);
+        }
+
+        public async Task<Dictionary<string, int>> GetStatusCountsAsync()
+        {
+            var results = await _applicationsCollection.Aggregate()
+                .Group(a => a.Status, g => new { Status = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            return results.ToDictionary(r => r.Status, r => r.Count);
+        }
     }
 }

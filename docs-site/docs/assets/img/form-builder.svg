@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" role="img" aria-label="Annotated wireframe of the dynamic form builder with live print preview">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .md    { font-size: 13px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="440" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="439" rx="6" class="line"/>
+
+  <text class="t sm muted" x="28" y="26">← Back</text>
+  <text class="t md bold" x="28" y="52">New Form</text>
+  <rect x="700" y="38" width="62" height="24" rx="5" class="soft"/><text class="t sm muted" x="714" y="54">Cancel</text>
+  <rect x="772" y="38" width="88" height="24" rx="5" fill="#4f46e5"/><text class="t sm" x="790" y="54" fill="#ffffff">Save Form</text>
+
+  <!-- Editor column -->
+  <rect x="28" y="76" width="504" height="108" rx="5" class="line"/>
+  <text class="t sm bold" x="44" y="98">Form name</text>
+  <rect x="44" y="104" width="228" height="22" rx="4" class="soft"/>
+  <text class="t sm muted" x="54" y="119">e.g. Student Declaration Form</text>
+  <text class="t sm bold" x="288" y="98">Bind to step <tspan class="muted">(optional)</tspan></text>
+  <rect x="288" y="104" width="228" height="22" rx="4" class="soft"/>
+  <text class="t sm muted" x="298" y="119">Not bound (ad hoc)</text>
+  <text class="t sm bold" x="44" y="146">Description <tspan class="muted">(staff only, not printed)</tspan></text>
+  <rect x="44" y="152" width="472" height="20" rx="4" class="soft"/>
+  <rect x="44" y="168" width="26" height="13" rx="7" fill="#4f46e5"/><circle cx="63" cy="174.5" r="5" fill="#ffffff"/>
+  <text class="t sm" x="78" y="179">Active</text>
+
+  <!-- Question card -->
+  <rect x="28" y="194" width="504" height="150" rx="5" class="line" stroke="#4f46e5"/>
+  <text class="t sm bold" x="44" y="214" fill="#4f46e5">QUESTION 1 · REQUIRED</text>
+  <g class="t sm muted">
+    <text x="448" y="214">↑</text><text x="472" y="214">↓</text>
+  </g>
+  <text class="t sm" x="500" y="214" fill="#dc2626">✕</text>
+  <rect x="44" y="222" width="472" height="22" rx="4" class="soft"/>
+  <text class="t sm muted" x="54" y="237">Question text</text>
+  <rect x="44" y="250" width="472" height="20" rx="4" class="soft"/>
+  <text class="t sm muted" x="54" y="264">Hint text shown under the question (optional)</text>
+  <rect x="44" y="276" width="228" height="22" rx="4" class="soft"/>
+  <text class="t sm" x="54" y="291">Single select</text>
+  <rect x="288" y="280" width="26" height="13" rx="7" fill="#4f46e5"/><circle cx="307" cy="286.5" r="5" fill="#ffffff"/>
+  <text class="t sm" x="322" y="291">Required</text>
+
+  <rect x="44" y="304" width="330" height="20" rx="4" class="soft"/>
+  <text class="t sm muted" x="54" y="318">Option text</text>
+  <text class="t sm" x="384" y="318" fill="#dc2626">×</text>
+  <rect x="404" y="304" width="112" height="20" rx="4" class="soft"/>
+  <text class="t sm muted" x="416" y="318">+ Add option</text>
+  <text class="t sm muted" x="44" y="338">Options layout</text>
+  <rect x="120" y="328" width="56" height="14" rx="3" fill="#4f46e5"/><text class="t sm" x="130" y="339" fill="#ffffff">Vertical</text>
+  <rect x="178" y="328" width="62" height="14" rx="3" class="soft"/><text class="t sm muted" x="188" y="339">Horizontal</text>
+
+  <rect x="28" y="354" width="504" height="24" rx="5" class="soft" stroke="#4f46e5"/>
+  <text class="t sm" x="238" y="370" fill="#4f46e5">+ Add question</text>
+
+  <!-- Preview column -->
+  <rect x="548" y="76" width="324" height="336" rx="5" class="line" fill="#f8fafc"/>
+  <text class="t sm bold" x="564" y="96">Live print preview</text>
+  <text class="t sm muted" x="676" y="96">updates as you edit</text>
+  <rect x="564" y="106" width="292" height="290" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+  <text class="t sm bold" x="580" y="132">Untitled form</text>
+  <line x1="580" y1="142" x2="840" y2="142" class="soft"/>
+  <g class="t sm muted">
+    <text x="580" y="166">1. ______________________________</text>
+    <text x="580" y="192">☐ Option A</text>
+    <text x="580" y="210">☐ Option B</text>
+    <text x="580" y="246">2. ______________________________</text>
+    <text x="580" y="272">☐ Yes    ☐ No</text>
+  </g>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="14" cy="112" r="11"/><text class="caltx" x="10.5" y="116">1</text>
+  <circle class="cal" cx="288" cy="180" r="11"/><text class="caltx" x="284.5" y="184">2</text>
+  <circle class="cal" cx="14" cy="210" r="11"/><text class="caltx" x="10.5" y="214">3</text>
+  <circle class="cal" cx="14" cy="287" r="11"/><text class="caltx" x="10.5" y="291">4</text>
+  <circle class="cal" cx="14" cy="334" r="11"/><text class="caltx" x="10.5" y="338">5</text>
+  <circle class="cal" cx="536" cy="96" r="11"/><text class="caltx" x="532.5" y="100">6</text>
+</svg>

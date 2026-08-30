@@ -1,0 +1,20 @@
+{
+  "name": "eduflex-docs",
+  "version": "1.0.0",
+  "description": "Eduflex customer manuals — staff and student, built from one source.",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "node dev.mjs staff",
+    "dev:student": "node dev.mjs student",
+    "build": "node build.mjs",
+    "build:staff": "node build.mjs staff",
+    "build:student": "node build.mjs student"
+  },
+  "dependencies": {
+    "vitepress": "^1.6.4"
+  },
+  "private": true,
+  "type": "module"
+}

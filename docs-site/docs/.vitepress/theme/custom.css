@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Eduflex Help — customisations over the VitePress default theme.
+   The default is already close to what we want, so this stays small.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Brand — indigo, matching the portal
+   -------------------------------------------------------------------------- */
+
+:root {
+  --vp-c-brand-1: #4f46e5;
+  --vp-c-brand-2: #4338ca;
+  --vp-c-brand-3: #6366f1;
+  --vp-c-brand-soft: rgb(79 70 229 / 14%);
+
+  --eduflex-radius: 10px;
+  --eduflex-shadow: 0 1px 2px rgb(15 23 42 / 4%), 0 8px 24px -12px rgb(15 23 42 / 12%);
+}
+
+.dark {
+  --vp-c-brand-1: #a5b4fc;
+  --vp-c-brand-2: #c7d2fe;
+  --vp-c-brand-3: #818cf8;
+  --vp-c-brand-soft: rgb(165 180 252 / 16%);
+
+  --eduflex-shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px -12px rgb(0 0 0 / 60%);
+}
+
+/* --------------------------------------------------------------------------
+   2. Tables — the workhorse of this manual
+   -------------------------------------------------------------------------- */
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+  margin: 1.25rem 0;
+  font-size: 14px;
+  border-collapse: collapse;
+}
+
+.vp-doc th {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--vp-c-divider);
+  padding: 0.6em 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.vp-doc td {
+  border: none;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 0.6em 0.85em;
+  vertical-align: top;
+}
+
+.vp-doc tr {
+  background: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.vp-doc tbody tr:hover {
+  background: var(--vp-c-bg-soft);
+}
+
+.vp-doc tr:last-child td {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Wireframes — bordered "paper" so they read as figures
+   -------------------------------------------------------------------------- */
+
+.vp-doc img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--eduflex-radius);
+  box-shadow: var(--eduflex-shadow);
+  margin: 1.5em 0 1em;
+}
+
+/* The wireframes are drawn with fixed light colours. In dark mode keep them on
+   their own white sheet rather than letting them glare against the page. */
+.dark .vp-doc img {
+  background: #ffffff;
+  padding: 0.35rem;
+  filter: brightness(0.94);
+}
+
+/* The numbered legend that follows every wireframe. */
+.vp-doc p:has(> img) + ol {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  margin-top: 0.4em;
+}
+
+.vp-doc p:has(> img) + ol strong {
+  color: var(--vp-c-text-1);
+}
+
+/* --------------------------------------------------------------------------
+   4. Headings — a little tighter than the default
+   -------------------------------------------------------------------------- */
+
+.vp-doc h1 {
+  letter-spacing: -0.022em;
+}
+
+.vp-doc h2 {
+  letter-spacing: -0.016em;
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+}
+
+.vp-doc h3 {
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   5. Home page cards
+   -------------------------------------------------------------------------- */
+
+.doc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1.75rem 0;
+}
+
+.doc-card {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--eduflex-radius);
+  background: var(--vp-c-bg-soft);
+  text-decoration: none !important;
+  color: inherit;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease, transform 0.14s ease;
+}
+
+.doc-card:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--eduflex-shadow);
+  transform: translateY(-2px);
+}
+
+.doc-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--vp-c-brand-1);
+  font-size: 15px;
+}
+
+.doc-card span {
+  display: block;
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-card,
+  .doc-card:hover,
+  .vp-doc tr {
+    transition: none;
+    transform: none;
+  }
+}

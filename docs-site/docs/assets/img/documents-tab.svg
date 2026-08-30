@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-label="Annotated wireframe of the Documents tab: step evidence groups, other documents and invoices">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="400" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="399" rx="6" class="line"/>
+
+  <text class="t sm muted" x="28" y="30">Every evidence file uploaded through the VISA Process, grouped by step, plus anything uploaded manually below.</text>
+
+  <!-- Category groups (read-only) -->
+  <rect x="28" y="44" width="832" height="110" rx="5" class="line" fill="#f8fafc"/>
+  <text class="t sm bold" x="44" y="64">Genuine Student statement</text>
+  <text class="t sm muted" x="760" y="64">1 file(s)</text>
+  <line x1="44" y1="72" x2="844" y2="72" class="soft"/>
+  <text class="t sm" x="44" y="90">gs-statement.pdf</text>
+  <text class="t sm muted" x="240" y="90">Jo Diaz · 11/08/2026</text>
+  <rect x="748" y="78" width="66" height="17" rx="4" class="soft" fill="#ffffff"/><text class="t sm muted" x="758" y="90">Download</text>
+
+  <text class="t sm bold" x="44" y="118">University offer letter</text>
+  <text class="t sm muted" x="760" y="118">1 file(s)</text>
+  <line x1="44" y1="126" x2="844" y2="126" class="soft"/>
+  <text class="t sm" x="44" y="144">offer-letter.pdf</text>
+  <text class="t sm muted" x="240" y="144">Minh Tran (student) · 12/08/2026</text>
+  <rect x="748" y="132" width="66" height="17" rx="4" class="soft" fill="#ffffff"/><text class="t sm muted" x="758" y="144">Download</text>
+
+  <!-- Other documents (manageable) -->
+  <rect x="28" y="168" width="832" height="122" rx="5" class="line"/>
+  <text class="t sm bold" x="44" y="188">Other documents</text>
+  <text class="t sm muted" x="760" y="188">2 file(s)</text>
+  <line x1="44" y1="196" x2="844" y2="196" class="soft"/>
+
+  <rect x="44" y="204" width="130" height="22" rx="4" class="soft" stroke="#4f46e5"/>
+  <text class="t sm" x="56" y="219" fill="#4f46e5">Upload a document</text>
+
+  <text class="t sm" x="44" y="248">bank-statement.pdf</text>
+  <text class="t sm muted" x="240" y="248">Sarah Chen · 13/08/2026</text>
+  <rect x="608" y="236" width="66" height="17" rx="4" class="soft"/><text class="t sm muted" x="618" y="248">Download</text>
+  <rect x="682" y="236" width="58" height="17" rx="4" class="soft"/><text class="t sm muted" x="692" y="248">Rename</text>
+  <rect x="748" y="236" width="52" height="17" rx="4" class="soft" stroke="#dc2626"/><text class="t sm" x="757" y="248" fill="#dc2626">Delete</text>
+
+  <text class="t sm" x="44" y="276">scan001.pdf</text>
+  <text class="t sm muted" x="240" y="276">Minh Tran (student) · 13/08/2026</text>
+  <rect x="608" y="264" width="66" height="17" rx="4" class="soft"/><text class="t sm muted" x="618" y="276">Download</text>
+  <rect x="682" y="264" width="58" height="17" rx="4" class="soft"/><text class="t sm muted" x="692" y="276">Rename</text>
+  <rect x="748" y="264" width="52" height="17" rx="4" class="soft" stroke="#dc2626"/><text class="t sm" x="757" y="276" fill="#dc2626">Delete</text>
+
+  <!-- Invoices (enrolment only) -->
+  <rect x="28" y="304" width="832" height="74" rx="5" class="line" stroke-dasharray="4 3"/>
+  <text class="t sm bold" x="44" y="324">Invoices</text>
+  <text class="t sm muted" x="98" y="324">— enrolments only</text>
+  <text class="t sm muted" x="760" y="324">1 file(s)</text>
+  <line x1="44" y1="332" x2="844" y2="332" class="soft"/>
+  <text class="t sm" x="44" y="356">INV-Eduflex0007</text>
+  <rect x="146" y="345" width="50" height="14" rx="7" fill="#e0e7ff"/><text class="t sm" x="154" y="356" fill="#4338ca">Invoice</text>
+  <text class="t sm muted" x="240" y="356">Sent to Minh Tran · 14/08/2026 09:12 · Sent</text>
+  <rect x="748" y="344" width="66" height="17" rx="4" class="soft"/><text class="t sm muted" x="758" y="356">Download</text>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="14" cy="60" r="11"/><text class="caltx" x="10.5" y="64">1</text>
+  <circle class="cal" cx="356" cy="144" r="11"/><text class="caltx" x="352.5" y="148">2</text>
+  <circle class="cal" cx="14" cy="215" r="11"/><text class="caltx" x="10.5" y="219">3</text>
+  <circle class="cal" cx="774" cy="224" r="11"/><text class="caltx" x="770.5" y="228">4</text>
+  <circle class="cal" cx="14" cy="320" r="11"/><text class="caltx" x="10.5" y="324">5</text>
+</svg>

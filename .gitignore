@@ -10,3 +10,9 @@ Thumbs.db
 
 # Generated at build time (see eduflex-Angular/scripts/generate-build-info.js)
 eduflex-Angular/src/app/environments/build-info.ts
+# Docs site (VitePress) - build output, caches and deps
+docs-site/site/
+docs-site/site-student/
+docs-site/node_modules/
+docs-site/docs/.vitepress/cache/
+docs-site/docs/.vitepress/dist/

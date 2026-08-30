@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-label="Annotated wireframe of the Accounts screen with type and status filters and health states">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .md    { font-size: 13px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="360" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="359" rx="6" class="line"/>
+
+  <text class="t md bold" x="28" y="36">Accounts</text>
+  <text class="t sm muted" x="98" y="36">Total accounts: 48</text>
+
+  <!-- Filters -->
+  <rect x="28" y="56" width="286" height="26" rx="4" class="soft"/>
+  <text class="t sm muted" x="42" y="73">Search name, course, partner…</text>
+  <rect x="328" y="56" width="160" height="26" rx="4" class="soft"/>
+  <text class="t sm" x="340" y="73">All types</text><text class="t sm muted" x="468" y="73">▾</text>
+  <rect x="502" y="56" width="180" height="26" rx="4" class="soft" stroke="#4f46e5"/>
+  <text class="t sm" x="514" y="73" fill="#4f46e5">Needs action now</text><text class="t sm muted" x="662" y="73">▾</text>
+
+  <!-- Table -->
+  <rect x="28" y="100" width="844" height="196" rx="5" class="line"/>
+  <rect x="28" y="100" width="844" height="30" rx="5" fill="#f1f5f9"/>
+  <line x1="28" y1="130" x2="872" y2="130" class="line"/>
+  <g class="t sm bold">
+    <text x="44" y="120">Account</text>
+    <text x="292" y="120">Type</text>
+    <text x="452" y="120">Amount</text>
+    <text x="574" y="120">Schedule position</text>
+    <text x="748" y="120">Status</text>
+  </g>
+
+  <g class="t sm muted">
+    <text x="44" y="152">Minh Tran — Master of IT</text><text x="292" y="152">Student</text><text x="452" y="152">4,200.00</text><text x="574" y="152">2 of 3</text>
+    <text x="44" y="184">Southbank University</text><text x="292" y="184">Education partner</text><text x="452" y="184">18,900.00</text><text x="574" y="184">1 of 4</text>
+    <text x="44" y="216">Harbour Agents Pty</text><text x="292" y="216">Business partner</text><text x="452" y="216">2,750.00</text><text x="574" y="216">3 of 3</text>
+    <text x="44" y="248">Ana Silva — Diploma</text><text x="292" y="248">Student</text><text x="452" y="248">1,100.00</text><text x="574" y="248">1 of 2</text>
+    <text x="44" y="280">Northfield College</text><text x="292" y="280">Education partner</text><text x="452" y="280">9,400.00</text><text x="574" y="280">4 of 4</text>
+  </g>
+
+  <rect x="744" y="141" width="96" height="16" rx="8" fill="#fee2e2"/><text class="t sm" x="752" y="153" fill="#b91c1c">Needs action now</text>
+  <rect x="744" y="173" width="62" height="16" rx="8" fill="#fee2e2"/><text class="t sm" x="752" y="185" fill="#b91c1c">Overdue</text>
+  <rect x="744" y="205" width="54" height="16" rx="8" fill="#fef3c7"/><text class="t sm" x="752" y="217" fill="#92400e">At risk</text>
+  <rect x="744" y="237" width="58" height="16" rx="8" fill="#dcfce7"/><text class="t sm" x="752" y="249" fill="#15803d">On track</text>
+  <rect x="744" y="269" width="60" height="16" rx="8" fill="#e2e8f0"/><text class="t sm" x="752" y="281">Complete</text>
+
+  <line x1="28" y1="164" x2="872" y2="164" class="soft"/>
+  <line x1="28" y1="196" x2="872" y2="196" class="soft"/>
+  <line x1="28" y1="228" x2="872" y2="228" class="soft"/>
+  <line x1="28" y1="260" x2="872" y2="260" class="soft"/>
+
+  <text class="t sm muted" x="28" y="324">Health states are ordered by urgency — filter to the top two to get a worklist.</text>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="592" cy="46" r="11"/><text class="caltx" x="588.5" y="50">1</text>
+  <circle class="cal" cx="408" cy="46" r="11"/><text class="caltx" x="404.5" y="50">2</text>
+  <circle class="cal" cx="14" cy="152" r="11"/><text class="caltx" x="10.5" y="156">3</text>
+  <circle class="cal" cx="646" cy="120" r="11"/><text class="caltx" x="642.5" y="124">4</text>
+  <circle class="cal" cx="886" cy="152" r="11"/><text class="caltx" x="882.5" y="156">5</text>
+</svg>

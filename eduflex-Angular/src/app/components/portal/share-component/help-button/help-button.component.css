@@ -1,0 +1,50 @@
+/* Sized and shaped to match .notif-bell__button so the two header controls line up. */
+.help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    background-color 0.16s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.16s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.help-button:hover {
+  background: color-mix(in srgb, var(--color-navy-900) 8%, white);
+  color: var(--color-navy-900);
+}
+
+/* Slight press so the control feels responsive on click. */
+.help-button:active {
+  transform: scale(0.92);
+  background: color-mix(in srgb, var(--color-navy-900) 14%, white);
+}
+
+.help-button:focus-visible {
+  outline: none;
+  color: var(--color-navy-900);
+  background: color-mix(in srgb, var(--color-navy-900) 8%, white);
+  box-shadow: 0 0 0 2px var(--color-base-100, #fff), 0 0 0 4px var(--color-primary);
+}
+
+.help-button i {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .help-button {
+    transition: background-color 0.16s ease, color 0.16s ease;
+  }
+
+  .help-button:active {
+    transform: none;
+  }
+}

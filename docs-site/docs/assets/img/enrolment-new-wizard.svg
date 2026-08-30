@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-label="Annotated wireframe of the New Enrolment wizard step one, showing student search and the duplicate warning">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .md    { font-size: 13px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="400" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="399" rx="6" class="line"/>
+
+  <text class="t md bold" x="28" y="36">New Enrolment</text>
+
+  <!-- Stepper -->
+  <circle cx="42" cy="66" r="11" fill="#4f46e5"/><text class="t sm" x="38.5" y="70" fill="#ffffff">1</text>
+  <text class="t sm bold" x="62" y="70">Student Details</text>
+  <line x1="168" y1="66" x2="256" y2="66" stroke="#cbd5e1" stroke-width="2"/>
+  <circle cx="270" cy="66" r="11" fill="#e2e8f0"/><text class="t sm muted" x="266.5" y="70">2</text>
+  <text class="t sm muted" x="290" y="70">Enrolment Details</text>
+
+  <!-- Search card -->
+  <rect x="28" y="88" width="832" height="128" rx="5" class="line"/>
+  <rect x="28" y="88" width="832" height="30" rx="5" fill="#f8fafc"/>
+  <line x1="28" y1="118" x2="860" y2="118" class="line"/>
+  <text class="t sm bold" x="44" y="108">Find Existing Student</text>
+
+  <rect x="44" y="130" width="300" height="24" rx="4" class="soft"/>
+  <text class="t sm muted" x="58" y="146">Search by name, email or mobile…</text>
+
+  <line x1="44" y1="166" x2="844" y2="166" class="soft"/>
+  <g class="t sm muted">
+    <text x="44" y="186">Minh Tran</text><text x="244" y="186">minh.tran@example.com</text><text x="500" y="186">0400 123 456</text>
+    <text x="44" y="206">Minh T Nguyen</text><text x="244" y="206">minh.n@example.com</text><text x="500" y="206">0400 987 654</text>
+  </g>
+  <rect x="756" y="174" width="60" height="18" rx="4" class="soft" stroke="#4f46e5"/><text class="t sm" x="768" y="187" fill="#4f46e5">Select</text>
+  <rect x="756" y="194" width="60" height="18" rx="4" class="soft" stroke="#4f46e5"/><text class="t sm" x="768" y="207" fill="#4f46e5">Select</text>
+
+  <!-- Toggle -->
+  <rect x="28" y="228" width="238" height="24" rx="5" class="soft" stroke="#4f46e5"/>
+  <text class="t sm" x="42" y="244" fill="#4f46e5">+ Can't find them? Add New Student</text>
+
+  <!-- Duplicate warning -->
+  <rect x="28" y="264" width="832" height="106" rx="5" fill="#fef3c7" stroke="#fcd34d"/>
+  <text class="t sm bold" x="44" y="288" fill="#92400e">⚠  An active student already exists with this email.</text>
+  <text class="t sm" x="44" y="308" fill="#92400e">Minh Tran · minh.tran@example.com · created 04/03/2026</text>
+
+  <rect x="44" y="322" width="118" height="26" rx="5" fill="#4f46e5"/>
+  <text class="t sm" x="62" y="339" fill="#ffffff">Use This Student</text>
+  <rect x="174" y="322" width="126" height="26" rx="5" fill="#f59e0b"/>
+  <text class="t sm" x="188" y="339" fill="#ffffff">Reactivate &amp; Use</text>
+  <rect x="312" y="322" width="80" height="26" rx="5" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sm muted" x="328" y="339">Dismiss</text>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="14" cy="66" r="11"/><text class="caltx" x="10.5" y="70">1</text>
+  <circle class="cal" cx="14" cy="142" r="11"/><text class="caltx" x="10.5" y="146">2</text>
+  <circle class="cal" cx="14" cy="240" r="11"/><text class="caltx" x="10.5" y="244">3</text>
+  <circle class="cal" cx="14" cy="288" r="11"/><text class="caltx" x="10.5" y="292">4</text>
+  <circle class="cal" cx="14" cy="335" r="11"/><text class="caltx" x="10.5" y="339">5</text>
+</svg>

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img" aria-label="Annotated wireframe of the New Application screen">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .md    { font-size: 13px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+    .req   { fill: #dc2626; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="500" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="499" rx="6" class="line"/>
+
+  <text class="t sm muted" x="28" y="30">&#8592; Back</text>
+  <text class="t md bold" x="28" y="56">New Application</text>
+
+  <!-- Left column -->
+  <rect x="28" y="76" width="212" height="128" rx="5" class="line"/>
+  <rect x="28" y="76" width="212" height="26" rx="5" fill="#f8fafc"/>
+  <text class="t sm bold" x="42" y="94">Applicant Details</text>
+  <text class="t sm muted" x="42" y="122">Prefilled from your account</text>
+  <text class="t sm bold" x="42" y="146">Full Name</text>
+  <text class="t sm muted" x="42" y="162">Minh Tran</text>
+  <text class="t sm bold" x="42" y="182">Email</text>
+  <text class="t sm muted" x="42" y="196">minh.tran@example.com</text>
+
+  <!-- Right column: Program Selection -->
+  <rect x="256" y="76" width="616" height="150" rx="5" class="line"/>
+  <rect x="256" y="76" width="616" height="26" rx="5" fill="#f8fafc"/>
+  <text class="t sm bold" x="270" y="94">Program Selection</text>
+
+  <text class="t sm" x="270" y="122">University <tspan class="req">*</tspan></text>
+  <rect x="270" y="128" width="278" height="22" rx="4" class="soft"/>
+  <text class="t sm muted" x="280" y="143">Select a university…</text>
+
+  <text class="t sm" x="574" y="122">Course / Program <tspan class="req">*</tspan></text>
+  <rect x="574" y="128" width="284" height="22" rx="4" class="soft"/>
+  <text class="t sm muted" x="584" y="143">Pick a listed course or type your own</text>
+
+  <text class="t sm" x="270" y="170">Study mode</text>
+  <rect x="270" y="176" width="278" height="22" rx="4" class="soft"/>
+  <text class="t sm" x="574" y="170">Campus</text>
+  <rect x="574" y="176" width="284" height="22" rx="4" class="soft"/>
+
+  <!-- Address card -->
+  <rect x="256" y="238" width="616" height="72" rx="5" class="line"/>
+  <rect x="256" y="238" width="616" height="26" rx="5" fill="#f8fafc"/>
+  <text class="t sm bold" x="270" y="256">Address &amp; Emergency Contact</text>
+  <text class="t sm muted" x="270" y="282">Hometown · Current · Emergency contact</text>
+  <rect x="270" y="290" width="11" height="11" rx="2" fill="#ffffff" stroke="#94a3b8"/>
+  <text class="t sm muted" x="290" y="300">Same as hometown address</text>
+
+  <!-- Documents card -->
+  <rect x="256" y="322" width="616" height="122" rx="5" class="line"/>
+  <rect x="256" y="322" width="616" height="26" rx="5" fill="#f8fafc"/>
+  <text class="t sm bold" x="270" y="340">Required Documents</text>
+  <text class="t sm muted" x="742" y="340">2 / 4 required uploaded</text>
+
+  <rect x="270" y="356" width="588" height="26" rx="4" class="soft" fill="#fef3c7"/>
+  <text class="t sm" x="282" y="373" fill="#92400e">Document upload isn't wired to the backend yet — files are lost when you leave.</text>
+
+  <g class="t sm">
+    <text x="282" y="400">Passport <tspan class="req">*</tspan></text>
+    <text x="452" y="400">IELTS Result <tspan class="req">*</tspan></text>
+    <text x="622" y="400">Year 10-12 Cert <tspan class="req">*</tspan></text>
+    <text x="282" y="428">Highest Qualification <tspan class="req">*</tspan></text>
+    <text x="622" y="428" class="muted">Genuine Student Statement</text>
+  </g>
+  <rect x="770" y="416" width="88" height="20" rx="4" class="soft"/>
+  <text class="t sm muted" x="782" y="430">+ Add Document</text>
+
+  <!-- Sticky bar -->
+  <rect x="1" y="456" width="898" height="43" fill="#f8fafc"/>
+  <line x1="1" y1="456" x2="899" y2="456" class="line"/>
+  <text class="t sm muted" x="28" y="482">Complete the program details and all required documents to enable Submit.</text>
+  <rect x="530" y="466" width="66" height="24" rx="5" class="soft"/><text class="t sm muted" x="546" y="482">Discard</text>
+  <rect x="608" y="466" width="82" height="24" rx="5" class="soft"/><text class="t sm muted" x="620" y="482">Save Draft</text>
+  <rect x="702" y="466" width="146" height="24" rx="5" fill="#c7d2fe"/><text class="t sm" x="722" y="482" fill="#4f46e5">Submit Application</text>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="242" cy="140" r="11"/><text class="caltx" x="238.5" y="144">1</text>
+  <circle class="cal" cx="412" cy="66" r="11"/><text class="caltx" x="408.5" y="70">2</text>
+  <circle class="cal" cx="412" cy="228" r="11"/><text class="caltx" x="408.5" y="232">3</text>
+  <circle class="cal" cx="412" cy="312" r="11"/><text class="caltx" x="408.5" y="316">4</text>
+  <circle class="cal" cx="775" cy="446" r="11"/><text class="caltx" x="771.5" y="450">5</text>
+</svg>

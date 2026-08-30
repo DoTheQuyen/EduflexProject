@@ -6,11 +6,12 @@ import { AuthHelperService } from '../../../services/auth-helper.service';
 import { RealtimeNotificationService } from '../../../services/realtime-notification.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NotificationBellComponent } from '../share-component/notification-bell/notification-bell.component';
+import { HelpButtonComponent } from '../share-component/help-button/help-button.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent, NotificationBellComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent, NotificationBellComponent, HelpButtonComponent],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })

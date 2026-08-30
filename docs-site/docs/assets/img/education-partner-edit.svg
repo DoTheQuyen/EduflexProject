@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" role="img" aria-label="Annotated wireframe of the education partner editor with its locked Courses tab">
+  <style>
+    .t     { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; fill: #334155; }
+    .muted { fill: #94a3b8; }
+    .sm    { font-size: 11px; }
+    .md    { font-size: 13px; }
+    .bold  { font-weight: 600; }
+    .line  { stroke: #cbd5e1; stroke-width: 1; fill: none; }
+    .soft  { stroke: #e2e8f0; stroke-width: 1; fill: none; }
+    .cal   { fill: #ea580c; }
+    .caltx { font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; fill: #ffffff; }
+    .req   { fill: #dc2626; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="400" rx="6" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="899" height="399" rx="6" class="line"/>
+
+  <text class="t md bold" x="28" y="36">Add Education Partner</text>
+
+  <!-- Tabs -->
+  <line x1="28" y1="76" x2="872" y2="76" class="line"/>
+  <text class="t sm bold" x="40" y="68">Education Partner</text>
+  <line x1="28" y1="76" x2="152" y2="76" stroke="#4f46e5" stroke-width="2"/>
+  <rect x="166" y="50" width="76" height="24" rx="4" fill="#f1f5f9"/>
+  <text class="t sm muted" x="182" y="68">Courses</text>
+  <text class="t sm muted" x="252" y="68">🔒 Save the education partner info first</text>
+
+  <!-- Basic information -->
+  <text class="t sm bold" x="28" y="102">Basic information</text>
+  <g class="t sm">
+    <text x="28" y="126">Name <tspan class="req">*</tspan></text>
+    <text x="228" y="126">Trademark <tspan class="req">*</tspan></text>
+    <text x="428" y="126">Partner type <tspan class="req">*</tspan></text>
+    <text x="628" y="126">Country <tspan class="req">*</tspan></text>
+  </g>
+  <rect x="28" y="132" width="180" height="22" rx="4" class="soft"/>
+  <rect x="228" y="132" width="180" height="22" rx="4" class="soft"/>
+  <rect x="428" y="132" width="180" height="22" rx="4" class="soft"/>
+  <rect x="628" y="132" width="180" height="22" rx="4" class="soft"/>
+
+  <g class="t sm">
+    <text x="28" y="176">Location <tspan class="req">*</tspan></text>
+    <text x="228" y="176">Contact email</text>
+    <text x="428" y="176">Contact phone</text>
+    <text x="628" y="176">Managed under partner</text>
+  </g>
+  <rect x="28" y="182" width="180" height="22" rx="4" class="soft"/>
+  <rect x="228" y="182" width="180" height="22" rx="4" class="soft"/>
+  <rect x="428" y="182" width="180" height="22" rx="4" class="soft"/>
+  <rect x="628" y="182" width="180" height="22" rx="4" class="soft"/>
+
+  <text class="t sm" x="28" y="226">Short description <tspan class="req">*</tspan></text>
+  <rect x="28" y="232" width="780" height="22" rx="4" class="soft"/>
+
+  <!-- Business terms -->
+  <text class="t sm bold" x="28" y="280">Business terms</text>
+  <g class="t sm">
+    <text x="28" y="304">Commission base rate (%) <tspan class="req">*</tspan></text>
+    <text x="228" y="304">ABN</text>
+    <text x="428" y="304">ACN</text>
+  </g>
+  <rect x="28" y="310" width="180" height="22" rx="4" class="soft"/><text class="t sm" x="38" y="325">15</text>
+  <rect x="228" y="310" width="180" height="22" rx="4" class="soft"/>
+  <rect x="428" y="310" width="180" height="22" rx="4" class="soft"/>
+
+  <!-- Intakes -->
+  <text class="t sm bold" x="628" y="280">Intakes <tspan class="req">*</tspan></text>
+  <rect x="628" y="310" width="180" height="22" rx="4" class="soft"/>
+  <rect x="628" y="338" width="62" height="18" rx="9" fill="#e0e7ff"/><text class="t sm" x="636" y="351" fill="#4338ca">Feb ×</text>
+  <rect x="698" y="338" width="60" height="18" rx="9" fill="#e0e7ff"/><text class="t sm" x="706" y="351" fill="#4338ca">Jul ×</text>
+
+  <!-- Callouts -->
+  <circle class="cal" cx="204" cy="40" r="11"/><text class="caltx" x="200.5" y="44">1</text>
+  <circle class="cal" cx="14" cy="143" r="11"/><text class="caltx" x="10.5" y="147">2</text>
+  <circle class="cal" cx="14" cy="321" r="11"/><text class="caltx" x="10.5" y="325">3</text>
+  <circle class="cal" cx="614" cy="321" r="11"/><text class="caltx" x="610.5" y="325">4</text>
+</svg>

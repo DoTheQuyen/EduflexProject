@@ -1,13 +1,17 @@
 {
-   "//": "index.html stays uncached so it always points at the latest chunk hashes; js/css get long-lived caching since their filenames change on every build",
-   
+  "//": "index.html stays uncached so it always points at the latest chunk hashes; js/css get long-lived caching since their filenames change on every build",
+
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/*.{css,scss,js,png,gif,jpg,jpeg,svg,ico,json,woff,woff2,ttf}"]
+    "exclude": [
+      "/assets/*",
+      "/help/*",
+      "/*.{css,scss,js,png,gif,jpg,jpeg,svg,ico,json,woff,woff2,ttf}"
+    ]
   },
   "globalHeaders": {
     "Cache-Control": "no-cache, must-revalidate",
-     "Referrer-Policy": "strict-origin-when-cross-origin"
+    "Referrer-Policy": "strict-origin-when-cross-origin"
   },
   "routes": [
     {

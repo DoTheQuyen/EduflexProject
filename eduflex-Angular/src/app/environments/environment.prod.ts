@@ -1,6 +1,6 @@
 export const environment = {
-  docsBaseUrl: 'https://YOUR-DOMAIN/help/staff',
-  docsStudentBaseUrl: 'https://YOUR-DOMAIN/help/student',
+  docsBaseUrl: '/help/staff',
+  docsStudentBaseUrl: '/help/student',
   production: true,
 
   // config for Azure

@@ -1,10 +1,12 @@
 name: Deploy Frontend to Azure Static Web Apps
 
 on:
+  workflow_dispatch:
   push:
     branches: [dev]
     paths:
       - "eduflex-Angular/**"
+      - "docs-site/**"
       - ".github/workflows/frontend-deploy.yml"
 
 jobs:
@@ -32,6 +34,29 @@ jobs:
       - name: Build for production
         working-directory: eduflex-Angular
         run: npx ng build --configuration production
+
+      - name: Install docs dependencies
+        working-directory: docs-site
+        run: npm ci
+
+      - name: Build staff manual
+        working-directory: docs-site
+        env:
+          DOCS_BASE: /help/staff/
+        run: npm run build:staff
+
+      - name: Build student manual
+        working-directory: docs-site
+        env:
+          DOCS_BASE: /help/student/
+        run: npm run build:student
+
+      - name: Copy manuals into the app bundle
+        run: |
+          BROWSER_DIR=eduflex-Angular/dist/eduflex-Angular/browser
+          mkdir -p "$BROWSER_DIR/help"
+          cp -r docs-site/site         "$BROWSER_DIR/help/staff"
+          cp -r docs-site/site-student "$BROWSER_DIR/help/student"
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
